@@ -5,7 +5,8 @@ import net.pixelstatic.koru.utils.Hitbox;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Rectangle;
 
-public class HitboxComponent implements Component{ 
+public class HitboxComponent implements Component{
+	public float height; //coords of top of entity
 	public Hitbox entityhitbox = new Hitbox();
 	public Hitbox terrainhitbox = new Hitbox();
 	public boolean collideterrain = false;

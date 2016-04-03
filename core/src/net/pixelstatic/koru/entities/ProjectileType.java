@@ -1,8 +1,6 @@
 package net.pixelstatic.koru.entities;
 
-import net.pixelstatic.koru.components.FadeComponent;
-import net.pixelstatic.koru.components.ProjectileComponent;
-import net.pixelstatic.koru.components.RenderComponent;
+import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.sprites.Layer;
 
 public enum ProjectileType{
@@ -29,11 +27,12 @@ public enum ProjectileType{
 		
 	}
 	
-	public static KoruEntity createProjectile(ProjectileType type, float rotation){
+	public static KoruEntity createProjectile(long source, ProjectileType type, float rotation){
 		KoruEntity entity = new KoruEntity(EntityType.projectile);
 		entity.mapComponent(ProjectileComponent.class).type = type;
 		entity.mapComponent(ProjectileComponent.class).setRotation(entity, rotation);
 		entity.mapComponent(FadeComponent.class).lifetime = type.lifetime();
+		entity.mapComponent(DamageComponent.class).source = source;
 		return entity;
 	}
 }

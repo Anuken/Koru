@@ -52,10 +52,11 @@ public class CollisionSystem extends KoruSystem{
 			HitboxComponent otherhitbox = other.mapComponent(HitboxComponent.class);
 			otherhitbox.entityhitbox.update(other);
 			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
-					&& entity.getType().collide(other.getType()) && other.getType().collide(entity.getType())){
+					&& entity.getType().collide(entity, other) && other.getType().collide(other, entity)){
 				collisionEvent(entity,other);
+			//	iterated.add(other.getID());
 			}
-			iterated.add(other.getID());
+		
 		}
 		iterated.add(entity.getID());
 	}

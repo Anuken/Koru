@@ -18,7 +18,6 @@ public class FadeSystem extends IteratingSystem{
 	protected void processEntity(Entity entity, float delta){
 		KoruEntity koru = (KoruEntity)entity;
 		FadeComponent fade = koru.mapComponent(FadeComponent.class);
-		//Koru.log(fade.lifetime);
 		fade.life += delta;
 		if(fade.life > fade.lifetime){
 			koru.removeSelf();

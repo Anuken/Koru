@@ -82,15 +82,20 @@ public class Layer implements Comparable<Layer>, Poolable{
 	
 	public Layer yLayer(float y){
 		this.alignbottom = true;
-		layer = World.worldheight * World.worldheight + World.tilesize -y + heightoffset;
+		layer = posLayer(y) + heightoffset;
 	//	addShadow();
 		return this;
 	}
 	
-	public void update(float x, float y){
+	public static float posLayer(float y){
+		return World.worldheight * World.worldheight + World.tilesize -y;
+	}
+	
+	public Layer update(float x, float y){
 		setPosition(x,y);
 		yLayer();
 		add();
+		return this;
 	}
 	
 	public static Layer obtainLayer(){

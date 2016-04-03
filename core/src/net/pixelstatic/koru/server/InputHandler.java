@@ -31,7 +31,7 @@ public class InputHandler{
 
 	private void inputKey(InputType type){
 		if(type == InputType.leftclick_down){
-			KoruEntity projectile = ProjectileType.createProjectile(ProjectileType.bolt, mouseangle);
+			KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.bolt, mouseangle);
 			projectile.position().set(entity.getX(), entity.getY());
 			projectile.addSelf().sendSelf();
 		}

@@ -44,6 +44,7 @@ public class Registrator{
 		k.register(FadeComponent.class);
 		k.register(ConnectionComponent.class);
 		k.register(ChildComponent.class);
+		k.register(TextComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncBuffer.class);

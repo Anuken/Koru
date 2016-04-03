@@ -25,9 +25,9 @@ public class AIData{
 	public void CreatePath(float ax, float ay, float bx, float by){
 		axg = (int)(ax / Node.TILE_SIZE);
 		ayg = (int)(ay / Node.TILE_SIZE);
-		int bxg = (int)(bx / Node.TILE_SIZE);
-		int byg = (int)(by / Node.TILE_SIZE);
-		int index = 0;
+		//int bxg = (int)(bx / Node.TILE_SIZE);
+		//int byg = (int)(by / Node.TILE_SIZE);
+		//int index = 0;
 		Node end = null;
 		graph = new Graph();
 		/*
@@ -52,27 +52,6 @@ public class AIData{
 		}
 		*/
 
-		if(inobject){
-
-			int x = axg;
-			int y = ayg;
-			/*
-			int sectorx = (int)((ax % 12) / 6);
-			int sectory = (int)((ay % 12) / 6);
-
-			Home.log("ignoring block. sectory is " + sectory);
-			if(sectory == 0){
-			ignoredx = 0;
-			ignoredy = -1;
-			}else if(sectory == 1){
-			ignoredx = 0;
-			ignoredy = 1;
-			}else if(sectory == 2){
-
-			}
-			*/
-			//Main.SetBlock(x,y,0);
-		}
 		for(int x = 0;x < node_range * 2;x ++){
 			for(int y = 0;y < node_range * 2;y ++){
 				if(nodearray[x][y] != null){
@@ -93,6 +72,7 @@ public class AIData{
 		//if(Path.nodes.size == 0) return new Vector2(bx, by);
 		//return new Vector2(node.x * 12 + 6, node.y * 12 + 6);
 	}
+	
 
 
 	private void addNodeNeighbour(Node aNode, int aX, int aY, int rx, int ry){

@@ -5,13 +5,19 @@ public enum Material{
 	grass, 
 	stone, 
 	pinetree, 
-	stoneblock{
-		public MaterialType getType(){
-			return MaterialType.block;
-		}
-	};
+	stoneblock(MaterialType.block);
+	
+	private MaterialType type = MaterialType.tile;
+	
+	private Material(){
+		
+	}
+	
+	private Material(MaterialType type){
+		this.type = type;
+	}
 	
 	public MaterialType getType(){
-		return MaterialType.tile;
+		return type;
 	}
 }

@@ -36,4 +36,10 @@ public class LayerGroup{
 			layer.update(x, y);
 		}
 	}
+	
+	public void update(float x, float y, float ylayer){
+		for(Layer layer : layers.values()){
+			layer.update(x, y).layer = ylayer;
+		}
+	}
 }

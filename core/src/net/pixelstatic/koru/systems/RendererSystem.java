@@ -34,7 +34,6 @@ public class RendererSystem extends KoruSystem{
 	void addFade(KoruEntity entity, RenderComponent render){
 		FadeComponent fade = entity.mapComponent(FadeComponent.class);
 		for(Layer layer : render.layers.values()){
-			layer.update(entity.getX(), entity.getY());
 			if(fade != null && fade.render) layer.color.a = 1f - fade.life / fade.lifetime;
 		}
 	}

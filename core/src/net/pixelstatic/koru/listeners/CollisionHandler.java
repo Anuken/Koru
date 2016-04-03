@@ -9,6 +9,7 @@ public class CollisionHandler{
 	
 	public CollisionHandler(){
 		addListener(new DamageListener());
+		addListener(new ProjectileListener());
 	}
 	
 	public void dispatchEvent(KoruEntity entity, KoruEntity other){

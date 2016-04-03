@@ -29,7 +29,7 @@ public class Interpolator{
 	public void update(KoruEntity entity){
 		temp1.set(entity.getX(), entity.getY());
 		temp2.set(lastx + entity.getX(),lasty + entity.getY());
-		temp1.interpolate(temp2, 0.1f, Interpolation.linear);
+		temp1.interpolate(temp2, 0.15f, Interpolation.linear);
 		entity.position().set(temp1.x, temp1.y);
 	}
 	

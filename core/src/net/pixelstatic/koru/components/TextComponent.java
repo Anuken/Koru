@@ -5,7 +5,6 @@ import net.pixelstatic.koru.network.SyncBuffer.Synced;
 import com.badlogic.ashley.core.Component;
 
 @Synced
-public class ChildComponent implements Component{
-	public transient float offset;
-	public long parent;
+public class TextComponent implements Component{
+	public String text;
 }
