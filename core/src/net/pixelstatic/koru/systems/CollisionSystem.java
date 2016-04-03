@@ -4,6 +4,7 @@ import net.pixelstatic.koru.components.DestroyOnTerrainHitComponent;
 import net.pixelstatic.koru.components.HitboxComponent;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.listeners.CollisionHandler;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Tile;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ObjectSet;
 
 public class CollisionSystem extends KoruSystem{
+	private CollisionHandler handler;
 	ObjectSet<Long> iterated = new ObjectSet<Long>();
 	long lastFrameID;
 	private Rectangle rect = new Rectangle();
@@ -22,6 +24,7 @@ public class CollisionSystem extends KoruSystem{
 	@SuppressWarnings("unchecked")
 	public CollisionSystem(){
 		super(Family.all(HitboxComponent.class, PositionComponent.class).get());
+		handler = new CollisionHandler();
 	}
 
 	@Override
@@ -51,26 +54,16 @@ public class CollisionSystem extends KoruSystem{
 			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
 					&& entity.getType().collide(other.getType()) && other.getType().collide(entity.getType())){
 				collisionEvent(entity,other);
-				collided(entity, other);
-				collided(other, entity);
 			}
 			iterated.add(other.getID());
 		}
 		iterated.add(entity.getID());
 	}
 	
-	void collisionEvent(KoruEntity entitya, Entity entityb){
-		
+	void collisionEvent(KoruEntity entitya, KoruEntity entityb){
+		handler.dispatchEvent(entitya, entityb);
 	}
 
-	void collided(KoruEntity entity, KoruEntity other){
-		/*
-		KoruEntity indicator = new KoruEntity(EntityType.damageindicator);
-		indicator.mapComponent(ChildComponent.class).parent = entity.getID();
-		indicator.sendSelf();
-		*/
-		entity.getType().collisionEvent(entity, other);
-	}
 
 	public void moveWithCollisions(World world, KoruEntity entity, float mx, float my){
 		boolean wallcollision = false;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.pixelstatic.koru.modules.*;
+import net.pixelstatic.koru.systems.InterpolationSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.RendererSystem;
 
@@ -30,6 +31,8 @@ public class Koru extends ApplicationAdapter{
 		createModule(World.class);
 
 		engine.addSystem(new RendererSystem(getModule(Renderer.class)));
+
+		engine.addSystem(new InterpolationSystem());
 		//engine.addSystem(new ProjectileRenderSystem());
 		//engine.addSystem(new PlayerRenderSystem());
 		//engine.addSystem(new IndicatorRenderSystem());

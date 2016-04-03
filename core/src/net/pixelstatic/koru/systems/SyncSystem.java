@@ -18,7 +18,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 @SuppressWarnings("unchecked")
 public class SyncSystem extends IteratingSystem{
 	Family family = Family.all(SyncComponent.class).get();
-	
+
 	public SyncSystem(){
 		super(Family.all(PositionComponent.class, ConnectionComponent.class).get());
 	}
@@ -28,17 +28,16 @@ public class SyncSystem extends IteratingSystem{
 		if(KoruUpdater.frameID() % Network.packetFrequency != 0) return;
 		KoruEntity player = (KoruEntity)aentity;
 		ImmutableArray<Entity> entities = getEngine().getEntitiesFor(family);
-		
+
 		WorldUpdatePacket packet = new WorldUpdatePacket();
 		for(Entity entity : entities){
 			if(entity == player) continue;
-			KoruEntity ko = (KoruEntity) entity;
+			KoruEntity ko = (KoruEntity)entity;
 			packet.updates.put(ko.getID(), ko.mapComponent(SyncComponent.class).type.write(ko));
 		}
-		if(packet.updates.size() != 0)
-		player.mapComponent(ConnectionComponent.class).connection.sendTCP(packet);
+		if(packet.updates.size() != 0) player.mapComponent(ConnectionComponent.class).connection.sendTCP(packet);
 	}
-	
+
 	public enum SyncType{
 		position{
 			public SyncBuffer write(KoruEntity entity){
@@ -46,12 +45,19 @@ public class SyncSystem extends IteratingSystem{
 			}
 
 			public void read(SyncBuffer buffer, KoruEntity entity){
-				entity.position().set(((PositionSyncBuffer)buffer).x, ((PositionSyncBuffer)buffer).y);
+				PositionSyncBuffer position = (PositionSyncBuffer)buffer;
+				SyncComponent sync = entity.mapComponent(SyncComponent.class);
+				if(sync.interpolator != null){
+					sync.interpolator.push(entity, position.x, position.y);
+				}else{
+					entity.position().set(position.x, position.y);
+				}
 			}
 		};
-		
+
 		public abstract SyncBuffer write(KoruEntity entity);
+
 		public abstract void read(SyncBuffer buffer, KoruEntity entity);
-		
+
 	}
 }

@@ -3,6 +3,7 @@ package net.pixelstatic.koru.entities;
 import net.pixelstatic.koru.behaviors.MoveTowardBehavior;
 import net.pixelstatic.koru.behaviors.TargetBehavior;
 import net.pixelstatic.koru.components.*;
+import net.pixelstatic.koru.network.Interpolator;
 import net.pixelstatic.koru.renderers.*;
 import net.pixelstatic.koru.server.InputHandler;
 import net.pixelstatic.koru.server.KoruServer;
@@ -40,15 +41,11 @@ public enum EntityType{
 			hitbox.terrainhitbox.setCenter(0, 1);
 			hitbox.collideterrain = true;
 		}
-		
-		public void collisionEvent(KoruEntity entity, KoruEntity other){
-			entity.removeSelfServer();
-		}
 	},
 	genericmonster{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new MonsterRenderer()), new HitboxComponent(),
-					new SyncComponent(SyncType.position), new BehaviorComponent(), new HealthComponent(),
+					new SyncComponent(SyncType.position, new Interpolator()), new BehaviorComponent(), new HealthComponent(),
 					new VelocityComponent()};
 		}
 
@@ -63,12 +60,6 @@ public enum EntityType{
 		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
 			behavior.addBehavior(TargetBehavior.class).setRange(100f).setType(EntityType.player);
 			behavior.addBehavior(MoveTowardBehavior.class);
-		}
-		
-		public void collisionEvent(KoruEntity entity, KoruEntity other){
-			KoruEntity damage = new KoruEntity(EntityType.damageindicator);
-			damage.mapComponent(ChildComponent.class).parent = entity.getID();
-			damage.sendSelf();
 		}
 		
 		public boolean collide(EntityType other){
@@ -97,8 +88,8 @@ public enum EntityType{
 		return true;
 	}
 	
-	public void collisionEvent(KoruEntity entity, KoruEntity other){
-	}
+	//public void collisionEvent(KoruEntity entity, KoruEntity other){
+	//}
 
 	void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 	}

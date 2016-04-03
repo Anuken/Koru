@@ -5,7 +5,6 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.sprites.*;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
-import net.pixelstatic.koru.world.WorldRenderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -27,7 +26,6 @@ public class Renderer extends Module{
 	Matrix4 matrix;
 	GlyphLayout layout;
 	BitmapFont font;
-	WorldRenderer worldrenderer;
 	
 	public KoruEntity player;
 	
@@ -48,7 +46,6 @@ public class Renderer extends Module{
 	public void init(){
 		player = getModule(ClientData.class).player;
 		world = getModule(World.class);
-		worldrenderer = new WorldRenderer(world, this, camera);
 	}
 
 	@Override

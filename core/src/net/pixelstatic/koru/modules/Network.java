@@ -20,7 +20,7 @@ public class Network extends Module{
 	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
 	public static final int port = 7575;
 	public static final int ping = 0;
-	public static final int packetFrequency = 10;
+	public static final int packetFrequency = 3;
 	private boolean connected = true;
 	private boolean initialconnect = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
