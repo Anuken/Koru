@@ -3,6 +3,193 @@ koru.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+objects/pinetree3
+  rotate: false
+  xy: 1, 3
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: -1
+objects/pinetree2
+  rotate: false
+  xy: 43, 7
+  size: 40, 56
+  orig: 40, 56
+  offset: 0, 0
+  index: -1
+objects/pinetree4
+  rotate: false
+  xy: 85, 7
+  size: 40, 56
+  orig: 40, 56
+  offset: 0, 0
+  index: -1
+objects/pinetree1
+  rotate: false
+  xy: 127, 7
+  size: 32, 56
+  orig: 32, 56
+  offset: 0, 0
+  index: -1
+objects/pinetree2shadow
+  rotate: false
+  xy: 161, 53
+  size: 32, 10
+  orig: 32, 10
+  offset: 0, 0
+  index: -1
+objects/pinetree1shadow
+  rotate: false
+  xy: 161, 41
+  size: 32, 10
+  orig: 32, 10
+  offset: 0, 0
+  index: -1
+objects/pinetree4shadow
+  rotate: false
+  xy: 195, 53
+  size: 32, 10
+  orig: 32, 10
+  offset: 0, 0
+  index: -1
+objects/pinetree3shadow
+  rotate: false
+  xy: 161, 29
+  size: 32, 10
+  orig: 32, 10
+  offset: 0, 0
+  index: -1
+objects/koru2shadow
+  rotate: false
+  xy: 195, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/fern2shadow
+  rotate: false
+  xy: 161, 11
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/tallgrass1
+  rotate: false
+  xy: 161, 1
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/koru3
+  rotate: false
+  xy: 213, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/koru1shadow
+  rotate: false
+  xy: 179, 11
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/tallgrass3shadow
+  rotate: false
+  xy: 177, 1
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass1shadow
+  rotate: false
+  xy: 177, 1
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass2shadow
+  rotate: false
+  xy: 177, 1
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/koru2
+  rotate: false
+  xy: 197, 17
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/koru1
+  rotate: false
+  xy: 215, 17
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/tallgrass3
+  rotate: false
+  xy: 193, 1
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass2
+  rotate: false
+  xy: 229, 55
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/fern3
+  rotate: false
+  xy: 231, 37
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/fern3shadow
+  rotate: false
+  xy: 233, 19
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/fern1
+  rotate: false
+  xy: 233, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/koru3shadow
+  rotate: false
+  xy: 249, 47
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/fern2
+  rotate: false
+  xy: 267, 47
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+objects/fern1shadow
+  rotate: false
+  xy: 285, 47
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+
+koru2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 player/player
   rotate: false
   xy: 1, 1
@@ -11,7 +198,7 @@ player/player
   offset: 0, 0
   index: -1
 
-koru2.png
+koru3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -23,7 +210,7 @@ entities/genericmonster
   offset: 0, 0
   index: -1
 
-koru3.png
+koru4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -49,7 +236,7 @@ other/error
   offset: 0, 0
   index: -1
 
-koru4.png
+koru5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -96,7 +283,7 @@ tiles/stone
   offset: 0, 0
   index: -1
 
-koru5.png
+koru6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

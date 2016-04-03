@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	boolean temp = false;
-	public static final float shadowlayer = -10, shadowoffset = -10;
+	public static final float shadowlayer = 0, shadowoffset = -10;
 	public static final Color shadowcolor = new Color(0,0,0,0.14f);
 	public Color color = Color.WHITE.cpy();
 	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height;

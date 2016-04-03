@@ -36,7 +36,7 @@ public class Network extends Module{
 			client.start();
 			client.connect(12000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = "a name";
+			packet.name = System.getProperty("user.name");
 			client.sendTCP(packet);
 			initialconnect = true;
 			Koru.log("Connecting to server..");
