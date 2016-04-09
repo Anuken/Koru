@@ -7,7 +7,16 @@ import net.pixelstatic.koru.sprites.Layer;
 import com.badlogic.gdx.math.Rectangle;
 
 public enum MaterialType{
-	tile, block{
+	tile{
+		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
+			if(!this.world.blends(x, y, material)){
+				renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(material.ordinal()));
+			}else{
+				renderer.layer(material.name() + "edge", tile(x), tile(y)).setLayer(tilelayer(material.ordinal()) - 1);
+			}
+		}
+	},
+	block{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).alignBottom().yLayer();
 			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f).setLayer(1f).setScale(0.14f);
@@ -32,11 +41,13 @@ public enum MaterialType{
 		}
 
 		public boolean solid(){
-			return false;
+			return true;
 		}
 
 		public Rectangle getRect(int x, int y, Rectangle rectangle){
-			return rectangle.set(x * World.tilesize, y * World.tilesize + 6, World.tilesize, World.tilesize);
+			float width = 7;
+			float height = 2;
+			return rectangle.set(x * World.tilesize + width / 2, y * World.tilesize + 6 + height / 2, width, height);
 		}
 	},
 	grass{
@@ -49,8 +60,17 @@ public enum MaterialType{
 			return false;
 		}
 	};
-
+	protected World world;
 	static final int tilelayer = -1;
+
+	static int tilelayer(int id){
+		return tilelayer - (512 - id * 2);
+	}
+
+	public final void drawInternal(Material material, Tile tile, int x, int y, Renderer renderer, World world){
+		this.world = world;
+		draw(material, tile, x, y, renderer);
+	}
 
 	public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 		renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer);

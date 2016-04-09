@@ -75,8 +75,8 @@ public class Renderer extends Module{
 			for(int y =camy - viewrange; y < World.worldheight && y < camy + viewrange; y ++){
 				if(x < 0 || y < 0) continue;
 				Tile tile = world.tiles[x][y];
-				if(tile.tile != Material.air)tile.tile.getType().draw(tile.tile, tile, x, y, this);
-				if(tile.block != Material.air)tile.block.getType().draw(tile.block, tile, x, y, this);
+				if(tile.tile != Material.air)tile.tile.getType().drawInternal(tile.tile, tile, x, y, this, world);
+				if(tile.block != Material.air)tile.block.getType().drawInternal(tile.block, tile, x, y, this, world);
 			}
 		}
 	}

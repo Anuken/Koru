@@ -242,42 +242,56 @@ filter: Nearest,Nearest
 repeat: none
 tiles/walldropshadow
   rotate: false
-  xy: 1, 40
+  xy: 1, 51
   size: 260, 260
   orig: 260, 260
   offset: 0, 0
   index: -1
+tiles/magmarockedge
+  rotate: false
+  xy: 1, 33
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 tiles/stoneedge
   rotate: false
-  xy: 1, 22
+  xy: 263, 295
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/grassedge
   rotate: false
-  xy: 263, 284
+  xy: 1, 15
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneblock
   rotate: false
-  xy: 1, 1
+  xy: 19, 30
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/grass
   rotate: false
-  xy: 19, 26
+  xy: 263, 281
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone
   rotate: false
-  xy: 263, 270
+  xy: 281, 299
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+tiles/magmarock
+  rotate: false
+  xy: 1, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

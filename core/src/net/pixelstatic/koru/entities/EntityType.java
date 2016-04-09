@@ -16,7 +16,8 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new ConnectionComponent(),
 					new RenderComponent(new PlayerRenderer()), new HitboxComponent(),
-					new SyncComponent(SyncType.position, new Interpolator()), new InputComponent(), new HealthComponent()};
+					new SyncComponent(SyncType.position, new Interpolator()), new InputComponent(), 
+					new HealthComponent(), new InventoryComponent(4,4)};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){

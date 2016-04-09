@@ -25,7 +25,7 @@ public enum Material{
 	stoneblock(MaterialType.block);
 	
 	private MaterialType type = MaterialType.tile;
-	private Color foilageColor = Color.WHITE;
+	private Color foilageColor = Colors.colora(69, 109, 29,0.04f);
 	
 	private Material(){
 		
