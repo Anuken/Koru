@@ -8,9 +8,15 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class BehaviorComponent implements Component{
 	public ObjectMap<String, Behavior> behaviors = new ObjectMap<String, Behavior>();
+	public Behavior[] behaviorarray;
+	private int behavioramount;
 
 	{
 		this.addBehavior(PathfindBehavior.class);
+	}
+	
+	public BehaviorComponent(int behaviors){
+		behaviorarray = new Behavior[behaviors];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -18,6 +24,7 @@ public class BehaviorComponent implements Component{
 		try{
 			Behavior t = (Behavior)c.newInstance();
 			behaviors.put(name, t);
+			behaviorarray[behavioramount++] = t;
 			return (T)t;
 		}catch(Exception e){
 			e.printStackTrace();

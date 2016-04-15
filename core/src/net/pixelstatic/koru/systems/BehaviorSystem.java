@@ -17,8 +17,9 @@ public class BehaviorSystem extends KoruSystem{
 	@Override
 	void processEntity(KoruEntity entity, float delta){
 		BehaviorComponent component = entity.mapComponent(BehaviorComponent.class);
-		for(Behavior behavior : component.behaviors.values()){
+		for(Behavior behavior : component.behaviorarray){
 			behavior.internalUpdate(entity, (KoruEngine)this.getEngine());
+			if(behavior.isBlocking()) break;
 		}
 	}
 

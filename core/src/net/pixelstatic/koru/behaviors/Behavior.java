@@ -7,6 +7,7 @@ import net.pixelstatic.koru.systems.KoruEngine;
 public abstract class Behavior{
 	protected KoruEntity entity;
 	protected KoruEngine engine;
+	protected boolean blocking;
 	
 	public final void internalUpdate(KoruEntity entity,  KoruEngine engine){
 		this.entity = entity;
@@ -21,6 +22,10 @@ public abstract class Behavior{
 	
 	public <T extends Behavior> T getBehavior(Class<T> c){
 		return c.cast(getBehavior(c, c.getSimpleName()));
+	}
+	
+	public boolean isBlocking(){
+		return blocking;
 	}
 	
 	abstract protected void update();

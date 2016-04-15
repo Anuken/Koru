@@ -56,7 +56,7 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new MonsterRenderer()),
 					new HitboxComponent(), new SyncComponent(SyncType.position, new Interpolator()),
-					new BehaviorComponent(), new HealthComponent(), new VelocityComponent()};
+					new BehaviorComponent(8), new HealthComponent(), new VelocityComponent()};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
@@ -76,6 +76,24 @@ public enum EntityType{
 		public boolean collide(KoruEntity entity, KoruEntity other){
 			return other.getType() == EntityType.projectile;
 		}
+	},
+	testmonster{
+		public Component[] defaultComponents(){
+			return genericmonster.defaultComponents();
+		}
+		
+		public boolean collide(KoruEntity entity, KoruEntity other){
+			return genericmonster.collide(entity, other);
+		}
+		
+		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
+			genericmonster.initHitbox(entity, hitbox);
+		}
+		
+		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
+			
+		}
+		
 	},
 	damageindicator{
 		public Component[] defaultComponents(){

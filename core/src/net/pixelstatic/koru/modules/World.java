@@ -3,6 +3,7 @@ package net.pixelstatic.koru.modules;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
+import net.pixelstatic.koru.network.packets.TileUpdatePacket;
 import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
@@ -13,6 +14,7 @@ public class World extends Module{
 	public static final int tilesize = 12;
 	public static final int worldwidth = 100, worldheight = 100;
 	Network network;
+	KoruServer server;
 	public Tile[][] tiles;
 	boolean[][] chunkloaded;
 
@@ -75,6 +77,11 @@ public class World extends Module{
 		return chunk;
 	}
 
+	public World(KoruServer server, boolean kek){
+		this(null);
+		this.server = server;
+	}
+
 	public World(Koru k){
 		super(k);
 		tiles = new Tile[worldwidth][worldheight];
@@ -97,11 +104,15 @@ public class World extends Module{
 	}
 
 	public boolean blends(int x, int y, Material material){
-		return !isType(x, y+1, material) || !isType(x, y-1, material) || !isType(x+1, y, material) || !isType(x-1, y, material);
+		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
 	public boolean isType(int x, int y, Material material){
 		return !inBounds(x, y) || tiles[x][y].tile == material;
+	}
+
+	public void updateTile(int x, int y){
+		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 	}
 
 	public static int tile(float i){

@@ -61,7 +61,7 @@ public class KoruUpdater{
 	public KoruUpdater(KoruServer server){
 		instance = this;
 		this.server = server;
-		world = new World();
+		world = new World(server, true);
 		generator = new Generator(world);
 		generator.generate();
 		engine = new KoruEngine();
@@ -69,7 +69,7 @@ public class KoruUpdater{
 		engine.addSystem(new CollisionSystem());
 		engine.addSystem(new BehaviorSystem());
 		
-		KoruEntity entity = new KoruEntity(EntityType.genericmonster).addSelf();
+		KoruEntity entity = new KoruEntity(EntityType.testmonster).addSelf();
 		entity.position().set(20f, 20f);
 	}
 }

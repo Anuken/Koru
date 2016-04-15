@@ -209,6 +209,13 @@ entities/genericmonster
   orig: 8, 8
   offset: 0, 0
   index: -1
+entities/testmonster
+  rotate: false
+  xy: 11, 1
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 
 koru4.png
 format: RGBA8888

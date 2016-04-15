@@ -133,6 +133,10 @@ public class KoruServer{
 	public void sendEntity(KoruEntity entity){
 		server.sendToAllTCP(entity);
 	}
+	
+	public void sendToAll(Object object){
+		server.sendToAllTCP(object);
+	}
 
 	public KoruEntity getPlayer(int cid){
 		return updater.engine.getEntity(players.get(cid));

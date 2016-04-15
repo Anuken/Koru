@@ -10,7 +10,7 @@ public class MonsterRenderer extends EntityRenderer{
 
 	@Override
 	protected void initRender(){
-		render.layer("genericmonster");
+		render.layer(entity.getType().toString());
 	}
 
 }

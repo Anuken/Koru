@@ -22,8 +22,8 @@ public class Generator{
 					world.tiles[x][y].setBlockMaterial(Material.next(Material.fern1, 3));
 				if(Math.random() < 0.01)
 					world.tiles[x][y].setBlockMaterial(Material.next(Material.koru1, 3));
-				if(Math.random() < 0.1)
-					world.tiles[x][y].setTileMaterial(Material.stone);
+				//if(Math.random() < 0.1)
+				//	world.tiles[x][y].setTileMaterial(Material.stone);
 				
 			}
 		}
