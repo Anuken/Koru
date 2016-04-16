@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.components;
 
+import net.pixelstatic.koru.ai.AIData;
 import net.pixelstatic.koru.behaviors.Behavior;
 
 import com.badlogic.ashley.core.Component;
@@ -9,8 +10,10 @@ import com.badlogic.gdx.utils.SnapshotArray;
 public class BehaviorComponent implements Component{
 	public ObjectMap<String, Behavior> behaviors = new ObjectMap<String, Behavior>();
 	public SnapshotArray<Behavior> behaviorarray = new SnapshotArray<Behavior>();
+	public AIData data;
 	
 	public BehaviorComponent(){
+		data = new AIData();
 	}
 
 	@SuppressWarnings("unchecked")

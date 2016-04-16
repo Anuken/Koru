@@ -22,7 +22,8 @@ public enum Material{
 	pinetree2(MaterialType.tree, true), 
 	pinetree3(MaterialType.tree, true), 
 	pinetree4(MaterialType.tree, true), 
-	stoneblock(MaterialType.block);
+	stoneblock(MaterialType.block),
+	woodblock(MaterialType.block);
 	
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Colors.colora(69, 109, 29,0.04f);

@@ -7,42 +7,25 @@ public class AIController{
 	static int space = 14;
 	static int skip = 1;
 	static public final boolean debug = false;
-	static public final float changerange = 12;
+	static public final float changerange = 11;
 
-	public static Vector2 PathfindTo(AIData data, float x, float y, float targetx, float targety){
+	public static Vector2 pathfindTo(AIData data, float x, float y, float targetx, float targety){
 
-		if( !Cast2(x, y, targetx, targety)){
+		if( !Cast2(x, y, targetx, targety) && false){
 			v.set(targetx, targety);
 		}else{
-			if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.Path == null){
+			if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null){
 				data.CreatePath(x, y, targetx, targety);
 			}
-			if(data.Path.nodes.size <= 1) return v.set(targetx, targety);
-
-			if(data.node + 1 >= data.Path.nodes.size){
+			if(data.path.nodes.size <= 1) return v.set(targetx, targety);
+			
+			if(data.node + 2 >= data.path.nodes.size){
 				return v.set(targetx, targety);
-			}else if(data.Path.getNodePosition(1 + data.node).dst(v.set(x, y)) <= 1f){
+			}else if(data.path.getNodePosition(1 + data.node).dst(v.set(x, y)) <= 1f){
 				data.node ++;
 			}
-			v.set(data.Path.getNodePosition(1 + data.node));
+			v.set(data.path.getNodePosition(1 + data.node));
 		}
-		/*
-		if(ObjectLoader.ObjectIsSolid((int)(x / 12), (int)(y / 12))){
-		    if(y % 12 > 4f && y % 12 < 9.5f){
-			v.set(x % 12 > 6 ? - 2f : 2f, v.y);
-		    }else{
-			if(y % 12 > 6){
-			    v.set(v.x, y + 2f);
-			    Home.log("Moving forward to the " + ((x > targetx) ? "left" : "right"));
-			}else{
-			    Home.log("Backing away to the " + ((x > targetx) ? "left" : "right"));
-			    v.set(v.x, y - 2f);
-			}
-		    }
-		}else{
-		    Home.log("Not solid");
-		}
-		*/
 		return v;
 		/*
 		//Cast(x, y, x + 50, y + 50);

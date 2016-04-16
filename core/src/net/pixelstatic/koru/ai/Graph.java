@@ -6,7 +6,8 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
 
 public class Graph implements IndexedGraph<Node>{
-
+	Array<Node> nodes = new Array<Node>();
+	
 	@Override
 	public Array<Connection<Node>> getConnections(Node fromNode){
 		return fromNode.getConnections();
@@ -19,7 +20,11 @@ public class Graph implements IndexedGraph<Node>{
 
 	@Override
 	public int getNodeCount(){
-		return 0;
+		return nodes.size;
+	}
+	
+	public void addNode(Node node){
+		nodes.add(node);
 	}
 
 }

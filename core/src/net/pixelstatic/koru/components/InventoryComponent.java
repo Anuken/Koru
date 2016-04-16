@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.components;
 
+import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 
 import com.badlogic.ashley.core.Component;
@@ -50,6 +51,18 @@ public class InventoryComponent implements Component{
 			}
 		}
 		return stack.amount == 0;
+	}
+	
+	public int quantityOf(Item item){
+		int sum = 0;
+		for(int x = 0; x < inventory.length; x ++){
+			for(int y = 0; y < inventory[x].length; y ++){
+				if(inventory[x][y] != null && inventory[x][y].item == item){
+					sum += inventory[x][y].amount;
+				}
+			}
+		}
+		return sum;
 	}
 		
 }

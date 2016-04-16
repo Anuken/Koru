@@ -1,6 +1,9 @@
 package net.pixelstatic.koru.behaviors;
 
+import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.components.VelocityComponent;
+import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
@@ -37,9 +40,12 @@ public class ChopTreeBehavior extends Behavior{
 			world.updateTile(targetx, targety);
 			broke = false;
 			
-			//entity.
+			entity.mapComponent(InventoryComponent.class).addItem(new ItemStack(Item.wood, 5));
 			targetTree();
-			
+			if(entity.mapComponent(InventoryComponent.class).quantityOf(Item.wood) > 40){
+				this.component().insertBehavior(0, new BuildBehavior());
+				removeSelf();
+			}
 		}
 		
 		if(Math.random() < 0.001){

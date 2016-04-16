@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.components;
 
+import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.network.SyncBuffer.Synced;
 
 import com.badlogic.ashley.core.Component;
@@ -25,6 +26,14 @@ public class PositionComponent implements Component{
 	
 	public float dist(PositionComponent other){
 		return Vector2.dst(x, y, other.x, other.y);
+	}
+	
+	public int blockX(){
+		return World.tile(x);
+	}
+	
+	public int blockY(){
+		return World.tile(y);
 	}
 	
 	public String toString(){

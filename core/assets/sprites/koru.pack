@@ -282,7 +282,7 @@ tiles/stoneblock
   orig: 12, 19
   offset: 0, 0
   index: -1
-tiles/woodwall
+tiles/woodblock
   rotate: false
   xy: 263, 274
   size: 12, 19
