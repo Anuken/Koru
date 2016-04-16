@@ -14,6 +14,10 @@ public class PositionComponent implements Component{
 		this.y = y;
 	}
 	
+	public void set(PositionComponent position){
+		set(position.x, position.y);
+	}
+	
 	public void add(float x, float y){
 		this.x += x;
 		this.y += y;

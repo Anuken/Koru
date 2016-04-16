@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.entities;
 
+import net.pixelstatic.koru.behaviors.ChopTreeBehavior;
 import net.pixelstatic.koru.behaviors.MoveTowardBehavior;
 import net.pixelstatic.koru.behaviors.TargetBehavior;
 import net.pixelstatic.koru.components.*;
@@ -56,7 +57,7 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new MonsterRenderer()),
 					new HitboxComponent(), new SyncComponent(SyncType.position, new Interpolator()),
-					new BehaviorComponent(8), new HealthComponent(), new VelocityComponent()};
+					new BehaviorComponent(), new HealthComponent(), new VelocityComponent(), new InventoryComponent(5, 5)};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
@@ -91,7 +92,7 @@ public enum EntityType{
 		}
 		
 		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
-			
+			behavior.addBehavior(ChopTreeBehavior.class);
 		}
 		
 	},

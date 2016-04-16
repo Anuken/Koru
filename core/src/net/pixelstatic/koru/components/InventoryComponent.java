@@ -10,5 +10,46 @@ public class InventoryComponent implements Component{
 	public InventoryComponent(int width, int height){
 		inventory = new ItemStack[width][height];
 	}
+	
+	public boolean addItem(ItemStack item){
+		ItemStack stack = new ItemStack(item);
+		for(int x = 0; x < inventory.length; x ++){
+			for(int y = 0; y < inventory[x].length; y ++){
+				if(inventory[x][y] == null){
+					inventory[x][y] = stack;
+					return true;
+				}else if(inventory[x][y].item == stack.item){
+					if(inventory[x][y].amount + stack.amount <= stack.item.getMaxStackSize()){
+						inventory[x][y].amount += stack.amount;
+						return true;
+					}else{
+						int overflow = inventory[x][y].amount + stack.amount - stack.item.getMaxStackSize();
+						stack.amount = overflow;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean removeItem(ItemStack item){
+		ItemStack stack = new ItemStack(item);
+		for(int x = 0; x < inventory.length; x ++){
+			for(int y = 0; y < inventory[x].length; y ++){
+				if(inventory[x][y] == null) continue;
+				if(inventory[x][y].item == stack.item){
+					if(inventory[x][y].amount >= stack.amount){
+						inventory[x][y].amount -= stack.amount;
+						if(inventory[x][y].amount <= 0) inventory[x][y] = null;
+						return true;
+					}else{
+						stack.amount -= inventory[x][y].amount;
+						inventory[x][y] = null;
+					}
+				}
+			}
+		}
+		return stack.amount == 0;
+	}
 		
 }

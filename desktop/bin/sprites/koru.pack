@@ -282,23 +282,30 @@ tiles/stoneblock
   orig: 12, 19
   offset: 0, 0
   index: -1
-tiles/grass
+tiles/woodwall
   rotate: false
-  xy: 263, 281
-  size: 12, 12
-  orig: 12, 12
+  xy: 263, 274
+  size: 12, 19
+  orig: 12, 19
   offset: 0, 0
   index: -1
-tiles/stone
+tiles/grass
   rotate: false
   xy: 281, 299
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/magmarock
+tiles/stone
   rotate: false
   xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+tiles/magmarock
+  rotate: false
+  xy: 19, 16
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

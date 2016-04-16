@@ -17,10 +17,14 @@ public class BehaviorSystem extends KoruSystem{
 	@Override
 	void processEntity(KoruEntity entity, float delta){
 		BehaviorComponent component = entity.mapComponent(BehaviorComponent.class);
-		for(Behavior behavior : component.behaviorarray){
+		Object[] behaviors = component.behaviorarray.begin();
+		for(Object object : behaviors ){
+			Behavior behavior = (Behavior)object;
+			if(behavior == null) continue;
 			behavior.internalUpdate(entity, (KoruEngine)this.getEngine());
 			if(behavior.isBlocking()) break;
 		}
+		component.behaviorarray.end();
 	}
 
 }

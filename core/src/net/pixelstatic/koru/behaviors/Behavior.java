@@ -24,6 +24,14 @@ public abstract class Behavior{
 		return c.cast(getBehavior(c, c.getSimpleName()));
 	}
 	
+	public BehaviorComponent component(){
+		return entity.mapComponent(BehaviorComponent.class);
+	}
+	
+	public void removeSelf(){
+		entity.mapComponent(BehaviorComponent.class).removeBehavior(this);
+	}
+	
 	public boolean isBlocking(){
 		return blocking;
 	}
