@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.behaviors;
 
-import net.pixelstatic.koru.behaviors.tasks.MoveTowardTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
 
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -8,9 +7,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 
 public class TaskBehavior extends Behavior{
 	public SnapshotArray<Task> tasks = new SnapshotArray<Task>();
-	{
-		tasks.add(new MoveTowardTask(100, 100));
-	}
+	
 	@Override
 	protected void update(){
 		Object[] objects = tasks.begin();

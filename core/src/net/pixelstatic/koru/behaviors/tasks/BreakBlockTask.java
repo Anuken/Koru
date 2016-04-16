@@ -1,5 +1,8 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
+import net.pixelstatic.koru.components.InventoryComponent;
+import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
@@ -20,9 +23,14 @@ public class BreakBlockTask extends Task{
 			waited = true;
 			return;
 		}
+		if(!World.inBounds(blockx, blocky)){ 
+			finish();
+			return;
+		}
 		World world = KoruUpdater.instance.world;
 		world.tiles[blockx][blocky].block = Material.air;
 		world.updateTile(blockx, blocky);
+		entity.mapComponent(InventoryComponent.class).addItem(new ItemStack(Item.wood, 5));
 		finish();
 	}
 }

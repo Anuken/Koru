@@ -115,6 +115,10 @@ public class KoruServer{
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket)object;
 				getPlayer(connection.getID()).mapComponent(InputComponent.class).input.inputEvent(packet.type);
+			}else if(object instanceof BlockInputPacket){
+				BlockInputPacket packet = (BlockInputPacket)object;
+				updater.world.tiles[packet.x][packet.y].block = packet.material;
+				updater.world.updateTile(packet.x, packet.y);
 			}
 			}catch (Exception e){
 				e.printStackTrace();

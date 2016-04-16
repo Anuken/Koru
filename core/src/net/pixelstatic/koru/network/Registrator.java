@@ -36,6 +36,7 @@ public class Registrator{
 		k.register(ChunkPacket.class);
 		k.register(InputPacket.class);
 		k.register(TileUpdatePacket.class);
+		k.register(BlockInputPacket.class);
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);

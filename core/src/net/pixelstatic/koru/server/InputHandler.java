@@ -2,8 +2,8 @@ package net.pixelstatic.koru.server;
 
 import java.util.HashMap;
 
+import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.entities.ProjectileType;
 import net.pixelstatic.koru.utils.InputType;
 
 public class InputHandler{
@@ -31,9 +31,16 @@ public class InputHandler{
 
 	private void inputKey(InputType type){
 		if(type == InputType.leftclick_down){
-			KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.bolt, mouseangle);
-			projectile.position().set(entity.getX(), entity.getY());
-			projectile.addSelf().sendSelf();
+		//	KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.bolt, mouseangle);
+		//	projectile.position().set(entity.getX(), entity.getY());
+		//	projectile.addSelf().sendSelf();
+			//	KoruEntity entity = new KoruEntity(EntityType.testmonster);
+			//	entity.position().set(this.entity.getX(), this.entity.getY());
+			//	entity.addSelf().sendSelf();
+		}else if(type == InputType.r){
+			KoruEntity entity = new KoruEntity(EntityType.testmonster);
+			entity.position().set(this.entity.getX(), this.entity.getY());
+			entity.addSelf().sendSelf();
 		}
 	}
 

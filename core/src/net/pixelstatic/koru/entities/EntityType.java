@@ -1,8 +1,8 @@
 package net.pixelstatic.koru.entities;
 
+import net.pixelstatic.koru.behaviors.BuildBehavior;
 import net.pixelstatic.koru.behaviors.MoveTowardBehavior;
 import net.pixelstatic.koru.behaviors.TargetBehavior;
-import net.pixelstatic.koru.behaviors.TaskBehavior;
 import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.network.Interpolator;
 import net.pixelstatic.koru.renderers.*;
@@ -62,7 +62,7 @@ public enum EntityType{
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 			hitbox.terrainRect().set(0, 0, 4, 2);
-			hitbox.collideterrain = true;
+			hitbox.collideterrain = false;
 
 			hitbox.entityRect().set(0, 0, 4, 4);
 			hitbox.alignBottom();
@@ -94,7 +94,7 @@ public enum EntityType{
 		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
 		//	behavior.addBehavior(ChopTreeBehavior.class);
 		//	behavior.addBehavior(TargetBehavior.class).setRange(100f).setType(EntityType.player);
-			behavior.addBehavior(TaskBehavior.class);
+			behavior.addBehavior(BuildBehavior.class);
 		}
 		
 	},

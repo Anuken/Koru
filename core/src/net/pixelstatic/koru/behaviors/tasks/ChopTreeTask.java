@@ -13,7 +13,7 @@ public class ChopTreeTask extends Task{
 		World world = KoruUpdater.instance.world;
 		int ex= World.tile(entity.position().x);
 		int ey = World.tile(entity.position().y);
-		int nearestx = -1, nearesty = -1;
+		int nearestx = -9999, nearesty = -9999;
 		float closest = Float.MAX_VALUE;
 		for(int x = -searchrange; x <= searchrange; x ++){
 			for(int y = -searchrange; y <= searchrange; y ++){
@@ -28,6 +28,10 @@ public class ChopTreeTask extends Task{
 					}
 				}
 			}
+		}
+		if(nearestx == -9999 || nearesty == -9999){
+			finish();
+			return;
 		}
 		int targetx = ex+nearestx;
 		int targety = ey+nearesty;

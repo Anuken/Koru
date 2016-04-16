@@ -12,7 +12,7 @@ public class AIData{
 	ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
 	Graph graph;
 	TiledGraphPath<Node> path = new TiledGraphPath<Node>();
-	final int node_range = 20;
+	final int node_range = 30;
 	Node[][] nodearray = new Node[node_range * 2][node_range * 2];
 	Raycaster caster = new Raycaster();
 	PathSmoother<Node, Vector2> smoother = new PathSmoother<Node, Vector2>(caster);
@@ -32,10 +32,30 @@ public class AIData{
 		int index = 0;
 		Node end = null;
 		graph = new Graph();
+		boolean ended = false;
+		/*
+		boolean broken =false;
+		if(solid(axg,ayg)){
+			for(int sx = -1; sx <= -1; sx ++){
+				for(int sy = -1; sy <= -1; sy ++){
+					if((sx == 1 && sy == 1) || (sx == 1 && sy == -1)
+							|| (sx == -1 && sy == -1) || (sx == -1 && sy == 1)  || (sx == 0 && sy == 0) ) continue;
+					if(!solid(sx + axg, sy + ayg)){
+						axg += sx;
+						ayg += sy;
+						broken = true;
+						break;
+					}
+				}
+				if(broken) break;
+			}
+		}
+		*/
 		
 		for(int x = -node_range;x < node_range;x ++){
 			for(int y = -node_range;y < node_range;y ++){
-				if(x == 0 && y == 0){ // this is the starting point
+				if(x == 0 && y == 0 ){ // this is the starting point
+				//	Koru.log(solid(axg + x, ayg + y));
 					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
 					graph.addNode(nodearray[x + node_range][y + node_range]);
 					start = nodearray[x + node_range][y + node_range];
@@ -43,6 +63,7 @@ public class AIData{
 					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
 					graph.addNode(nodearray[x + node_range][y + node_range]);
 					end = nodearray[x + node_range][y + node_range];
+					ended = true;
 				}else if(solid(axg + x, ayg + y)){ // this block is solid, ignoring
 					nodearray[x + node_range][y + node_range] = null;
 				}else{ //otherwise, normal node
@@ -52,7 +73,7 @@ public class AIData{
 
 			}
 		}
-		
+		//Koru.log("ended: " + ended);
 		//add linked neighbors
 		for(int x = 0;x < node_range * 2;x ++){
 			for(int y = 0;y < node_range * 2;y ++){
@@ -84,9 +105,9 @@ public class AIData{
 	
 
 
-	private void addNodeNeighbour(Node aNode, int aX, int aY, int rx, int ry){
+	private void addNodeNeighbour(Node node, int aX, int aY, int rx, int ry){
 		if(aX >= 0 && aX < node_range * 2 && aY >= 0 && aY < node_range * 2){
-			aNode.addNeighbour(nodearray[aX][aY]);
+			node.addNeighbour(nodearray[aX][aY]);
 		}
 	}
 }

@@ -11,21 +11,23 @@ public class AIController{
 
 	public static Vector2 pathfindTo(AIData data, float x, float y, float targetx, float targety){
 
-		if( !Cast2(x, y, targetx, targety) && false){
-			v.set(targetx, targety);
-		}else{
-			if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null){
-				data.CreatePath(x, y, targetx, targety);
-			}
-			if(data.path.nodes.size <= 1) return v.set(targetx, targety);
-			
-			if(data.node + 2 >= data.path.nodes.size){
-				return v.set(targetx, targety);
-			}else if(data.path.getNodePosition(1 + data.node).dst(v.set(x, y)) <= 1f){
-				data.node ++;
-			}
-			v.set(data.path.getNodePosition(1 + data.node));
+		//if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null){
+		data.CreatePath(x, y, targetx, targety);
+		//	}
+		
+		if(data.path.nodes.size <= 1){
+	//		Koru.log("returning direct path");
+			return data.path.nodes.size == 0 ? v.set(targetx,targety) : v.set(data.path.getNodePosition(0));
 		}
+
+		if(data.node + 2 >= data.path.nodes.size){
+		//	Koru.log("returning broken short path");
+			return v.set(targetx, targety);
+		}else if(data.path.getNodePosition(1 + data.node).dst(v.set(x, y)) <= 1f){
+			data.node ++;
+		}
+		//Koru.log("returning normal path");
+		v.set(data.path.getNodePosition(1 + data.node));
 		return v;
 		/*
 		//Cast(x, y, x + 50, y + 50);
@@ -140,39 +142,40 @@ public class AIController{
 	public static boolean solid(float x, float y){
 		return false;
 	}
-/*
-	public static Array<Vector2> line(int x0, int y0, int x1, int y1){
-		Array<Vector2> line = new Array<Vector2>();
 
-		int dx = Math.abs(x1 - x0);
-		int dy = Math.abs(y1 - y0);
+	/*
+		public static Array<Vector2> line(int x0, int y0, int x1, int y1){
+			Array<Vector2> line = new Array<Vector2>();
 
-		int sx = x0 < x1 ? 1 : -1;
-		int sy = y0 < y1 ? 1 : -1;
+			int dx = Math.abs(x1 - x0);
+			int dy = Math.abs(y1 - y0);
 
-		int err = dx - dy;
-		int e2;
+			int sx = x0 < x1 ? 1 : -1;
+			int sy = y0 < y1 ? 1 : -1;
 
-		while(true){
-			line.add(new Vector2(x0, y0));
-			if((x0 + y0) % 10 == 0) new FramedEffect(x0, y0, "blank", 1, 5).SetColor(0, 0, 1).SetLayer( -1).SetShadow(false).SetNoFrame(true).SendSelf();
+			int err = dx - dy;
+			int e2;
 
-			if(x0 == x1 && y0 == y1) break;
+			while(true){
+				line.add(new Vector2(x0, y0));
+				if((x0 + y0) % 10 == 0) new FramedEffect(x0, y0, "blank", 1, 5).SetColor(0, 0, 1).SetLayer( -1).SetShadow(false).SetNoFrame(true).SendSelf();
 
-			e2 = 2 * err;
-			if(e2 > -dy){
-				err = err - dy;
-				x0 = x0 + sx;
+				if(x0 == x1 && y0 == y1) break;
+
+				e2 = 2 * err;
+				if(e2 > -dy){
+					err = err - dy;
+					x0 = x0 + sx;
+				}
+
+				if(e2 < dx){
+					err = err + dx;
+					y0 = y0 + sy;
+				}
 			}
-
-			if(e2 < dx){
-				err = err + dx;
-				y0 = y0 + sy;
-			}
+			return line;
 		}
-		return line;
-	}
-*/
+	*/
 	public static boolean Cast2(float x0f, float y0f, float x1f, float y1f){
 		int x0 = (int)x0f;
 		int y0 = (int)y0f;

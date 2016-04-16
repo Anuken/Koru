@@ -2,14 +2,17 @@ package net.pixelstatic.koru.modules;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.network.packets.BlockInputPacket;
 import net.pixelstatic.koru.network.packets.InputPacket;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.utils.InputType;
+import net.pixelstatic.koru.world.Material;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Input extends Module implements InputProcessor{
 	private Vector2 vector = new Vector2();
@@ -31,7 +34,8 @@ public class Input extends Module implements InputProcessor{
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
 			Gdx.app.exit();
 		}
-	
+		
+		if(Gdx.input.isKeyJustPressed(Keys.R)) sendInput(InputType.r);
 		
 		float speed = 1f;
 		
@@ -84,11 +88,19 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
+		BlockInputPacket packet = new BlockInputPacket();
 		if(button == Buttons.LEFT){
 			sendInput(InputType.leftclick_down);
+			packet.material = Material.woodblock;
 		}else if(button == Buttons.RIGHT){
 			sendInput(InputType.rightclick_down);
+			packet.material = Material.air;
 		}
+		
+		Vector2 mouse = cursorblock();
+		packet.x = (int)mouse.x;
+		packet.y = (int)mouse.y;
+		getModule(Network.class).client.sendTCP(packet);
 		return false;
 	}
 
@@ -115,6 +127,11 @@ public class Input extends Module implements InputProcessor{
 	@Override
 	public boolean scrolled(int amount){
 		return false;
+	}
+	
+	public Vector2 cursorblock(){
+		Vector3 v = getModule(Renderer.class).camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(), 1f));
+		return new Vector2(World.tile(v.x), World.tile(v.y));
 	}
 
 }

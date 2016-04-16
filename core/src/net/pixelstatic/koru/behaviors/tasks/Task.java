@@ -26,4 +26,8 @@ public abstract class Task{
 	protected void finish(){
 		behavior.tasks.removeValue(this, true);
 	}
+	
+	public String toString(){
+		return this.getClass().getSimpleName();
+	}
 }

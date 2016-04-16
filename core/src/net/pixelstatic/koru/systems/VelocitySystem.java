@@ -26,7 +26,7 @@ public class VelocitySystem extends KoruSystem{
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 
-		if(hitbox != null && KoruServer.active){
+		if(hitbox != null && KoruServer.active && hitbox.collideterrain){
 			collisions.moveWithCollisions(KoruUpdater.instance.world, entity, addx, addy);
 		}else{
 			entity.position().x += addx;
