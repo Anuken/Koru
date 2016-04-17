@@ -31,6 +31,12 @@ public class Layer implements Comparable<Layer>, Poolable{
 
 	public void Draw(Renderer renderer){
 		renderer.batch().setColor(color);
+		
+		if(MathUtils.isEqual(layer, 1f)){
+		//	Gdx.gl.glBlendFunc(GL20.GL_ONE_MINUS_CONSTANT_COLOR, GL20.GL_ONE_MINUS_CONSTANT_COLOR);
+		}else{
+	//		Gdx.gl.glBlendFunc(GL20.GL_SRC_COLOR, GL20.GL_SRC_COLOR);
+		}
 		if(region.equals("")){
 		//	Koru.log(x + " " + y + " " + type);
 		}
@@ -69,9 +75,13 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 	
 	public Layer addShadow(){
+		return addShadow("shadow" + (int)(atlas.findRegion(region).getRegionWidth()*0.9f/2f)*2);
+	}
+	
+	public Layer addShadow(String name){
 		Layer shadow = obtainLayer();
-		shadow.region = "shadow" + (int)(atlas.findRegion(region).getRegionWidth()*0.9f/2f)*2;
-		shadow.setPosition(x, y).setColor(shadowcolor).setTemp().setLayer(1f).add();
+		shadow.region = name;
+		shadow.setPosition(x, y)/*.setColor(shadowcolor)*/.setTemp().setLayer(shadowlayer).add();
 		return this;
 	}
 	

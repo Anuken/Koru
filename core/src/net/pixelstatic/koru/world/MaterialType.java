@@ -8,18 +8,14 @@ import com.badlogic.gdx.math.Rectangle;
 public enum MaterialType{
 	tile{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			//if(!this.world.blends(x, y, material)){
-				renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(material.ordinal()));
-			//}else{
-				if(this.world.blends(x, y, material))
-				renderer.layer(material.name() + "edge", tile(x), tile(y)).setLayer(tilelayer(material.ordinal()) - 1);
-			//}
+			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(material.ordinal()));
+			if(this.world.blends(x, y, material)) renderer.layer(material.name() + "edge", tile(x), tile(y)).setLayer(tilelayer(material.ordinal()) - 1);
 		}
 	},
 	block{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(material.name(), tile(x), tile(y)-World.tilesize/2+0.5f).yLayer();
-			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f-World.tilesize/2).setLayer(1f).setScale(0.14f);
+			renderer.layer(material.name(), tile(x), tile(y) - World.tilesize / 2 + 0.5f).yLayer().addShadow("wallshadow");
+			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f - World.tilesize / 2).setLayer(1f).setScale(0.14f);
 		}
 
 		public boolean tile(){
@@ -33,7 +29,6 @@ public enum MaterialType{
 	tree{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).alignBottom().yLayer();
-		//	renderer.layer(material.name() + "shadow", tile(x), tile(y)).setLayer(Layer.shadowlayer);
 		}
 
 		public boolean tile(){
@@ -53,7 +48,6 @@ public enum MaterialType{
 	grass{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).alignBottom().yLayer().setColor(tile.tile.foilageColor());
-		//	renderer.layer(material.name() + "shadow", tile(x), tile(y)).setLayer(Layer.shadowlayer);
 		}
 
 		public boolean tile(){
