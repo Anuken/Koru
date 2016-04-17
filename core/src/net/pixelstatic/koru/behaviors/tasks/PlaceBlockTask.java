@@ -33,7 +33,7 @@ public class PlaceBlockTask extends Task{
 			finish();
 			return;
 		}
-		world.tiles[blockx][blocky].block = material;
+		world.tiles[blockx][blocky].setMaterial(material);
 		world.updateTile(blockx, blocky);
 		entity.mapComponent(InventoryComponent.class).removeItem(new ItemStack(Item.wood, 3));
 		finish();

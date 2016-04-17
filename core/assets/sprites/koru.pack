@@ -221,6 +221,200 @@ koru4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+shadows/shadow58
+  rotate: false
+  xy: 1, 8
+  size: 58, 7
+  orig: 58, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow56
+  rotate: false
+  xy: 61, 8
+  size: 56, 7
+  orig: 56, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow54
+  rotate: false
+  xy: 119, 8
+  size: 54, 7
+  orig: 54, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow52
+  rotate: false
+  xy: 175, 8
+  size: 52, 7
+  orig: 52, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow50
+  rotate: false
+  xy: 229, 8
+  size: 50, 7
+  orig: 50, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow48
+  rotate: false
+  xy: 281, 8
+  size: 48, 7
+  orig: 48, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow46
+  rotate: false
+  xy: 331, 7
+  size: 46, 8
+  orig: 46, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow44
+  rotate: false
+  xy: 379, 7
+  size: 44, 8
+  orig: 44, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow42
+  rotate: false
+  xy: 425, 7
+  size: 42, 8
+  orig: 42, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow40
+  rotate: false
+  xy: 469, 7
+  size: 40, 8
+  orig: 40, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow38
+  rotate: false
+  xy: 511, 7
+  size: 38, 8
+  orig: 38, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow36
+  rotate: false
+  xy: 551, 7
+  size: 36, 8
+  orig: 36, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow34
+  rotate: false
+  xy: 589, 7
+  size: 34, 8
+  orig: 34, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow32
+  rotate: false
+  xy: 625, 7
+  size: 32, 8
+  orig: 32, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow30
+  rotate: false
+  xy: 659, 7
+  size: 30, 8
+  orig: 30, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow28
+  rotate: false
+  xy: 691, 7
+  size: 28, 8
+  orig: 28, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow26
+  rotate: false
+  xy: 721, 7
+  size: 26, 8
+  orig: 26, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow24
+  rotate: false
+  xy: 749, 7
+  size: 24, 8
+  orig: 24, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow22
+  rotate: false
+  xy: 775, 7
+  size: 22, 8
+  orig: 22, 8
+  offset: 0, 0
+  index: -1
+shadows/shadow10
+  rotate: false
+  xy: 1, 1
+  size: 10, 5
+  orig: 10, 5
+  offset: 0, 0
+  index: -1
+shadows/shadow20
+  rotate: false
+  xy: 799, 8
+  size: 20, 7
+  orig: 20, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow18
+  rotate: false
+  xy: 821, 8
+  size: 18, 7
+  orig: 18, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow16
+  rotate: false
+  xy: 841, 8
+  size: 16, 7
+  orig: 16, 7
+  offset: 0, 0
+  index: -1
+shadows/shadow14
+  rotate: false
+  xy: 859, 9
+  size: 14, 6
+  orig: 14, 6
+  offset: 0, 0
+  index: -1
+shadows/shadow12
+  rotate: false
+  xy: 859, 1
+  size: 12, 6
+  orig: 12, 6
+  offset: 0, 0
+  index: -1
+shadows/shadow8
+  rotate: false
+  xy: 13, 2
+  size: 8, 4
+  orig: 8, 4
+  offset: 0, 0
+  index: -1
+shadows/shadow6
+  rotate: false
+  xy: 875, 12
+  size: 6, 3
+  orig: 6, 3
+  offset: 0, 0
+  index: -1
+
+koru5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 other/hitbox
   rotate: false
   xy: 1, 11
@@ -243,75 +437,89 @@ other/error
   offset: 0, 0
   index: -1
 
-koru5.png
+koru6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 tiles/walldropshadow
   rotate: false
-  xy: 1, 51
+  xy: 1, 58
   size: 260, 260
   orig: 260, 260
   offset: 0, 0
   index: -1
 tiles/magmarockedge
   rotate: false
-  xy: 1, 33
+  xy: 1, 40
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneedge
   rotate: false
-  xy: 263, 295
+  xy: 263, 302
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/grassedge
   rotate: false
-  xy: 1, 15
+  xy: 1, 22
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiles/woodflooredge
+  rotate: false
+  xy: 19, 40
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneblock
   rotate: false
-  xy: 19, 30
+  xy: 263, 281
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/woodblock
   rotate: false
-  xy: 263, 274
+  xy: 1, 1
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/grass
   rotate: false
-  xy: 281, 299
+  xy: 281, 306
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+tiles/woodfloor
+  rotate: false
+  xy: 19, 26
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone
   rotate: false
-  xy: 1, 1
+  xy: 37, 44
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/magmarock
   rotate: false
-  xy: 19, 16
+  xy: 263, 267
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 
-koru6.png
+koru7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

@@ -14,6 +14,15 @@ public class Tile{
 		return this;
 	}
 	
+	public void setMaterial(Material m){
+	
+		if(m.getType().tile()){
+			tile = m;
+		}else{
+			block = m;
+		}
+	}
+	
 	public String toString(){
 		return "Tile:[block="+block+" tile="+tile+ "]";
 	}

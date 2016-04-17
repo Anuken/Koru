@@ -9,6 +9,7 @@ public enum Material{
 	air, 
 	grass(Colors.colora(69, 109, 29,0.04f)), 
 	stone, 
+	woodfloor, 
 	tallgrass1(MaterialType.grass),
 	tallgrass2(MaterialType.grass),
 	tallgrass3(MaterialType.grass),

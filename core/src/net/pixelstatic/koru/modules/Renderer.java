@@ -41,6 +41,8 @@ public class Renderer extends Module{
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
+		Layer.atlas = this.atlas;
+		//atlas.addRegion(name, textureRegion)
 	}
 	
 	public void init(){

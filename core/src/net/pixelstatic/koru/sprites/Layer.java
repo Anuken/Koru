@@ -6,10 +6,12 @@ import net.pixelstatic.koru.modules.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
+	public static KoruAtlas atlas;
 	boolean temp = false;
 	public static final float shadowlayer = 0, shadowoffset = -10;
 	public static final Color shadowcolor = new Color(0,0,0,0.14f);
@@ -21,6 +23,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public String text;
 	public TextureRegion texture;
 	public boolean alignbottom = false;
+	public float haddscl = 0f;
 
 	public enum LayerType{
 		SPRITE, TEXT, TEXTURE, SHAPE
@@ -33,12 +36,13 @@ public class Layer implements Comparable<Layer>, Poolable{
 		}
 		if(type == LayerType.SPRITE){
 			float yalign = 0;
-			if(alignbottom){
+			if(alignbottom || !MathUtils.isEqual(haddscl, 0)){
 				TextureRegion tex = renderer.getRegion(region);
 				yalign = tex.getRegionHeight()/2;
+				yalign += tex.getRegionHeight()*haddscl;
 			}
 			if(scaled){
-				renderer.drawscl(region, x, y, scalex, scaley);
+				renderer.drawscl(region, x, y+yalign, scalex, scaley);
 			}else if(rotation == 0){
 				renderer.draw(region, x, y+yalign);
 			}else{
@@ -66,8 +70,13 @@ public class Layer implements Comparable<Layer>, Poolable{
 	
 	public Layer addShadow(){
 		Layer shadow = obtainLayer();
-		shadow.set(this).setColor(shadowcolor).setTemp().setScale(1f, -1f).setLayer(1f).add();
-		
+		shadow.region = "shadow" + (int)(atlas.findRegion(region).getRegionWidth()*0.9f/2f)*2;
+		shadow.setPosition(x, y).setColor(shadowcolor).setTemp().setLayer(1f).add();
+		return this;
+	}
+	
+	public Layer setHeightAddScale(float h){
+		haddscl = h;
 		return this;
 	}
 	
@@ -83,7 +92,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public Layer yLayer(float y){
 		this.alignbottom = true;
 		layer = posLayer(y) + heightoffset;
-	//	addShadow();
+		addShadow();
 		return this;
 	}
 	
@@ -222,6 +231,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 		alignbottom = false;
 		heightoffset = 0;
 		width =0; height=0;
+		haddscl = 0f;
 	}
 
 	@Override

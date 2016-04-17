@@ -9,12 +9,12 @@ public class Group{
 	public Array<PlaceBlockTask> taskpool = new Array<PlaceBlockTask>();
 	//@formatter:off
 	int[][] blocks = {
-		{1,0,0,0,0,0},
-		{1,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{1,0,0,0,0,0},
-		{1,0,0,0,0,0},
-		{1,1,1,0,1,1},
+		{1,1,1,1,1,1},
+		{1,0,0,0,0,1},
+		{1,0,0,0,0,1},
+		{1,0,0,0,0,1},
+		{1,0,0,0,0,1},
+		{1,1,0,0,1,1},
 	};
 	//@formatter:on
 
@@ -23,9 +23,13 @@ public class Group{
 	}
 
 	public Group(){
+		addBuilding(20, 20);
+	
+		/*
 		int range = 3;
 		for(int fx = 0;fx < range;fx ++){
 			for(int fy = 0;fy < range;fy ++){
+				
 				int ex = 40 + fx*blocks.length;
 				int ey = 40 + fy*blocks.length;
 				for(int x = 0;x < blocks.length;x ++){
@@ -37,6 +41,21 @@ public class Group{
 						}
 					}
 				}
+				
+				
+			}
+		}
+		*/
+	}
+	
+	private void addBuilding(int ex, int ey){
+		for(int x = 0;x < blocks.length;x ++){
+			for(int y = 0;y < blocks[x].length;y ++){
+				int worldx = ex + x, worldy = ey + y;
+				//if(blocks[x][y] != 0){
+					//	tasks.add(new MoveTowardTask(worldx*12+6, (worldy+2)*12+6));
+					taskpool.add(new PlaceBlockTask(worldx, worldy, blocks[x][y] != 0 ? Material.woodblock : Material.woodfloor));
+				//}
 			}
 		}
 	}
