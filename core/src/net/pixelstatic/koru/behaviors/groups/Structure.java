@@ -25,11 +25,11 @@ public class Structure{
 		this.y = y;
 		addTasks();
 	}
-	
+
 	public boolean isDone(){
 		return tasks.size == 0;
 	}
-	
+
 	public Task getTask(){
 		return tasks.pop();
 	}
@@ -38,7 +38,24 @@ public class Structure{
 		for(int x = 0;x < blocks.length;x ++){
 			for(int y = 0;y < blocks[x].length;y ++){
 				int worldx = this.x + x, worldy = this.y + y;
-				tasks.add(new PlaceBlockTask(worldx, worldy, blocks[x][y] != 0 ? Material.woodblock : Material.woodfloor));
+				int id = blocks[x][y];
+				Material block = null;
+				Material floor = null;
+				
+				if(id == 0){
+					floor = Material.woodfloor;
+				}else if(id == 1){
+					block = Material.woodblock;
+				}else if(id == 2){
+					block = Material.pinesapling;
+				}
+					
+				
+
+				if(block != null) tasks.add(new PlaceBlockTask(worldx, worldy, block));
+
+				if(floor != null) tasks.add(new PlaceBlockTask(worldx, worldy, floor));
+
 			}
 		}
 	}

@@ -94,7 +94,7 @@ public class CollisionSystem extends KoruSystem{
 				int worldx = tilex + rx, worldy = tiley + ry;
 				if( !World.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tiles[worldx][worldy];
-				if( !tile.block.getType().solid()) continue;
+				if( !tile.block.getType().solid() || !tile.block.collisionsEnabled()) continue;
 				if(component.terrainhitbox.collides(tile.block.getType().getRect(worldx, worldy, rect))){
 					return true;
 				}

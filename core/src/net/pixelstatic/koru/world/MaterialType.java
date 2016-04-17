@@ -12,6 +12,20 @@ public enum MaterialType{
 			if(this.world.blends(x, y, material)) renderer.layer(material.name() + "edge", tile(x), tile(y)).setLayer(tilelayer(material.ordinal()) - 1);
 		}
 	},
+	water{
+		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
+			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(2));
+		}
+	},
+	overlay{
+		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
+			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(256));
+		}
+		
+		public boolean tile(){
+			return false;
+		}
+	},
 	block{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y) - World.tilesize / 2 + 0.5f).yLayer().addShadow("wallshadow");

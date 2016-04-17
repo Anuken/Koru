@@ -1,6 +1,6 @@
 package net.pixelstatic.koru.items;
 
-public class ItemStack{
+public class ItemStack implements Cloneable{
 	public Item item;
 	public int amount;
 	
@@ -15,5 +15,9 @@ public class ItemStack{
 	
 	public ItemStack(){
 		
+	}
+	
+	public ItemStack clone(){
+		return new ItemStack(this);
 	}
 }

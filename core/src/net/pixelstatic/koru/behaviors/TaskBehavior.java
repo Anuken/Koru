@@ -19,6 +19,10 @@ public class TaskBehavior extends Behavior{
 		if(tasks.size == 0) return;
 		if(tasks.get(0).getClass() == c) tasks.removeIndex(0);
 	}
+	
+	public boolean anyTasks(){
+		return tasks.size != 0;
+	}
 
 	public void removeTask(Class<? extends Task> c){
 		Object[] to = tasks.begin();

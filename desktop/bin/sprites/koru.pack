@@ -185,6 +185,20 @@ objects/fern1shadow
   orig: 16, 16
   offset: 0, 0
   index: -1
+objects/pinecones
+  rotate: false
+  xy: 303, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/pinesapling
+  rotate: false
+  xy: 249, 37
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 
 koru2.png
 format: RGBA8888
@@ -450,56 +464,63 @@ filter: Nearest,Nearest
 repeat: none
 tiles/walldropshadow
   rotate: false
-  xy: 1, 58
+  xy: 1, 54
   size: 260, 260
   orig: 260, 260
   offset: 0, 0
   index: -1
-tiles/magmarockedge
+tiles/water
   rotate: false
   xy: 1, 40
+  size: 24, 12
+  orig: 24, 12
+  offset: 0, 0
+  index: -1
+tiles/magmarockedge
+  rotate: false
+  xy: 263, 298
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneedge
   rotate: false
-  xy: 263, 302
+  xy: 1, 22
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/grassedge
   rotate: false
-  xy: 1, 22
+  xy: 263, 280
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/woodflooredge
   rotate: false
-  xy: 19, 40
+  xy: 281, 298
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneblock
   rotate: false
-  xy: 263, 281
+  xy: 1, 1
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/woodblock
   rotate: false
-  xy: 1, 1
+  xy: 263, 259
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/grass
   rotate: false
-  xy: 281, 306
+  xy: 27, 40
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -513,14 +534,14 @@ tiles/woodfloor
   index: -1
 tiles/stone
   rotate: false
-  xy: 37, 44
+  xy: 281, 284
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/magmarock
   rotate: false
-  xy: 263, 267
+  xy: 299, 302
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

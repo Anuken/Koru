@@ -8,23 +8,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class Group{
 	public static Group instance;
-	//private Array<PlaceBlockTask> taskpool = new Array<PlaceBlockTask>();
 	private Array<Point> usedtasks = new Array<Point>();
 	private Array<Structure> structures = new Array<Structure>();
-	//private int x = 20, y = 20;
-	//@formatter:off
-	/*
-	int[][] blocks = {
-		{1,1,1,1,1,1},
-		{1,0,0,0,0,1},
-		{0,0,0,0,0,1},
-		{0,0,0,0,0,1},
-		{1,0,0,0,0,1},
-		{1,1,1,1,1,1},
-	};
-	//@formatter:on
-	 * */
-	 
 
 	static{
 		instance = new Group();
@@ -32,9 +17,13 @@ public class Group{
 
 	public Group(){
 		structures.add(new Structure(20, 20));
-		structures.add(new Structure(20, 30));
-		structures.add(new Structure(20, 40));
+		structures.add(new Structure(30, 20));
+		structures.add(new Structure(40, 20));
 		//addBuilding(x, y);
+	}
+	
+	private void addNewBuildings(){
+		
 	}
 	
 	public boolean blockReserved(int x, int y){
@@ -65,6 +54,7 @@ public class Group{
 				return structure.getTask();
 			}
 		}
+		addNewBuildings();
 		return null;
 	}
 }

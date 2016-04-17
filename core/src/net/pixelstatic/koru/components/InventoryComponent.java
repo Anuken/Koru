@@ -7,15 +7,20 @@ import com.badlogic.ashley.core.Component;
 
 public class InventoryComponent implements Component{
 	public ItemStack[][] inventory;
-	
+
 	public InventoryComponent(int width, int height){
 		inventory = new ItemStack[width][height];
 	}
-	
+
+	public void addItems(Iterable<ItemStack> items){
+		for(ItemStack item : items)
+			addItem(item);
+	}
+
 	public boolean addItem(ItemStack item){
 		ItemStack stack = new ItemStack(item);
-		for(int x = 0; x < inventory.length; x ++){
-			for(int y = 0; y < inventory[x].length; y ++){
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
 				if(inventory[x][y] == null){
 					inventory[x][y] = stack;
 					return true;
@@ -32,11 +37,11 @@ public class InventoryComponent implements Component{
 		}
 		return false;
 	}
-	
+
 	public boolean removeItem(ItemStack item){
 		ItemStack stack = new ItemStack(item);
-		for(int x = 0; x < inventory.length; x ++){
-			for(int y = 0; y < inventory[x].length; y ++){
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
 				if(inventory[x][y] == null) continue;
 				if(inventory[x][y].item == stack.item){
 					if(inventory[x][y].amount >= stack.amount){
@@ -52,11 +57,11 @@ public class InventoryComponent implements Component{
 		}
 		return stack.amount == 0;
 	}
-	
+
 	public int quantityOf(Item item){
 		int sum = 0;
-		for(int x = 0; x < inventory.length; x ++){
-			for(int y = 0; y < inventory[x].length; y ++){
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
 				if(inventory[x][y] != null && inventory[x][y].item == item){
 					sum += inventory[x][y].amount;
 				}
@@ -64,5 +69,5 @@ public class InventoryComponent implements Component{
 		}
 		return sum;
 	}
-		
+
 }

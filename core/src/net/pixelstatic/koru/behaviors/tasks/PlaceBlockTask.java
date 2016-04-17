@@ -26,7 +26,7 @@ public class PlaceBlockTask extends Task{
 			insertTask(new MoveTowardTask(blockx*12+6, (blocky)*12+6));
 			return;
 		}else if(world.tiles[blockx][blocky].block != Material.air){
-			insertTask(new BreakBlockTask(blockx, blocky));
+			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
 			return;
 		}
 		if(entity.mapComponent(InventoryComponent.class).quantityOf(Item.wood) < 3){
