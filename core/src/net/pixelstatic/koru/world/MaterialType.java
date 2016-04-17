@@ -28,7 +28,7 @@ public enum MaterialType{
 	},
 	tree{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(material.name(), tile(x), tile(y)).alignBottom().yLayer();
+			renderer.layer(material.name(), tile(x), tile(y)).yLayer();
 		}
 
 		public boolean tile(){
@@ -47,7 +47,7 @@ public enum MaterialType{
 	},
 	grass{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(material.name(), tile(x), tile(y)).alignBottom().yLayer().setColor(tile.tile.foilageColor());
+			renderer.layer(material.name(), tile(x), tile(y)).yLayer().setColor(tile.tile.foilageColor());
 		}
 
 		public boolean tile(){

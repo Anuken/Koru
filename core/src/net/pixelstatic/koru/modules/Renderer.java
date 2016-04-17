@@ -93,6 +93,7 @@ public class Renderer extends Module{
 		boolean inshadow = false;
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
+			
 			if(MathUtils.isEqual(layer.layer, Layer.shadowlayer)){ //layer is shadow layer
 				if( !inshadow){
 					inshadow = true;
@@ -106,7 +107,7 @@ public class Renderer extends Module{
 				buffer.end();
 				batch.begin();
 				batch.setColor(Layer.shadowcolor);
-				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2, camera.position.y + camera.viewportHeight / 2, camera.viewportWidth, -camera.viewportHeight);
+				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth/2, camera.position.y + camera.viewportHeight/2, camera.viewportWidth, -camera.viewportHeight);
 				batch.setColor(Color.WHITE);
 				inshadow = false;
 			}

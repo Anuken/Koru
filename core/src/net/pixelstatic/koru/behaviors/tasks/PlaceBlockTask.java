@@ -22,8 +22,8 @@ public class PlaceBlockTask extends Task{
 	@Override
 	protected void update(){
 		World world = KoruUpdater.instance.world;
-		if(Vector2.dst(entity.getX(), entity.getY(), blockx*12+6, (blocky+2)*12+6) > MoveTowardTask.completerange){
-			insertTask(new MoveTowardTask(blockx*12+6, (blocky+2)*12+6));
+		if(Vector2.dst(entity.getX(), entity.getY(), blockx*12+6, (blocky)*12+6) > MoveTowardTask.completerange){
+			insertTask(new MoveTowardTask(blockx*12+6, (blocky)*12+6));
 			return;
 		}else if(world.tiles[blockx][blocky].block != Material.air){
 			insertTask(new BreakBlockTask(blockx, blocky));

@@ -6,7 +6,6 @@ import net.pixelstatic.koru.modules.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class Layer implements Comparable<Layer>, Poolable{
@@ -23,7 +22,6 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public String text;
 	public TextureRegion texture;
 	public boolean alignbottom = false;
-	public float haddscl = 0f;
 
 	public enum LayerType{
 		SPRITE, TEXT, TEXTURE, SHAPE
@@ -31,21 +29,11 @@ public class Layer implements Comparable<Layer>, Poolable{
 
 	public void Draw(Renderer renderer){
 		renderer.batch().setColor(color);
-		
-		if(MathUtils.isEqual(layer, 1f)){
-		//	Gdx.gl.glBlendFunc(GL20.GL_ONE_MINUS_CONSTANT_COLOR, GL20.GL_ONE_MINUS_CONSTANT_COLOR);
-		}else{
-	//		Gdx.gl.glBlendFunc(GL20.GL_SRC_COLOR, GL20.GL_SRC_COLOR);
-		}
-		if(region.equals("")){
-		//	Koru.log(x + " " + y + " " + type);
-		}
 		if(type == LayerType.SPRITE){
 			float yalign = 0;
-			if(alignbottom || !MathUtils.isEqual(haddscl, 0)){
+			if(alignbottom){
 				TextureRegion tex = renderer.getRegion(region);
 				yalign = tex.getRegionHeight()/2;
-				yalign += tex.getRegionHeight()*haddscl;
 			}
 			if(scaled){
 				renderer.drawscl(region, x, y+yalign, scalex, scaley);
@@ -82,11 +70,6 @@ public class Layer implements Comparable<Layer>, Poolable{
 		Layer shadow = obtainLayer();
 		shadow.region = name;
 		shadow.setPosition(x, y)/*.setColor(shadowcolor)*/.setTemp().setLayer(shadowlayer).add();
-		return this;
-	}
-	
-	public Layer setHeightAddScale(float h){
-		haddscl = h;
 		return this;
 	}
 	
@@ -241,7 +224,6 @@ public class Layer implements Comparable<Layer>, Poolable{
 		alignbottom = false;
 		heightoffset = 0;
 		width =0; height=0;
-		haddscl = 0f;
 	}
 
 	@Override
