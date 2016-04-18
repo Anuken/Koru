@@ -7,6 +7,8 @@ import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.entities.ProjectileType;
+import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.network.SyncBuffer.PositionSyncBuffer;
 import net.pixelstatic.koru.network.SyncBuffer.Synced;
 import net.pixelstatic.koru.network.packets.*;
@@ -46,6 +48,7 @@ public class Registrator{
 		k.register(ConnectionComponent.class);
 		k.register(ChildComponent.class);
 		k.register(TextComponent.class);
+		k.register(InventoryComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncBuffer.class);
@@ -58,6 +61,10 @@ public class Registrator{
 		k.register(Tile[][].class);
 		k.register(Tile[][][].class);
 		k.register(Material.class);
+		k.register(ItemStack.class);
+		k.register(ItemStack[].class);
+		k.register(ItemStack[][].class);
+		k.register(Item.class);
 		
 		k.register(InputType.class);
 		k.register(SyncType.class);

@@ -5,6 +5,7 @@ import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.MaterialType;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -24,7 +25,9 @@ public class PlaceBlockTask extends Task{
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
 			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
 			return;
-		}else if(world.tiles[blockx][blocky].block != Material.air){
+		}else if(world.tiles[blockx][blocky].block != Material.air && 
+				(!material.getType().tile() || world.tiles[blockx][blocky].block.getType() == MaterialType.grass  
+				|| world.tiles[blockx][blocky].block.getType() == MaterialType.tree)){
 			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
 			return;
 		}

@@ -11,6 +11,10 @@ public class InventoryComponent implements Component{
 	public InventoryComponent(int width, int height){
 		inventory = new ItemStack[width][height];
 	}
+	
+	@SuppressWarnings("unused")
+	private InventoryComponent(){}
+	
 
 	public void addItems(Iterable<ItemStack> items){
 		for(ItemStack item : items)
@@ -36,6 +40,29 @@ public class InventoryComponent implements Component{
 			}
 		}
 		return false;
+	}
+	
+	public int size(){
+		return inventory.length * inventory[0].length;
+	}
+	
+	public int usedSlots(){
+		int slots = 0;
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				if(inventory[x][y] != null)
+				slots ++;
+			}
+		}
+		return slots;
+	}
+	
+	public void clear(){
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				inventory[x][y] = null;
+			}
+		}
 	}
 
 	public boolean removeItem(ItemStack item){

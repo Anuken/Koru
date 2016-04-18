@@ -90,9 +90,10 @@ public class Renderer extends Module{
 	public void drawGUI(){
 		Point cursor = getModule(Input.class).cursorblock();
 		Tile tile = world.getTile(cursor);
+		font.getData().setScale(1/GUIscale);
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
-			font.draw(batch, data.inventory.toString(), Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			font.draw(batch, data.inventory.toString(), Gdx.input.getX()/GUIscale, Gdx.graphics.getHeight()/GUIscale - Gdx.input.getY()/GUIscale);
 		}
 	}
 

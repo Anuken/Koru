@@ -53,6 +53,7 @@ public enum Material{
 	stoneblock(MaterialType.block),
 	woodblock(MaterialType.block){{addDrop(Item.wood, 3);}},
 	box(MaterialType.chest){
+	//	{addDrop(Item.wood, 3);}
 		public TileData getDefaultData(){
 			return new InventoryTileData(5,5);
 		}
@@ -129,7 +130,7 @@ public enum Material{
 	}
 	
 	public Class<? extends TileData> getDataClass(){
-		return TileData.class;
+		return null;
 	}
 	
 	public boolean growable(){

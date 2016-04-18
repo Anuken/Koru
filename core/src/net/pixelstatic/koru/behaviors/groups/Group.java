@@ -3,6 +3,7 @@ package net.pixelstatic.koru.behaviors.groups;
 import java.awt.Point;
 
 import net.pixelstatic.koru.behaviors.tasks.*;
+import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.world.Material;
@@ -26,8 +27,9 @@ public class Group{
 	}
 
 	public Group(){
-		structures.add(new Structure(StructureType.garden, 20, 20));
+		//structures.add(new Structure(StructureType.garden, 20, 20));
 		structures.add(new Structure(StructureType.storage, 20, 30));
+		structures.add(new Structure(StructureType.garden, 20, 20));
 		
 		//structures.add(new Structure(StructureSchematic.house, 30, 20));
 		//structures.add(new Structure(StructureSchematic.house, 40, 20));
@@ -38,7 +40,19 @@ public class Group{
 		entities.add(entity);
 	}
 	
-	private Task getDefaultTask(){
+	private Task getDefaultTask(KoruEntity entity){
+		points.clear();
+		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
+		
+		if(inventory.usedSlots() > 3){
+			for(Structure structure : structures){ // get all chest blocks
+				if(structure.isDone())
+				points.addAll(structure.getBlocks(3));
+			}
+			if(points.size == 0) return null;
+			return new StoreItemTask(points.first().x, points.first().y);
+		}
+		
 		for(Structure structure : structures){ // get all shrub blocks
 			points.addAll(structure.getBlocks(2));
 		}
@@ -88,12 +102,12 @@ public class Group{
 		usedtasks.add(new Point(x,y));
 	}
 	
-	public Task getTask(){
+	public Task getTask(KoruEntity entity){
 		for(Structure structure : structures){
 			if(!structure.isDone()){
 				return structure.getTask();
 			}
 		}
-		return getDefaultTask();
+		return getDefaultTask(entity);
 	}
 }

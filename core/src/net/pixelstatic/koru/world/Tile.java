@@ -38,6 +38,14 @@ public class Tile{
 	}
 	
 	protected boolean checkData(Material material, Class<? extends TileData> data){
+		if(material.getDataClass() == null){
+			if(material.getType().tile()){
+				tiledata = null;
+			}else{
+				blockdata = null;
+			}
+			return false;
+		}
 		if(material.getType().tile()){
 			if(tiledata == null || !tiledata.getClass().getCanonicalName().equals(data.getCanonicalName())){
 				tiledata = material.getDefaultData();

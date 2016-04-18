@@ -69,6 +69,9 @@ public class Structure{
 					block = Material.woodblock;
 				}else if(id == 2){
 					block = Material.pinesapling;
+				}else if(id == 3){
+					block = Material.box;
+					floor = Material.woodfloor;
 				}
 				
 				if(block != null) tasks.add(new PlaceBlockTask(worldx, worldy, block));

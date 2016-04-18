@@ -11,7 +11,7 @@ public enum Item{
 		this.stacksize = stacksize;
 	}
 	
-	private int stacksize = 999;
+	private int stacksize = 40;
 	
 	public int getMaxStackSize(){
 		return stacksize;

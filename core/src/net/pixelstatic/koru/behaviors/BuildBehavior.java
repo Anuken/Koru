@@ -20,7 +20,7 @@ public class BuildBehavior extends TaskBehavior{
 	}
 
 	private void addBlockTask(){
-		Task task = entity.group().getTask();
+		Task task = entity.group().getTask(entity);
 		if(task != null) tasks.insert(0, task);
 	}
 }
