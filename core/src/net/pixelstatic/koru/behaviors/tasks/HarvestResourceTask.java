@@ -1,6 +1,7 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.behaviors.groups.Group;
+import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
@@ -11,14 +12,21 @@ import com.badlogic.gdx.math.Vector2;
 
 public class HarvestResourceTask extends Task{
 	private int searchrange = 50;
-	private Item item;
+	private int quantitygoal; // how many blocks to harvest until it stops
+	private Item item; // goal item
 
-	public HarvestResourceTask(Item item){
+
+	public HarvestResourceTask(Item item, int goal){
 		this.item = item;
+		this.quantitygoal = goal;
 	}
 
 	@Override
 	protected void update(){
+		if(entity.mapComponent(InventoryComponent.class).quantityOf(item) > quantitygoal && quantitygoal != 0){
+			finish();
+			return;
+		}
 		World world = KoruUpdater.instance.world;
 		int ex = World.tile(entity.position().x);
 		int ey = World.tile(entity.position().y);

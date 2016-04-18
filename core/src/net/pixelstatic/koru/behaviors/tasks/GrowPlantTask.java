@@ -1,48 +1,41 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.components.InventoryComponent;
-import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class PlaceBlockTask extends Task{
+public class GrowPlantTask extends Task{
 	int blockx, blocky;
-	Material material;
 
-	public PlaceBlockTask(int x, int y, Material material){
-		blockx = x;
-		blocky = y;
-		this.material = material;
+	public GrowPlantTask(int x, int y){
+		this.blockx = x;
+		this.blocky = y;
 	}
 
 	@Override
 	protected void update(){
 		World world = KoruUpdater.instance.world;
+		Material material = world.tiles[blockx][blocky].block;
+
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
 			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
 			return;
-		}else if(world.tiles[blockx][blocky].block != Material.air){
-			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
+		}
+
+		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
+
+		if( !inventory.hasItem(material.getGrowItem())){
+			insertTask(new HarvestResourceTask(material.getGrowItem().item, material.getGrowItem().amount * 2));
 			return;
 		}
-		
-		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-		
-		boolean missing = false;
-		for(ItemStack stack : material.getDrops()){
-			if( !inventory.hasItem(stack)){
-				insertTask(new HarvestResourceTask(stack.item, stack.amount*2));
-				missing = true;
-			}
-		}
-		if(missing) return;
 
-		world.tiles[blockx][blocky].setMaterial(material);
+		world.tiles[blockx][blocky].block.growEvent(world.tiles[blockx][blocky]);
 		world.updateTile(blockx, blocky);
-		inventory.removeAll(material.getDrops());
+		inventory.removeItem(material.getGrowItem());
 		finish();
 	}
+
 }

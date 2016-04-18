@@ -16,9 +16,9 @@ public class Group{
 	}
 
 	public Group(){
-		structures.add(new Structure(20, 20));
-		structures.add(new Structure(30, 20));
-		structures.add(new Structure(40, 20));
+		structures.add(new Structure(StructureSchematic.garden, 20, 20));
+		structures.add(new Structure(StructureSchematic.house, 30, 20));
+		structures.add(new Structure(StructureSchematic.house, 40, 20));
 		//addBuilding(x, y);
 	}
 	

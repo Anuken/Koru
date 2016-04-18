@@ -91,6 +91,22 @@ public enum Material{
 		}
 	}
 	
+	public boolean growable(){
+		return false;
+	}
+	
+	public Material growMaterial(){
+		return null;
+	}
+	
+	public void growEvent(Tile tile){
+		tile.block = growMaterial();
+	}
+	
+	public ItemStack getGrowItem(){
+		return null;
+	}
+	
 	protected void addDrop(Item item, int amount){
 		if(drops == null) drops = new Array<ItemStack>();
 		drops.add(new ItemStack(item, amount));

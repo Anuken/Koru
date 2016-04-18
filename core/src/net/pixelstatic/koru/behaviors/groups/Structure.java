@@ -9,19 +9,11 @@ import com.badlogic.gdx.utils.Array;
 public class Structure{
 	private Array<Task> tasks = new Array<Task>();
 	private int x = 20, y = 20;
-	//@formatter:off
-	private int[][] blocks = {
-		{1,1,1,1,1,1},
-		{1,0,0,0,0,1},
-		{0,0,0,0,0,1},
-		{0,0,0,0,0,1},
-		{1,0,0,0,0,1},
-		{1,1,1,1,1,1},
-	};
-	//@formatter:on
+	private StructureSchematic schematic;
 
-	public Structure(int x, int y){
+	public Structure(StructureSchematic schematic, int x, int y){
 		this.x = x;
+		this.schematic = schematic;
 		this.y = y;
 		addTasks();
 	}
@@ -35,6 +27,7 @@ public class Structure{
 	}
 
 	private void addTasks(){
+		int[][] blocks = schematic.getTiles();
 		for(int x = 0;x < blocks.length;x ++){
 			for(int y = 0;y < blocks[x].length;y ++){
 				int worldx = this.x + x, worldy = this.y + y;

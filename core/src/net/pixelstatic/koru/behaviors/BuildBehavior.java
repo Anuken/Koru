@@ -3,20 +3,17 @@ package net.pixelstatic.koru.behaviors;
 import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.behaviors.tasks.HarvestResourceTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
-import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
 
 public class BuildBehavior extends TaskBehavior{
 
 	{
-		tasks.add(new HarvestResourceTask(Item.wood));
+		tasks.add(new HarvestResourceTask(Item.wood, 20));
 	}
 
 	@Override
 	protected void update(){
 		super.update();
-		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-		int wood = inventory.quantityOf(Item.wood);
 		/*
 		if(Group.instance.tasks() == 0 && !hasTask(PlaceBlockTask.class)){
 			if(!clearedtasks){
@@ -25,6 +22,11 @@ public class BuildBehavior extends TaskBehavior{
 			}
 		}else{
 		*/
+		
+		if(!anyTasks()){
+			addBlockTask();
+		}
+		/*
 		if(hasTask(HarvestResourceTask.class)){  // is chopping wood
 			if(wood >= 20){ // has 20 wood, so stop chopping and start placing blocks
 				removeTask(HarvestResourceTask.class);
@@ -37,7 +39,7 @@ public class BuildBehavior extends TaskBehavior{
 				tasks.add(new HarvestResourceTask(Item.wood));
 			}
 		}
-		
+		*/
 		/*
 		if(wood >= 20 && !this.hasTask(PlaceBlockTask.class)){
 			addBlockTask();
