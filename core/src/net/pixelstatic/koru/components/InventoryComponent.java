@@ -57,6 +57,38 @@ public class InventoryComponent implements Component{
 		}
 		return stack.amount == 0;
 	}
+	
+	public boolean removeAll(Iterable<ItemStack> items){
+		boolean removed = true;
+		for(ItemStack stack : items){
+			removed = removed && removeItem(stack);
+		}
+		return removed;
+	}
+	
+	public boolean hasAll(Iterable<ItemStack> items){
+		for(ItemStack stack : items){
+			if(!hasItem(stack)) return false;
+		}
+		return true;
+	}
+	
+	public boolean hasItem(ItemStack item){
+		ItemStack stack = new ItemStack(item);
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				if(inventory[x][y] == null) continue;
+				if(inventory[x][y].item == stack.item){
+					if(inventory[x][y].amount >= stack.amount){
+						return true;
+					}else{
+						stack.amount -= inventory[x][y].amount;
+					}
+				}
+			}
+		}
+		return stack.amount == 0;
+	}
 
 	public int quantityOf(Item item){
 		int sum = 0;
@@ -68,6 +100,17 @@ public class InventoryComponent implements Component{
 			}
 		}
 		return sum;
+	}
+	
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				builder.append("[" + inventory[x][y]+ "]");
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 
 }

@@ -15,12 +15,21 @@ public class Tile{
 	}
 	
 	public void setMaterial(Material m){
-	
 		if(m.getType().tile()){
 			tile = m;
 		}else{
 			block = m;
 		}
+	}
+	
+	public boolean solid(){
+		return tile.getType().solid() || block.getType().solid();
+	}
+	
+	public Material solidMaterial(){
+		if(block.getType().solid()) return block;
+		if(tile.getType().solid()) return tile;
+		return null;
 	}
 	
 	public String toString(){

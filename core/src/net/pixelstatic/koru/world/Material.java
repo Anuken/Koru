@@ -11,10 +11,11 @@ import com.badlogic.gdx.utils.Array;
 public enum Material{
 	air, 
 	grass(Colors.colora(69, 109, 29,0.04f)), 
-	water(MaterialType.water),
+	water(MaterialType.water){{addDrop(Item.water, 1);}},
+	riveredge,
 	stone, 
 	woodfloor, 
-	pinecones{{addDrop(Item.pinecone, 1);}}, 
+	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
 	tallgrass1(MaterialType.grass),
 	tallgrass2(MaterialType.grass),
 	tallgrass3(MaterialType.grass),
@@ -26,17 +27,17 @@ public enum Material{
 	koru3(MaterialType.grass),
 	pinetree1(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
 	pinetree2(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree3(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
+	pinetree3(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
 	pinetree4(MaterialType.tree, true){{addDrop(Item.wood, 5);}}, 
-	pinesapling(MaterialType.tree, false, false), 
+	pinesapling(MaterialType.tree, false, false){{addDrop(Item.pinecone, 1);}}, 
 	stoneblock(MaterialType.block),
-	woodblock(MaterialType.block);
+	woodblock(MaterialType.block){{addDrop(Item.wood, 3);}};
 	
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Colors.colora(69, 109, 29,0.04f);
 	private boolean breakable;
 	private boolean enablecollisions = true;
-	private Array<ItemStack> drops;
+	private Array<ItemStack> drops = new Array<ItemStack>();
 	
 	private Material(){
 		

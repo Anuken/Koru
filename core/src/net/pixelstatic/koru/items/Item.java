@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.items;
 
 public enum Item{
-	stick, wood, pinecone;
+	stick, wood, pinecone, water;
 	
 	private Item(){
 		

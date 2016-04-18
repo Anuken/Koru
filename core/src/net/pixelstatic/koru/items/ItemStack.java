@@ -20,4 +20,8 @@ public class ItemStack implements Cloneable{
 	public ItemStack clone(){
 		return new ItemStack(this);
 	}
+	
+	public String toString(){
+		return item.name() + "x" + amount;
+	}
 }

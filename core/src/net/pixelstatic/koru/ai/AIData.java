@@ -32,7 +32,6 @@ public class AIData{
 		int index = 0;
 		Node end = null;
 		graph = new Graph();
-		boolean ended = false;
 		/*
 		boolean broken =false;
 		if(solid(axg,ayg)){
@@ -55,7 +54,6 @@ public class AIData{
 		for(int x = -node_range;x < node_range;x ++){
 			for(int y = -node_range;y < node_range;y ++){
 				if(x == 0 && y == 0 ){ // this is the starting point
-				//	Koru.log(solid(axg + x, ayg + y));
 					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
 					graph.addNode(nodearray[x + node_range][y + node_range]);
 					start = nodearray[x + node_range][y + node_range];
@@ -63,7 +61,6 @@ public class AIData{
 					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
 					graph.addNode(nodearray[x + node_range][y + node_range]);
 					end = nodearray[x + node_range][y + node_range];
-					ended = true;
 				}else if(solid(axg + x, ayg + y)){ // this block is solid, ignoring
 					nodearray[x + node_range][y + node_range] = null;
 				}else{ //otherwise, normal node
@@ -73,7 +70,6 @@ public class AIData{
 
 			}
 		}
-		//Koru.log("ended: " + ended);
 		//add linked neighbors
 		for(int x = 0;x < node_range * 2;x ++){
 			for(int y = 0;y < node_range * 2;y ++){
@@ -100,7 +96,7 @@ public class AIData{
 	public boolean solid(int x, int y){
 		if(!World.inBounds(x, y)) return true;
 		if(world == null) world = KoruUpdater.instance.world;
-		return world.tiles[x][y].block.getType().solid();
+		return world.tiles[x][y].solid();
 	}
 	
 

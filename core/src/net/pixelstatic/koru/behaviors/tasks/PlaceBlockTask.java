@@ -1,8 +1,6 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.components.InventoryComponent;
-import net.pixelstatic.koru.items.Item;
-import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
@@ -29,13 +27,15 @@ public class PlaceBlockTask extends Task{
 			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
 			return;
 		}
-		if(entity.mapComponent(InventoryComponent.class).quantityOf(Item.wood) < 3){
+		
+		if(!entity.mapComponent(InventoryComponent.class).hasAll(material.getDrops())){
+			//Koru.log(entity.mapComponent(InventoryComponent.class));
 			finish();
 			return;
 		}
 		world.tiles[blockx][blocky].setMaterial(material);
 		world.updateTile(blockx, blocky);
-		entity.mapComponent(InventoryComponent.class).removeItem(new ItemStack(Item.wood, 3));
+		entity.mapComponent(InventoryComponent.class).removeAll(material.getDrops());
 		finish();
 	}
 }
