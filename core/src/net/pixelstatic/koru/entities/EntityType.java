@@ -3,6 +3,7 @@ package net.pixelstatic.koru.entities;
 import net.pixelstatic.koru.behaviors.BuildBehavior;
 import net.pixelstatic.koru.behaviors.MoveTowardBehavior;
 import net.pixelstatic.koru.behaviors.TargetBehavior;
+import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.network.Interpolator;
 import net.pixelstatic.koru.renderers.*;
@@ -57,7 +58,8 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new MonsterRenderer()),
 					new HitboxComponent(), new SyncComponent(SyncType.position, new Interpolator()),
-					new BehaviorComponent(), new HealthComponent(), new VelocityComponent(), new InventoryComponent(5, 5)};
+					new BehaviorComponent(), new HealthComponent(), new VelocityComponent(), new InventoryComponent(5, 5), 
+					new GroupComponent(Group.instance())};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
@@ -95,6 +97,7 @@ public enum EntityType{
 		//	behavior.addBehavior(ChopTreeBehavior.class);
 		//	behavior.addBehavior(TargetBehavior.class).setRange(100f).setType(EntityType.player);
 			behavior.addBehavior(BuildBehavior.class);
+			entity.mapComponent(GroupComponent.class).init(entity);
 		}
 		
 	},
@@ -114,7 +117,8 @@ public enum EntityType{
 
 		BehaviorComponent behavior = entity.mapComponent(BehaviorComponent.class);
 		if(behavior != null) initBehavior(entity, behavior);
-
+		
+		
 	}
 
 	public boolean collide(KoruEntity entity, KoruEntity other){

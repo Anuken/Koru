@@ -185,9 +185,23 @@ objects/fern1shadow
   orig: 16, 16
   offset: 0, 0
   index: -1
+objects/box
+  rotate: false
+  xy: 303, 44
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/boxopen
+  rotate: false
+  xy: 317, 44
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
 objects/pinecones
   rotate: false
-  xy: 303, 51
+  xy: 331, 51
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

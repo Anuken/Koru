@@ -1,5 +1,7 @@
 package net.pixelstatic.koru.modules;
 
+import java.awt.Point;
+
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.packets.BlockInputPacket;
@@ -37,7 +39,7 @@ public class Input extends Module implements InputProcessor{
 		
 		if(Gdx.input.isKeyJustPressed(Keys.R)) sendInput(InputType.r);
 		
-		float speed = 2f;
+		float speed = 1f;
 		
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			vector.y += speed;
@@ -97,9 +99,9 @@ public class Input extends Module implements InputProcessor{
 			packet.material = Material.air;
 		}
 		
-		Vector2 mouse = cursorblock();
-		packet.x = (int)mouse.x;
-		packet.y = (int)mouse.y;
+		Point mouse = cursorblock();
+		packet.x = mouse.x;
+		packet.y = mouse.y;
 		getModule(Network.class).client.sendTCP(packet);
 		return false;
 	}
@@ -129,9 +131,9 @@ public class Input extends Module implements InputProcessor{
 		return false;
 	}
 	
-	public Vector2 cursorblock(){
+	public Point cursorblock(){
 		Vector3 v = getModule(Renderer.class).camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(), 1f));
-		return new Vector2(World.tile(v.x), World.tile(v.y));
+		return new Point(World.tile(v.x), World.tile(v.y));
 	}
 
 }

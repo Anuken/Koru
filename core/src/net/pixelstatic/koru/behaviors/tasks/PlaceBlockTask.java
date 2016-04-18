@@ -34,7 +34,7 @@ public class PlaceBlockTask extends Task{
 		boolean missing = false;
 		for(ItemStack stack : material.getDrops()){
 			if( !inventory.hasItem(stack)){
-				insertTask(new HarvestResourceTask(stack.item, stack.amount*2));
+				insertTask(new HarvestResourceTask(stack.item, stack.amount*2).setIgnoredMaterial(material));
 				missing = true;
 			}
 		}

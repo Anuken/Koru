@@ -36,8 +36,9 @@ public class Generator{
 					world.tiles[x][y].setBlockMaterial(Material.pinesapling);
 				if(Math.random() < 0.001)
 					world.tiles[x][y].setMaterial(Material.pinecones);
-			
-			
+			//	if(Math.random() < 0.01)
+			//		world.tiles[x][y].setMaterial(Material.box);
+				
 			
 				//if(Math.random() < 0.1)
 				//	world.tiles[x][y].setTileMaterial(Material.stone);

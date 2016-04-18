@@ -1,10 +1,11 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
-import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class BreakBlockTask extends Task{
 	int blockx, blocky;
@@ -15,17 +16,22 @@ public class BreakBlockTask extends Task{
 		blockx = x;
 		blocky = y;
 		this.material = material;
+		if(this.material == null) this.material = World.instance().tiles[blockx][blocky].block;
 	}
 	
 	@Override
 	protected void update(){
+		if(!World.inBounds(blockx, blocky)){ 
+			finish();
+			return;
+		}
+		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
+			this.insertTask(new MoveTowardTask(blockx * 12 + 6, blocky * 12 + 6));
+			return;
+		}
 		if(!waited){
 			this.insertTask(new WaitTask(60));
 			waited = true;
-			return;
-		}
-		if(!World.inBounds(blockx, blocky)){ 
-			finish();
 			return;
 		}
 		World world = KoruUpdater.instance.world;
@@ -33,7 +39,7 @@ public class BreakBlockTask extends Task{
 		material.harvestEvent(world.tiles[blockx][blocky]);
 		world.updateTile(blockx, blocky);
 		entity.mapComponent(InventoryComponent.class).addItems(material.getDrops());
-		Group.instance.unreserveBlock(blockx, blocky);
+		entity.group().unreserveBlock(blockx, blocky);
 		finish();
 	}
 }

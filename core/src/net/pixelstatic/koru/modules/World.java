@@ -1,10 +1,13 @@
 package net.pixelstatic.koru.modules;
 
+import java.awt.Point;
+
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
 import net.pixelstatic.koru.server.KoruServer;
+import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 
@@ -76,6 +79,10 @@ public class World extends Module{
 		}
 		return chunk;
 	}
+	
+	public static World instance(){
+		return KoruUpdater.instance.world;
+	}
 
 	public World(KoruServer server, boolean kek){
 		this(null);
@@ -102,6 +109,10 @@ public class World extends Module{
 	public static boolean inBounds(int x, int y){
 		return x >= 0 && y >= 0 && x < worldwidth && y < worldheight;
 	}
+	
+	public Tile getTile(Point point){
+		return tiles[point.x][point.y];
+	}
 
 	public boolean blends(int x, int y, Material material){
 		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
@@ -112,6 +123,8 @@ public class World extends Module{
 	}
 
 	public void updateTile(int x, int y){
+		tiles[x][y].block.changeEvent(tiles[x][y]);
+		tiles[x][y].tile.changeEvent(tiles[x][y]);
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 	}
 

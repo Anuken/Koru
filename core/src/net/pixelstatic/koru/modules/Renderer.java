@@ -1,8 +1,11 @@
 package net.pixelstatic.koru.modules;
 
+import java.awt.Point;
+
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.sprites.*;
+import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 
@@ -85,7 +88,12 @@ public class Renderer extends Module{
 	}
 
 	public void drawGUI(){
-
+		Point cursor = getModule(Input.class).cursorblock();
+		Tile tile = world.getTile(cursor);
+		if(tile.blockdata instanceof InventoryTileData){
+			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
+			font.draw(batch, data.inventory.toString(), Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+		}
 	}
 
 	void drawLayers(){

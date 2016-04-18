@@ -12,8 +12,7 @@ import net.pixelstatic.koru.network.SyncBuffer.Synced;
 import net.pixelstatic.koru.network.packets.*;
 import net.pixelstatic.koru.systems.SyncSystem.SyncType;
 import net.pixelstatic.koru.utils.InputType;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.*;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -52,6 +51,8 @@ public class Registrator{
 		k.register(SyncBuffer.class);
 		k.register(PositionSyncBuffer.class);
 		
+		k.register(TileData.class);
+		k.register(InventoryTileData.class);
 		k.register(Tile.class);
 		k.register(Tile[].class);
 		k.register(Tile[][].class);

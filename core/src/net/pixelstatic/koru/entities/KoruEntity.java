@@ -2,6 +2,8 @@ package net.pixelstatic.koru.entities;
 
 import java.util.HashMap;
 
+import net.pixelstatic.koru.behaviors.groups.Group;
+import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.systems.KoruEngine;
@@ -58,6 +60,10 @@ public class KoruEntity extends Entity{
 	
 	public float getY(){
 		return this.mapComponent(PositionComponent.class).y;
+	}
+	
+	public Group group(){
+		return this.mapComponent(GroupComponent.class).group;
 	}
 
 	public long getID(){

@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
-import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.modules.World;
@@ -14,11 +13,17 @@ public class HarvestResourceTask extends Task{
 	private int searchrange = 50;
 	private int quantitygoal; // how many blocks to harvest until it stops
 	private Item item; // goal item
+	private Material ignored;
 
 
 	public HarvestResourceTask(Item item, int goal){
 		this.item = item;
 		this.quantitygoal = goal;
+	}
+	
+	public HarvestResourceTask setIgnoredMaterial(Material material){
+		ignored = material;
+		return this;
 	}
 
 	@Override
@@ -40,16 +45,16 @@ public class HarvestResourceTask extends Task{
 				Tile tile = world.tiles[worldx][worldy];
 				Material material = tile.block;
 
-				if(tile.block.breakable() && tile.block.dropsItem(item)){
+				if(tile.block != ignored && tile.block.breakable() && tile.block.dropsItem(item)){
 					material = tile.block;
-				}else if(tile.tile.breakable() && tile.tile.dropsItem(item)){
+				}else if(tile.tile != ignored && tile.tile.breakable() && tile.tile.dropsItem(item)){
 					material = tile.tile;
 				}else{
 					continue;
 				}
 
 				float dist = Vector2.dst(0, 0, x, y);
-				if(dist < closest && !Group.instance.blockReserved(worldx, worldy)){
+				if(dist < closest && (!entity.group().blockReserved(worldx, worldy) || !material.reserved())){
 					nearestx = x;
 					nearesty = y;
 					closest = dist;
@@ -63,8 +68,7 @@ public class HarvestResourceTask extends Task{
 		}
 		int targetx = ex + nearestx;
 		int targety = ey + nearesty;
-		Group.instance.reserveBlock(targetx, targety);
+		if(selected.reserved())entity.group().reserveBlock(targetx, targety);
 		this.insertTask(new BreakBlockTask(selected, targetx, targety));
-		this.insertTask(new MoveTowardTask(targetx * 12 + 6, targety * 12 + 6));
 	}
 }

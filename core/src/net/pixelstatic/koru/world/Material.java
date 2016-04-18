@@ -11,7 +11,13 @@ import com.badlogic.gdx.utils.Array;
 public enum Material{
 	air, 
 	grass(Colors.colora(69, 109, 29,0.04f)), 
-	water(MaterialType.water){{addDrop(Item.water, 1);}},
+	water(MaterialType.water, true){
+		{addDrop(Item.water, 1);}
+		
+		public boolean reserved(){
+			return false;
+		}
+	},
 	riveredge,
 	stone, 
 	woodfloor, 
@@ -29,9 +35,32 @@ public enum Material{
 	pinetree2(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
 	pinetree3(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
 	pinetree4(MaterialType.tree, true){{addDrop(Item.wood, 5);}}, 
-	pinesapling(MaterialType.tree, false, false){{addDrop(Item.pinecone, 1);}}, 
+	pinesapling(MaterialType.tree, false, false){
+		{addDrop(Item.pinecone, 1);}
+		
+		public boolean growable(){
+			return true;
+		}
+		
+		public Material growMaterial(){
+			return random(Material.pinetree1, Material.pinetree2, Material.pinetree3, Material.pinetree4);
+		}
+		
+		public ItemStack getGrowItem(){
+			return new ItemStack(Item.water, 4);
+		}
+	}, 
 	stoneblock(MaterialType.block),
-	woodblock(MaterialType.block){{addDrop(Item.wood, 3);}};
+	woodblock(MaterialType.block){{addDrop(Item.wood, 3);}},
+	box(MaterialType.chest){
+		public TileData getDefaultData(){
+			return new InventoryTileData(5,5);
+		}
+		
+		public Class<? extends TileData> getDataClass(){
+			return InventoryTileData.class;
+		}
+	};
 	
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Colors.colora(69, 109, 29,0.04f);
@@ -67,28 +96,40 @@ public enum Material{
 		this.foilageColor = foilageColor;
 	}
 	
-	public Color foilageColor(){
+	public Color foilageColor(){ // the color that plants have on this tile
 		return foilageColor;
 	}
 	
-	public boolean breakable(){
+	public boolean breakable(){ // if the block is breakable (controls whether or not it is searched)
 		return breakable;
 	}
 	
-	public boolean collisionsEnabled(){
+	public boolean collisionsEnabled(){ //if collisions are enabled
 		return enablecollisions;
 	}
 	
-	public MaterialType getType(){
+	public MaterialType getType(){ //the type
 		return type;
 	}
 	
-	public void harvestEvent(Tile tile){
+	public void harvestEvent(Tile tile){ //called when the block is harvested/destroyed
 		if(getType().tile()){
-			tile.tile = Material.air;
+			//tile.tile = Material.air;
 		}else{
 			tile.block = Material.air;
 		}
+	}
+	
+	public void changeEvent(Tile tile){ //called when the block is changed/updated
+		tile.checkData(this, getDataClass());
+	}
+	
+	public TileData getDefaultData(){
+		return null;
+	}
+	
+	public Class<? extends TileData> getDataClass(){
+		return TileData.class;
 	}
 	
 	public boolean growable(){
@@ -121,6 +162,14 @@ public enum Material{
 			if(stack.item == item) return true;
 		}
 		return false;
+	}
+	
+	public boolean reserved(){
+		return true;
+	}
+	
+	public static Material random(Material... materials){
+		return materials[MathUtils.random(materials.length-1)];
 	}
 	
 	public static Material next(Material mat, int max){

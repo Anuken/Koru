@@ -51,6 +51,25 @@ public enum MaterialType{
 			return true;
 		}
 	},
+	chest{
+		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
+			renderer.layer(material.name(), tile(x), tile(y) - World.tilesize / 2 + 0.5f).yLayer();
+//			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f - World.tilesize / 2).setLayer(1f).setScale(0.14f);
+		}
+		
+		public Rectangle getRect(int x, int y, Rectangle rectangle){
+			int i = 1;
+			return rectangle.set(x * World.tilesize+1, y * World.tilesize+1, World.tilesize-i*2, World.tilesize-5);
+		}
+
+		public boolean tile(){
+			return false;
+		}
+
+		public boolean solid(){
+			return true;
+		}
+	},
 	tree{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).yLayer();

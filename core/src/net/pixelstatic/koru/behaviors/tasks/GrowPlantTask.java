@@ -19,6 +19,10 @@ public class GrowPlantTask extends Task{
 	protected void update(){
 		World world = KoruUpdater.instance.world;
 		Material material = world.tiles[blockx][blocky].block;
+		if(!material.growable()){
+			finish();
+			return;
+		}
 
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
 			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
@@ -31,7 +35,6 @@ public class GrowPlantTask extends Task{
 			insertTask(new HarvestResourceTask(material.getGrowItem().item, material.getGrowItem().amount * 2));
 			return;
 		}
-
 		world.tiles[blockx][blocky].block.growEvent(world.tiles[blockx][blocky]);
 		world.updateTile(blockx, blocky);
 		inventory.removeItem(material.getGrowItem());

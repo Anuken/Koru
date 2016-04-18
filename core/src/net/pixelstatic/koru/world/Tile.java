@@ -3,6 +3,7 @@ package net.pixelstatic.koru.world;
 public class Tile{
 	public Material tile = Material.air;
 	public Material block = Material.air;
+	public TileData tiledata, blockdata;
 	
 	public Tile setTileMaterial(Material m){
 		this.tile = m;
@@ -31,6 +32,31 @@ public class Tile{
 		if(tile.getType().solid()) return tile;
 		return null;
 	}
+	
+	public <T> T getBlockData(Class<T> c){
+		return c.cast(blockdata);
+	}
+	
+	protected boolean checkData(Material material, Class<? extends TileData> data){
+		if(material.getType().tile()){
+			if(tiledata == null || !tiledata.getClass().getCanonicalName().equals(data.getCanonicalName())){
+				tiledata = material.getDefaultData();
+				return true;
+			}
+		}else{
+			if(blockdata == null || !blockdata.getClass().getCanonicalName().equals(data.getCanonicalName())){
+				blockdata = material.getDefaultData();
+				return true;
+			}
+		}
+		return false;
+	}
+	
+//	public <T> T blockData(Class<T> c){
+		//if(tiledata == null){
+			
+		//}
+//	}
 	
 	public String toString(){
 		return "Tile:[block="+block+" tile="+tile+ "]";
