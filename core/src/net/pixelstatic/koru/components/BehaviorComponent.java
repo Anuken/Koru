@@ -15,6 +15,15 @@ public class BehaviorComponent implements Component{
 	public BehaviorComponent(){
 		data = new AIData();
 	}
+	
+	public <T extends Behavior> T getBehavior(Class<T> c){
+		return c.cast(getBehavior(c, c.getSimpleName()));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Behavior> T getBehavior(Class<T> c, String name){
+		return (T)behaviors.get(name);
+	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends Behavior> T addBehavior(Class<T> c, String name){

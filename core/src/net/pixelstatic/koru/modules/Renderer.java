@@ -8,6 +8,7 @@ import net.pixelstatic.koru.sprites.*;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.utils.GifRecorder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -31,6 +32,7 @@ public class Renderer extends Module{
 	GlyphLayout layout;
 	BitmapFont font;
 	FrameBuffer buffer;
+	GifRecorder recorder;
 
 	public KoruEntity player;
 
@@ -46,6 +48,7 @@ public class Renderer extends Module{
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+		recorder = new GifRecorder(batch, 1f/ GUIscale);
 		Layer.atlas = this.atlas;
 	}
 

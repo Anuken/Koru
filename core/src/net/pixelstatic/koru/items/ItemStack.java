@@ -17,6 +17,11 @@ public class ItemStack implements Cloneable{
 		
 	}
 	
+	public void set(Item item, int amount){
+		this.item = item;
+		this.amount = amount;
+	}
+	
 	public ItemStack clone(){
 		return new ItemStack(this);
 	}

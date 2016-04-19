@@ -4,7 +4,7 @@ import net.pixelstatic.koru.behaviors.tasks.HarvestResourceTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.items.Item;
 
-public class BuildBehavior extends TaskBehavior{
+public class GroupBehavior extends TaskBehavior{
 
 	{
 		tasks.add(new HarvestResourceTask(Item.wood, 20));
@@ -15,12 +15,8 @@ public class BuildBehavior extends TaskBehavior{
 		super.update();
 		
 		if(!anyTasks()){
-			addBlockTask();
+			Task task = entity.group().getTask(entity);
+			if(task != null) tasks.insert(0, task);
 		}
-	}
-
-	private void addBlockTask(){
-		Task task = entity.group().getTask(entity);
-		if(task != null) tasks.insert(0, task);
 	}
 }

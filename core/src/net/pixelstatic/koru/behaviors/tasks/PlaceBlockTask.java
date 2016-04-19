@@ -22,6 +22,10 @@ public class PlaceBlockTask extends Task{
 	@Override
 	protected void update(){
 		World world = KoruUpdater.instance.world;
+		if(!World.inBounds(blockx, blocky)){
+			finish();
+			return;
+		}
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
 			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
 			return;
@@ -42,10 +46,11 @@ public class PlaceBlockTask extends Task{
 			}
 		}
 		if(missing) return;
-
+		
 		world.tiles[blockx][blocky].setMaterial(material);
 		world.updateTile(blockx, blocky);
 		inventory.removeAll(material.getDrops());
+		entity.group().registerBlock(material, blockx, blocky);
 		finish();
 	}
 }

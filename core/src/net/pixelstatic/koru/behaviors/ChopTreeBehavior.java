@@ -43,7 +43,7 @@ public class ChopTreeBehavior extends Behavior{
 			entity.mapComponent(InventoryComponent.class).addItem(new ItemStack(Item.wood, 5));
 			targetTree();
 			if(entity.mapComponent(InventoryComponent.class).quantityOf(Item.wood) > 40){
-				this.component().insertBehavior(0, new BuildBehavior());
+				this.component().insertBehavior(0, new GroupBehavior());
 				removeSelf();
 			}
 		}

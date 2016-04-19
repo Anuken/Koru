@@ -31,7 +31,7 @@ public class Structure{
 	public Task getTask(){
 		return tasks.pop();
 	}
-	
+	/*
 	public Array<Point> getBlocks(int type){
 		clearPoints();
 		for(int x = 0;x < blocks.length;x ++){
@@ -46,6 +46,7 @@ public class Structure{
 		return points;
 	}
 	
+	*/
 	public void clearPoints(){
 		Pools.freeAll(points);
 		points.clear();

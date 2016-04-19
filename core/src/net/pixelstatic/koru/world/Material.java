@@ -20,7 +20,7 @@ public enum Material{
 	},
 	riveredge,
 	stone, 
-	woodfloor, 
+	woodfloor{{addDrop(Item.wood, 2);}},
 	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
 	tallgrass1(MaterialType.grass),
 	tallgrass2(MaterialType.grass),
@@ -51,7 +51,7 @@ public enum Material{
 		}
 	}, 
 	stoneblock(MaterialType.block),
-	woodblock(MaterialType.block){{addDrop(Item.wood, 3);}},
+	woodblock(MaterialType.block){{addDrop(Item.wood, 5);}},
 	box(MaterialType.chest){
 	//	{addDrop(Item.wood, 3);}
 		public TileData getDefaultData(){

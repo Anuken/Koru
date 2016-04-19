@@ -1,6 +1,6 @@
 package net.pixelstatic.koru.entities;
 
-import net.pixelstatic.koru.behaviors.BuildBehavior;
+import net.pixelstatic.koru.behaviors.GroupBehavior;
 import net.pixelstatic.koru.behaviors.MoveTowardBehavior;
 import net.pixelstatic.koru.behaviors.TargetBehavior;
 import net.pixelstatic.koru.behaviors.groups.Group;
@@ -96,7 +96,7 @@ public enum EntityType{
 		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
 		//	behavior.addBehavior(ChopTreeBehavior.class);
 		//	behavior.addBehavior(TargetBehavior.class).setRange(100f).setType(EntityType.player);
-			behavior.addBehavior(BuildBehavior.class);
+			behavior.addBehavior(GroupBehavior.class);
 			entity.mapComponent(GroupComponent.class).init(entity);
 		}
 		

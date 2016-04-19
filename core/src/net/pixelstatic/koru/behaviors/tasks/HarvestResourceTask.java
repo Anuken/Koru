@@ -2,8 +2,10 @@ package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
+import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 
@@ -43,6 +45,15 @@ public class HarvestResourceTask extends Task{
 				int worldx = ex + x, worldy = ey + y;
 				if( !World.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tiles[worldx][worldy];
+				if(tile.blockdata != null && tile.blockdata instanceof InventoryTileData){
+					InventoryComponent inventory = tile.getBlockData(InventoryTileData.class).inventory;
+					ItemStack stack = new ItemStack(item, quantitygoal);
+					if(inventory.hasItem(stack)){
+						insertTask(new TakeItemTask(worldx, worldy, stack));
+						finish();
+						return;
+					}
+				}
 				Material material = tile.block;
 
 				if(tile.block != ignored && tile.block.breakable() && tile.block.dropsItem(item)){
@@ -54,7 +65,8 @@ public class HarvestResourceTask extends Task{
 				}
 
 				float dist = Vector2.dst(0, 0, x, y);
-				if(dist < closest && (!entity.group().blockReserved(worldx, worldy) || !material.reserved())){
+				if(dist < closest && (!entity.group().blockReserved(worldx, worldy) || !material.reserved()) 
+						&& !entity.group().isBaseBlock(material, worldx, worldy)){
 					nearestx = x;
 					nearesty = y;
 					closest = dist;

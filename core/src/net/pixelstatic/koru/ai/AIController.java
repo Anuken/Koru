@@ -17,7 +17,7 @@ public class AIController{
 		
 		if(data.path.nodes.size <= 1){
 	//		Koru.log("returning direct path");
-			return data.path.nodes.size == 0 ? v.set(targetx,targety) : v.set(data.path.getNodePosition(0));
+			return data.path.nodes.size == 0 ? v.set(x,y) : v.set(data.path.getNodePosition(0));
 		}
 
 		if(data.node + 2 >= data.path.nodes.size){
