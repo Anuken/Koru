@@ -2,6 +2,7 @@ package net.pixelstatic.koru.entities;
 
 import java.util.HashMap;
 
+import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.components.PositionComponent;
@@ -72,6 +73,10 @@ public class KoruEntity extends Entity{
 
 	public <T>T mapComponent(Class<T> c){
 		return c.cast(Mappers.get(c.asSubclass(Component.class), this));
+	}
+	
+	public void log(Object object){
+		Koru.log("[" + id + "]: " + object);
 	}
 
 	public EntityType getType(){

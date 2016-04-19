@@ -1,15 +1,12 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
-import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.InventoryComponent;
-import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.InventoryTileData;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.ObjectMap;
 
 public class StoreItemTask extends Task{
 	int blockx, blocky;
@@ -31,13 +28,29 @@ public class StoreItemTask extends Task{
 
 	
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-		Koru.log("Storing items: " + entity.getID() + " : " + inventory);
-		ObjectMap<Item, Integer> stored = world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.merge(inventory);
-		ItemStack temp = new ItemStack();
-		for(Item item : stored.keys()){
-			temp.set(item, stored.get(item));
-			entity.group().updateStorage(world.tiles[blockx][blocky], temp, true);
+		InventoryComponent chest = world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory;
+		//world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.
+		for(ItemStack[] array : inventory.inventory){
+			for(ItemStack stack : array){
+				if(stack == null) continue;
+				entity.group().updateStorage(world.tiles[blockx][blocky], stack, true);
+				chest.addItem(stack);
+			}
 		}
+			
+		
+		inventory.clear();
+		
+		//Koru.log("Storing items: " + entity.getID() + " : " + inventory);
+		//ObjectMap<Item, Integer> stored = world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.merge(inventory);
+		//ItemStack temp = new ItemStack();
+		//temp.item = Item.wood;
+		//for(Item item : stored.keys()){
+		//	temp.set(item, stored.get(item));
+		//	entity.group().updateStorage(world.tiles[blockx][blocky], temp, true);
+		//}
+		
+		
 		world.updateTile(blockx, blocky);
 		finish();
 	}

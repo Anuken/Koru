@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.world;
 
+
 public class Tile{
 	public Material tile = Material.air;
 	public Material block = Material.air;
@@ -37,34 +38,22 @@ public class Tile{
 		return c.cast(blockdata);
 	}
 	
-	protected boolean checkData(Material material, Class<? extends TileData> data){
-		if(material.getDataClass() == null){
-			if(material.getType().tile()){
-				tiledata = null;
-			}else{
-				blockdata = null;
-			}
-			return false;
+	public void changeEvent(){
+		if(invalidData(tile, tiledata)){
+			tiledata = tile.getDefaultData();
 		}
-		if(material.getType().tile()){
-			if(tiledata == null || !tiledata.getClass().getCanonicalName().equals(data.getCanonicalName())){
-				tiledata = material.getDefaultData();
-				return true;
-			}
-		}else{
-			if(blockdata == null || !blockdata.getClass().getCanonicalName().equals(data.getCanonicalName())){
-				blockdata = material.getDefaultData();
-				return true;
-			}
+		
+		if(invalidData(block, blockdata)){
+			blockdata = block.getDefaultData();
 		}
-		return false;
+		tile.changeEvent(this);
+		block.changeEvent(this);
 	}
 	
-//	public <T> T blockData(Class<T> c){
-		//if(tiledata == null){
-			
-		//}
-//	}
+	public boolean invalidData(Material material, TileData data){
+		return material.getDataClass() == null || data == null || !material.getDataClass().getCanonicalName().equals(data.getClass().getCanonicalName());
+	}
+	
 	
 	public String toString(){
 		return "Tile:[block="+block+" tile="+tile+ "]";

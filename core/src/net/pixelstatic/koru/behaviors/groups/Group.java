@@ -9,7 +9,6 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
-import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
@@ -39,14 +38,14 @@ public class Group{
 		//structures.add(new Structure(StructureType.garden, 20, 20));
 		
 		addStructure(StructureType.garden);
-		addStructure(StructureType.storage);
+		//addStructure(StructureType.storage);
 		//structures.add(new Structure(StructureSchematic.house, 30, 20));
 		//structures.add(new Structure(StructureSchematic.house, 40, 20));
 		//addBuilding(x, y);
 	}
 	
 	private void addStructure(StructureType type){
-		structures.add(new Structure(type, offsetx + 10 * (structures.size % 4), offsety + (structures.size /3)));
+		structures.add(new Structure(type, offsetx + 10 * (structures.size % 4), offsety + (structures.size /4)*10));
 	}
 	
 	private void storageFailEvent(){
@@ -57,7 +56,8 @@ public class Group{
 	private Task getDefaultTask(KoruEntity entity){
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 		
-		if(resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) != 0){
+		//Koru.log(amountOfUnbuiltStructure(StructureType.garden));
+		if(resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) == 0){
 			addStructure(StructureType.garden);
 			return null;
 		}
@@ -88,8 +88,8 @@ public class Group{
 	}
 	
 	public void updateStorage(Tile tile, ItemStack stack, boolean add){
-		if(KoruUpdater.frameID() % 120 == 0)
-			Koru.log(resources);
+		//if(KoruUpdater.frameID() % 120 == 0)
+		Koru.log(resources);
 		if(!resources.containsKey(stack.item)) resources.put(stack.item, 0);
 		resources.put(stack.item, resources.get(stack.item)+ (add ? 1 : -1)* stack.amount);
 	}

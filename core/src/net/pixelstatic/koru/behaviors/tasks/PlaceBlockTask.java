@@ -24,15 +24,7 @@ public class PlaceBlockTask extends Task{
 		World world = KoruUpdater.instance.world;
 		if(!World.inBounds(blockx, blocky)){
 			finish();
-			return;
-		}
-		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
-			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
-			return;
-		}else if(world.tiles[blockx][blocky].block != Material.air && 
-				(!material.getType().tile() || world.tiles[blockx][blocky].block.getType() == MaterialType.grass  
-				|| world.tiles[blockx][blocky].block.getType() == MaterialType.tree)){
-			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
+			entity.log("Block index out of bounds.");
 			return;
 		}
 		
@@ -46,6 +38,16 @@ public class PlaceBlockTask extends Task{
 			}
 		}
 		if(missing) return;
+		
+		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
+			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
+			return;
+		}else if(world.tiles[blockx][blocky].block != Material.air && 
+				(!material.getType().tile() || world.tiles[blockx][blocky].block.getType() == MaterialType.grass  
+				|| world.tiles[blockx][blocky].block.getType() == MaterialType.tree)){
+			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
+			return;
+		}
 		
 		world.tiles[blockx][blocky].setMaterial(material);
 		world.updateTile(blockx, blocky);

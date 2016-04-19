@@ -3,6 +3,7 @@ package net.pixelstatic.koru.behaviors;
 import net.pixelstatic.koru.behaviors.tasks.HarvestResourceTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.server.KoruUpdater;
 
 public class GroupBehavior extends TaskBehavior{
 
@@ -13,6 +14,8 @@ public class GroupBehavior extends TaskBehavior{
 	@Override
 	protected void update(){
 		super.update();
+		if(KoruUpdater.frameID() % 360 == 0)
+			entity.log(tasks);
 		
 		if(!anyTasks()){
 			Task task = entity.group().getTask(entity);

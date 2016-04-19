@@ -123,8 +123,7 @@ public class World extends Module{
 	}
 
 	public void updateTile(int x, int y){
-		tiles[x][y].block.changeEvent(tiles[x][y]);
-		tiles[x][y].tile.changeEvent(tiles[x][y]);
+		tiles[x][y].changeEvent();
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 	}
 

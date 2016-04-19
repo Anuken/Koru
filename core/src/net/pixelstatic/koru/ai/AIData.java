@@ -23,10 +23,12 @@ public class AIData{
 	boolean inobject;
 	int ignoredx, ignoredy, axg, ayg;
 	World world;
+	public boolean foundend;
 
 	public Vector2 CreatePath(float ax, float ay, float bx, float by){
+		foundend = false;
 		axg = (int)(ax / World.tilesize); //starting x/y
-		ayg = (int)(ay / World.tilesize);
+		ayg = (int)((ay) / World.tilesize);
 		int bxg = (int)(bx / World.tilesize); //ending x/y
 		int byg = (int)(by / World.tilesize);
 		int index = 0;
@@ -61,6 +63,7 @@ public class AIData{
 					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
 					graph.addNode(nodearray[x + node_range][y + node_range]);
 					end = nodearray[x + node_range][y + node_range];
+					foundend = true;
 				}else if(solid(axg + x, ayg + y)){ // this block is solid, ignoring
 					nodearray[x + node_range][y + node_range] = null;
 				}else{ //otherwise, normal node

@@ -3,6 +3,7 @@ package net.pixelstatic.koru.modules;
 import java.awt.Point;
 
 import net.pixelstatic.koru.Koru;
+import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.sprites.*;
 import net.pixelstatic.koru.world.InventoryTileData;
@@ -10,6 +11,8 @@ import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.utils.GifRecorder;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -90,13 +93,24 @@ public class Renderer extends Module{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void drawGUI(){
 		Point cursor = getModule(Input.class).cursorblock();
+		float cx = Gdx.input.getX()/GUIscale, cy = Gdx.graphics.getHeight()/GUIscale - Gdx.input.getY()/GUIscale;
 		Tile tile = world.getTile(cursor);
 		font.getData().setScale(1/GUIscale);
+		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight()/GUIscale);
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
-			font.draw(batch, data.inventory.toString(), Gdx.input.getX()/GUIscale, Gdx.graphics.getHeight()/GUIscale - Gdx.input.getY()/GUIscale);
+			font.draw(batch, data.inventory.toString(), cx, cy);
+		}
+		
+		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class).get())){
+			KoruEntity entity = (KoruEntity)e;
+			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
+				font.draw(batch,entity.getID() + "", cx, cy);
+				continue;
+			}
 		}
 	}
 

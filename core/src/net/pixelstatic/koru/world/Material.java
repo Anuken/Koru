@@ -122,7 +122,7 @@ public enum Material{
 	}
 	
 	public void changeEvent(Tile tile){ //called when the block is changed/updated
-		tile.checkData(this, getDataClass());
+		
 	}
 	
 	public TileData getDefaultData(){
