@@ -19,7 +19,6 @@ public class Group{
 	private static Group instance;
 	private Array<Point> usedtasks = new Array<Point>();
 	private Array<Structure> structures = new Array<Structure>();
-	//private Array<Point> points = new Array<Point>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
 	private int offsetx = 20, offsety = 20;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
@@ -87,10 +86,14 @@ public class Group{
 	}
 	
 	public void updateStorage(Tile tile, ItemStack stack, boolean add){
-		//if(KoruUpdater.frameID() % 120 == 0)
-		//Koru.log(resources);
+		//if(stack.amount == 0) return;
+	//	if(KoruUpdater.frameID() % 5 == 0)
+	//		Koru.log(resources);
+		//if(stack.item == Item.wood) wood += stack.amount;
+		//Koru.log("wood: " + wood);
+		//Koru.log((add ? "ADDING" : "REMOVING") + " [" + stack.toString() + "]");
 		if(!resources.containsKey(stack.item)) resources.put(stack.item, 0);
-		resources.put(stack.item, resources.get(stack.item)+ (add ? 1 : -1)* stack.amount);
+		resources.put(stack.item, resources.get(stack.item) + (add ? 1 : -1)* stack.amount);
 	}
 	
 	public int resourceAmount(Item item){

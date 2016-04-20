@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
+import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.world.Material;
 
 import com.badlogic.gdx.utils.Array;
@@ -15,6 +16,7 @@ public class Structure{
 	private StructureType schematic;
 	private int[][] blocks;
 	private Array<Point> points = new Array<Point>();
+	private Array<KoruEntity> entities;
 
 	public Structure(StructureType schematic, int x, int y){
 		this.x = x;
@@ -47,6 +49,21 @@ public class Structure{
 	}
 	
 	*/
+	
+	public void assignEntity(KoruEntity entity){
+		entities.add(entity);
+		entity.groucp().structure = this;
+	}
+	
+	public void deassignEntity(KoruEntity entity){
+		entity.groucp().structure = null;
+		entities.removeValue(entity, true);
+	}
+	
+	public boolean isEntityAssigned(KoruEntity entity){
+		return entities.contains(entity, true);
+	}
+	
 	public void clearPoints(){
 		Pools.freeAll(points);
 		points.clear();

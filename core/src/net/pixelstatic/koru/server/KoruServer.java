@@ -11,6 +11,7 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Network;
 import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
+import net.pixelstatic.koru.world.InventoryTileData;
 
 import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.kryonet.Connection;
@@ -115,6 +116,10 @@ public class KoruServer{
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket)object;
 				getPlayer(connection.getID()).mapComponent(InputComponent.class).input.inputEvent(packet.type);
+			}else if(object instanceof StoreItemPacket){
+				StoreItemPacket packet = (StoreItemPacket)object;
+				updater.world.tiles[packet.x][packet.y].getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
+				updater.world.updateTile(packet.x, packet.y);
 			}else if(object instanceof BlockInputPacket){
 				BlockInputPacket packet = (BlockInputPacket)object;
 				updater.world.tiles[packet.x][packet.y].block = packet.material;

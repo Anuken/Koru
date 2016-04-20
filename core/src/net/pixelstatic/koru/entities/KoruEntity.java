@@ -66,6 +66,10 @@ public class KoruEntity extends Entity{
 	public Group group(){
 		return this.mapComponent(GroupComponent.class).group;
 	}
+	
+	public GroupComponent groucp(){
+		return this.mapComponent(GroupComponent.class);
+	}
 
 	public long getID(){
 		return id;

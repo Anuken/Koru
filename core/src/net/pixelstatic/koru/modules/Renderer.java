@@ -99,6 +99,7 @@ public class Renderer extends Module{
 		float cx = Gdx.input.getX()/GUIscale, cy = Gdx.graphics.getHeight()/GUIscale - Gdx.input.getY()/GUIscale;
 		Tile tile = world.getTile(cursor);
 		font.getData().setScale(1/GUIscale);
+		font.setColor(Color.WHITE);
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight()/GUIscale);
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);

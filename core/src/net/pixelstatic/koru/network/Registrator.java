@@ -38,6 +38,7 @@ public class Registrator{
 		k.register(InputPacket.class);
 		k.register(TileUpdatePacket.class);
 		k.register(BlockInputPacket.class);
+		k.register(StoreItemPacket.class);
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);

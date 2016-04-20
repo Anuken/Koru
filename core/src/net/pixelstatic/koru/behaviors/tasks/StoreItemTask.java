@@ -30,6 +30,8 @@ public class StoreItemTask extends Task{
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 		InventoryComponent chest = world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory;
 		//world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.
+		
+		
 		for(ItemStack[] array : inventory.inventory){
 			for(ItemStack stack : array){
 				if(stack == null) continue;

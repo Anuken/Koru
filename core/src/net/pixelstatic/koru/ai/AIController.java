@@ -8,10 +8,11 @@ public class AIController{
 	static int skip = 1;
 	static public final boolean debug = false;
 	static public final float changerange = 11;
+	static boolean straight = false;
 
 	public static Vector2 pathfindTo(AIData data, float x, float y, float targetx, float targety){
 		
-		if(true)
+		if(straight)
 			return v.set(targetx, targety);
 		//if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null){
 		data.CreatePath(x, y, targetx, targety);
@@ -19,7 +20,7 @@ public class AIController{
 		
 		if(data.path.nodes.size <= 1){
 	//		Koru.log("returning direct path");
-			return data.path.nodes.size == 0 ? (data.foundend ? v.set(targetx,targety) :  v.set(x,y)) : v.set(data.path.getNodePosition(0));
+			return data.path.nodes.size == 0 ? (data.foundend ? v.set(targetx,targety) :  v.set(targetx,targety)) : v.set(data.path.getNodePosition(0));
 		}
 
 		if(data.node + 2 >= data.path.nodes.size){

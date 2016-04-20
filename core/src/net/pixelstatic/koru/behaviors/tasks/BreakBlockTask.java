@@ -8,6 +8,7 @@ import net.pixelstatic.koru.world.Material;
 import com.badlogic.gdx.math.Vector2;
 
 public class BreakBlockTask extends Task{
+	static final int speed = 1;
 	int blockx, blocky;
 	Material material;
 	boolean waited = false;
@@ -30,7 +31,7 @@ public class BreakBlockTask extends Task{
 			return;
 		}
 		if(!waited){
-			this.insertTask(new WaitTask(60));
+			this.insertTask(new WaitTask(speed));
 			waited = true;
 			return;
 		}

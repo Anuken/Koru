@@ -6,6 +6,7 @@ import net.pixelstatic.koru.components.VelocityComponent;
 import com.badlogic.gdx.math.Vector2;
 
 public class MoveTowardTask extends Task{
+	static final float speed = 2f;
 	static final float completerange = 8;
 	float targetx, targety;
 	
@@ -18,7 +19,7 @@ public class MoveTowardTask extends Task{
 	protected void update(){
 		Vector2 pos = AIController.pathfindTo(behavior.component().data, entity.getX(), entity.getY(), targetx,targety);
 		entity.mapComponent(VelocityComponent.class).velocity.set(pos.x - entity.getX(), pos.y - entity.getY())
-		.setLength(0.5f);
+		.setLength(speed);
 		
 		if(Vector2.dst(entity.getX(), entity.getY(), targetx, targety) < completerange){
 			finish();

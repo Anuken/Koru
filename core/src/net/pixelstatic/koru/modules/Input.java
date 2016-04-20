@@ -4,11 +4,16 @@ import java.awt.Point;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.network.packets.BlockInputPacket;
 import net.pixelstatic.koru.network.packets.InputPacket;
+import net.pixelstatic.koru.network.packets.StoreItemPacket;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.utils.InputType;
+import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.Tile;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;
@@ -65,6 +70,18 @@ public class Input extends Module implements InputProcessor{
 		}
 		
 		vector.set(0,0);
+		
+		if(Gdx.input.isKeyJustPressed(Keys.T)){
+			Point point =cursorblock();
+			Tile tile = getModule(World.class).getTile(point);
+			if(tile.blockdata != null && tile.blockdata instanceof InventoryTileData){
+				StoreItemPacket packet = new StoreItemPacket();
+				packet.x = point.x;
+				packet.y = point.y;
+				packet.stack = new ItemStack(Item.wood, 20);
+				getModule(Network.class).client.sendTCP(packet);
+			}
+		}
 	}
 	
 	void sendInput(InputType type){

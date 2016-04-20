@@ -68,7 +68,7 @@ public enum EntityType{
 
 			hitbox.entityRect().set(0, 0, 4, 4);
 			hitbox.alignBottom();
-			hitbox.height = 6;
+			hitbox.height = 8;
 		}
 
 		void initBehavior(KoruEntity entity, BehaviorComponent behavior){

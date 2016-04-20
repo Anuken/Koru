@@ -45,6 +45,7 @@ public class HarvestResourceTask extends Task{
 				int worldx = ex + x, worldy = ey + y;
 				if( !World.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tiles[worldx][worldy];
+				
 				if(tile.blockdata != null && tile.blockdata instanceof InventoryTileData){
 					InventoryComponent inventory = tile.getBlockData(InventoryTileData.class).inventory;
 					ItemStack stack = new ItemStack(item, quantitygoal);

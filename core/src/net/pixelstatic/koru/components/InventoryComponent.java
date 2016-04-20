@@ -28,11 +28,12 @@ public class InventoryComponent implements Component{
 	 * @return what remains of the stack after adding it. May be a stack with quantity 0.
 	 */
 	public ItemStack addItem(ItemStack item){
+		if(item.amount == 0) return item;
 		ItemStack stack = new ItemStack(item);
 		for(int x = 0;x < inventory.length;x ++){
 			for(int y = 0;y < inventory[x].length;y ++){
 				if(inventory[x][y] == null){
-					inventory[x][y] = stack;
+					inventory[x][y] = stack.clone();
 					stack.amount = 0;
 					return stack;
 				}else if(inventory[x][y].item == stack.item){
@@ -42,6 +43,7 @@ public class InventoryComponent implements Component{
 						return stack;
 					}else{
 						int overflow = inventory[x][y].amount + stack.amount - stack.item.getMaxStackSize();
+						inventory[x][y].amount = stack.item.getMaxStackSize();
 						stack.amount = overflow;
 					}
 				}
