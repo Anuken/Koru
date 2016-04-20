@@ -85,7 +85,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public Layer yLayer(float y){
 		this.alignbottom = true;
 		layer = posLayer(y) + heightoffset;
-		addShadow();
+		if(type == LayerType.SPRITE)addShadow();
 		return this;
 	}
 	

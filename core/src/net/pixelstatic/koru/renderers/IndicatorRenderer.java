@@ -1,9 +1,7 @@
 package net.pixelstatic.koru.renderers;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.components.ChildComponent;
-import net.pixelstatic.koru.components.HitboxComponent;
-import net.pixelstatic.koru.components.TextComponent;
+import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.sprites.Layer.LayerType;
@@ -16,7 +14,7 @@ public class IndicatorRenderer extends EntityRenderer{
 		KoruEntity parent = Koru.getEngine().getEntity(child.parent);
 		if(parent == null) return;
 		
-		child.offset += 0.2f;
+		child.offset += 0.2f * 20f/entity.mapComponent(FadeComponent.class).lifetime;
 		entity.position().set(parent.getX(), parent.getY() + child.offset);
 		render.layers.update(entity.getX(), entity.getY(), Layer.posLayer(parent.getY()-1));
 	}

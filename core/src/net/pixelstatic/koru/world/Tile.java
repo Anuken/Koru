@@ -1,6 +1,7 @@
 package net.pixelstatic.koru.world;
 
 
+
 public class Tile{
 	public Material tile = Material.air;
 	public Material block = Material.air;

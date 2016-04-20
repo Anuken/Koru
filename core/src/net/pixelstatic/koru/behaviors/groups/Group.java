@@ -2,7 +2,6 @@ package net.pixelstatic.koru.behaviors.groups;
 
 import java.awt.Point;
 
-import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.behaviors.tasks.*;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
@@ -89,7 +88,7 @@ public class Group{
 	
 	public void updateStorage(Tile tile, ItemStack stack, boolean add){
 		//if(KoruUpdater.frameID() % 120 == 0)
-		Koru.log(resources);
+		//Koru.log(resources);
 		if(!resources.containsKey(stack.item)) resources.put(stack.item, 0);
 		resources.put(stack.item, resources.get(stack.item)+ (add ? 1 : -1)* stack.amount);
 	}

@@ -104,13 +104,14 @@ public class Renderer extends Module{
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
 			font.draw(batch, data.inventory.toString(), cx, cy);
 		}
-		
+		int i = 0;
 		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class).get())){
 			KoruEntity entity = (KoruEntity)e;
 			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
-				font.draw(batch,entity.getID() + "", cx, cy);
-				continue;
+				font.draw(batch,entity.getID() + "", cx, cy + i*5 );
+				i ++;
 			}
+			
 		}
 	}
 

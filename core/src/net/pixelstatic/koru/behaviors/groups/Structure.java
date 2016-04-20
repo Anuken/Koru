@@ -21,7 +21,7 @@ public class Structure{
 		this.schematic = schematic;
 		this.y = y;
 		blocks = schematic.getTiles();
-		addTasks();
+		addBuildTasks();
 	}
 
 	public boolean isDone(){
@@ -56,7 +56,7 @@ public class Structure{
 		return schematic;
 	}
 
-	private void addTasks(){
+	private void addBuildTasks(){
 		for(int x = 0;x < blocks.length;x ++){
 			for(int y = 0;y < blocks[x].length;y ++){
 				int worldx = this.x + x, worldy = this.y + y;
