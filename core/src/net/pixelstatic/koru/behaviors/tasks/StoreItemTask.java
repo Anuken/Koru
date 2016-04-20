@@ -35,8 +35,10 @@ public class StoreItemTask extends Task{
 		for(ItemStack[] array : inventory.inventory){
 			for(ItemStack stack : array){
 				if(stack == null) continue;
-				entity.group().updateStorage(world.tiles[blockx][blocky], stack, true);
-				chest.addItem(stack);
+				ItemStack clone = chest.addItem(stack);
+				clone.amount = stack.amount - clone.amount;
+				entity.group().updateStorage(world.tiles[blockx][blocky], clone, true);
+				
 			}
 		}
 			

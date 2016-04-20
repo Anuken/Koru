@@ -8,7 +8,7 @@ public class AIController{
 	static int skip = 1;
 	static public final boolean debug = false;
 	static public final float changerange = 11;
-	static boolean straight = false;
+	static boolean straight = true;
 
 	public static Vector2 pathfindTo(AIData data, float x, float y, float targetx, float targety){
 		

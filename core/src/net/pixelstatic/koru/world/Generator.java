@@ -12,12 +12,13 @@ public class Generator{
 	}
 	
 	public void generate(){
+		int seed = 0;
 		for(int x = 0;x < World.worldwidth;x ++){
 			for(int y = 0;y < World.worldwidth;y ++){
-				if(Noise.normalNoise(x, y, 20f, 7f) > 3){
+				if(Noise.normalNoise(x+seed, y+seed, 20f, 7f) > 3){
 					world.tiles[x][y].setMaterial(Material.water);
 					continue;
-				}else if(Noise.normalNoise(x, y, 20f, 7f) > 2.7f){
+				}else if(Noise.normalNoise(x+seed, y+seed, 20f, 7f) > 2.7f){
 					world.tiles[x][y].setMaterial(Material.riveredge);
 					continue;
 				}

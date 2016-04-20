@@ -5,34 +5,56 @@ import java.awt.Point;
 import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.MaterialPair;
+import net.pixelstatic.koru.world.Tile;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class Structure{
 	private Array<Task> tasks = new Array<Task>();
-	private int x = 20, y = 20;
+	private final int x, y;
 	private StructureType schematic;
-	private int[][] blocks;
-	private Array<Point> points = new Array<Point>();
-	private Array<KoruEntity> entities;
+	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
+	private Array<KoruEntity> entities = new Array<KoruEntity>();
 
 	public Structure(StructureType schematic, int x, int y){
 		this.x = x;
-		this.schematic = schematic;
 		this.y = y;
-		blocks = schematic.getTiles();
+		this.schematic = schematic;
 		addBuildTasks();
 	}
 
 	public boolean isDone(){
 		return tasks.size == 0;
 	}
+	
+	public Tile getTileAt(int x, int y){
+		//Koru.log("returning " + this.x + " [" + x + "] " + "[" + (this.x + x)+"]");
+		return World.instance().tiles[this.x + x][this.y + y];
+	}
+	
+	public int worldX(int x){
+	//	Koru.log("returning " + (x + this.x));
+		return this.x + x;
+	}
+	
+	public int worldY(int y){
+		return this.y + y;
+	}
+	
+	public boolean assignable(){
+		return schematic.assignable() || !this.isDone();
+	}
 
-	public Task getTask(){
+	public Task getTask(KoruEntity entity){
+		if(tasks.size == 0)
+			return schematic.getTask(this, entity);
 		return tasks.pop();
 	}
+	
 	/*
 	public Array<Point> getBlocks(int type){
 		clearPoints();
@@ -50,7 +72,12 @@ public class Structure{
 	
 	*/
 	
+	public int maxAssignedEntities(){
+		return schematic.maxAssignedEntities();
+	}
+	
 	public void assignEntity(KoruEntity entity){
+		if(entity.groucp().structure != null) entity.groucp().structure.deassignEntity(entity);
 		entities.add(entity);
 		entity.groucp().structure = this;
 	}
@@ -60,13 +87,23 @@ public class Structure{
 		entities.removeValue(entity, true);
 	}
 	
+	public int assignedEntities(){
+		return entities.size;
+	}
+	
 	public boolean isEntityAssigned(KoruEntity entity){
 		return entities.contains(entity, true);
 	}
 	
-	public void clearPoints(){
-		Pools.freeAll(points);
-		points.clear();
+	public boolean isOverloaded(){
+		return maxAssignedEntities() < entities.size;
+	}
+
+	public void registerBlock(KoruEntity entity, Material material, int x, int y){
+		if( !blocks.containsKey(material)){
+			blocks.put(material, new Array<Point>());
+		}
+		blocks.get(material).add(new Point(x, y));
 	}
 	
 	public StructureType getType(){
@@ -74,27 +111,17 @@ public class Structure{
 	}
 
 	private void addBuildTasks(){
+		int[][] blocks = schematic.getTiles();
+		
 		for(int x = 0;x < blocks.length;x ++){
 			for(int y = 0;y < blocks[x].length;y ++){
 				int worldx = this.x + x, worldy = this.y + y;
 				int id = blocks[x][y];
-				Material block = null;
-				Material floor = null;
+				MaterialPair pair = StructureType.getMaterials(id);
 				
-				if(id == 0){
-					floor = Material.woodfloor;
-				}else if(id == 1){
-					block = Material.woodblock;
-				}else if(id == 2){
-					block = Material.pinesapling;
-				}else if(id == 3){
-					block = Material.box;
-					floor = Material.woodfloor;
-				}
-				
-				if(block != null) tasks.add(new PlaceBlockTask(worldx, worldy, block));
+				if(pair.block != null) tasks.add(new PlaceBlockTask(worldx, worldy, pair.block));
 
-				if(floor != null) tasks.add(new PlaceBlockTask(worldx, worldy, floor));
+				if(pair.tile != null) tasks.add(new PlaceBlockTask(worldx, worldy, pair.tile));
 
 			}
 		}

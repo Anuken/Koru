@@ -72,7 +72,7 @@ public class KoruUpdater{
 		engine.addSystem(new CollisionSystem());
 		engine.addSystem(new BehaviorSystem());
 
-		for(int i = 0;i < 20;i ++){
+		for(int i = 0;i < 30;i ++){
 			KoruEntity entity = new KoruEntity(EntityType.testmonster).addSelf();
 			entity.position().set(20f, 20f);
 		}

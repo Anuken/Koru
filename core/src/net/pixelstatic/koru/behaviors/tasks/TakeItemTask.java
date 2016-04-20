@@ -1,29 +1,26 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.components.InventoryComponent;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.InventoryTileData;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class GrowPlantTask extends Task{
+public class TakeItemTask extends Task{
 	int blockx, blocky;
+	ItemStack stack;
 
-	public GrowPlantTask(int x, int y){
+	public TakeItemTask(int x, int y, ItemStack stack){
 		this.blockx = x;
 		this.blocky = y;
+		this.stack = stack;
 	}
 
 	@Override
 	protected void update(){
 		World world = KoruUpdater.instance.world;
-		Material material = world.tiles[blockx][blocky].block;
-		if(!material.growable()){
-		//	entity.log("mat not growable: " + world.tiles[blockx][blocky]);
-			finish();
-			return;
-		}
 
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
 			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
@@ -31,15 +28,14 @@ public class GrowPlantTask extends Task{
 		}
 
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-
-		if( !inventory.hasItem(material.getGrowItem())){
-			insertTask(new HarvestResourceTask(material.getGrowItem().item, material.getGrowItem().amount * 2));
-			return;
+		if(!inventory.hasItem(stack)){
+		//	finish();
+		//	return;
 		}
-		world.tiles[blockx][blocky].block.growEvent(world.tiles[blockx][blocky]);
+		world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.removeItem(stack);
+		inventory.addItem(stack);
+		entity.group().updateStorage(world.tiles[blockx][blocky], stack, false);
 		world.updateTile(blockx, blocky);
-		inventory.removeItem(material.getGrowItem());
 		finish();
 	}
-
 }

@@ -27,7 +27,7 @@ public class PlaceBlockTask extends Task{
 			entity.log("Block index out of bounds.");
 			return;
 		}
-		
+	//	entity.group().reserveBlock(blockx, blocky);
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 		
 		boolean missing = false;
@@ -52,7 +52,8 @@ public class PlaceBlockTask extends Task{
 		world.tiles[blockx][blocky].setMaterial(material);
 		world.updateTile(blockx, blocky);
 		inventory.removeAll(material.getDrops());
-		entity.group().registerBlock(material, blockx, blocky);
+		entity.group().registerBlock(entity, material, blockx, blocky);
+		entity.group().unreserveBlock(blockx, blocky);
 		finish();
 	}
 }
