@@ -59,7 +59,7 @@ public class HarvestResourceTask extends Task{
 
 				if(tile.block != ignored && tile.block.breakable() && tile.block.dropsItem(item)){
 					material = tile.block;
-				}else if(tile.tile != ignored && tile.tile.breakable() && tile.tile.dropsItem(item)){
+				}else if(tile.tile != ignored && tile.tile.breakable() && tile.tile.dropsItem(item) && !tile.block.getType().solid()){
 					material = tile.tile;
 				}else{
 					continue;

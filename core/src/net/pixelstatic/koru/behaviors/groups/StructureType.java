@@ -1,11 +1,11 @@
 package net.pixelstatic.koru.behaviors.groups;
 
-import net.pixelstatic.koru.behaviors.tasks.*;
+import net.pixelstatic.koru.behaviors.tasks.GrowPlantTask;
+import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
+import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.MaterialPair;
-import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.*;
 
 import com.badlogic.gdx.utils.Array;
 
@@ -53,10 +53,11 @@ public enum StructureType{
 				entity.group().reserveBlock(x,y);
 				return new PlaceBlockTask(x, y, Material.pinesapling);
 			}else if(tile.block == Material.pinesapling){
+				if(!tile.getBlockData(TreeTileData.class).hasEnoughWater())
 				return new GrowPlantTask(x,y);
 			}else if(tile.block.name().contains("pinetree")){
-				entity.group().reserveBlock(x,y);
-				return new BreakBlockTask(tile.block, x,y);
+		//		entity.group().reserveBlock(x,y);
+		//		return new BreakBlockTask(tile.block, x,y);
 			}
 			return null;
 		}

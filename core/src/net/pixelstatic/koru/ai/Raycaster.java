@@ -9,7 +9,7 @@ public class Raycaster implements RaycastCollisionDetector<Vector2>{
 
 	@Override
 	public boolean collides(Ray<Vector2> ray){
-		return AIController.Cast2(ray.start.x, ray.start.y, ray.end.x, ray.end.y);
+		return AIController.cast(ray.start.x, ray.start.y, ray.end.x, ray.end.y);
 	}
 
 	@Override

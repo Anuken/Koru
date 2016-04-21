@@ -1,5 +1,7 @@
 package net.pixelstatic.koru.ai;
 
+import net.pixelstatic.koru.modules.World;
+
 import com.badlogic.gdx.math.Vector2;
 
 public class AIController{
@@ -8,11 +10,11 @@ public class AIController{
 	static int skip = 1;
 	static public final boolean debug = false;
 	static public final float changerange = 11;
-	static boolean straight = true;
+	static boolean straight = false;
 
 	public static Vector2 pathfindTo(AIData data, float x, float y, float targetx, float targety){
 		
-		if(straight)
+		if(straight || !cast(x, y, targetx, targety))
 			return v.set(targetx, targety);
 		//if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null){
 		data.CreatePath(x, y, targetx, targety);
@@ -143,7 +145,7 @@ public class AIController{
 	}
 
 	public static boolean solid(float x, float y){
-		return false;
+		return World.instance().solid(x, y);
 	}
 
 	/*
@@ -179,7 +181,7 @@ public class AIController{
 			return line;
 		}
 	*/
-	public static boolean Cast2(float x0f, float y0f, float x1f, float y1f){
+	public static boolean cast(float x0f, float y0f, float x1f, float y1f){
 		int x0 = (int)x0f;
 		int y0 = (int)y0f;
 		int x1 = (int)x1f;

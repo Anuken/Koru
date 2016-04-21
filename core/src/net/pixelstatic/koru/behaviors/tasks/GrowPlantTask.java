@@ -1,9 +1,12 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.components.InventoryComponent;
+import net.pixelstatic.koru.items.Item;
+import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.TreeTileData;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -20,8 +23,16 @@ public class GrowPlantTask extends Task{
 		World world = KoruUpdater.instance.world;
 		Material material = world.tiles[blockx][blocky].block;
 		if(!material.growable()){
-		//	entity.log("mat not growable: " + world.tiles[blockx][blocky]);
+			//Koru.log("Critical error: lel");
 			finish();
+			return;
+		}
+		
+		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
+		
+		ItemStack water = new ItemStack(Item.water, 1);
+		if( !inventory.hasItem(water)){
+			insertTask(new HarvestResourceTask(water.item, water.amount * 2));
 			return;
 		}
 
@@ -29,16 +40,11 @@ public class GrowPlantTask extends Task{
 			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
 			return;
 		}
-
-		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-
-		if( !inventory.hasItem(material.getGrowItem())){
-			insertTask(new HarvestResourceTask(material.getGrowItem().item, material.getGrowItem().amount * 2));
-			return;
-		}
-		world.tiles[blockx][blocky].block.growEvent(world.tiles[blockx][blocky]);
+		
+		world.tiles[blockx][blocky].getBlockData(TreeTileData.class).addWater();
+		//world.tiles[blockx][blocky].block.growEvent(world.tiles[blockx][blocky]);
 		world.updateTile(blockx, blocky);
-		inventory.removeItem(material.getGrowItem());
+		inventory.removeItem(water);
 		finish();
 	}
 

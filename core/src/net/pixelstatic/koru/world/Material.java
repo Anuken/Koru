@@ -46,14 +46,18 @@ public enum Material{
 			return random(Material.pinetree1, Material.pinetree2, Material.pinetree3, Material.pinetree4);
 		}
 		
-		public ItemStack getGrowItem(){
-			return new ItemStack(Item.water, 4);
+		public TileData getDefaultData(){
+			return new PinetreeTileData();
+		}
+		
+		public Class<? extends TileData> getDataClass(){
+			return PinetreeTileData.class;
 		}
 	}, 
 	stoneblock(MaterialType.block),
 	woodblock(MaterialType.block){{addDrop(Item.wood, 5);}},
 	box(MaterialType.chest){
-	//	{addDrop(Item.wood, 3);}
+		{addDrop(Item.wood, 10);}
 		public TileData getDefaultData(){
 			return new InventoryTileData(5,5);
 		}
@@ -143,10 +147,6 @@ public enum Material{
 	
 	public void growEvent(Tile tile){
 		tile.block = growMaterial();
-	}
-	
-	public ItemStack getGrowItem(){
-		return null;
 	}
 	
 	protected void addDrop(Item item, int amount){

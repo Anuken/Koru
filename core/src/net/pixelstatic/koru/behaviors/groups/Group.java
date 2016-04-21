@@ -44,7 +44,8 @@ public class Group{
 	}
 
 	private void addStructure(StructureType type){
-		structures.add(new Structure(type, offsetx + 10 * (structures.size % 4), offsety + (structures.size / 4) * 10));
+		Structure structure = new Structure(type, offsetx + 10 * (structures.size % 4), offsety + (structures.size / 4) * 10);
+		structures.add(structure);
 	}
 
 	private void storageFailEvent(){
@@ -72,8 +73,19 @@ public class Group{
 	private void checkStructure(KoruEntity entity){
 		if(entity.groucp().structure.isOverloaded() || !entity.groucp().structure.assignable()){
 			for(Structure structure : structures){
-				if(entity.groucp().structure != structure && !structure.isOverloaded() && structure.assignable()) structure.assignEntity(entity);
+				if(entity.groucp().structure != structure && !structure.isOverloaded() && structure.assignable()){
+					structure.assignEntity(entity);
+					return;
+				}
 			}
+			structures.first().assignEntity(entity);
+		}
+		
+		for(Structure structure : structures){
+			if(!structure.isDone() && !structure.isOverloaded() && Math.random() < 0.05){
+				structure.assignEntity(entity);
+				return;
+			}		
 		}
 	}
 
@@ -96,7 +108,7 @@ public class Group{
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 
 		
-		if(entity.groucp().structure.isOverloaded() && resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) == 0){
+		if(entity.groucp().structure.getType() == StructureType.garden && entity.groucp().structure.isOverloaded() && entity.groucp().structure.isDone() && resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) == 0){
 			addStructure(StructureType.garden);
 			return null;
 		}

@@ -6,6 +6,8 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.systems.*;
 import net.pixelstatic.koru.world.Generator;
+import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.UpdatingTileData;
 
 public class KoruUpdater{
 	public static KoruUpdater instance;
@@ -18,11 +20,12 @@ public class KoruUpdater{
 	static long frameid;
 	float delta = 1f;
 	long lastFpsTime;
+	final int blockupdatetime = 60*6;
 
 	void Loop(){
 		try{
 			engine.update(delta);
-			if(frameid % (60*5) == 0) updateTiles();
+			if(frameid % (blockupdatetime) == 0) updateTiles();
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Entity update loop error!");
@@ -31,7 +34,12 @@ public class KoruUpdater{
 	}
 	
 	void updateTiles(){
-		
+		for(int x = 0; x < World.worldwidth; x ++){
+			for(int y = 0; y < World.worldheight; y ++){
+				Tile tile = world.tiles[x][y];
+				if(tile.blockdata instanceof UpdatingTileData) ((UpdatingTileData)tile.blockdata).update(x,y,tile);
+			}
+		}
 	}
 
 	public static long frameID(){
@@ -72,7 +80,7 @@ public class KoruUpdater{
 		engine.addSystem(new CollisionSystem());
 		engine.addSystem(new BehaviorSystem());
 
-		for(int i = 0;i < 30;i ++){
+		for(int i = 0;i < 10;i ++){
 			KoruEntity entity = new KoruEntity(EntityType.testmonster).addSelf();
 			entity.position().set(20f, 20f);
 		}

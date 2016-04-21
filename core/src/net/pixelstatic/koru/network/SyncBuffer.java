@@ -26,4 +26,7 @@ public abstract class SyncBuffer{
 	
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Synced{}
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface Transient{}
 }

@@ -57,6 +57,7 @@ public class Registrator{
 		
 		k.register(TileData.class);
 		k.register(InventoryTileData.class);
+		k.register(PinetreeTileData.class);
 		k.register(Tile.class);
 		k.register(Tile[].class);
 		k.register(Tile[][].class);

@@ -11,11 +11,14 @@ import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 
+import com.badlogic.gdx.math.Rectangle;
+
 public class World extends Module{
 	public static final int chunksize = 10;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
 	public static final int worldwidth = 100, worldheight = 100;
+	private static Rectangle rect = new Rectangle();
 	Network network;
 	KoruServer server;
 	public Tile[][] tiles;
@@ -79,7 +82,7 @@ public class World extends Module{
 		}
 		return chunk;
 	}
-	
+
 	public static World instance(){
 		return KoruUpdater.instance.world;
 	}
@@ -109,9 +112,22 @@ public class World extends Module{
 	public static boolean inBounds(int x, int y){
 		return x >= 0 && y >= 0 && x < worldwidth && y < worldheight;
 	}
-	
+
 	public Tile getTile(Point point){
 		return tiles[point.x][point.y];
+	}
+
+	public Tile getTile(float fx, float fy){
+		int x = tile(fx);
+		int y = tile(fy);
+		//if(!bounds(x,y)) return null;
+		return tiles[x][y];
+	}
+
+	public boolean solid(float x, float y){
+		Tile tile = getTile(x,y);
+		return (tile.block.getType().solid() && tile.block.getType().getRect(tile(x), tile(y), rect).contains(x, y))
+				|| (tile.tile.getType().solid() && tile.tile.getType().getRect(tile(x), tile(y), rect).contains(x, y));
 	}
 
 	public boolean blends(int x, int y, Material material){
@@ -123,8 +139,13 @@ public class World extends Module{
 	}
 
 	public void updateTile(int x, int y){
+		//TileData blockdata = tiles[x][y].blockdata, tiledata = tiles[x][y].tiledata;
 		tiles[x][y].changeEvent();
+		//if(tiles[x][y].blockdata != null && tiles[x][y].blockdata.getClass().isAnnotationPresent(Transient.class)) tiles[x][y].blockdata = null;
+		//if(tiles[x][y].tiledata != null && tiles[x][y].tiledata.getClass().isAnnotationPresent(Transient.class)) tiles[x][y].tiledata = null;
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
+		//tiles[x][y].blockdata = blockdata;
+		//tiles[x][y].tiledata = tiledata;
 	}
 
 	public static int tile(float i){
