@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
+import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
@@ -15,22 +16,16 @@ public class HarvestResourceTask extends Task{
 	private int searchrange = 50;
 	private int quantitygoal; // how many blocks to harvest until it stops
 	private Item item; // goal item
-	private Material ignored;
 
 
 	public HarvestResourceTask(Item item, int goal){
 		this.item = item;
 		this.quantitygoal = goal;
 	}
-	
-	public HarvestResourceTask setIgnoredMaterial(Material material){
-		ignored = material;
-		return this;
-	}
 
 	@Override
 	protected void update(){
-		if(entity.mapComponent(InventoryComponent.class).quantityOf(item) > quantitygoal && quantitygoal != 0){
+		if(quantitygoal <= 0){
 			finish();
 			return;
 		}
@@ -57,9 +52,9 @@ public class HarvestResourceTask extends Task{
 				}
 				Material material = tile.block;
 
-				if(tile.block != ignored && tile.block.breakable() && tile.block.dropsItem(item)){
+				if(tile.block.breakable() && tile.block.dropsItem(item)){
 					material = tile.block;
-				}else if(tile.tile != ignored && tile.tile.breakable() && tile.tile.dropsItem(item) && !tile.block.getType().solid()){
+				}else if(tile.tile.breakable() && tile.tile.dropsItem(item) && !tile.block.getType().solid()){
 					material = tile.tile;
 				}else{
 					continue;
@@ -76,12 +71,20 @@ public class HarvestResourceTask extends Task{
 			}
 		}
 		if(nearestx == -9999 || nearesty == -9999 || selected == null){
+			Koru.log("failed: " + item + " not found");
 			finish();
 			return;
+		}
+		for(ItemStack stack :  selected.getDrops()){
+			if(stack.item == item){
+				quantitygoal -= stack.amount;
+				break;
+			}
 		}
 		int targetx = ex + nearestx;
 		int targety = ey + nearesty;
 		if(selected.reserved())entity.group().reserveBlock(targetx, targety);
 		this.insertTask(new BreakBlockTask(selected, targetx, targety));
+	
 	}
 }

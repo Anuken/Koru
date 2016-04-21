@@ -9,36 +9,47 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public abstract class TreeTileData extends UpdatingTileData{
 	public final long growtime;
-	public final int maxwater = 10;
-	private long growstart;
+	public final int maxwater = 1;
+	private long growstart = TimeUtils.millis();
+	private int timer = maxwater;
 	private int water;
 	
 	public TreeTileData(long growtime){
-		this.growtime = growtime;
+		this.growtime = 2*1000;//growtime;
 	}
 	
 	public void addWater(){
 		if(hasEnoughWater()) return;
-		water ++;
-		if(hasEnoughWater()){
+		
+		water --;
+		timer --;
+		if(timer == 0){
 			Koru.log("Tree has been watered enough.");
-			growstart = TimeUtils.millis()  + MathUtils.random(-5000, 5000);
 		}
 	}
 
 	public void update(int x, int y, Tile tile){
-		if(!hasEnoughWater())return;
-		
-		if(TimeUtils.timeSinceMillis(growstart) > growtime){
+		//if(!hasEnoughWater())return;
+		if(timer == 0){
 			tile.block.growEvent(tile);
 			World.instance().updateTile(x, y);
-			growstart = 0;
 			water = 0;
-			Koru.log("Tree has finished growing.");
+			growstart = TimeUtils.millis();
+			timer = maxwater;
+			
+		}
+		if(TimeUtils.timeSinceMillis(growstart) > growtime){
+			water ++;
+			growstart = TimeUtils.millis() + MathUtils.random(-growtime, growtime);
+			//tile.block.growEvent(tile);
+			//World.instance().updateTile(x, y);
+			//growstart = 0;
+			//water = 0;
+			//Koru.log("Tree has finished growing.");
 		}
 	}
 	
 	public boolean hasEnoughWater(){
-		return water > maxwater;
+		return water == 0;
 	}
 }

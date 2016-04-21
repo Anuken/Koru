@@ -64,7 +64,7 @@ public enum EntityType{
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 			hitbox.terrainRect().set(0, 0, 4, 2);
-			hitbox.collideterrain = false;
+			hitbox.collideterrain = true;
 
 			hitbox.entityRect().set(0, 0, 4, 4);
 			hitbox.alignBottom();

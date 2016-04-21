@@ -10,8 +10,9 @@ import net.pixelstatic.koru.world.MaterialType;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlaceBlockTask extends Task{
-	int blockx, blocky;
-	Material material;
+	final int blockx, blocky;
+	final Material material;
+	private boolean waited = false;
 
 	public PlaceBlockTask(int x, int y, Material material){
 		blockx = x;
@@ -33,14 +34,14 @@ public class PlaceBlockTask extends Task{
 		boolean missing = false;
 		for(ItemStack stack : material.getDrops()){
 			if( !inventory.hasItem(stack)){
-				insertTask(new HarvestResourceTask(stack.item, stack.amount*2).setIgnoredMaterial(material));
+				insertTask(new HarvestResourceTask(stack.item, stack.amount*2));
 				missing = true;
 			}
 		}
 		if(missing) return;
 		
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
-			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
+			insertTask(new MoveTowardTask(blockx, blocky));
 			return;
 		}else if(world.tiles[blockx][blocky].block != Material.air && 
 				(!material.getType().tile() || world.tiles[blockx][blocky].block.getType() == MaterialType.grass  
@@ -48,6 +49,13 @@ public class PlaceBlockTask extends Task{
 			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
 			return;
 		}
+		
+		if(!waited && material.getType().solid()){
+			this.insertTask(new WaitUntilEmptyTask(material, blockx, blocky));
+			waited = true;
+			return;
+		}
+			
 		
 		world.tiles[blockx][blocky].setMaterial(material);
 		world.updateTile(blockx, blocky);

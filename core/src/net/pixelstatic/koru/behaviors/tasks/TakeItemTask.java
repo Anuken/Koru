@@ -23,7 +23,7 @@ public class TakeItemTask extends Task{
 		World world = KoruUpdater.instance.world;
 
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
-			insertTask(new MoveTowardTask(blockx * 12 + 6, (blocky) * 12 + 6));
+			insertTask(new MoveTowardTask(blockx, blocky));
 			return;
 		}
 

@@ -27,7 +27,7 @@ public class BreakBlockTask extends Task{
 			return;
 		}
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
-			this.insertTask(new MoveTowardTask(blockx * 12 + 6, blocky * 12 + 6));
+			this.insertTask(new MoveTowardTask(blockx, blocky ));
 			return;
 		}
 		if(!waited){

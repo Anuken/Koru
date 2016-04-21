@@ -1,8 +1,6 @@
 package net.pixelstatic.koru.behaviors.groups;
 
-import net.pixelstatic.koru.behaviors.tasks.GrowPlantTask;
-import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
-import net.pixelstatic.koru.behaviors.tasks.Task;
+import net.pixelstatic.koru.behaviors.tasks.*;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.world.*;
@@ -56,10 +54,12 @@ public enum StructureType{
 				if(!tile.getBlockData(TreeTileData.class).hasEnoughWater())
 				return new GrowPlantTask(x,y);
 			}else if(tile.block.name().contains("pinetree")){
-		//		entity.group().reserveBlock(x,y);
-		//		return new BreakBlockTask(tile.block, x,y);
+				entity.group().reserveBlock(x,y);
+				return new BreakBlockTask(tile.block, x,y);
 			}
 			return null;
+			
+			//return null;
 		}
 	},
 	storage(

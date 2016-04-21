@@ -9,16 +9,18 @@ public class AIController{
 	static int space = 14;
 	static int skip = 1;
 	static public final boolean debug = false;
-	static public final float changerange = 11;
+	static public final float changerange = 6;
 	static boolean straight = false;
 
 	public static Vector2 pathfindTo(AIData data, float x, float y, float targetx, float targety){
 		
-		if(straight || !cast(x, y, targetx, targety))
+		if(straight /*|| !cast(x, y, targetx, targety)*/)
 			return v.set(targetx, targety);
-		//if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null){
-		data.CreatePath(x, y, targetx, targety);
-		//	}
+		
+		if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null || World.instance().updated()){
+	//		Koru.log("Recalculating path: " + KoruUpdater.frameID());
+			data.CreatePath(x, y, targetx, targety);
+		}
 		
 		if(data.path.nodes.size <= 1){
 	//		Koru.log("returning direct path");
@@ -145,7 +147,7 @@ public class AIController{
 	}
 
 	public static boolean solid(float x, float y){
-		return World.instance().solid(x, y);
+		return World.instance().positionSolid(x, y);
 	}
 
 	/*

@@ -12,7 +12,7 @@ import net.pixelstatic.koru.world.UpdatingTileData;
 public class KoruUpdater{
 	public static KoruUpdater instance;
 	KoruServer server;
-	KoruEngine engine;
+	public KoruEngine engine;
 	public World world;
 	Generator generator;
 	private boolean isRunning = true;
@@ -25,6 +25,7 @@ public class KoruUpdater{
 	void Loop(){
 		try{
 			engine.update(delta);
+			world.update();
 			if(frameid % (blockupdatetime) == 0) updateTiles();
 		}catch(Exception e){
 			e.printStackTrace();

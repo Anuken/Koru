@@ -19,6 +19,7 @@ public class World extends Module{
 	public static final int tilesize = 12;
 	public static final int worldwidth = 100, worldheight = 100;
 	private static Rectangle rect = new Rectangle();
+	private boolean updated;
 	Network network;
 	KoruServer server;
 	public Tile[][] tiles;
@@ -26,7 +27,8 @@ public class World extends Module{
 
 	@Override
 	public void update(){
-		sendChunkRequest();
+		updated = false;
+		if(server == null)sendChunkRequest();
 	}
 
 	public void loadChunks(ChunkPacket packet){
@@ -124,10 +126,14 @@ public class World extends Module{
 		return tiles[x][y];
 	}
 
-	public boolean solid(float x, float y){
+	public boolean positionSolid(float x, float y){
 		Tile tile = getTile(x,y);
 		return (tile.block.getType().solid() && tile.block.getType().getRect(tile(x), tile(y), rect).contains(x, y))
 				|| (tile.tile.getType().solid() && tile.tile.getType().getRect(tile(x), tile(y), rect).contains(x, y));
+	}
+	
+	public boolean blockSolid(int x, int y){
+		return tiles[x][y].block.getType().solid() || tiles[x][y].tile.getType().solid();
 	}
 
 	public boolean blends(int x, int y, Material material){
@@ -139,6 +145,7 @@ public class World extends Module{
 	}
 
 	public void updateTile(int x, int y){
+		updated = true;
 		//TileData blockdata = tiles[x][y].blockdata, tiledata = tiles[x][y].tiledata;
 		tiles[x][y].changeEvent();
 		//if(tiles[x][y].blockdata != null && tiles[x][y].blockdata.getClass().isAnnotationPresent(Transient.class)) tiles[x][y].blockdata = null;
@@ -146,6 +153,10 @@ public class World extends Module{
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 		//tiles[x][y].blockdata = blockdata;
 		//tiles[x][y].tiledata = tiledata;
+	}
+	
+	public boolean updated(){
+		return updated;
 	}
 
 	public static int tile(float i){

@@ -6,9 +6,6 @@ import net.pixelstatic.koru.components.VelocityComponent;
 
 import com.badlogic.gdx.math.Vector2;
 
-
-
-
 public class MoveTowardBehavior extends Behavior{
 	AIData data;
 	

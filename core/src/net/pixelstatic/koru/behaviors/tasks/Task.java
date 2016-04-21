@@ -29,7 +29,7 @@ public abstract class Task{
 	
 	protected void finish(){
 		behavior.tasks.removeValue(this, true);
-		indicateTask();
+	//	indicateTask();
 	}
 	
 	public String toString(){
