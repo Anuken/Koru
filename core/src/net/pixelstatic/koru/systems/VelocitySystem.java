@@ -34,6 +34,8 @@ public class VelocitySystem extends KoruSystem{
 		}
 
 		velocity.velocity.scl((float)Math.pow(1f - velocity.drag, delta));
+		
+		velocity.velocity.limit(velocity.limit);
 	}
 
 	public void updateVelocity(PositionComponent position, VelocityComponent velocity){

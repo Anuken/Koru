@@ -42,8 +42,12 @@ public class PlaceBlockTask extends Task{
 		}
 		if(missing) return;
 		
-		Point point = world.findEmptySpace(entity, x, y, entity.group());
-		int blockx = point.x, blocky = point.y;
+		int blockx = x, blocky = y;
+		if(material.solid()){
+			Point point = world.findEmptySpace(entity, x, y, entity.group());
+			blockx = point.x;
+			blocky = point.y;
+		}
 		
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > 2){
 			insertTask(new MoveTowardTask(blockx, blocky, 2));
@@ -55,7 +59,7 @@ public class PlaceBlockTask extends Task{
 			return;
 		}
 		
-		if(!waited && material.getType().solid()){
+		if(!waited && material.solid()){
 			this.insertTask(new WaitUntilEmptyTask(material, x, y));
 			waited = true;
 			return;

@@ -2,7 +2,6 @@ package net.pixelstatic.koru.server;
 
 import java.util.HashMap;
 
-import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.utils.InputType;
 
@@ -38,9 +37,9 @@ public class InputHandler{
 			//	entity.position().set(this.entity.getX(), this.entity.getY());
 			//	entity.addSelf().sendSelf();
 		}else if(type == InputType.r){
-			KoruEntity entity = new KoruEntity(EntityType.testmonster);
-			entity.position().set(this.entity.getX(), this.entity.getY());
-			entity.addSelf().sendSelf();
+	//		KoruEntity entity = new KoruEntity(EntityType.testmonster);
+	//		entity.position().set(this.entity.getX(), this.entity.getY());
+	//		entity.addSelf().sendSelf();
 		}
 	}
 

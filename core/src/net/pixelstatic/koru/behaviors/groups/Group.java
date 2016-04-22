@@ -107,8 +107,8 @@ public class Group{
 		if( !entity.groucp().structure.isDone()) return null;
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 
-		
 		if(entity.groucp().structure.getType() == StructureType.garden && entity.groucp().structure.isOverloaded() && entity.groucp().structure.isDone() && resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) == 0){
+			entity.log("Adding garden. Structure entities: " + entity.groucp().structure.assignedEntities());
 			addStructure(StructureType.garden);
 			return null;
 		}

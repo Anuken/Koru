@@ -4,6 +4,7 @@ import net.pixelstatic.koru.components.HitboxComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.MaterialType;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -26,7 +27,7 @@ public class WaitUntilEmptyTask extends Task{
 	@Override
 	protected void update(){
 		ImmutableArray<Entity> entities = KoruUpdater.instance.engine.getEntitiesFor(family);
-		material.getType().getRect(x, y, rect);
+		MaterialType.block.getRect(x, y, rect);
 		rect.x -= 2;
 		rect.y -=2;
 		rect.width += 4;

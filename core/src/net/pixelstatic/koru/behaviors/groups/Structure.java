@@ -103,7 +103,7 @@ public class Structure{
 	}
 	
 	public boolean isOverloaded(){
-		return maxAssignedEntities() < entities.size;
+		return entities.size > maxAssignedEntities();
 	}
 
 	public void registerBlock(KoruEntity entity, Material material, int x, int y){

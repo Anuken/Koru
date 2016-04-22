@@ -1,5 +1,7 @@
 package net.pixelstatic.koru.systems;
 
+import java.awt.Point;
+
 import net.pixelstatic.koru.components.DestroyOnTerrainHitComponent;
 import net.pixelstatic.koru.components.HitboxComponent;
 import net.pixelstatic.koru.components.PositionComponent;
@@ -13,6 +15,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectSet;
 
 public class CollisionSystem extends KoruSystem{
@@ -20,6 +23,8 @@ public class CollisionSystem extends KoruSystem{
 	ObjectSet<Long> iterated = new ObjectSet<Long>();
 	long lastFrameID;
 	private Rectangle rect = new Rectangle();
+	private Point point = new Point();
+	private Vector2 vector = new Vector2();
 
 	@SuppressWarnings("unchecked")
 	public CollisionSystem(){
@@ -35,6 +40,13 @@ public class CollisionSystem extends KoruSystem{
 		hitbox.entityhitbox.update(entity);
 
 		checkCollisions(entity, hitbox);
+		
+		Point point = vectorTerrainCollisions(World.instance(), entity, 0, 0);
+		if(point != null){ //AHH ENTITY STUCK IN BLOCK!!
+			float blockx = World.world(point.x), blocky = World.world(point.y);
+			vector.set(entity.getX() - blockx, entity.getY() - blocky).setLength(1f);
+			entity.position().add(vector.x, vector.y);
+		}
 	}
 
 	void blockCollisionEvent(KoruEntity entity){
@@ -82,7 +94,7 @@ public class CollisionSystem extends KoruSystem{
 		}
 	}
 
-	public boolean checkTerrainCollisions(World world, KoruEntity entity, float mx, float my){
+	public Point vectorTerrainCollisions(World world, KoruEntity entity, float mx, float my){
 		HitboxComponent component = entity.mapComponent(HitboxComponent.class);
 		float newx = entity.getX() + mx;
 		float newy = entity.getY() + my;
@@ -94,14 +106,19 @@ public class CollisionSystem extends KoruSystem{
 				int worldx = tilex + rx, worldy = tiley + ry;
 				if( !World.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tiles[worldx][worldy];
-				if( !tile.solid() || !tile.solidMaterial().collisionsEnabled()) continue;
+				if( !tile.solid()) continue;
 				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, rect))){
-					return true;
+					point.setLocation(worldx, worldy);
+					return point;
 				}
 				//	rect.set(0,0,0,0);
 			}
 		}
-		return false;
+		return null;
+	}
+	
+	public boolean checkTerrainCollisions(World world, KoruEntity entity, float mx, float my){
+		return vectorTerrainCollisions(world, entity, mx, my) != null;
 	}
 
 	private void checkFrame(){

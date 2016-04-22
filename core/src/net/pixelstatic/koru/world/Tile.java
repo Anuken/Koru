@@ -26,7 +26,7 @@ public class Tile{
 	}
 	
 	public boolean solid(){
-		return tile.getType().solid() || block.getType().solid();
+		return tile.solid() || block.solid();
 	}
 	
 	public Material solidMaterial(){

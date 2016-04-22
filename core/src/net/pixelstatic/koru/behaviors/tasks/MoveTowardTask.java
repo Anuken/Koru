@@ -12,6 +12,7 @@ public class MoveTowardTask extends Task{
 	static final float completerange = 11;
 	private final int x, y;
 	private float selfcompleterange = -1;
+	private static Vector2 vector = new Vector2();
 	
 	public MoveTowardTask(int x, int y){
 		this.x = x;
@@ -40,8 +41,8 @@ public class MoveTowardTask extends Task{
 		}
 		//Koru.log(targetx + " " + targety);
 		Vector2 pos = AIController.pathfindTo(behavior.component().data, entity.getX(), entity.getY(), targetx,targety);
-		entity.mapComponent(VelocityComponent.class).velocity.set(pos.x - entity.getX(), pos.y - entity.getY())
-		.setLength(speed);
+		entity.mapComponent(VelocityComponent.class).velocity.add(vector.set(pos.x - entity.getX(), pos.y - entity.getY()).setLength(speed));
+		
 		
 		if(Vector2.dst(entity.getX(), entity.getY(), targetx, targety) < (selfcompleterange > 0 ? selfcompleterange : completerange)){
 			finish();

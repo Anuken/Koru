@@ -42,7 +42,6 @@ public class GrowPlantTask extends Task{
 		}
 		
 		world.tiles[blockx][blocky].getBlockData(TreeTileData.class).addWater();
-		//world.tiles[blockx][blocky].block.growEvent(world.tiles[blockx][blocky]);
 		world.updateTile(blockx, blocky);
 		inventory.removeItem(water);
 		finish();

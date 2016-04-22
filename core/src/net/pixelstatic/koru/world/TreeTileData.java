@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public abstract class TreeTileData extends UpdatingTileData{
 	public final long growtime;
-	public final int maxwater = 0;
+	public final int maxwater = 20;
 	private long growstart = TimeUtils.millis();
 	private int timer = maxwater;
 	private int water;

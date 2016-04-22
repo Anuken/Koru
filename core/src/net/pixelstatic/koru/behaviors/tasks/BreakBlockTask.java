@@ -22,20 +22,28 @@ public class BreakBlockTask extends Task{
 	
 	@Override
 	protected void update(){
-		if(!World.inBounds(blockx, blocky)){ 
+		if(!World.inBounds(blockx, blocky) || entity.group().isBaseBlock(material, blockx, blocky)){ 
 			finish();
 			return;
 		}
+		
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
 			this.insertTask(new MoveTowardTask(blockx, blocky ));
 			return;
 		}
+		
 		if(!waited){
 			this.insertTask(new WaitTask(speed));
 			waited = true;
 			return;
 		}
+		
 		World world = KoruUpdater.instance.world;
+		
+		if((world.tiles[blockx][blocky].block != material && world.tiles[blockx][blocky].tile != material)){
+			finish();
+			return;
+		}
 		
 		material.harvestEvent(world.tiles[blockx][blocky]);
 		world.updateTile(blockx, blocky);

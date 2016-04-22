@@ -22,7 +22,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 
 public class Renderer extends Module{
-
 	public static final int viewrange = 21;
 	final float GUIscale = 5f;
 	final int scale = 4;
@@ -51,7 +50,7 @@ public class Renderer extends Module{
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-		recorder = new GifRecorder(batch, 1f/ GUIscale);
+		recorder = new GifRecorder(batch, 1f / GUIscale);
 		Layer.atlas = this.atlas;
 	}
 
@@ -96,11 +95,11 @@ public class Renderer extends Module{
 	@SuppressWarnings("unchecked")
 	public void drawGUI(){
 		Point cursor = getModule(Input.class).cursorblock();
-		float cx = Gdx.input.getX()/GUIscale, cy = Gdx.graphics.getHeight()/GUIscale - Gdx.input.getY()/GUIscale;
+		float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
 		Tile tile = world.getTile(cursor);
-		font.getData().setScale(1/GUIscale);
+		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
-		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight()/GUIscale);
+		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
 			font.draw(batch, data.inventory.toString(), cx, cy);
@@ -109,11 +108,13 @@ public class Renderer extends Module{
 		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class).get())){
 			KoruEntity entity = (KoruEntity)e;
 			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
-				font.draw(batch,entity.getID() + "", cx, cy + i*5 );
+				font.draw(batch, entity.getID() + "", cx, cy + i * 5);
 				i ++;
 			}
-			
+
 		}
+		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
+
 	}
 
 	void drawLayers(){
@@ -121,7 +122,7 @@ public class Renderer extends Module{
 		boolean inshadow = false;
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
-			
+
 			if(MathUtils.isEqual(layer.layer, Layer.shadowlayer)){ //layer is shadow layer
 				if( !inshadow){
 					inshadow = true;
@@ -135,7 +136,7 @@ public class Renderer extends Module{
 				buffer.end();
 				batch.begin();
 				batch.setColor(Layer.shadowcolor);
-				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth/2, camera.position.y + camera.viewportHeight/2, camera.viewportWidth, -camera.viewportHeight);
+				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2, camera.position.y + camera.viewportHeight / 2, camera.viewportWidth, -camera.viewportHeight);
 				batch.setColor(Color.WHITE);
 				inshadow = false;
 			}

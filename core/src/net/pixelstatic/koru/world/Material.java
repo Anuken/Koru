@@ -169,6 +169,10 @@ public enum Material{
 		return true;
 	}
 	
+	public boolean solid(){
+		return type.solid() && collisionsEnabled();
+	}
+	
 	public static Material random(Material... materials){
 		return materials[MathUtils.random(materials.length-1)];
 	}

@@ -1,6 +1,7 @@
 package net.pixelstatic.koru.ai;
 
 import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.koru.server.KoruUpdater;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,7 +18,7 @@ public class AIController{
 		if(straight /*|| !cast(x, y, targetx, targety)*/)
 			return v.set(targetx, targety);
 		
-		if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null || World.instance().updated()){
+		if(data.lastpos.dst(v.set(targetx, targety)) > changerange || data.path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
 	//		Koru.log("Recalculating path: " + KoruUpdater.frameID());
 			data.CreatePath(x, y, targetx, targety);
 		}
