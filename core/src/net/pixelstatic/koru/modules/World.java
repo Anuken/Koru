@@ -3,6 +3,10 @@ package net.pixelstatic.koru.modules;
 import java.awt.Point;
 
 import net.pixelstatic.koru.Koru;
+import net.pixelstatic.koru.behaviors.groups.Group;
+import net.pixelstatic.koru.behaviors.groups.Structure;
+import net.pixelstatic.koru.behaviors.groups.Structure.BuildState;
+import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
@@ -10,6 +14,7 @@ import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.utils.DirectionUtils;
 
 import com.badlogic.gdx.math.Rectangle;
 
@@ -20,6 +25,7 @@ public class World extends Module{
 	public static final int worldwidth = 100, worldheight = 100;
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
+	private Point point = new Point();
 	Network network;
 	KoruServer server;
 	public Tile[][] tiles;
@@ -125,6 +131,21 @@ public class World extends Module{
 		//if(!bounds(x,y)) return null;
 		return tiles[x][y];
 	}
+	
+	public Point findEmptySpace(KoruEntity entity, int x, int y, Group group){
+		Structure structure = entity.groucp().structure;
+	//	structure.getBuildState(x, y);
+		for(int k = -1; k < 3; k ++){
+			int i = (k+4)%4;
+			int sx =DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
+			if(!blockSolid(x + sx, y + sy) && structure.getBuildState(sx + x, sy + y) == BuildState.completed){
+				point.setLocation(x+sx, y+sy);
+				return point;
+			}
+		}
+	//	Koru.log("Error: empty point not found!");
+		return point;
+	}
 
 	public boolean positionSolid(float x, float y){
 		Tile tile = getTile(x,y);
@@ -133,6 +154,7 @@ public class World extends Module{
 	}
 	
 	public boolean blockSolid(int x, int y){
+		if(!inBounds(x,y)) return true;
 		return tiles[x][y].block.getType().solid() || tiles[x][y].tile.getType().solid();
 	}
 
@@ -161,6 +183,10 @@ public class World extends Module{
 
 	public static int tile(float i){
 		return (int)(i / tilesize);
+	}
+	
+	public static float world(int i){
+		return tilesize*i + tilesize/2;
 	}
 
 	public static int worldWidthPixels(){

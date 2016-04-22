@@ -57,9 +57,9 @@ public enum StructureType{
 				entity.group().reserveBlock(x,y);
 				return new BreakBlockTask(tile.block, x,y);
 			}
-			return null;
+			//return new HarvestResourceTask(Item.wood, 10);
 			
-			//return null;
+			return null;
 		}
 	},
 	storage(

@@ -26,9 +26,15 @@ public class WaitUntilEmptyTask extends Task{
 	@Override
 	protected void update(){
 		ImmutableArray<Entity> entities = KoruUpdater.instance.engine.getEntitiesFor(family);
+		material.getType().getRect(x, y, rect);
+		rect.x -= 2;
+		rect.y -=2;
+		rect.width += 4;
+		rect.height += 4;
 		for(Entity e : entities){
 			KoruEntity entity = (KoruEntity)e;
-			if(entity.mapComponent(HitboxComponent.class).terrainhitbox.collides(material.getType().getRect(x, y, rect))){
+			
+			if(entity.mapComponent(HitboxComponent.class).terrainhitbox.collides(rect)){
 				return;
 			}
 		}

@@ -19,12 +19,19 @@ public class Structure{
 	private StructureType schematic;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
+	private BuildState[][] buildstates;
 
 	public Structure(StructureType schematic, int x, int y){
 		this.x = x;
 		this.y = y;
 		this.schematic = schematic;
 		addBuildTasks();
+		buildstates = new BuildState[schematic.tiles.length][schematic.tiles[0].length];
+		for(int bx = 0; bx < buildstates.length; bx ++){
+			for(int by = 0; by < buildstates[0].length; by ++){
+				buildstates[bx][by] = BuildState.unbuilt;
+			}
+		}
 	}
 
 	public boolean isDone(){
@@ -104,6 +111,7 @@ public class Structure{
 			blocks.put(material, new Array<Point>());
 		}
 		blocks.get(material).add(new Point(x, y));
+		buildstates[x - this.x][y - this.y] = BuildState.completed;
 	}
 	
 	public StructureType getType(){
@@ -125,6 +133,17 @@ public class Structure{
 
 			}
 		}
+	}
+	
+	public BuildState getBuildState(int x, int y){
+		int rx = x - this.x;
+		int ry = y - this.y;
+		if(rx >= buildstates.length || ry >= buildstates[0].length || rx < 0 || ry < 0) return BuildState.completed;
+		return buildstates[rx][ry];
+	}
+	
+	public static enum BuildState{
+		unbuilt, completed
 	}
 
 }

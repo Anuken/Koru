@@ -1,5 +1,7 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
+import java.awt.Point;
+
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.modules.World;
@@ -10,20 +12,20 @@ import net.pixelstatic.koru.world.MaterialType;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlaceBlockTask extends Task{
-	final int blockx, blocky;
+	final int x, y;
 	final Material material;
 	private boolean waited = false;
 
 	public PlaceBlockTask(int x, int y, Material material){
-		blockx = x;
-		blocky = y;
+		this.x = x;
+		this.y = y;
 		this.material = material;
 	}
 
 	@Override
 	protected void update(){
 		World world = KoruUpdater.instance.world;
-		if(!World.inBounds(blockx, blocky)){
+		if(!World.inBounds(x, y)){
 			finish();
 			entity.log("Block index out of bounds.");
 			return;
@@ -40,28 +42,31 @@ public class PlaceBlockTask extends Task{
 		}
 		if(missing) return;
 		
-		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > MoveTowardTask.completerange){
-			insertTask(new MoveTowardTask(blockx, blocky));
+		Point point = world.findEmptySpace(entity, x, y, entity.group());
+		int blockx = point.x, blocky = point.y;
+		
+		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > 2){
+			insertTask(new MoveTowardTask(blockx, blocky, 2));
 			return;
-		}else if(world.tiles[blockx][blocky].block != Material.air && 
-				(!material.getType().tile() || world.tiles[blockx][blocky].block.getType() == MaterialType.grass  
-				|| world.tiles[blockx][blocky].block.getType() == MaterialType.tree)){
-			insertTask(new BreakBlockTask(world.tiles[blockx][blocky].block, blockx, blocky));
+		}else if(world.tiles[x][y].block != Material.air && 
+				(!material.getType().tile() || world.tiles[x][y].block.getType() == MaterialType.grass  
+				|| world.tiles[x][y].block.getType() == MaterialType.tree)){
+			insertTask(new BreakBlockTask(world.tiles[x][y].block, x, y));
 			return;
 		}
 		
 		if(!waited && material.getType().solid()){
-			this.insertTask(new WaitUntilEmptyTask(material, blockx, blocky));
+			this.insertTask(new WaitUntilEmptyTask(material, x, y));
 			waited = true;
 			return;
 		}
 			
 		
-		world.tiles[blockx][blocky].setMaterial(material);
-		world.updateTile(blockx, blocky);
+		world.tiles[x][y].setMaterial(material);
+		world.updateTile(x, y);
 		inventory.removeAll(material.getDrops());
-		entity.group().registerBlock(entity, material, blockx, blocky);
-		entity.group().unreserveBlock(blockx, blocky);
+		entity.group().registerBlock(entity, material, x, y);
+		entity.group().unreserveBlock(x, y);
 		finish();
 	}
 }

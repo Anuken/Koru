@@ -12,7 +12,7 @@ public class AIData{
 	ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
 	Graph graph;
 	TiledGraphPath<Node> path = new TiledGraphPath<Node>();
-	final int node_range = 30;
+	final int node_range = 50;
 	Node[][] nodearray = new Node[node_range * 2][node_range * 2];
 	Raycaster caster = new Raycaster();
 	PathSmoother<Node, Vector2> smoother = new PathSmoother<Node, Vector2>(caster);

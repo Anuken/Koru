@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.world;
 
-import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.modules.World;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -9,7 +8,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public abstract class TreeTileData extends UpdatingTileData{
 	public final long growtime;
-	public final int maxwater = 1;
+	public final int maxwater = 0;
 	private long growstart = TimeUtils.millis();
 	private int timer = maxwater;
 	private int water;
@@ -23,9 +22,6 @@ public abstract class TreeTileData extends UpdatingTileData{
 		
 		water --;
 		timer --;
-		if(timer == 0){
-			Koru.log("Tree has been watered enough.");
-		}
 	}
 
 	public void update(int x, int y, Tile tile){

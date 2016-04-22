@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Group{
 	private static Group instance;
-	private Array<Point> usedtasks = new Array<Point>();
+	private Array<Point> reservedblocks = new Array<Point>();
 	private Array<Structure> structures = new Array<Structure>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
 	private int offsetx = 10, offsety = 10;
@@ -158,7 +158,9 @@ public class Group{
 		if( !blocks.containsKey(material)){
 			blocks.put(material, new Array<Point>());
 		}
-		blocks.get(material).add(new Point(x, y));
+		Point point = new Point(x, y);
+		blocks.get(material).add(point);
+		
 		if(entity.groucp().structure != null)
 			entity.groucp().structure.registerBlock(entity, material, x, y);
 	}
@@ -213,7 +215,7 @@ public class Group{
 	}
 
 	public boolean blockReserved(int x, int y){
-		for(Point point : usedtasks){
+		for(Point point : reservedblocks){
 			if(point.x == x && point.y == y){
 				return true;
 			}
@@ -222,16 +224,16 @@ public class Group{
 	}
 
 	public void unreserveBlock(int x, int y){
-		for(Point point : usedtasks){
+		for(Point point : reservedblocks){
 			if(point.x == x && point.y == y){
-				usedtasks.removeValue(point, true);
+				reservedblocks.removeValue(point, true);
 				break;
 			}
 		}
 	}
 
 	public void reserveBlock(int x, int y){
-		usedtasks.add(new Point(x, y));
+		reservedblocks.add(new Point(x, y));
 	}
 
 }
