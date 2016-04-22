@@ -1,12 +1,31 @@
 package net.pixelstatic.koru.world;
 
-import net.pixelstatic.koru.modules.World;
-
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.TimeUtils;
 
 
 public abstract class TreeTileData extends UpdatingTileData{
+	static final int maxwater = 2;
+	int water = 0;
+	
+	public TreeTileData(long growtime){
+		
+	}
+	
+	public void addWater(){
+		water ++;
+	}
+	
+	public void update(int x, int y, Tile tile){
+		if(water >= maxwater){
+			tile.block.growEvent(tile);
+			water = 0;
+		}
+	}
+	
+	public boolean hasEnoughWater(){
+		return water >= maxwater;
+	}
+	
+	/*
 	public final long growtime;
 	public final int maxwater = 20;
 	private long growstart = TimeUtils.millis();
@@ -48,4 +67,5 @@ public abstract class TreeTileData extends UpdatingTileData{
 	public boolean hasEnoughWater(){
 		return water == 0;
 	}
+	*/
 }

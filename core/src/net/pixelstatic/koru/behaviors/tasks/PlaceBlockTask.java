@@ -48,9 +48,12 @@ public class PlaceBlockTask extends Task{
 			blockx = point.x;
 			blocky = point.y;
 		}
-		
-		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > 2){
-			insertTask(new MoveTowardTask(blockx, blocky, 2));
+		int dist = 2;
+		if(world.tiles[x][y].block.solid() && material.getType().tile()){
+			dist = 11;
+		}
+		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > dist){
+			insertTask(new MoveTowardTask(blockx, blocky, dist));
 			return;
 		}else if(world.tiles[x][y].block != Material.air && 
 				(!material.getType().tile() || world.tiles[x][y].block.getType() == MaterialType.grass  

@@ -155,7 +155,7 @@ public class World extends Module{
 	
 	public boolean blockSolid(int x, int y){
 		if(!inBounds(x,y)) return true;
-		return tiles[x][y].block.getType().solid() || tiles[x][y].tile.getType().solid();
+		return tiles[x][y].block.solid() || tiles[x][y].tile.solid();
 	}
 
 	public boolean blends(int x, int y, Material material){
