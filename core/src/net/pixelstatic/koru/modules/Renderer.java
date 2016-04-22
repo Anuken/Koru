@@ -5,10 +5,14 @@ import java.awt.Point;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.sprites.*;
+import net.pixelstatic.koru.renderers.ParticleRenderer;
+import net.pixelstatic.koru.sprites.Layer;
+import net.pixelstatic.koru.sprites.PooledLayerList;
+import net.pixelstatic.koru.sprites.SpriteLayer;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.utils.Atlas;
 import net.pixelstatic.utils.GifRecorder;
 
 import com.badlogic.ashley.core.Entity;
@@ -29,7 +33,7 @@ public class Renderer extends Module{
 	SpriteBatch batch;
 	OrthographicCamera camera;
 	PooledLayerList layers;
-	KoruAtlas atlas;
+	Atlas atlas;
 	Matrix4 matrix;
 	GlyphLayout layout;
 	BitmapFont font;
@@ -44,7 +48,7 @@ public class Renderer extends Module{
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
-		atlas = new KoruAtlas(Gdx.files.internal("sprites/koru.pack"));
+		atlas = new Atlas(Gdx.files.internal("sprites/koru.pack"));
 		layers = new PooledLayerList();
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
@@ -57,6 +61,7 @@ public class Renderer extends Module{
 	public void init(){
 		player = getModule(ClientData.class).player;
 		world = getModule(World.class);
+		ParticleRenderer.loadParticles(this);
 	}
 
 	@Override
@@ -216,6 +221,10 @@ public class Renderer extends Module{
 
 	public void draw(String region, float x, float y, float rotation){
 		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2, atlas.RegionWidth(region) / 2, atlas.RegionHeight(region) / 2, atlas.RegionWidth(region), atlas.RegionHeight(region), 1f, 1f, rotation);
+	}
+	
+	public TextureAtlas atlas(){
+		return atlas;
 	}
 
 	public TextureRegion getRegion(String name){

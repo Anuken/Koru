@@ -22,6 +22,11 @@ public class Generator{
 					world.tiles[x][y].setMaterial(Material.riveredge);
 					continue;
 				}
+				
+				if(Noise.normalNoise(x + 100+seed, y + 100+seed, 20f, 6f) > 2f){
+					world.tiles[x][y].setMaterial(Material.stone);
+					continue;
+				}
 
 				world.tiles[x][y].setTileMaterial(Material.grass);
 				if(Math.random() < 0.05) world.tiles[x][y].setBlockMaterial(Material.next(Material.pinetree1, 4));

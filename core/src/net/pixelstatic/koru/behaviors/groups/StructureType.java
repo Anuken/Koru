@@ -2,6 +2,7 @@ package net.pixelstatic.koru.behaviors.groups;
 
 import net.pixelstatic.koru.behaviors.tasks.*;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.world.*;
 
@@ -57,9 +58,9 @@ public enum StructureType{
 				entity.group().reserveBlock(x,y);
 				return new BreakBlockTask(tile.block, x,y);
 			}
-			//return new HarvestResourceTask(Item.wood, 10);
+			return new HarvestResourceTask(Item.stone, 5);
 			
-			return null;
+			//return null;
 		}
 	},
 	storage(

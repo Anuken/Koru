@@ -106,6 +106,11 @@ public enum EntityType{
 			return new Component[]{new PositionComponent(), new RenderComponent(new IndicatorRenderer()),
 					new ChildComponent(), new TextComponent(), new FadeComponent(20).enableRender()};
 		}
+	},
+	particle{
+		public Component[] defaultComponents(){
+			return new Component[]{new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleComponent()};
+		}
 	};
 
 	final void init(KoruEntity entity){

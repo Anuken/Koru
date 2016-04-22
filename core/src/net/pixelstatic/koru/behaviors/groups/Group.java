@@ -103,7 +103,7 @@ public class Group{
 	}
 
 	private Task getDefaultTask(KoruEntity entity){
-		
+		//if(entity.groucp().structure.isOverloaded()) entity.log("Structure overloaded: " + entity.groucp().structure.assignedEntities());
 		if( !entity.groucp().structure.isDone()) return null;
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 

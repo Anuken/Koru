@@ -2,15 +2,18 @@ package net.pixelstatic.koru.sprites;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.utils.Atlas;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
-	public static KoruAtlas atlas;
+	public static Atlas atlas;
 	boolean temp = false;
 	public static final float shadowlayer = 0, shadowoffset = -10;
 	public static final Color shadowcolor = new Color(0,0,0,0.14f);
@@ -22,9 +25,10 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public String text;
 	public TextureRegion texture;
 	public boolean alignbottom = false;
+	public PooledEffect particle;
 
 	public enum LayerType{
-		SPRITE, TEXT, TEXTURE, SHAPE
+		SPRITE, TEXT, TEXTURE, SHAPE, PARTICLE
 	}
 
 	public void Draw(Renderer renderer){
@@ -53,6 +57,9 @@ public class Layer implements Comparable<Layer>, Poolable{
 			renderer.batch().draw(texture, x - texture.getRegionWidth() / 2, y - texture.getRegionHeight() / 2, texture.getRegionHeight() / 2, texture.getRegionWidth() / 2, texture.getRegionWidth(), texture.getRegionHeight(), 1f, 1f, rotation);
 		}else if(type == LayerType.SHAPE){
 			renderer.batch().draw(renderer.getRegion(region), x, y, width, height);
+		}else if(type == LayerType.PARTICLE){
+			particle.setPosition(x, y);
+			particle.draw(renderer.batch(), Gdx.graphics.getDeltaTime());
 		}
 	
 	}
@@ -92,6 +99,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public static float posLayer(float y){
 		return World.worldheight * World.worldheight + World.tilesize -y;
 	}
+
 	
 	public Layer update(float x, float y){
 		setPosition(x,y);
@@ -129,6 +137,12 @@ public class Layer implements Comparable<Layer>, Poolable{
 		.setType(layer.type)
 		.setTexture(layer.texture)
 		.setRotation(layer.rotation);
+	}
+	
+	
+	public Layer setParticle(PooledEffect effect){
+		this.setType(LayerType.PARTICLE).particle = effect;
+		return this;
 	}
 
 	public Layer(String region, float x, float y){
@@ -224,6 +238,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 		alignbottom = false;
 		heightoffset = 0;
 		width =0; height=0;
+		//if(particle != null) particle.free();
 	}
 
 	@Override

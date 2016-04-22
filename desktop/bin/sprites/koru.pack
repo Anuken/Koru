@@ -497,14 +497,14 @@ tiles/riveredgeedge
   orig: 22, 22
   offset: 0, 0
   index: -1
-tiles/magmarockedge
+tiles/stoneedge
   rotate: false
-  xy: 263, 322
-  size: 16, 16
-  orig: 16, 16
+  xy: 263, 316
+  size: 22, 22
+  orig: 22, 22
   offset: 0, 0
   index: -1
-tiles/stoneedge
+tiles/magmarockedge
   rotate: false
   xy: 1, 36
   size: 16, 16
@@ -520,14 +520,14 @@ tiles/grassedge
   index: -1
 tiles/woodflooredge
   rotate: false
-  xy: 263, 304
+  xy: 263, 298
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneblock
   rotate: false
-  xy: 281, 319
+  xy: 287, 319
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
@@ -548,42 +548,42 @@ tiles/grass
   index: -1
 tiles/water
   rotate: false
-  xy: 263, 290
+  xy: 263, 284
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/riveredge
   rotate: false
-  xy: 281, 305
+  xy: 301, 326
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/riverrock
   rotate: false
-  xy: 295, 326
+  xy: 1, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/woodfloor
   rotate: false
-  xy: 1, 1
+  xy: 57, 64
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone
   rotate: false
-  xy: 57, 64
+  xy: 263, 270
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/magmarock
   rotate: false
-  xy: 263, 276
+  xy: 315, 326
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
