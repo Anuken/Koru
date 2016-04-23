@@ -2,6 +2,7 @@ package net.pixelstatic.koru.world;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.utils.Hue;
 import net.pixelstatic.utils.Noise;
 
 import com.badlogic.gdx.Gdx;
@@ -70,7 +71,7 @@ public enum MaterialType{
 			return true;
 		}
 	},
-	tree{
+	tree(Hue.rgb(80, 53, 30)){
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).yLayer();
 		}
@@ -89,7 +90,7 @@ public enum MaterialType{
 			return rectangle.set(x * World.tilesize + width / 2, y * World.tilesize + 6 + height / 2, width, height);
 		}
 	},
-	grass{
+	grass(Hue.rgb(66, 44, 25)){
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).yLayer().setColor(tile.tile.foilageColor());
 		}
@@ -98,8 +99,17 @@ public enum MaterialType{
 			return false;
 		}
 	};
+	private Color color = null;
 	protected World world;
 	static final int tilelayer = -1;
+	
+	private MaterialType(){
+		
+	}
+	
+	private MaterialType(Color color){
+		this.color = color;
+	}
 
 	static int tilelayer(int id){
 		return tilelayer - (512 - id * 2);
@@ -124,6 +134,10 @@ public enum MaterialType{
 
 	public boolean tile(){
 		return true;
+	}
+	
+	public Color getColor(){
+		return color;
 	}
 
 	int tile(int i){

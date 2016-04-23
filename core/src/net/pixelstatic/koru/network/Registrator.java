@@ -50,6 +50,7 @@ public class Registrator{
 		k.register(ChildComponent.class);
 		k.register(TextComponent.class);
 		k.register(InventoryComponent.class);
+		k.register(ParticleComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncBuffer.class);

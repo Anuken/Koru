@@ -13,14 +13,20 @@ import net.pixelstatic.koru.world.Tile;
 import com.badlogic.gdx.math.Vector2;
 
 public class HarvestResourceTask extends Task{
-	private int searchrange = 50;
-	private int quantitygoal; // how many blocks to harvest until it stops
-	private Item item; // goal item
+	private final int searchrange = 50;
+	private int quantitygoal = 1; // how many blocks to harvest until it stops
+	private final Item item; // goal item
+	private final boolean usechests;
 
 
-	public HarvestResourceTask(Item item, int goal){
+	public HarvestResourceTask(Item item, int goal, boolean usechests){
 		this.item = item;
 		this.quantitygoal = goal;
+		this.usechests = usechests;
+	}
+	
+	public HarvestResourceTask(Item item, int goal){
+		this(item, goal, true);
 	}
 
 	@Override
@@ -41,7 +47,8 @@ public class HarvestResourceTask extends Task{
 				if( !World.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tiles[worldx][worldy];
 				
-				if(tile.blockdata != null && tile.blockdata instanceof InventoryTileData){
+				
+				if(usechests && tile.blockdata != null && tile.blockdata instanceof InventoryTileData){
 					InventoryComponent inventory = tile.getBlockData(InventoryTileData.class).inventory;
 					ItemStack stack = new ItemStack(item, quantitygoal);
 					if(inventory.hasItem(stack)){

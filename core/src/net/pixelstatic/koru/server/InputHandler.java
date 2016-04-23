@@ -2,9 +2,11 @@ package net.pixelstatic.koru.server;
 
 import java.util.HashMap;
 
-import net.pixelstatic.koru.entities.EntityType;
+import net.pixelstatic.koru.entities.Effects;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.utils.InputType;
+
+import com.badlogic.gdx.graphics.Color;
 
 public class InputHandler{
 	public float mouseangle;
@@ -38,9 +40,7 @@ public class InputHandler{
 			//	entity.position().set(this.entity.getX(), this.entity.getY());
 			//	entity.addSelf().sendSelf();
 		}else if(type == InputType.r){
-			KoruEntity entity = new KoruEntity(EntityType.particle);
-			entity.position().set(this.entity.getX(), this.entity.getY());
-			entity.sendSelf();
+			Effects.particle(entity, Color.BLUE);
 		}
 	}
 

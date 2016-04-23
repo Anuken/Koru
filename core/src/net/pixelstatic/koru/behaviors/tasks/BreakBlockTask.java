@@ -1,6 +1,7 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
 import net.pixelstatic.koru.components.InventoryComponent;
+import net.pixelstatic.koru.entities.Effects;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
@@ -8,7 +9,7 @@ import net.pixelstatic.koru.world.Material;
 import com.badlogic.gdx.math.Vector2;
 
 public class BreakBlockTask extends Task{
-	static final int speed = 1;
+	//static final int speed = 1;
 	int blockx, blocky;
 	Material material;
 	boolean waited = false;
@@ -33,7 +34,7 @@ public class BreakBlockTask extends Task{
 		}
 		
 		if(!waited){
-			this.insertTask(new WaitTask(speed));
+			this.insertTask(new WaitTask(material.breakTime()));
 			waited = true;
 			return;
 		}
@@ -46,6 +47,7 @@ public class BreakBlockTask extends Task{
 		}
 		
 		material.harvestEvent(world.tiles[blockx][blocky]);
+		Effects.blockParticle(blockx, blocky, material);
 		world.updateTile(blockx, blocky);
 		entity.mapComponent(InventoryComponent.class).addItems(material.getDrops());
 		entity.group().unreserveBlock(blockx, blocky);

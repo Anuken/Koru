@@ -2,7 +2,7 @@ package net.pixelstatic.koru.world;
 
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.utils.Colors;
+import net.pixelstatic.utils.Hue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.Array;
 
 public enum Material{
 	air, 
-	grass(Colors.colora(69, 109, 29,0.04f)), 
-	water(MaterialType.water, true){
+	grass(Hue.rgb(69, 109, 29,0.04f)), 
+	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){
 		{addDrop(Item.water, 1);}
 		
 		public boolean reserved(){
@@ -19,7 +19,7 @@ public enum Material{
 		}
 	},
 	riveredge,
-	stone(MaterialType.tile, true){
+	stone(MaterialType.tile, 60, Hue.rgb(115, 115, 115, 0.09f)){
 		{addDrop(Item.stone, 1);}
 	}, 
 	woodfloor{{addDrop(Item.wood, 2);}},
@@ -33,11 +33,11 @@ public enum Material{
 	koru1(MaterialType.grass),
 	koru2(MaterialType.grass),
 	koru3(MaterialType.grass),
-	pinetree1(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
-	pinetree2(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree3(MaterialType.tree, true){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree4(MaterialType.tree, true){{addDrop(Item.wood, 5);}}, 
-	pinesapling(MaterialType.tree, false, false){
+	pinetree1(MaterialType.tree, 1){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
+	pinetree2(MaterialType.tree, 1){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
+	pinetree3(MaterialType.tree, 1){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
+	pinetree4(MaterialType.tree, 1){{addDrop(Item.wood, 5);}}, 
+	pinesapling(MaterialType.tree, 1, false){
 		{addDrop(Item.pinecone, 1);}
 		
 		public boolean growable(){
@@ -70,10 +70,11 @@ public enum Material{
 	};
 	
 	private MaterialType type = MaterialType.tile;
-	private Color foilageColor = Colors.colora(69, 109, 29,0.04f);
-	private boolean breakable;
+	private Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
+	private int breaktime;
 	private boolean enablecollisions = true;
 	private Array<ItemStack> drops = new Array<ItemStack>();
+	private Color color = Color.CLEAR;
 	
 	private Material(){
 		
@@ -83,14 +84,21 @@ public enum Material{
 		this.type = type;
 	}
 	
-	private Material(MaterialType type, boolean breakable){
+	private Material(MaterialType type, int breaktime, Color color){
 		this.type = type;
-		this.breakable = breakable;
+		this.breaktime = breaktime;
+		this.color = color;
 	}
 	
-	private Material(MaterialType type, boolean breakable, boolean collisions){
+	
+	private Material(MaterialType type, int breaktime){
+		this(type, breaktime, Color.WHITE);
+	}
+	
+
+	private Material(MaterialType type, int breaktime, boolean collisions){
 		this.type = type;
-		this.breakable = breakable;
+		this.breaktime = breaktime;
 		this.enablecollisions = collisions;
 	}
 	
@@ -107,8 +115,12 @@ public enum Material{
 		return foilageColor;
 	}
 	
-	public boolean breakable(){ // if the block is breakable (controls whether or not it is searched)
-		return breakable;
+	public final boolean breakable(){ // if the block is breakable (controls whether or not it is searched)
+		return breaktime >= 0;
+	}
+	
+	public final int breakTime(){ // how much time it takes to break the block
+		return breaktime;
 	}
 	
 	public boolean collisionsEnabled(){ //if collisions are enabled
@@ -149,6 +161,11 @@ public enum Material{
 	
 	public void growEvent(Tile tile){
 		tile.block = growMaterial();
+	}
+	
+	public Color getColor(){
+		if(type.getColor() != null) return type.getColor();
+		return color;
 	}
 	
 	protected void addDrop(Item item, int amount){
