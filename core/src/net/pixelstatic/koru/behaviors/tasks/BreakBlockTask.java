@@ -9,8 +9,7 @@ import net.pixelstatic.koru.world.Material;
 import com.badlogic.gdx.math.Vector2;
 
 public class BreakBlockTask extends Task{
-	//static final int speed = 1;
-	int blockx, blocky;
+	final int blockx, blocky;
 	Material material;
 	boolean waited = false;
 	
@@ -34,14 +33,14 @@ public class BreakBlockTask extends Task{
 		}
 		
 		if(!waited){
-			this.insertTask(new WaitTask(material.breakTime()));
+			this.insertTask(new ParticleWaitTask(blockx, blocky, material, material.breakTime()));
 			waited = true;
 			return;
 		}
 		
 		World world = KoruUpdater.instance.world;
 		
-		if((world.tiles[blockx][blocky].block != material && world.tiles[blockx][blocky].tile != material)){
+		if((world.tiles[blockx][blocky].block == material && world.tiles[blockx][blocky].tile == material)){
 			finish();
 			return;
 		}

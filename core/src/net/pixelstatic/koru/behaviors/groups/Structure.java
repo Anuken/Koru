@@ -62,6 +62,10 @@ public class Structure{
 		return tasks.pop();
 	}
 	
+	public void addFailedBuildTask(PlaceBlockTask task){
+		tasks.add(task);
+	}
+	
 	/*
 	public Array<Point> getBlocks(int type){
 		clearPoints();
@@ -84,13 +88,13 @@ public class Structure{
 	}
 	
 	public void assignEntity(KoruEntity entity){
-		if(entity.groucp().structure != null) entity.groucp().structure.deassignEntity(entity);
+		if(entity.groupc().structure != null) entity.groupc().structure.deassignEntity(entity);
 		entities.add(entity);
-		entity.groucp().structure = this;
+		entity.groupc().structure = this;
 	}
 	
 	public void deassignEntity(KoruEntity entity){
-		entity.groucp().structure = null;
+		entity.groupc().structure = null;
 		entities.removeValue(entity, true);
 	}
 	

@@ -2,8 +2,8 @@ package net.pixelstatic.koru.behaviors.groups;
 
 import java.awt.Point;
 
-import net.pixelstatic.koru.behaviors.tasks.StoreItemTask;
-import net.pixelstatic.koru.behaviors.tasks.Task;
+import net.pixelstatic.koru.behaviors.tasks.*;
+import net.pixelstatic.koru.behaviors.tasks.Task.FailReason;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.Item;
@@ -21,7 +21,7 @@ public class Group{
 	private Array<Point> reservedblocks = new Array<Point>();
 	private Array<Structure> structures = new Array<Structure>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
-	private int offsetx = 10, offsety = 10;
+	private int offsetx = 37, offsety = 10;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private ObjectMap<Item, Integer> resources = new ObjectMap<Item, Integer>();
 
@@ -71,9 +71,9 @@ public class Group{
 	}
 
 	private void checkStructure(KoruEntity entity){
-		if(entity.groucp().structure.isOverloaded() || !entity.groucp().structure.assignable()){
+		if(entity.groupc().structure.isOverloaded() || !entity.groupc().structure.assignable()){
 			for(Structure structure : structures){
-				if(entity.groucp().structure != structure && !structure.isOverloaded() && structure.assignable()){
+				if(entity.groupc().structure != structure && !structure.isOverloaded() && structure.assignable()){
 					structure.assignEntity(entity);
 					return;
 				}
@@ -90,7 +90,7 @@ public class Group{
 	}
 
 	public Task getTask(KoruEntity entity){
-		if(entity.groucp().structure == null){
+		if(entity.groupc().structure == null){
 			assignStructure(entity);
 		}else{
 			checkStructure(entity);
@@ -99,18 +99,26 @@ public class Group{
 		Task task = getDefaultTask(entity);
 		if(task != null) return task;
 
-		return entity.groucp().structure.getTask(entity);
+		Task stask = entity.groupc().structure.getTask(entity);
+		if(stask != null) return stask;
+		
+		return new HarvestResourceTask(Item.stone, 1, false);
 	}
 
 	private Task getDefaultTask(KoruEntity entity){
 		//if(entity.groucp().structure.isOverloaded()) entity.log("Structure overloaded: " + entity.groucp().structure.assignedEntities());
-		if( !entity.groucp().structure.isDone()) return null;
+		if( !entity.groupc().structure.isDone()) return null;
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 
-		if(entity.groucp().structure.getType() == StructureType.garden && entity.groucp().structure.isOverloaded() && entity.groucp().structure.isDone() && resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) == 0){
-			entity.log("Adding garden. Structure entities: " + entity.groucp().structure.assignedEntities());
+		if(entity.groupc().structure.getType() == StructureType.garden && entity.groupc().structure.isOverloaded() && entity.groupc().structure.isDone() && resourceAmount(Item.wood) > 200 && amountOfUnbuiltStructure(StructureType.garden) == 0){
+			entity.log("Adding garden. Structure entities: " + entity.groupc().structure.assignedEntities());
 			addStructure(StructureType.garden);
 			return null;
+		}
+		
+		if(resourceAmount(Item.stone) > 200 && resourceAmount(Item.wood) > 80 && amountOfUnbuiltStructure(StructureType.mine) == 0){
+			entity.log("Adding mine.");
+			addStructure(StructureType.mine);
 		}
 
 		if(inventory.usedSlots() > 3){
@@ -161,8 +169,8 @@ public class Group{
 		Point point = new Point(x, y);
 		blocks.get(material).add(point);
 		
-		if(entity.groucp().structure != null)
-			entity.groucp().structure.registerBlock(entity, material, x, y);
+		if(entity.groupc().structure != null)
+			entity.groupc().structure.registerBlock(entity, material, x, y);
 	}
 
 	public boolean isBaseBlock(Material material, int x, int y){
@@ -188,6 +196,14 @@ public class Group{
 
 	public void addEntity(KoruEntity entity){
 		entities.add(entity);
+	}
+	
+	public void notifyTaskFailed(KoruEntity entity, Task task, FailReason reason){
+		task.behavior.resetTimer();
+		if(task instanceof PlaceBlockTask){
+			entity.groupc().structure.addFailedBuildTask((PlaceBlockTask)task);
+			entity.log("place block task failed!");
+		}
 	}
 
 	public int amountOfStructure(StructureType schematic){

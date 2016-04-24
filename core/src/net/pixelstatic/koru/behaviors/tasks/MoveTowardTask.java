@@ -35,12 +35,13 @@ public class MoveTowardTask extends Task{
 				if( !World.instance().blockSolid(x + sx, y + sy)){
 					targetx = World.world(x) + sx / 2f;
 					targety = World.world(y) + sy / 2f;
+			//		Koru.log(sx + " " + sy);
 					break;
 				}
 			}
 		}
 
-		if(World.instance().tiles[x][y].block.solid()) selfcompleterange = -1;
+		if(World.instance().blockSolid(x, y)) selfcompleterange = -1;
 
 		//Koru.log(targetx + " " + targety);
 		Vector2 pos = AIController.pathfindTo(behavior.component().data, entity.getX(), entity.getY(), targetx, targety);
@@ -48,6 +49,10 @@ public class MoveTowardTask extends Task{
 
 		if(Vector2.dst(entity.getX(), entity.getY(), targetx, targety) < (selfcompleterange > 0 ? selfcompleterange : completerange)){
 			finish();
+		}
+		
+		if(stuck()){
+			finish(FailReason.stuck);
 		}
 	}
 

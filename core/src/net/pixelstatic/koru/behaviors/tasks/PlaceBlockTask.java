@@ -21,6 +21,12 @@ public class PlaceBlockTask extends Task{
 		this.y = y;
 		this.material = material;
 	}
+	
+	public void notifyFailed(Task task, FailReason reason){
+		if(task instanceof MoveTowardTask && reason == FailReason.stuck){
+			finish(FailReason.stuck);
+		}
+	}
 
 	@Override
 	protected void update(){
@@ -42,20 +48,27 @@ public class PlaceBlockTask extends Task{
 		}
 		if(missing) return;
 		
+		if(world.tiles[x][y].block == material || world.tiles[x][y].tile == material){
+			finish();
+			return;
+		}
+		
 		int blockx = x, blocky = y;
 		if(material.solid()){
 			Point point = world.findEmptySpace(entity, x, y, entity.group());
 			blockx = point.x;
 			blocky = point.y;
 		}
-		int dist = 2;
-		if(world.tiles[x][y].block.solid() && material.getType().tile()){
-			dist = 11;
+		
+		float dist = 2;
+		if(world.tiles[x][y].solid() && material.getType().tile()){
+			dist = MoveTowardTask.completerange;
 		}
+		
 		if(Vector2.dst(entity.getX(), entity.getY(), blockx * 12 + 6, (blocky) * 12 + 6) > dist){
 			insertTask(new MoveTowardTask(blockx, blocky, dist));
 			return;
-		}else if(world.tiles[x][y].block != Material.air && 
+		}else if(world.tiles[x][y].block != Material.air && !entity.group().isBaseBlock(world.tiles[x][y].block, blockx, blocky)&&
 				(!material.getType().tile() || world.tiles[x][y].block.getType() == MaterialType.grass  
 				|| world.tiles[x][y].block.getType() == MaterialType.tree)){
 			insertTask(new BreakBlockTask(world.tiles[x][y].block, x, y));

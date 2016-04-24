@@ -90,7 +90,7 @@ public enum MaterialType{
 			return rectangle.set(x * World.tilesize + width / 2, y * World.tilesize + 6 + height / 2, width, height);
 		}
 	},
-	grass(Hue.rgb(66, 44, 25)){
+	grass(Hue.rgb(69, 109, 29,0.02f)){
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).yLayer().setColor(tile.tile.foilageColor());
 		}

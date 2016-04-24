@@ -19,7 +19,7 @@ public enum Material{
 		}
 	},
 	riveredge,
-	stone(MaterialType.tile, 60, Hue.rgb(115, 115, 115, 0.09f)){
+	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){
 		{addDrop(Item.stone, 1);}
 	}, 
 	woodfloor{{addDrop(Item.wood, 2);}},
@@ -56,7 +56,7 @@ public enum Material{
 			return PinetreeTileData.class;
 		}
 	}, 
-	stoneblock(MaterialType.block),
+	stoneblock(MaterialType.block){{addDrop(Item.stone, 6);}},
 	woodblock(MaterialType.block){{addDrop(Item.wood, 5);}},
 	box(MaterialType.chest){
 		{addDrop(Item.wood, 10);}

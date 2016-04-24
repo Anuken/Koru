@@ -67,7 +67,7 @@ public class KoruEntity extends Entity{
 		return this.mapComponent(GroupComponent.class).group;
 	}
 	
-	public GroupComponent groucp(){
+	public GroupComponent groupc(){
 		return this.mapComponent(GroupComponent.class);
 	}
 

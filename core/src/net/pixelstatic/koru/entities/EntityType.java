@@ -111,6 +111,11 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleComponent()};
 		}
+	},
+	tile{
+		public Component[] defaultComponents(){
+			return new Component[]{new TileComponent()};
+		}
 	};
 
 	final void init(KoruEntity entity){

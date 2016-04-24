@@ -2,7 +2,6 @@ package net.pixelstatic.koru.behaviors.groups;
 
 import net.pixelstatic.koru.behaviors.tasks.*;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.world.*;
 
@@ -19,7 +18,21 @@ public enum StructureType{
 			{1,0,0,0,0,1},
 			{1,1,1,1,1,1},
 		}
-	), 
+	),
+	mine(
+		new int[][]{
+			{4,4,4,4,4,4},
+			{4,0,0,0,0,4},
+			{0,0,0,0,0,0},
+			{0,0,0,0,0,0},
+			{4,0,0,0,0,4},
+			{4,4,4,4,4,4},
+		}
+	){
+		public boolean assignable(){
+			return false;
+		}
+	},
 	garden(
 		new int[][]{
 			{1,1,1,1,1,1},
@@ -58,7 +71,7 @@ public enum StructureType{
 				entity.group().reserveBlock(x,y);
 				return new BreakBlockTask(tile.block, x,y);
 			}
-			return new HarvestResourceTask(Item.stone, 2, false);
+			return null;
 			
 			//return null;
 		}
@@ -81,37 +94,37 @@ public enum StructureType{
 	private static MaterialPair pair = new MaterialPair();
 	protected int[][] tiles;
 	private Array<ItemStack> requirements = new Array<ItemStack>();
-	
+
 	public Task getTask(Structure structure, KoruEntity entity){
 
 		return null;
 	}
-	
+
 	public int maxAssignedEntities(){
 		return 5;
 	}
-	
+
 	public Array<ItemStack> getRequirements(){
 		return requirements;
 	}
-	
+
 	private StructureType(int[][] tiles){
 		this.tiles = tiles;
-		for(int x = 0; x < tiles.length; x ++){
-			for(int y = 0; y < tiles[x].length; y ++){
-				
+		for(int x = 0;x < tiles.length;x ++){
+			for(int y = 0;y < tiles[x].length;y ++){
+
 			}
 		}
 	}
-	
+
 	public int[][] getTiles(){
 		return tiles;
 	}
-	
+
 	public boolean assignable(){
 		return true;
 	}
-	
+
 	public static MaterialPair getMaterials(int id){
 		pair.clear();
 		if(id == 0){
@@ -124,6 +137,8 @@ public enum StructureType{
 		}else if(id == 3){
 			pair.block = Material.box;
 			pair.tile = Material.woodfloor;
+		}else if(id == 4){
+			pair.block = Material.stoneblock;
 		}
 		return pair;
 	}

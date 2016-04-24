@@ -133,7 +133,7 @@ public class World extends Module{
 	}
 	
 	public Point findEmptySpace(KoruEntity entity, int x, int y, Group group){
-		Structure structure = entity.groucp().structure;
+		Structure structure = entity.groupc().structure;
 	//	structure.getBuildState(x, y);
 		for(int k = -1; k < 3; k ++){
 			int i = (k+4)%4;
@@ -155,7 +155,7 @@ public class World extends Module{
 	
 	public boolean blockSolid(int x, int y){
 		if(!inBounds(x,y)) return true;
-		return tiles[x][y].block.solid() || tiles[x][y].tile.solid();
+		return tiles[x][y].solid();
 	}
 
 	public boolean blends(int x, int y, Material material){
