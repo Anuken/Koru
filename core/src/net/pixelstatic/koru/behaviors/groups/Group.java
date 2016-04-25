@@ -55,7 +55,7 @@ public class Group{
 
 	private void assignStructure(KoruEntity entity){
 		for(Structure structure : structures){
-			if(structure.assignedEntities() <= structure.maxAssignedEntities() && structure.assignable()){
+			if(!structure.willBeOverloaded() && structure.assignable()){
 				structure.assignEntity(entity);
 				return;
 			}
@@ -63,7 +63,7 @@ public class Group{
 		
 		for(int i = structures.size - 1; i >= 0; i ++){
 			Structure structure = structures.get(i);
-			if(i == 0 || (structure.assignable() && !structure.isOverloaded())){
+			if(i == 0 || (structure.assignable() && !structure.willBeOverloaded())){
 				structure.assignEntity(entity);
 				return;
 			}
@@ -73,16 +73,17 @@ public class Group{
 	private void checkStructure(KoruEntity entity){
 		if(entity.groupc().structure.isOverloaded() || !entity.groupc().structure.assignable()){
 			for(Structure structure : structures){
-				if(entity.groupc().structure != structure && !structure.isOverloaded() && structure.assignable()){
+				if(entity.groupc().structure != structure && !structure.willBeOverloaded() && structure.assignable()){
 					structure.assignEntity(entity);
 					return;
 				}
 			}
+			if(structures.first() != entity.groupc().structure)
 			structures.first().assignEntity(entity);
 		}
 		
 		for(Structure structure : structures){
-			if(!structure.isDone() && !structure.isOverloaded() && Math.random() < 0.05){
+			if(!structure.isDone() && !structure.willBeOverloaded() && Math.random() < 0.05){
 				structure.assignEntity(entity);
 				return;
 			}		

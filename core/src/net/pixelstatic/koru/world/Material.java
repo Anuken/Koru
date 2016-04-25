@@ -23,6 +23,7 @@ public enum Material{
 		{addDrop(Item.stone, 1);}
 	}, 
 	woodfloor{{addDrop(Item.wood, 2);}},
+	stonefloor{{addDrop(Item.stone, 2);}},
 	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
 	tallgrass1(MaterialType.grass),
 	tallgrass2(MaterialType.grass),

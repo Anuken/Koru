@@ -25,7 +25,7 @@ public abstract class Task{
 		behavior.resetTimer();
 		behavior.tasks.insert(0, task);
 		task.parent = this;
-		//indicateTask();
+		indicateTask();
 	}
 	
 	public void addTask(Task task){

@@ -157,6 +157,10 @@ public class World extends Module{
 		if(!inBounds(x,y)) return true;
 		return tiles[x][y].solid();
 	}
+	
+	public boolean isAccesible(int x, int y){
+		return !blockSolid(x-1,y) || !blockSolid(x+1,y) || !blockSolid(x,y-1) || !blockSolid(x,y+1);
+	}
 
 	public boolean blends(int x, int y, Material material){
 		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);

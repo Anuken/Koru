@@ -25,6 +25,7 @@ public class PlaceBlockTask extends Task{
 	public void notifyFailed(Task task, FailReason reason){
 		if(task instanceof MoveTowardTask && reason == FailReason.stuck){
 			finish(FailReason.stuck);
+			entity.position().y ++;
 		}
 	}
 

@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class Structure{
+	private static int nextid;
+	private int id;
 	private Array<Task> tasks = new Array<Task>();
 	private final int x, y;
 	private StructureType schematic;
@@ -22,6 +24,7 @@ public class Structure{
 	private BuildState[][] buildstates;
 
 	public Structure(StructureType schematic, int x, int y){
+		id = nextid++;
 		this.x = x;
 		this.y = y;
 		this.schematic = schematic;
@@ -91,6 +94,7 @@ public class Structure{
 		if(entity.groupc().structure != null) entity.groupc().structure.deassignEntity(entity);
 		entities.add(entity);
 		entity.groupc().structure = this;
+	//	Koru.log(schematic.name() + id +": assigining entity. entities: " + assignedEntities() );
 	}
 	
 	public void deassignEntity(KoruEntity entity){
@@ -108,6 +112,14 @@ public class Structure{
 	
 	public boolean isOverloaded(){
 		return entities.size > maxAssignedEntities();
+	}
+	
+	public boolean willBeOverloaded(){
+		return entities.size+1 > maxAssignedEntities();
+	}
+	
+	public int getID(){
+		return id;
 	}
 
 	public void registerBlock(KoruEntity entity, Material material, int x, int y){

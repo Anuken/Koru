@@ -22,15 +22,33 @@ public enum StructureType{
 	mine(
 		new int[][]{
 			{4,4,4,4,4,4},
-			{4,0,0,0,0,4},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{4,0,0,0,0,4},
+			{4,5,5,5,5,4},
+			{5,5,5,5,5,5},
+			{5,5,5,5,5,5},
+			{4,5,5,5,5,4},
 			{4,4,4,4,4,4},
 		}
 	){
 		public boolean assignable(){
 			return false;
+		}
+	},
+	hatchery(
+		new int[][]{
+			{4,4,4,4,4,4},
+			{4,5,5,5,5,4},
+			{5,5,5,5,5,5},
+			{5,5,5,5,5,5},
+			{4,5,5,5,5,4},
+			{4,4,4,4,4,4},
+		}
+	){
+		public boolean assignable(){
+			return false;
+		}
+		
+		public int maxAssignedEntities(){
+			return 2;
 		}
 	},
 	garden(
@@ -139,6 +157,8 @@ public enum StructureType{
 			pair.tile = Material.woodfloor;
 		}else if(id == 4){
 			pair.block = Material.stoneblock;
+		}else if(id == 5){
+			pair.block = Material.stonefloor;
 		}
 		return pair;
 	}

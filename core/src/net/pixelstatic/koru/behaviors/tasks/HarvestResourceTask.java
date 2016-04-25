@@ -47,6 +47,7 @@ public class HarvestResourceTask extends Task{
 				if( !World.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tiles[worldx][worldy];
 				
+				if(!world.isAccesible(worldx, worldy)) continue;
 				
 				if(usechests && tile.blockdata != null && tile.blockdata instanceof InventoryTileData){
 					InventoryComponent inventory = tile.getBlockData(InventoryTileData.class).inventory;
@@ -58,7 +59,6 @@ public class HarvestResourceTask extends Task{
 					}
 				}
 				Material material = tile.block;
-
 				if(tile.block.breakable() && tile.block.dropsItem(item)){
 					material = tile.block;
 				}else if(tile.tile.breakable() && tile.tile.dropsItem(item) && !tile.block.getType().solid()){

@@ -82,7 +82,7 @@ public class KoruUpdater{
 		engine.addSystem(new BehaviorSystem());
 
 		for(int i = 0;i < 10;i ++){
-			KoruEntity entity = new KoruEntity(EntityType.testmonster).addSelf();
+			KoruEntity entity = new KoruEntity(EntityType.egg).addSelf();
 			entity.position().set(20f, 20f);
 		}
 	}

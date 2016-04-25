@@ -230,7 +230,7 @@ koru3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-entities/genericmonster
+entities/egg
   rotate: false
   xy: 1, 1
   size: 8, 8
@@ -238,6 +238,13 @@ entities/genericmonster
   offset: 0, 0
   index: -1
 entities/testmonster
+  rotate: false
+  xy: 1, 1
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+entities/genericmonster
   rotate: false
   xy: 11, 1
   size: 8, 8
@@ -485,105 +492,119 @@ filter: Nearest,Nearest
 repeat: none
 tiles/walldropshadow
   rotate: false
-  xy: 1, 78
+  xy: 1, 92
   size: 260, 260
   orig: 260, 260
   offset: 0, 0
   index: -1
 tiles/riveredgeedge
   rotate: false
-  xy: 1, 54
+  xy: 1, 68
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 tiles/stoneedge
   rotate: false
-  xy: 263, 316
+  xy: 263, 330
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 tiles/magmarockedge
   rotate: false
-  xy: 1, 36
+  xy: 1, 50
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/grassedge
   rotate: false
-  xy: 25, 60
+  xy: 25, 74
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiles/stoneflooredge
+  rotate: false
+  xy: 263, 312
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/woodflooredge
   rotate: false
-  xy: 263, 298
+  xy: 287, 336
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stoneblock
   rotate: false
-  xy: 287, 319
+  xy: 1, 29
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/woodblock
   rotate: false
-  xy: 1, 15
+  xy: 263, 291
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/grass
   rotate: false
-  xy: 43, 64
+  xy: 43, 78
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/water
   rotate: false
-  xy: 263, 284
+  xy: 305, 340
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/riveredge
   rotate: false
-  xy: 301, 326
+  xy: 1, 15
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/riverrock
   rotate: false
-  xy: 1, 1
+  xy: 263, 277
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/woodfloor
   rotate: false
-  xy: 57, 64
+  xy: 57, 78
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone
   rotate: false
-  xy: 263, 270
+  xy: 319, 340
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/magmarock
   rotate: false
-  xy: 315, 326
+  xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+tiles/stonefloor
+  rotate: false
+  xy: 263, 263
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

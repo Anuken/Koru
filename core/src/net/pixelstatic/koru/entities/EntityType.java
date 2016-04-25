@@ -80,7 +80,7 @@ public enum EntityType{
 			return other.getType() == EntityType.projectile;
 		}
 	},
-	testmonster{
+	egg{
 		public Component[] defaultComponents(){
 			return genericmonster.defaultComponents();
 		}
