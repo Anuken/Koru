@@ -21,7 +21,7 @@ public class Group{
 	private Array<Point> reservedblocks = new Array<Point>();
 	private Array<Structure> structures = new Array<Structure>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
-	private int offsetx = 37, offsety = 10;
+	private int offsetx = 10, offsety = 10;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private ObjectMap<Item, Integer> resources = new ObjectMap<Item, Integer>();
 

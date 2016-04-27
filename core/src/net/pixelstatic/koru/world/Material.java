@@ -59,6 +59,7 @@ public enum Material{
 	}, 
 	stoneblock(MaterialType.block){{addDrop(Item.stone, 6);}},
 	woodblock(MaterialType.block){{addDrop(Item.wood, 5);}},
+	hatcher(MaterialType.hatcher),
 	box(MaterialType.chest){
 		{addDrop(Item.wood, 10);}
 		public TileData getDefaultData(){

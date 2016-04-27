@@ -199,9 +199,51 @@ objects/boxopen
   orig: 12, 19
   offset: 0, 0
   index: -1
-objects/pinecones
+objects/hatcher
   rotate: false
   xy: 331, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-4
+  rotate: false
+  xy: 331, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-1
+  rotate: false
+  xy: 345, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-0
+  rotate: false
+  xy: 359, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/pinecones
+  rotate: false
+  xy: 373, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-2
+  rotate: false
+  xy: 387, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-3
+  rotate: false
+  xy: 401, 51
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
