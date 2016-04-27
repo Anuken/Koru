@@ -1,19 +1,8 @@
 package net.pixelstatic.koru.behaviors.groups;
 
-import java.awt.Point;
-
-import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
-import net.pixelstatic.koru.behaviors.tasks.Task;
-import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.modules.World;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.MaterialPair;
-import net.pixelstatic.koru.world.Tile;
-
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 
 public class Structure{
+	/*
 	private static int nextid;
 	private int id;
 	private Array<Task> tasks = new Array<Task>();
@@ -68,23 +57,6 @@ public class Structure{
 	public void addFailedBuildTask(PlaceBlockTask task){
 		tasks.add(task);
 	}
-	
-	/*
-	public Array<Point> getBlocks(int type){
-		clearPoints();
-		for(int x = 0;x < blocks.length;x ++){
-			for(int y = 0;y < blocks[x].length;y ++){
-				if(blocks[x][y] == type){
-					Point point = Pools.get(Point.class).obtain();
-					point.setLocation(x+this.x, y+this.y);
-					points.add(point);
-				}
-			}
-		}
-		return points;
-	}
-	
-	*/
 	
 	public int maxAssignedEntities(){
 		return schematic.maxAssignedEntities();
@@ -161,5 +133,6 @@ public class Structure{
 	public static enum BuildState{
 		unbuilt, completed
 	}
+	*/
 
 }
