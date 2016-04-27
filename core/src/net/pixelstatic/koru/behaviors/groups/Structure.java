@@ -22,7 +22,8 @@ public class Structure{
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
 	private BuildState[][] buildstates;
-
+	
+	//structure-based version
 	public Structure(StructureType schematic, int x, int y){
 		id = nextid++;
 		this.x = x;
