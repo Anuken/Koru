@@ -4,8 +4,6 @@ import java.awt.Point;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.behaviors.groups.Group;
-import net.pixelstatic.koru.behaviors.groups.Structure;
-import net.pixelstatic.koru.behaviors.groups.Structure.BuildState;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
@@ -133,12 +131,12 @@ public class World extends Module{
 	}
 	
 	public Point findEmptySpace(KoruEntity entity, int x, int y, Group group){
-		Structure structure = entity.groupc().structure;
+		//Structure structure = entity.groupc().structure;
 	//	structure.getBuildState(x, y);
 		for(int k = -1; k < 3; k ++){
 			int i = (k+4)%4;
 			int sx =DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
-			if(!blockSolid(x + sx, y + sy) && structure.getBuildState(sx + x, sy + y) == BuildState.completed){
+			if(!blockSolid(x + sx, y + sy) /*&& structure.getBuildState(sx + x, sy + y) == BuildState.completed*/){
 				point.setLocation(x+sx, y+sy);
 				return point;
 			}

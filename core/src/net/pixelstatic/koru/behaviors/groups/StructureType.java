@@ -61,7 +61,8 @@ public enum StructureType{
 			{1,1,1,1,1,1},
 		}
 	){
-		public Task getTask(Structure structure, KoruEntity entity){
+		public Task getTask(KoruEntity entity){
+			/*
 			for(int x = 0; x < tiles.length; x ++){
 				for(int y = 0; y < tiles[x].length; y ++){
 					if(entity.group().blockReserved(structure.worldX(x), structure.worldX(y))) continue;
@@ -75,6 +76,7 @@ public enum StructureType{
 					}
 				}
 			}
+			*/
 			return null;
 		}
 		
@@ -113,7 +115,7 @@ public enum StructureType{
 	protected int[][] tiles;
 	private Array<ItemStack> requirements = new Array<ItemStack>();
 
-	public Task getTask(Structure structure, KoruEntity entity){
+	public Task getTask(KoruEntity entity){
 
 		return null;
 	}
