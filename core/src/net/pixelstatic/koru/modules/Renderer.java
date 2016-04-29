@@ -1,7 +1,5 @@
 package net.pixelstatic.koru.modules;
 
-import java.awt.Point;
-
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
@@ -9,6 +7,7 @@ import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.sprites.PooledLayerList;
 import net.pixelstatic.koru.sprites.SpriteLayer;
+import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;

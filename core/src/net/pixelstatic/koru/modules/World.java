@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.modules;
 
-import java.awt.Point;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.behaviors.groups.Group;
@@ -10,11 +9,13 @@ import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
 import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
+import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.utils.DirectionUtils;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class World extends Module{
 	public static final int chunksize = 10;
@@ -137,7 +138,7 @@ public class World extends Module{
 			int i = (k+4)%4;
 			int sx =DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
 			if(!blockSolid(x + sx, y + sy) /*&& structure.getBuildState(sx + x, sy + y) == BuildState.completed*/){
-				point.setLocation(x+sx, y+sy);
+				point.set(x+sx, y+sy);
 				return point;
 			}
 		}
@@ -166,6 +167,26 @@ public class World extends Module{
 
 	public boolean isType(int x, int y, Material material){
 		return !inBounds(x, y) || tiles[x][y].tile == material;
+	}
+	
+	public Point search(Material material, int x, int y, int range){
+		float nearest = Float.MAX_VALUE;
+		for(int cx = -range; cx <= range; cx ++){
+			for(int cy = -range; cy <= range; cy ++){
+				int worldx = x + cx;
+				int worldy = y + cy;
+				if(!World.inBounds(worldx, worldy)) continue;
+				if(tiles[x][y].block == material || tiles[x][y].tile == material){
+					float dist = Vector2.dst(x, y, worldx, worldy);
+					if(dist < nearest){
+						point.set(x, y);
+						nearest = dist;
+						return point;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	public void updateTile(int x, int y){

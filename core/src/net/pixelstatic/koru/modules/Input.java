@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.modules;
 
-import java.awt.Point;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
@@ -11,6 +10,7 @@ import net.pixelstatic.koru.network.packets.InputPacket;
 import net.pixelstatic.koru.network.packets.StoreItemPacket;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.utils.InputType;
+import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;

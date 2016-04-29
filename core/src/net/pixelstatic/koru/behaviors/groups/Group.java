@@ -2,14 +2,12 @@ package net.pixelstatic.koru.behaviors.groups;
 
 import java.awt.Point;
 
-import net.pixelstatic.koru.behaviors.tasks.*;
+import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
+import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.behaviors.tasks.Task.FailReason;
-import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.modules.World;
-import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 
@@ -23,6 +21,7 @@ public class Group{
 	private int offsetx = 10, offsety = 10;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private ObjectMap<Item, Integer> resources = new ObjectMap<Item, Integer>();
+	private ObjectMap<PointType, Array<TilePoint>> points = new ObjectMap<PointType, Array<TilePoint>>();
 
 	static{
 		instance = new Group();
@@ -33,41 +32,41 @@ public class Group{
 	}
 
 	public Group(){
-		//structures.add(new Structure(StructureType.garden, 20, 20));
-
-
-		//addStructure(StructureType.storage);
-		//structures.add(new Structure(StructureSchematic.house, 30, 20));
-		//structures.add(new Structure(StructureSchematic.house, 40, 20));
-		//addBuilding(x, y);
+		for(PointType type : PointType.values())
+			points.put(type, new Array<TilePoint>());
 	}
-
-	private void storageFailEvent(){
-		
-	}
-
 	
-	public Task getTask(KoruEntity entity){
-
-		return new HarvestResourceTask(Item.stone, 1, false);
+	int points(PointType type){
+		return points.get(type).size;
 	}
 
-	private Task getDefaultTask(KoruEntity entity){
-		//if(entity.groucp().structure.isOverloaded()) entity.log("Structure overloaded: " + entity.groucp().structure.assignedEntities());
-		
-		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-
-		
-
-		if(inventory.usedSlots() > 3){
-			Array<Point> chests = getBlocks(Material.box);
-			for(Point point : chests){
-				if( !World.instance().getTile(point).getBlockData(InventoryTileData.class).inventory.full()) return new StoreItemTask(point.x, point.y);
-			}
-			storageFailEvent();
+	public Task getTask(KoruEntity entity){
+		if(points(PointType.treefarm) == 0){ // no tree farms
+			
 		}
 		return null;
+		//return new HarvestResourceTask(Item.stone, 1, false);
 	}
+	
+
+
+	/*
+		private Task getDefaultTask(KoruEntity entity){
+			InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
+
+			
+
+			if(inventory.usedSlots() > 3){
+				Array<Point> chests = getBlocks(Material.box);
+				for(Point point : chests){
+					if( !World.instance().getTile(point).getBlockData(InventoryTileData.class).inventory.full()) return new StoreItemTask(point.x, point.y);
+				}
+				storageFailEvent();
+			}
+			return null;
+		}
+		
+		*/
 
 	public void updateStorage(Tile tile, ItemStack stack, boolean add){
 		if( !resources.containsKey(stack.item)) resources.put(stack.item, 0);
@@ -79,10 +78,13 @@ public class Group{
 		return resources.get(item);
 	}
 
+	public int tileAmount(Material material){
+		if( !blocks.containsKey(material)) blocks.put(material, new Array<Point>());
+		return blocks.get(material).size;
+	}
+
 	public void registerBlock(KoruEntity entity, Material material, int x, int y){
-		if( !blocks.containsKey(material)){
-			blocks.put(material, new Array<Point>());
-		}
+		if( !blocks.containsKey(material)) blocks.put(material, new Array<Point>());
 		Point point = new Point(x, y);
 		blocks.get(material).add(point);
 	}
@@ -111,7 +113,7 @@ public class Group{
 	public void addEntity(KoruEntity entity){
 		entities.add(entity);
 	}
-	
+
 	public void notifyTaskFailed(KoruEntity entity, Task task, FailReason reason){
 		task.behavior.resetTimer();
 		if(task instanceof PlaceBlockTask){
@@ -139,6 +141,21 @@ public class Group{
 
 	public void reserveBlock(int x, int y){
 		reservedblocks.add(new Point(x, y));
+	}
+	
+	static enum PointType{
+		treefarm
+	}
+	
+	static class TilePoint{
+		public final int x, y;
+		
+		public TilePoint(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	
+		
 	}
 
 }
