@@ -2,8 +2,6 @@ package net.pixelstatic.koru.modules;
 
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.behaviors.groups.Group;
-import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
@@ -131,7 +129,7 @@ public class World extends Module{
 		return tiles[x][y];
 	}
 	
-	public Point findEmptySpace(KoruEntity entity, int x, int y, Group group){
+	public Point findEmptySpace(int x, int y){
 		//Structure structure = entity.groupc().structure;
 	//	structure.getBuildState(x, y);
 		for(int k = -1; k < 3; k ++){
@@ -143,7 +141,7 @@ public class World extends Module{
 			}
 		}
 	//	Koru.log("Error: empty point not found!");
-		return point;
+		return null;
 	}
 
 	public boolean positionSolid(float x, float y){
@@ -175,17 +173,20 @@ public class World extends Module{
 			for(int cy = -range; cy <= range; cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
-				if(!World.inBounds(worldx, worldy)) continue;
-				if(tiles[x][y].block == material || tiles[x][y].tile == material){
+				if(!inBounds(worldx, worldy)) continue;
+				if(tiles[worldx][worldy].block == material || tiles[worldx][worldy].tile == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
-						point.set(x, y);
+						point.set(worldx, worldy);
 						nearest = dist;
 						return point;
 					}
 				}
 			}
 		}
+		if(nearest > 0)
+			return point;
+		
 		return null;
 	}
 

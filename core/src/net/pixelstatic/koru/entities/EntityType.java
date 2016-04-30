@@ -101,6 +101,11 @@ public enum EntityType{
 		}
 		
 	},
+	group{
+		public Component[] defaultComponents(){
+			return new Component[]{new GroupComponent(null)};
+		}
+	},
 	damageindicator{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new IndicatorRenderer()),

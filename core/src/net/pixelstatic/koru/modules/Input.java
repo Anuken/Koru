@@ -110,7 +110,7 @@ public class Input extends Module implements InputProcessor{
 		BlockInputPacket packet = new BlockInputPacket();
 		if(button == Buttons.LEFT){
 			sendInput(InputType.leftclick_down);
-			packet.material = Material.hatcher;
+			packet.material = Material.woodblock;
 		}else if(button == Buttons.RIGHT){
 			sendInput(InputType.rightclick_down);
 			packet.material = Material.air;

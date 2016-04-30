@@ -12,6 +12,8 @@ public class Point{
 	public Point(int x, int y){
 		set(x,y);
 	}
+	
+	
 	/**
 	 * Utility distance method.
 	 * @return distance from x, y to this point's x, y.

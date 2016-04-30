@@ -7,6 +7,8 @@ import net.pixelstatic.koru.components.TextComponent;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 
+import com.badlogic.gdx.utils.Array;
+
 public abstract class Task{
 	protected KoruEntity entity;
 	public TaskBehavior behavior;
@@ -64,6 +66,11 @@ public abstract class Task{
 	
 	public boolean stuck(){
 		return behavior.stuck();
+	}
+	
+	public Task add(Array<Task> tasks){
+		tasks.add(this);
+		return this;
 	}
 	
 	void indicateTask(){

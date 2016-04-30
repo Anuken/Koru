@@ -56,7 +56,7 @@ public class PlaceBlockTask extends Task{
 		
 		int blockx = x, blocky = y;
 		if(material.solid()){
-			Point point = world.findEmptySpace(entity, x, y, entity.group());
+			Point point = world.findEmptySpace(x, y);
 			blockx = point.x;
 			blocky = point.y;
 		}

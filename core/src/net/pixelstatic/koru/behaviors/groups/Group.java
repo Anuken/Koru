@@ -1,13 +1,15 @@
 package net.pixelstatic.koru.behaviors.groups;
 
-import java.awt.Point;
-
 import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.behaviors.tasks.Task.FailReason;
+import net.pixelstatic.koru.components.GroupComponent;
+import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
+import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
 
@@ -18,7 +20,8 @@ public class Group{
 	private static Group instance;
 	private Array<Point> reservedblocks = new Array<Point>();
 	private Array<KoruEntity> entities = new Array<KoruEntity>();
-	private int offsetx = 10, offsety = 10;
+	private Array<GroupModule> modules = new Array<GroupModule>();
+	protected int x = 10, y = 10;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private ObjectMap<Item, Integer> resources = new ObjectMap<Item, Integer>();
 	private ObjectMap<PointType, Array<TilePoint>> points = new ObjectMap<PointType, Array<TilePoint>>();
@@ -34,21 +37,85 @@ public class Group{
 	public Group(){
 		for(PointType type : PointType.values())
 			points.put(type, new Array<TilePoint>());
+		module(new TreeFarmModule());
+
+	}
+
+	private void module(GroupModule module){
+		modules.add(module);
+	}
+
+	int pointAmount(PointType type){
+		return points.get(type).size;
 	}
 	
-	int points(PointType type){
-		return points.get(type).size;
+	public Array<TilePoint> points(PointType type){
+		return points.get(type);
+	}
+
+	void addPoint(PointType type, int x, int y){
+		points.get(type).add(new TilePoint(x, y));
+	}
+	
+	public void update(){
+		for(GroupModule module : modules){
+			module.updateInternal(this);
+		}
 	}
 
 	public Task getTask(KoruEntity entity){
-		if(points(PointType.treefarm) == 0){ // no tree farms
-			
+		World world = World.instance();
+
+		for(GroupModule module : modules){
+			if(module.tasks.size != 0) return module.tasks.pop();
 		}
+
+		/*
+		int trees = points(PointType.treefarm);
+		if(trees < 6){ // no tree farms
+			if(trees == 0){
+				Point water = world.search(Material.water, entity.position().blockX(), entity.position().blockY(), 50); //search for water
+				if(water == null) return null;
+				Point point = world.findEmptySpace(water.x, water.y);
+				if(point == null) return null; //no empty spot found?
+
+				addPoint(PointType.treefarm, point.x, point.y);
+			}else{
+				Array<TilePoint> points = this.points.get(PointType.treefarm);
+				int min = Integer.MAX_VALUE;
+				int y = 0;
+				for(TilePoint point : points){
+					y = point.y;
+					min = Math.min(point.x, min);
+				}
+				//System.out.println(min-1);
+				addPoint(PointType.treefarm, min - 1, y);
+
+			}
+		}else{
+			Array<TilePoint> points = this.points.get(PointType.treefarm);
+			for(TilePoint point : points){
+				if(point.reserved()) continue;
+				Material material = point.block();
+
+				if(material == Material.pinesapling && !point.tile().getBlockData(PinetreeTileData.class).hasEnoughWater()){
+					return new GrowPlantTask(point.x, point.y);
+				}else if(material.name().contains("pinetree")){
+					return new BreakBlockTask(material, point.x, point.y);
+				}else{
+					return new PlaceBlockTask(point.x, point.y, Material.pinesapling);
+				}
+				//if(point.state == PointState.used){
+
+				//}else{
+
+				//}
+			}
+		}
+		*/
 		return null;
 		//return new HarvestResourceTask(Item.stone, 1, false);
 	}
-	
-
 
 	/*
 		private Task getDefaultTask(KoruEntity entity){
@@ -143,19 +210,39 @@ public class Group{
 		reservedblocks.add(new Point(x, y));
 	}
 	
+	public static KoruEntity createGroupEntity(Group group){
+		KoruEntity entity = new KoruEntity(EntityType.group);
+		entity.mapComponent(GroupComponent.class).group = group;
+		return entity;
+	}
+
 	static enum PointType{
 		treefarm
 	}
-	
-	static class TilePoint{
+
+	static enum PointState{
+		none, used
+	}
+
+	class TilePoint{
 		public final int x, y;
-		
+		public PointState state = PointState.none;
+
+		public Material block(){
+			return World.instance().tiles[x][y].block;
+		}
+
+		public Tile tile(){
+			return World.instance().tiles[x][y];
+		}
+
+		public boolean reserved(){
+			return blockReserved(x, y);
+		}
+
 		public TilePoint(int x, int y){
 			this.x = x;
 			this.y = y;
 		}
-	
-		
 	}
-
 }

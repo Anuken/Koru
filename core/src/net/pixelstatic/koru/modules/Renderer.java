@@ -2,6 +2,7 @@ package net.pixelstatic.koru.modules;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.GroupComponent;
+import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.sprites.Layer;
@@ -109,7 +110,7 @@ public class Renderer extends Module{
 			font.draw(batch, data.inventory.toString(), cx, cy);
 		}
 		int i = 0;
-		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class).get())){
+		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
 			KoruEntity entity = (KoruEntity)e;
 			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
 				font.draw(batch, entity.getID() + "", cx, cy + i * 5);
