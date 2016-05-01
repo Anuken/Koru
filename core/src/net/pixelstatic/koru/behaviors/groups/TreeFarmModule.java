@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.behaviors.groups;
 
+import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.behaviors.groups.Group.PointType;
 import net.pixelstatic.koru.behaviors.groups.Group.TilePoint;
 import net.pixelstatic.koru.behaviors.tasks.BreakBlockTask;
@@ -18,14 +19,18 @@ public class TreeFarmModule extends GroupModule{
 	@Override
 	public void update(){
 		
-		if(trees <= 0){
+		if(trees < 6){
 			Point water = world.search(Material.water, group.x, group.y, 50); //search for water
 			if(water == null) return;
-			Point point = world.findEmptySpace(water.x, water.y);
-			if(point == null) return; //no empty spot found?
-
-			group.addPoint(PointType.treefarm, point.x, point.y);
-			trees ++;
+			int wx = water.x, wy = water.y;
+			
+			int rx = -1, ry = 0;
+			Koru.log(water);
+			for(int i = 1; i <= 6; i ++){
+				Koru.log((wx + rx*i) + "," +  (wy + ry*i) + "(" + rx + "," + ry + ")");
+				group.addPoint(PointType.treefarm, wx + rx*i, wy + ry*i);
+				trees ++;
+			}
 		}else{
 			Array<TilePoint> points = group.points(PointType.treefarm);
 			for(TilePoint point : points){
@@ -37,6 +42,7 @@ public class TreeFarmModule extends GroupModule{
 				}else if(material.name().contains("pinetree")){
 					new BreakBlockTask(material, point.x, point.y).add(tasks);
 				}else if(material != Material.pinesapling){
+					Koru.log("placing block at " + point.x + " " + point.y);
 					new PlaceBlockTask(point.x, point.y, Material.pinesapling).add(tasks);
 				}
 			}

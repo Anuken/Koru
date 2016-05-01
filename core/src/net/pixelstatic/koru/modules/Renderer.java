@@ -105,11 +105,18 @@ public class Renderer extends Module{
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
+		int i = 0;
+		
+		i ++;
+		
+		font.draw(batch, cursor.x + ", " + cursor.y, cx, cy);
+		
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
 			font.draw(batch, data.inventory.toString(), cx, cy);
+			i += data.inventory.inventory[0].length;
 		}
-		int i = 0;
+		
 		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
 			KoruEntity entity = (KoruEntity)e;
 			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){

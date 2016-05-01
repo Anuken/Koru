@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class Group{
 	private static Group instance;
 	private Array<Point> reservedblocks = new Array<Point>();
-	private Array<KoruEntity> entities = new Array<KoruEntity>();
+	protected Array<KoruEntity> entities = new Array<KoruEntity>();
 	private Array<GroupModule> modules = new Array<GroupModule>();
 	protected int x = 10, y = 10;
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
@@ -37,6 +37,7 @@ public class Group{
 	public Group(){
 		for(PointType type : PointType.values())
 			points.put(type, new Array<TilePoint>());
+		module(new StorageModule());
 		module(new TreeFarmModule());
 
 	}
@@ -48,7 +49,7 @@ public class Group{
 	int pointAmount(PointType type){
 		return points.get(type).size;
 	}
-	
+
 	public Array<TilePoint> points(PointType type){
 		return points.get(type);
 	}
@@ -56,7 +57,7 @@ public class Group{
 	void addPoint(PointType type, int x, int y){
 		points.get(type).add(new TilePoint(x, y));
 	}
-	
+
 	public void update(){
 		for(GroupModule module : modules){
 			module.updateInternal(this);
@@ -64,10 +65,15 @@ public class Group{
 	}
 
 	public Task getTask(KoruEntity entity){
-		World world = World.instance();
 
 		for(GroupModule module : modules){
-			if(module.tasks.size != 0) return module.tasks.pop();
+			//if(module.hasTasks()){
+				Task task = module.getTask(entity);
+				if(task != null){
+					module.taskTakeEvent();
+					return task;
+				}
+			//}
 		}
 
 		/*
@@ -209,7 +215,7 @@ public class Group{
 	public void reserveBlock(int x, int y){
 		reservedblocks.add(new Point(x, y));
 	}
-	
+
 	public static KoruEntity createGroupEntity(Group group){
 		KoruEntity entity = new KoruEntity(EntityType.group);
 		entity.mapComponent(GroupComponent.class).group = group;
