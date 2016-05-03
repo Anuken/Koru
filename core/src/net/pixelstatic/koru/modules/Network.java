@@ -93,6 +93,7 @@ public class Network extends Module{
 	public void update(){
 		while(queue.size != 0){
 			KoruEntity entity = queue.pop();
+			if(entity == null) continue;
 			if(entitiesToRemove.contains(entity.getID())){
 				entitiesToRemove.remove(entity.getID());
 				continue;

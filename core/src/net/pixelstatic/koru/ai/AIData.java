@@ -17,7 +17,6 @@ public class AIData{
 	static Graph graph = new Graph();
 	static ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
 	static IndexedAStarPathFinder<Node> pathfinder;
-	static TiledGraphPath<Node> path = new TiledGraphPath<Node>();
 	static Raycaster caster = new Raycaster();
 	static PathSmoother<Node, Vector2> smoother = new PathSmoother<Node, Vector2>(caster);
 	static Vector2 v = new Vector2();
@@ -25,6 +24,7 @@ public class AIData{
 	static int skip = 1;
 	static public final float changerange = 6;
 	static boolean straight = false;
+	TiledGraphPath<Node> path = new TiledGraphPath<Node>();
 	Vector2 lastpos = new Vector2();
 	World world;
 	int node;
@@ -51,21 +51,21 @@ public class AIData{
 
 		if(straight /*|| !cast(x, y, targetx, targety)*/) return v.set(targetx, targety);
 
-		if(lastpos.dst(v.set(targetx, targety)) > changerange || AIData.path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
+		if(lastpos.dst(v.set(targetx, targety)) > changerange || path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
 			createPath(x, y, targetx, targety);
 		}
 
-		if(AIData.path.nodes.size <= 1){
-			return AIData.path.nodes.size == 0 ? v.set(targetx, targety) : v.set(AIData.path.getNodePosition(0));
+		if(path.nodes.size <= 1){
+			return path.nodes.size == 0 ? v.set(targetx, targety) : v.set(path.getNodePosition(0));
 		}
 
 		if(node + 2 >= path.nodes.size){
 			return v.set(targetx, targety);
-		}else if(AIData.path.getNodePosition(1 + node).dst(v.set(x, y)) <= 1f){
+		}else if(path.getNodePosition(1 + node).dst(v.set(x, y)) <= 1f){
 			node ++;
 		}
 
-		v.set(AIData.path.getNodePosition(1 + node));
+		v.set(path.getNodePosition(1 + node));
 		return v;
 	}
 

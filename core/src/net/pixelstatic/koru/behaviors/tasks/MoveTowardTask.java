@@ -7,7 +7,7 @@ import net.pixelstatic.utils.DirectionUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class MoveTowardTask extends Task{
-	static final float speed = 0.5f;
+	static final float speed = 2f;
 	static final float completerange = 11;
 	private final int x, y;
 	private float selfcompleterange = -1;
