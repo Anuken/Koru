@@ -8,105 +8,83 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
 
 public class AIData{
-	IndexedAStarPathFinder<Node> pathfinder;
-	ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
-	Graph graph;
-	TiledGraphPath<Node> path = new TiledGraphPath<Node>();
-	final int node_range = 50;
-	Node[][] nodearray = new Node[node_range * 2][node_range * 2];
-	Raycaster caster = new Raycaster();
-	PathSmoother<Node, Vector2> smoother = new PathSmoother<Node, Vector2>(caster);
+	static Node[][] nodes = new Node[World.worldwidth][World.worldheight];
+	static Graph graph = new Graph();
+	static ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
+	static IndexedAStarPathFinder<Node> pathfinder;
+	static TiledGraphPath<Node> path = new TiledGraphPath<Node>();
+	static Raycaster caster = new Raycaster();
+	static PathSmoother<Node, Vector2> smoother = new PathSmoother<Node, Vector2>(caster);
+	static Vector2 v = new Vector2();
+	static int space = 14;
+	static int skip = 1;
+	static public final float changerange = 6;
+	static boolean straight = false;
 	Vector2 lastpos = new Vector2();
-	int node = 0;
-	//Timer timer = new Timer();
-	Node start;
-	boolean inobject;
-	int ignoredx, ignoredy, axg, ayg;
 	World world;
-	public boolean foundend;
+	int node;
 
-	public Vector2 CreatePath(float ax, float ay, float bx, float by){
-		foundend = false;
-		axg = (int)(ax / World.tilesize); //starting x/y
-		ayg = (int)((ay) / World.tilesize);
-		int bxg = (int)(bx / World.tilesize); //ending x/y
-		int byg = (int)(by / World.tilesize);
-		int index = 0;
-		Node end = null;
-		graph = new Graph();
-		/*
-		boolean broken =false;
-		if(solid(axg,ayg)){
-			for(int sx = -1; sx <= -1; sx ++){
-				for(int sy = -1; sy <= -1; sy ++){
-					if((sx == 1 && sy == 1) || (sx == 1 && sy == -1)
-							|| (sx == -1 && sy == -1) || (sx == -1 && sy == 1)  || (sx == 0 && sy == 0) ) continue;
-					if(!solid(sx + axg, sy + ayg)){
-						axg += sx;
-						ayg += sy;
-						broken = true;
-						break;
-					}
-				}
-				if(broken) break;
+	static{
+		for(int x = 0;x < World.worldwidth;x ++){
+			for(int y = 0;y < World.worldheight;y ++){
+				nodes[x][y] = new Node(x, y, graph.nodes.size);
+				graph.addNode(nodes[x][y]);
 			}
 		}
-		*/
-		
-		for(int x = -node_range;x < node_range;x ++){
-			for(int y = -node_range;y < node_range;y ++){
-				if(x == 0 && y == 0 ){ // this is the starting point
-					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
-					graph.addNode(nodearray[x + node_range][y + node_range]);
-					start = nodearray[x + node_range][y + node_range];
-				}else if(x + axg == bxg && y + ayg == byg){ // this is the end point
-					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
-					graph.addNode(nodearray[x + node_range][y + node_range]);
-					end = nodearray[x + node_range][y + node_range];
-					foundend = true;
-				}else if(solid(axg + x, ayg + y)){ // this block is solid, ignoring
-					nodearray[x + node_range][y + node_range] = null;
-				}else{ //otherwise, normal node
-					nodearray[x + node_range][y + node_range] = new Node(axg + x, ayg + y, index ++);
-					graph.addNode(nodearray[x + node_range][y + node_range]);
-				}
-
+		for(int x = 0;x < World.worldwidth;x ++){
+			for(int y = 0;y < World.worldheight;y ++){
+				addNodeNeighbour(nodes[x][y], x + 1, y);
+				addNodeNeighbour(nodes[x][y], x - 1, y);
+				addNodeNeighbour(nodes[x][y], x, y + 1);
+				addNodeNeighbour(nodes[x][y], x, y - 1);
 			}
 		}
-		//add linked neighbors
-		for(int x = 0;x < node_range * 2;x ++){
-			for(int y = 0;y < node_range * 2;y ++){
-				if(nodearray[x][y] != null){
-					addNodeNeighbour(nodearray[x][y], x + 1, y, x, y);
-					addNodeNeighbour(nodearray[x][y], x - 1, y, x, y);
-					addNodeNeighbour(nodearray[x][y], x, y + 1, x, y);
-					addNodeNeighbour(nodearray[x][y], x, y - 1, x, y);
-				}
-			}
-		}
-
 		pathfinder = new IndexedAStarPathFinder<Node>(graph, true);
-		path.clear();
-		pathfinder.searchNodePath(start, end, heuristic, path);
-		//smoother.smoothPath(Path);
-		//end = path.nodes.peek();
-		node = 0;
-		lastpos.set(bx, by);
-		if(path.nodes.size == 0) return new Vector2(bx, by);
-		return new Vector2(end.x * World.tilesize + 6, end.y * World.tilesize + 6);
 	}
 	
+	public Vector2 pathfindTo(float x, float y, float targetx, float targety){
+		
+		if(straight /*|| !cast(x, y, targetx, targety)*/)
+			return v.set(targetx, targety);
+		
+		//if(data.lastpos.dst(v.set(targetx, targety)) > changerange || AIData.path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
+			createPath(x, y, targetx, targety);
+		//}
+		
+		if(AIData.path.nodes.size <= 1){
+			return AIData.path.nodes.size == 0 ? v.set(targetx,targety) : v.set(AIData.path.getNodePosition(0));
+		}
+
+		if(node + 2 >= path.nodes.size){
+			return v.set(targetx, targety);
+		}else if(AIData.path.getNodePosition(1 + node).dst(v.set(x, y)) <= 1f){
+			node ++;
+		}
+		
+		v.set(AIData.path.getNodePosition(1 + node));
+		return v;
+	}
+
+	public void createPath(float startx, float starty, float endx, float endy){
+		Node end = null, start = null;
+
+		start = nodes[World.tile(startx)][World.tile(starty)];
+		end = nodes[World.tile(endx)][World.tile(endy)];
+		
+		path.clear();
+		pathfinder.searchNodePath(start, end, heuristic, path);
+		lastpos.set(endx, endy);
+	}
+
 	public boolean solid(int x, int y){
-		if(!World.inBounds(x, y)) return true;
+		if( !World.inBounds(x, y)) return true;
 		if(world == null) world = KoruUpdater.instance.world;
 		return world.tiles[x][y].solid();
 	}
-	
 
-
-	private void addNodeNeighbour(Node node, int aX, int aY, int rx, int ry){
-		if(aX >= 0 && aX < node_range * 2 && aY >= 0 && aY < node_range * 2){
-			node.addNeighbour(nodearray[aX][aY]);
+	static void addNodeNeighbour(Node node, int x, int y){
+		if(x >= 0 && x < World.worldwidth && y >= 0 && y < World.worldheight){
+			node.addNeighbour(nodes[y][x]);
 		}
 	}
 }

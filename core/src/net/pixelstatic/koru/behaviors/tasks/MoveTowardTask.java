@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
-import net.pixelstatic.koru.ai.AIController;
 import net.pixelstatic.koru.components.VelocityComponent;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.utils.DirectionUtils;
@@ -8,7 +7,7 @@ import net.pixelstatic.utils.DirectionUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class MoveTowardTask extends Task{
-	static final float speed = 2f;
+	static final float speed = 0.5f;
 	static final float completerange = 11;
 	private final int x, y;
 	private float selfcompleterange = -1;
@@ -29,6 +28,7 @@ public class MoveTowardTask extends Task{
 		float targetx = 0, targety = 0;
 		targetx = World.world(x);
 		targety = World.world(y);
+		
 		if(World.instance().blockSolid(x, y)){
 			for(int i = 0;i < 4;i ++){
 				int sx = DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
@@ -40,11 +40,11 @@ public class MoveTowardTask extends Task{
 				}
 			}
 		}
-
+	
 		if(World.instance().blockSolid(x, y)) selfcompleterange = -1;
 
 		//Koru.log(targetx + " " + targety);
-		Vector2 pos = AIController.pathfindTo(behavior.component().data, entity.getX(), entity.getY(), targetx, targety);
+		Vector2 pos = behavior.component().data.pathfindTo(entity.getX(), entity.getY(), targetx, targety);
 		entity.mapComponent(VelocityComponent.class).velocity.add(vector.set(pos.x - entity.getX(), pos.y - entity.getY()).setLength(speed));
 
 		if(Vector2.dst(entity.getX(), entity.getY(), targetx, targety) < (selfcompleterange > 0 ? selfcompleterange : completerange)){
@@ -52,7 +52,7 @@ public class MoveTowardTask extends Task{
 		}
 		
 		if(stuck()){
-			finish(FailReason.stuck);
+		//	finish(FailReason.stuck);
 		}
 	}
 

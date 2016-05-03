@@ -21,7 +21,6 @@ public class TreeFarmModule extends GroupModule{
 		if(trees < 5){
 			Point water = world.search(Material.water, group.x, group.y, 50); //search for water
 			if(water == null) return;
-			int wx = water.x, wy = water.y;
 
 			int size = 3;
 

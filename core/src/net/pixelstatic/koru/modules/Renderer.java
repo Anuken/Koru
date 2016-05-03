@@ -86,6 +86,7 @@ public class Renderer extends Module{
 	}
 
 	void drawMap(){
+		camera.zoom = 1f;
 		int camx = (int)(camera.position.x / World.tilesize), camy = (int)(camera.position.y / World.tilesize);
 		for(int x = camx - viewrange;x < World.worldwidth && x < camx + viewrange;x ++){
 			for(int y = camy - viewrange;y < World.worldheight && y < camy + viewrange;y ++){
@@ -148,7 +149,7 @@ public class Renderer extends Module{
 				buffer.end();
 				batch.begin();
 				batch.setColor(Layer.shadowcolor);
-				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2, camera.position.y + camera.viewportHeight / 2, camera.viewportWidth, -camera.viewportHeight);
+				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2*camera.zoom, camera.position.y + camera.viewportHeight / 2*camera.zoom, camera.viewportWidth*camera.zoom, -camera.viewportHeight*camera.zoom);
 				batch.setColor(Color.WHITE);
 				inshadow = false;
 			}
