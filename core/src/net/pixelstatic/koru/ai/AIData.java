@@ -1,5 +1,10 @@
 package net.pixelstatic.koru.ai;
 
+
+import net.pixelstatic.koru.components.FadeComponent;
+import net.pixelstatic.koru.components.TextComponent;
+import net.pixelstatic.koru.entities.EntityType;
+import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 
@@ -41,18 +46,17 @@ public class AIData{
 		}
 		pathfinder = new IndexedAStarPathFinder<Node>(graph, true);
 	}
-	
+
 	public Vector2 pathfindTo(float x, float y, float targetx, float targety){
-		
-		if(straight /*|| !cast(x, y, targetx, targety)*/)
-			return v.set(targetx, targety);
-		
-		//if(data.lastpos.dst(v.set(targetx, targety)) > changerange || AIData.path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
+
+		if(straight /*|| !cast(x, y, targetx, targety)*/) return v.set(targetx, targety);
+
+		if(lastpos.dst(v.set(targetx, targety)) > changerange || AIData.path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
 			createPath(x, y, targetx, targety);
-		//}
-		
+		}
+
 		if(AIData.path.nodes.size <= 1){
-			return AIData.path.nodes.size == 0 ? v.set(targetx,targety) : v.set(AIData.path.getNodePosition(0));
+			return AIData.path.nodes.size == 0 ? v.set(targetx, targety) : v.set(AIData.path.getNodePosition(0));
 		}
 
 		if(node + 2 >= path.nodes.size){
@@ -60,20 +64,30 @@ public class AIData{
 		}else if(AIData.path.getNodePosition(1 + node).dst(v.set(x, y)) <= 1f){
 			node ++;
 		}
-		
+
 		v.set(AIData.path.getNodePosition(1 + node));
 		return v;
 	}
 
-	public void createPath(float startx, float starty, float endx, float endy){
+	private void createPath(float startx, float starty, float endx, float endy){
+		node = 0;
 		Node end = null, start = null;
 
 		start = nodes[World.tile(startx)][World.tile(starty)];
 		end = nodes[World.tile(endx)][World.tile(endy)];
-		
+
 		path.clear();
 		pathfinder.searchNodePath(start, end, heuristic, path);
 		lastpos.set(endx, endy);
+		int i = 0;
+		for(Node node : path.nodes){
+			KoruEntity entity = new KoruEntity(EntityType.damageindicator);
+			entity.mapComponent(TextComponent.class).text = "n" + i++;
+			entity.mapComponent(FadeComponent.class).lifetime = 180;
+			entity.position().set(World.world(node.x), World.world(node.y));
+			entity.sendSelf();
+		}
+		
 	}
 
 	public boolean solid(int x, int y){
@@ -84,7 +98,7 @@ public class AIData{
 
 	static void addNodeNeighbour(Node node, int x, int y){
 		if(x >= 0 && x < World.worldwidth && y >= 0 && y < World.worldheight){
-			node.addNeighbour(nodes[y][x]);
+			node.addNeighbour(nodes[x][y]);
 		}
 	}
 }

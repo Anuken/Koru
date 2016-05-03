@@ -12,11 +12,11 @@ public class IndicatorRenderer extends EntityRenderer{
 	protected void render(){
 		ChildComponent child = entity.mapComponent(ChildComponent.class);
 		KoruEntity parent = Koru.getEngine().getEntity(child.parent);
-		if(parent == null) return;
+		//if(parent == null) return;
 		
 		child.offset += 0.2f * 20f/entity.mapComponent(FadeComponent.class).lifetime;
-		entity.position().set(parent.getX(), parent.getY() + child.offset);
-		render.layers.update(entity.getX(), entity.getY(), Layer.posLayer(parent.getY()-1));
+		if(parent != null)entity.position().set(parent.getX(), parent.getY() + child.offset);
+		render.layers.update(entity.getX(), entity.getY(),parent != null ?  Layer.posLayer(parent.getY()-1) : entity.getY() + 15);
 	}
 
 	@Override

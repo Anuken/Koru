@@ -1,5 +1,7 @@
 package net.pixelstatic.koru.ai;
 
+import net.pixelstatic.koru.modules.World;
+
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.utils.Array;
@@ -31,6 +33,10 @@ public class Node{
 		if(null != aNode){
 			connections.add(new DefaultConnection<Node>(this, aNode));
 		}
+	}
+	
+	public boolean solid(){
+		return World.instance().blockSolid(x, y);
 	}
 
 	public String toString(){

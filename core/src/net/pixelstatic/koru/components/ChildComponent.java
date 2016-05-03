@@ -7,5 +7,5 @@ import com.badlogic.ashley.core.Component;
 @Synced
 public class ChildComponent implements Component{
 	public transient float offset;
-	public long parent;
+	public long parent = -1;
 }
