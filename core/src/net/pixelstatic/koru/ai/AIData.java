@@ -1,15 +1,13 @@
 package net.pixelstatic.koru.ai;
 
-
-import net.pixelstatic.koru.components.FadeComponent;
-import net.pixelstatic.koru.components.TextComponent;
-import net.pixelstatic.koru.entities.EntityType;
-import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.entities.Effects;
 import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
 
 import com.badlogic.gdx.ai.pfa.PathSmoother;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 public class AIData{
@@ -24,27 +22,38 @@ public class AIData{
 	static int skip = 1;
 	static public final float changerange = 6;
 	static boolean straight = false;
+	static private World world;
 	TiledGraphPath<Node> path = new TiledGraphPath<Node>();
 	Vector2 lastpos = new Vector2();
-	World world;
 	int node;
 
 	static{
-		for(int x = 0;x < World.worldwidth;x ++){
-			for(int y = 0;y < World.worldheight;y ++){
-				nodes[x][y] = new Node(x, y, graph.nodes.size);
-				graph.addNode(nodes[x][y]);
+		if(KoruServer.active){
+			for(int x = 0;x < World.worldwidth;x ++){
+				for(int y = 0;y < World.worldheight;y ++){
+					nodes[x][y] = new Node(x, y, graph.nodes.size);
+					graph.addNode(nodes[x][y]);
+				}
 			}
-		}
-		for(int x = 0;x < World.worldwidth;x ++){
-			for(int y = 0;y < World.worldheight;y ++){
-				addNodeNeighbour(nodes[x][y], x + 1, y);
-				addNodeNeighbour(nodes[x][y], x - 1, y);
-				addNodeNeighbour(nodes[x][y], x, y + 1);
-				addNodeNeighbour(nodes[x][y], x, y - 1);
+			for(int x = 0;x < World.worldwidth;x ++){
+				for(int y = 0;y < World.worldheight;y ++){
+					addNodeNeighbour(nodes[x][y], x + 1, y);
+					addNodeNeighbour(nodes[x][y], x - 1, y);
+					addNodeNeighbour(nodes[x][y], x, y + 1);
+					addNodeNeighbour(nodes[x][y], x, y - 1);
+				}
 			}
+			pathfinder = new IndexedAStarPathFinder<Node>(graph, true);
 		}
-		pathfinder = new IndexedAStarPathFinder<Node>(graph, true);
+	}
+
+	public static void updateNode(int x, int y){
+		Node node = nodes[x][y];
+		node.connections.clear();
+		addNodeNeighbour(node, x + 1, y);
+		addNodeNeighbour(node, x - 1, y);
+		addNodeNeighbour(node, x, y + 1);
+		addNodeNeighbour(node, x, y - 1);
 	}
 
 	public Vector2 pathfindTo(float x, float y, float targetx, float targety){
@@ -52,6 +61,7 @@ public class AIData{
 		if(straight /*|| !cast(x, y, targetx, targety)*/) return v.set(targetx, targety);
 
 		if(lastpos.dst(v.set(targetx, targety)) > changerange || path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
+			Effects.indicator("recalc", Color.GREEN, x, y + 10, 100);
 			createPath(x, y, targetx, targety);
 		}
 
@@ -61,7 +71,7 @@ public class AIData{
 
 		if(node + 2 >= path.nodes.size){
 			return v.set(targetx, targety);
-		}else if(path.getNodePosition(1 + node).dst(v.set(x, y)) <= 1f){
+		}else if(path.getNodePosition(1 + node).dst(v.set(x, y)) <= 2f){
 			node ++;
 		}
 
@@ -77,27 +87,24 @@ public class AIData{
 		end = nodes[World.tile(endx)][World.tile(endy)];
 
 		path.clear();
+		heuristic.set(start, end);
 		pathfinder.searchNodePath(start, end, heuristic, path);
 		lastpos.set(endx, endy);
 		int i = 0;
 		for(Node node : path.nodes){
-			KoruEntity entity = new KoruEntity(EntityType.damageindicator);
-			entity.mapComponent(TextComponent.class).text = "n" + i++;
-			entity.mapComponent(FadeComponent.class).lifetime = 180;
-			entity.position().set(World.world(node.x), World.world(node.y));
-			entity.sendSelf();
+			//	float d = KoruUpdater.frameID()/100f;
+			Effects.indicator("n" + i ++, /*new Color(((d+0.5f)%1f),((d+0.24f)%1f),((d+0.8f)%1f),1f)*/Color.RED, World.world(node.x), World.world(node.y), 180);
 		}
-		
+
 	}
 
-	public boolean solid(int x, int y){
-		if( !World.inBounds(x, y)) return true;
+	public static boolean solid(int x, int y){
 		if(world == null) world = KoruUpdater.instance.world;
 		return world.tiles[x][y].solid();
 	}
 
 	static void addNodeNeighbour(Node node, int x, int y){
-		if(x >= 0 && x < World.worldwidth && y >= 0 && y < World.worldheight){
+		if(x >= 0 && x < World.worldwidth && y >= 0 && y < World.worldheight /*&& !solid(x, y)*/){
 			node.addNeighbour(nodes[x][y]);
 		}
 	}

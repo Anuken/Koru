@@ -192,13 +192,9 @@ public class World extends Module{
 
 	public void updateTile(int x, int y){
 		updated = true;
-		//TileData blockdata = tiles[x][y].blockdata, tiledata = tiles[x][y].tiledata;
 		tiles[x][y].changeEvent();
-		//if(tiles[x][y].blockdata != null && tiles[x][y].blockdata.getClass().isAnnotationPresent(Transient.class)) tiles[x][y].blockdata = null;
-		//if(tiles[x][y].tiledata != null && tiles[x][y].tiledata.getClass().isAnnotationPresent(Transient.class)) tiles[x][y].tiledata = null;
+		//AIData.updateNode(x, y);
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
-		//tiles[x][y].blockdata = blockdata;
-		//tiles[x][y].tiledata = tiledata;
 	}
 	
 	public boolean updated(){

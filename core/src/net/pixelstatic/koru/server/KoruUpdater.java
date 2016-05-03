@@ -85,7 +85,7 @@ public class KoruUpdater{
 		
 		Group.createGroupEntity(Group.instance()).addSelf();
 
-		for(int i = 0;i < 10;i ++){
+		for(int i = 0;i < 1;i ++){
 			KoruEntity entity = new KoruEntity(EntityType.egg).addSelf();
 			entity.position().set(20f, 20f);
 		}

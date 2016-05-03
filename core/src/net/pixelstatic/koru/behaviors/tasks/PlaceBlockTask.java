@@ -61,7 +61,7 @@ public class PlaceBlockTask extends Task{
 			blocky = point.y;
 		}
 		
-		float dist = 2;
+		float dist = MoveTowardTask.speed;
 		if(world.tiles[x][y].solid() && material.getType().tile()){
 			dist = MoveTowardTask.completerange;
 		}

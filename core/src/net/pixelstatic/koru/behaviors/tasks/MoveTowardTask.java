@@ -7,8 +7,8 @@ import net.pixelstatic.utils.DirectionUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class MoveTowardTask extends Task{
-	static final float speed = 2f;
-	static final float completerange = 11;
+	static final float speed = 3f;
+	static final float completerange = 12;
 	private final int x, y;
 	private float selfcompleterange = -1;
 	private static Vector2 vector = new Vector2();
@@ -43,7 +43,7 @@ public class MoveTowardTask extends Task{
 	
 		if(World.instance().blockSolid(x, y)) selfcompleterange = -1;
 
-		//Koru.log(targetx + " " + targety);
+		//Koru.log(targetx + " " + targety + ": " + Vector2.dst(entity.getX(), entity.getY(), targetx, targety) + " [] " + (selfcompleterange > 0 ? selfcompleterange : completerange));
 		Vector2 pos = behavior.component().data.pathfindTo(entity.getX(), entity.getY(), targetx, targety);
 		entity.mapComponent(VelocityComponent.class).velocity.add(vector.set(pos.x - entity.getX(), pos.y - entity.getY()).setLength(speed));
 
@@ -52,7 +52,7 @@ public class MoveTowardTask extends Task{
 		}
 		
 		if(stuck()){
-		//	finish(FailReason.stuck);
+			finish(FailReason.stuck);
 		}
 	}
 

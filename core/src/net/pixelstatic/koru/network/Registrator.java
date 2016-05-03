@@ -18,6 +18,7 @@ import net.pixelstatic.koru.world.*;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Bits;
@@ -75,6 +76,7 @@ public class Registrator{
 		k.register(Component[].class);
 		k.register(Object[].class);
 		k.register(Bits.class);
+		k.register(Color.class);
 		k.register(Vector2.class);
 		k.register(ArrayList.class);
 		k.register(HashMap.class);

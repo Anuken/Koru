@@ -7,7 +7,7 @@ import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.utils.Array;
 
 public class Node{
-	private int index;
+	final int index;
 	public final int x;
 	public final int y;
 

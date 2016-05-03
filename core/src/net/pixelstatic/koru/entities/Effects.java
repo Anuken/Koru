@@ -1,12 +1,38 @@
 package net.pixelstatic.koru.entities;
 
-import net.pixelstatic.koru.components.ParticleComponent;
+import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.world.Material;
 
 import com.badlogic.gdx.graphics.Color;
 
 public class Effects{
+	
+	public static void indicator(String text, float x, float y, float lifetime){
+		indicator(text, Color.WHITE, x, y, lifetime);
+	}
+	
+	public static void indicator(String text, Color color, float x, float y, float lifetime){
+		KoruEntity entity = new KoruEntity(EntityType.damageindicator);
+		entity.mapComponent(TextComponent.class).text = text;
+		entity.mapComponent(TextComponent.class).color = color;
+		entity.mapComponent(FadeComponent.class).lifetime = lifetime;
+		entity.position().set(x, y);
+		entity.sendSelf();
+	}
+	
+	public static void indicator(String text, long parent, float lifetime){
+		indicator(text, Color.WHITE, parent,lifetime);
+	}
+	
+	public static void indicator(String text, Color color, long parent, float lifetime){
+		KoruEntity entity = new KoruEntity(EntityType.damageindicator);
+		entity.mapComponent(TextComponent.class).text = text;
+		entity.mapComponent(TextComponent.class).color = color;
+		entity.mapComponent(FadeComponent.class).lifetime = lifetime;
+		entity.mapComponent(ChildComponent.class).parent = parent;
+		entity.sendSelf();
+	}
 	
 	public static void particle(String name, float x, float y, Color start, Color end, float velocity, float gravity){
 		KoruEntity entity = new KoruEntity(EntityType.particle);
