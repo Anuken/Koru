@@ -1,18 +1,18 @@
 package net.pixelstatic.koru.behaviors;
 
-import net.pixelstatic.koru.behaviors.tasks.HarvestResourceTask;
+import net.pixelstatic.koru.behaviors.tasks.MoveTowardTask;
 import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.components.ChildComponent;
 import net.pixelstatic.koru.components.FadeComponent;
 import net.pixelstatic.koru.components.TextComponent;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.items.Item;
 
 public class GroupBehavior extends TaskBehavior{
 
 	{
-		tasks.add(new HarvestResourceTask(Item.wood, 20));
+		tasks.add(new MoveTowardTask(90, 90));
+	//	tasks.add(new HarvestResourceTask(Item.wood, 20));
 	}
 
 	@Override

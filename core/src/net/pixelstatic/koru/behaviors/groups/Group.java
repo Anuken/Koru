@@ -25,6 +25,7 @@ public class Group{
 	private ObjectMap<Material, Array<Point>> blocks = new ObjectMap<Material, Array<Point>>();
 	private ObjectMap<Item, Integer> resources = new ObjectMap<Item, Integer>();
 	private ObjectMap<PointType, Array<TilePoint>> points = new ObjectMap<PointType, Array<TilePoint>>();
+	private Array<Point> structures = new Array<Point>();
 
 	static{
 		instance = new Group();
@@ -40,6 +41,18 @@ public class Group{
 		module(new StorageModule());
 		module(new TreeFarmModule());
 
+	}
+	
+	public boolean structureTaken(int x, int y){
+		for(Point point : structures){
+			if(point.equals(x,y))
+				return true;
+		}
+		return false;
+	}
+	
+	public void addStructure(int x, int y){
+		structures.add(new Point(x,y));
 	}
 
 	private void module(GroupModule module){
@@ -190,6 +203,7 @@ public class Group{
 	public void notifyTaskFailed(KoruEntity entity, Task task, FailReason reason){
 		task.behavior.resetTimer();
 		if(task instanceof PlaceBlockTask){
+			
 			entity.log("place block task failed!");
 		}
 	}

@@ -13,11 +13,10 @@ public class Node{
 
 	boolean mSelected;
 
-	/** @param aIndex needs to be unique for every node and starts from 0. */
-	public Node(int aX, int aY, int aIndex){
-		index = aIndex;
-		x = aX;
-		y = aY;
+	public Node(int x, int y, int index){
+		this.index = index;
+		this.x = x;
+		this.y = y;
 	}
 
 	public int getIndex(){

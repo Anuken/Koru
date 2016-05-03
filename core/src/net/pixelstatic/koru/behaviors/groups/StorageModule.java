@@ -9,6 +9,11 @@ public class StorageModule extends GroupModule{
 	
 	public Task getTask(KoruEntity entity){
 		if(entity.mapComponent(InventoryComponent.class).usedSlots() > 3){
+			//if(storage < 1){
+				
+			//}else{
+				
+			//}
 		//	return new StoreItemTask(1,1);
 		}
 		return null;
