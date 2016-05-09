@@ -2,7 +2,7 @@ package net.pixelstatic.koru.world;
 
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.utils.Hue;
+import net.pixelstatic.utils.graphics.Hue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;

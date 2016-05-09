@@ -2,8 +2,8 @@ package net.pixelstatic.koru.world;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
-import net.pixelstatic.utils.Hue;
 import net.pixelstatic.utils.Noise;
+import net.pixelstatic.utils.graphics.Hue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

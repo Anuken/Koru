@@ -29,9 +29,9 @@ public class Node{
 		return connections;
 	}
 
-	public void addNeighbour(Node aNode){
-		if(null != aNode){
-			connections.add(new DefaultConnection<Node>(this, aNode));
+	public void addNeighbour(Node node){
+		if(node != null){
+			connections.add(new DefaultConnection<Node>(this, node));
 		}
 	}
 	

@@ -12,8 +12,11 @@ public class ManhattanDistanceHueristic implements Heuristic<Node>{
 
 	@Override
 	public float estimate(Node node, Node other){
-		//if(node == start && node == end && other == start && other == end) return 0;
-		if(node.solid() || other.solid()) return 9999999;
+		//if(node == start || node == end || other == start || other == end) return 0;
+		if(node.solid() || other.solid()){
+		//	Koru.log("Solid node " + node + " detected.");
+		//	return 99999999;
+		}
 		return Math.abs(other.x - node.x) + Math.abs(other.y - node.y);
 	}
 }

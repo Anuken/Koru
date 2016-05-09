@@ -2,6 +2,7 @@ package net.pixelstatic.koru.modules;
 
 
 import net.pixelstatic.koru.Koru;
+import net.pixelstatic.koru.ai.AIData;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
@@ -193,7 +194,7 @@ public class World extends Module{
 	public void updateTile(int x, int y){
 		updated = true;
 		tiles[x][y].changeEvent();
-		//AIData.updateNode(x, y);
+		AIData.updateNode(x, y);
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 	}
 	

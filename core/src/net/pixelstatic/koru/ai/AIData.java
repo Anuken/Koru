@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 public class AIData{
+	static final boolean debug = false;
 	static Node[][] nodes = new Node[World.worldwidth][World.worldheight];
 	static Graph graph = new Graph();
 	static ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
@@ -48,12 +49,29 @@ public class AIData{
 	}
 
 	public static void updateNode(int x, int y){
-		Node node = nodes[x][y];
+		updateConnections(x,y);
+		updateConnections(x-1,y);
+		updateConnections(x+1,y);
+		updateConnections(x,y-1);
+		updateConnections(x,y+1);
+		/*
 		node.connections.clear();
+		
 		addNodeNeighbour(node, x + 1, y);
 		addNodeNeighbour(node, x - 1, y);
 		addNodeNeighbour(node, x, y + 1);
 		addNodeNeighbour(node, x, y - 1);
+		*/
+	}
+	
+	private static void updateConnections(int x, int y){
+		if(!World.inBounds(x, y)) return;
+		Node node = nodes[x][y];
+		node.connections.clear();
+		addNodeNeighbour(node, node.x + 1, node.y);
+		addNodeNeighbour(node, node.x - 1, node.y);
+		addNodeNeighbour(node, node.x, node.y + 1);
+		addNodeNeighbour(node, node.x, node.y - 1);
 	}
 
 	public Vector2 pathfindTo(float x, float y, float targetx, float targety){
@@ -61,7 +79,7 @@ public class AIData{
 		if(straight /*|| !cast(x, y, targetx, targety)*/) return v.set(targetx, targety);
 
 		if(lastpos.dst(v.set(targetx, targety)) > changerange || path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
-			Effects.indicator("recalc", Color.GREEN, x, y + 10, 100);
+			if(debug)Effects.indicator("recalc", Color.GREEN, x, y + 10, 100);
 			createPath(x, y, targetx, targety);
 		}
 
@@ -74,7 +92,7 @@ public class AIData{
 		}else if(path.getNodePosition(1 + node).dst(v.set(x, y)) <= 2f){
 			node ++;
 		}
-
+		//Koru.log(path.get(1+node).solid());
 		v.set(path.getNodePosition(1 + node));
 		return v;
 	}
@@ -91,9 +109,9 @@ public class AIData{
 		pathfinder.searchNodePath(start, end, heuristic, path);
 		lastpos.set(endx, endy);
 		int i = 0;
+		if(debug)
 		for(Node node : path.nodes){
-			//	float d = KoruUpdater.frameID()/100f;
-			Effects.indicator("n" + i ++, /*new Color(((d+0.5f)%1f),((d+0.24f)%1f),((d+0.8f)%1f),1f)*/Color.RED, World.world(node.x), World.world(node.y), 180);
+			Effects.indicator("n" + i ++, Color.RED, World.world(node.x), World.world(node.y), 180);
 		}
 
 	}
@@ -104,7 +122,7 @@ public class AIData{
 	}
 
 	static void addNodeNeighbour(Node node, int x, int y){
-		if(x >= 0 && x < World.worldwidth && y >= 0 && y < World.worldheight /*&& !solid(x, y)*/){
+		if(x >= 0 && x < World.worldwidth && y >= 0 && y < World.worldheight && !solid(x, y)){
 			node.addNeighbour(nodes[x][y]);
 		}
 	}

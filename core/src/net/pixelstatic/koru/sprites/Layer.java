@@ -2,7 +2,7 @@ package net.pixelstatic.koru.sprites;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
-import net.pixelstatic.utils.Atlas;
+import net.pixelstatic.utils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

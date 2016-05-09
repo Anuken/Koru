@@ -12,16 +12,17 @@ import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
-import net.pixelstatic.utils.Atlas;
-import net.pixelstatic.utils.GifRecorder;
+import net.pixelstatic.utils.graphics.Atlas;
+import net.pixelstatic.utils.graphics.FrameBufferMap;
+import net.pixelstatic.utils.graphics.GifRecorder;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 
@@ -37,8 +38,9 @@ public class Renderer extends Module{
 	Matrix4 matrix;
 	GlyphLayout layout;
 	BitmapFont font;
-	FrameBuffer buffer;
+	//FrameBuffer buffer;
 	GifRecorder recorder;
+	FrameBufferMap buffers;
 
 	public KoruEntity player;
 
@@ -53,7 +55,8 @@ public class Renderer extends Module{
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
-		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+		//buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+		buffers = new FrameBufferMap();
 		recorder = new GifRecorder(batch, 1f / GUIscale);
 		Layer.atlas = this.atlas;
 	}
@@ -132,6 +135,7 @@ public class Renderer extends Module{
 
 	void drawLayers(){
 		layers.sort();
+		
 		boolean inshadow = false;
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
@@ -140,16 +144,16 @@ public class Renderer extends Module{
 				if( !inshadow){
 					inshadow = true;
 					batch.end();
-					buffer.begin();
+					buffers.begin("shadow");
 					batch.begin();
 					Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 				}
 			}else if(inshadow){
 				batch.end();
-				buffer.end();
+				buffers.end("shadow");
 				batch.begin();
 				batch.setColor(Layer.shadowcolor);
-				batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2*camera.zoom, camera.position.y + camera.viewportHeight / 2*camera.zoom, camera.viewportWidth*camera.zoom, -camera.viewportHeight*camera.zoom);
+				batch.draw(buffers.texture("shadow"), camera.position.x - camera.viewportWidth / 2*camera.zoom, camera.position.y + camera.viewportHeight / 2*camera.zoom, camera.viewportWidth*camera.zoom, -camera.viewportHeight*camera.zoom);
 				batch.setColor(Color.WHITE);
 				inshadow = false;
 			}
@@ -173,9 +177,6 @@ public class Renderer extends Module{
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale); //resize camera
-		buffer.dispose();
-		buffer = new FrameBuffer(Format.RGBA8888, width, height, true);
-
 	}
 
 	void limitCamera(){
@@ -211,7 +212,7 @@ public class Renderer extends Module{
 	}
 
 	public void draw(String region, float x, float y){
-		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2);
+		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2);
 	}
 
 	public void drawc(String region, float x, float y){
@@ -220,15 +221,15 @@ public class Renderer extends Module{
 
 	public void drawscl(String region, float x, float y, float sclx, float scly){
 
-		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2, atlas.RegionWidth(region) / 2, atlas.RegionHeight(region) / 2, atlas.RegionWidth(region), atlas.RegionHeight(region), sclx, scly, 0f);
+		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2, atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), sclx, scly, 0f);
 	}
 
 	public void drawscl(String region, float x, float y, float scl){
-		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2 * scl, y - atlas.RegionHeight(region) / 2 * scl, atlas.RegionWidth(region) * scl, atlas.RegionHeight(region) * scl);
+		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2 * scl, y - atlas.regionHeight(region) / 2 * scl, atlas.regionWidth(region) * scl, atlas.regionHeight(region) * scl);
 	}
 
 	public void draw(String region, float x, float y, float rotation){
-		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2, atlas.RegionWidth(region) / 2, atlas.RegionHeight(region) / 2, atlas.RegionWidth(region), atlas.RegionHeight(region), 1f, 1f, rotation);
+		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2, atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), 1f, 1f, rotation);
 	}
 	
 	public TextureAtlas atlas(){
