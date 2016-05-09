@@ -4,6 +4,7 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.sprites.PooledLayerList;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Array;
 
 public class Renderer extends Module{
 	public static final int viewrange = 21;
@@ -110,17 +112,17 @@ public class Renderer extends Module{
 		font.setColor(Color.WHITE);
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
 		int i = 0;
-		
+
 		i ++;
-		
+
 		font.draw(batch, cursor.x + ", " + cursor.y, cx, cy);
-		
+
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
 			font.draw(batch, data.inventory.toString(), cx, cy);
 			i += data.inventory.inventory[0].length;
 		}
-		
+
 		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
 			KoruEntity entity = (KoruEntity)e;
 			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
@@ -135,27 +137,35 @@ public class Renderer extends Module{
 
 	void drawLayers(){
 		layers.sort();
-		
-		boolean inshadow = false;
+
+		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
+		FrameBufferLayer selected = null;
+
+		//boolean inshadow = false;
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
 
-			if(MathUtils.isEqual(layer.layer, Layer.shadowlayer)){ //layer is shadow layer
-				if( !inshadow){
-					inshadow = true;
-					batch.end();
-					buffers.begin("shadow");
-					batch.begin();
-					Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			if(selected == null){
+				for(FrameBufferLayer fl : blayers){
+					if(MathUtils.isEqual(layer.layer, fl.layer)){
+						selected = fl;
+						selected.beginDraw(batch, camera, buffers.get(selected.name));
+						batch.end();
+						buffers.begin(selected.name);
+						batch.begin();
+						Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+						break;
+					}
 				}
-			}else if(inshadow){
-				batch.end();
-				buffers.end("shadow");
-				batch.begin();
-				batch.setColor(Layer.shadowcolor);
-				batch.draw(buffers.texture("shadow"), camera.position.x - camera.viewportWidth / 2*camera.zoom, camera.position.y + camera.viewportHeight / 2*camera.zoom, camera.viewportWidth*camera.zoom, -camera.viewportHeight*camera.zoom);
-				batch.setColor(Color.WHITE);
-				inshadow = false;
+			}else{
+				if( !MathUtils.isEqual(selected.layer, layer.layer)){
+					batch.end();
+					buffers.end(selected.name);
+					batch.begin();
+					selected.end();
+					batch.setColor(Color.WHITE);
+					selected = null;
+				}
 			}
 			layer.Draw(this);
 		}
@@ -231,7 +241,7 @@ public class Renderer extends Module{
 	public void draw(String region, float x, float y, float rotation){
 		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2, atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), 1f, 1f, rotation);
 	}
-	
+
 	public TextureAtlas atlas(){
 		return atlas;
 	}
