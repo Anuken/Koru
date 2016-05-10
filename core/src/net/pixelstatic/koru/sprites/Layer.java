@@ -86,7 +86,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 		//if(this.region.equals("player")) Koru.log(reflectionlayer);
 		Layer reflection = obtainLayer();
 		reflection.region = region;
-		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer).add();
+		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer - (0.01f) * (y % 1000) / 1000f).add();
 	}
 	
 	public Layer setHeightOffset(float offset){

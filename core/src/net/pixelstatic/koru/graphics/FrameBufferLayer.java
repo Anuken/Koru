@@ -89,7 +89,7 @@ public enum FrameBufferLayer{
 	abstract protected void begin();
 
 	public boolean layerEquals(float f){
-		return MathUtils.isEqual(layer, f, 0.0001f);
+		return MathUtils.isEqual(layer, f, 0.01f);
 	}
 
 	protected void loadShader(){

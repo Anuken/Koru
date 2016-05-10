@@ -142,17 +142,20 @@ public class Renderer extends Module{
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
 			
+			boolean ended = false;
 			if(selected != null && !selected.layerEquals(layer.layer)){
 				Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
 				endBufferLayer(selected, blayers);
 				selected = null;
-
-				layer.Draw(this);
+				ended = true;
 			}
 			
 			if(selected == null){
+
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer.layer)){
+						if(ended)
+							layer.Draw(this);
 						selected = fl;
 						Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
 						
