@@ -1,6 +1,5 @@
 package net.pixelstatic.koru.sprites;
 
-import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.world.MaterialType;
@@ -84,7 +83,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 	
 	public void addReflection(){
-		if(this.region.equals("player")) Koru.log("!");
+		//if(this.region.equals("player")) Koru.log(reflectionlayer);
 		Layer reflection = obtainLayer();
 		reflection.region = region;
 		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer).add();

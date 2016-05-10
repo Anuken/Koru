@@ -138,15 +138,24 @@ public class Renderer extends Module{
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
 		FrameBufferLayer selected = null;
-
-		//boolean inshadow = false;
+		Koru.log("--start--");
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
+			
+			if(selected != null && !selected.layerEquals(layer.layer)){
+				Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
+				endBufferLayer(selected, blayers);
+				selected = null;
 
+				layer.Draw(this);
+			}
+			
 			if(selected == null){
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer.layer)){
 						selected = fl;
+						Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
+						
 						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 						batch.end();
 						buffers.begin(selected.name);
@@ -161,31 +170,25 @@ public class Renderer extends Module{
 						break;
 					}
 				}
-			}else{
-				if( !selected.layerEquals(layer.layer)){
-					endBufferLayer(selected);
-					selected = null;
-				}
 			}
-			if(layer.region.equals("player")) Koru.log(selected + " " + layer.layer);
 			layer.Draw(this);
 		}
 		if(selected != null){
-			endBufferLayer(selected);
+			endBufferLayer(selected, blayers);
 			selected = null;
 		}
 		layers.clear();
 	}
 
-	private void endBufferLayer(FrameBufferLayer selected){
+	private void endBufferLayer(FrameBufferLayer selected, Array<FrameBufferLayer> layers){
 		batch.end();
 		if(selected.shader != null) batch.setShader(null);
-
 		buffers.end(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(0);
 		batch.begin();
 		selected.end();
 		batch.setColor(Color.WHITE);
+		layers.removeValue(selected, true);
 	}
 
 	void updateCamera(){
