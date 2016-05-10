@@ -46,7 +46,7 @@ public enum FrameBufferLayer{
 			
 		}
 	},
-	water("water", MaterialType.tilelayer(0)){
+	water("water", MaterialType.tilelayer(-1)){
 		public void end(){
 			batch.setColor(new Color(1, 1, 1, 1f));
 			drawFull();

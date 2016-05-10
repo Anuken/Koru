@@ -2,8 +2,10 @@ package net.pixelstatic.koru.world;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.utils.Noise;
 import net.pixelstatic.utils.graphics.Hue;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -16,11 +18,11 @@ public enum MaterialType{
 	},
 	water{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			//float tscl = 8f;
-		//	float s = 0.2f;
-		//	float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
-			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(0)).setColor(new Color(1f,1f,1f,0.7f));//new Color(1f-s+noise,1f-s+noise,1f-s+noise,1f));
-			renderer.layer("riverrock", tile(x), tile(y)).setLayer(tilelayer(0)-1);
+			float tscl = 8f;
+		float s = 0.2f;
+			float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
+			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(-1)).setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.87f));
+			renderer.layer("riverrock", tile(x), tile(y)).setLayer(tilelayer(-1)-1);
 		}
 		
 		public boolean solid(){

@@ -167,6 +167,7 @@ public class Renderer extends Module{
 					selected = null;
 				}
 			}
+			if(layer.region.equals("player")) Koru.log(selected + " " + layer.layer);
 			layer.Draw(this);
 		}
 		if(selected != null){

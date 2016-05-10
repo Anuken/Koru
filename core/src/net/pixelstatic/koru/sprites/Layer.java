@@ -1,7 +1,9 @@
 package net.pixelstatic.koru.sprites;
 
+import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.koru.world.MaterialType;
 import net.pixelstatic.utils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
@@ -15,7 +17,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	public static Atlas atlas;
 	boolean temp = false;
-	public static final float shadowlayer = 0, reflectionlayer = 1;
+	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer(-1)+1;
 	public static final Color shadowcolor = new Color(0,0,0,0.14f);
 	public Color color = Color.WHITE.cpy();
 	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height;
@@ -82,9 +84,10 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 	
 	public void addReflection(){
+		if(this.region.equals("player")) Koru.log("!");
 		Layer reflection = obtainLayer();
 		reflection.region = region;
-		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setLayer(reflectionlayer).setScale(1f, -1f).add();
+		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer).add();
 	}
 	
 	public Layer setHeightOffset(float offset){
