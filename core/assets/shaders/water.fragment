@@ -7,44 +7,14 @@
 
 varying LOWP vec4 v_color;
 varying vec2 v_texCoords;
-//uniform vec3 cpos;
-//uniform vec2 resolution;
 //uniform float time;
+uniform vec2 resolution;
 uniform sampler2D u_texture;
-
-vec3 water(){
- vec3 color  = vec3(0.3, 0.6, 0.8);
- vec3 color2 = vec3(0.2, 0.5, 0.7);
- float z = 1.0/3.0;
- float s = 100.0 ;
- float d = 10.0;
- float a = 30.0;
- float c = 0.4;
- float t = 0.0;
- float ts = 1.0;
- float yscale = 1.0;
- float xscale = 1.0;
- float round = 3.0;
- float roundc = 0.2;
- float cx = (gl_FragCoord.x *resolution.x) / 1000.0  + cpos.x;
- float cy = (gl_FragCoord.y * resolution.y) / 1000.0 + cpos.y;
-
- float x = cx, y = cy;
- float b = mod(y *yscale
-  + x *xscale+
-  time*t +
-  sin(x / a + time*5.0*ts +
-   cos(y / a - time*2.0*ts) * 2.0) *d +
-   cos((x) / a + 100.0 + time*ts) * 10.0, s);
-
-   color = mix(color, color2,
-     roundc * float(int(abs(b - s /2.0 * c )/ s / roundc)));
-   return color;
-}
+uniform sampler2D reflection;
 
 void main()
 {
-	vec2 coords = v_texCoords.xy;
-	vec4 color = vec4(water(),1);
- 	gl_FragColor = (v_color * texture2D(u_texture, vec4(1,1,1,1))) * 1.0;//; + color;
+	vec2 reflecoord = (gl_FragCoord.xy / resolution.xy);
+	vec4 rcolor = texture2D(reflection, reflecoord);
+ 	gl_FragColor = (v_color * texture2D(u_texture, v_texCoords)) + vec4(rcolor.r, rcolor.g, rcolor.b, 0);
 }

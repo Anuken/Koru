@@ -20,9 +20,7 @@ import net.pixelstatic.utils.graphics.GifRecorder;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
@@ -151,8 +149,11 @@ public class Renderer extends Module{
 						selected = fl;
 						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 						batch.end();
-						buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
 						buffers.begin(selected.name);
+						buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
+						for(Texture t : atlas.getTextures())
+							t.bind(0);
+
 						if(selected.shader != null) batch.setShader(selected.shader);
 						batch.begin();
 						Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -161,7 +162,7 @@ public class Renderer extends Module{
 					}
 				}
 			}else{
-				if(!selected.layerEquals(layer.layer)){
+				if( !selected.layerEquals(layer.layer)){
 					endBufferLayer(selected);
 					selected = null;
 				}
@@ -174,13 +175,13 @@ public class Renderer extends Module{
 		}
 		layers.clear();
 	}
-	
+
 	private void endBufferLayer(FrameBufferLayer selected){
 		batch.end();
 		if(selected.shader != null) batch.setShader(null);
-		
+
 		buffers.end(selected.name);
-		buffers.get(selected.name).bind();;
+		buffers.get(selected.name).getColorBufferTexture().bind(0);
 		batch.begin();
 		selected.end();
 		batch.setColor(Color.WHITE);
