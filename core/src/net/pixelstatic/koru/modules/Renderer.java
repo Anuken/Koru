@@ -24,7 +24,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 
@@ -60,6 +59,7 @@ public class Renderer extends Module{
 		//buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 		buffers = new FrameBufferMap();
 		recorder = new GifRecorder(batch, 1f / GUIscale);
+		FrameBufferLayer.loadShaders();
 		Layer.atlas = this.atlas;
 	}
 
@@ -147,29 +147,43 @@ public class Renderer extends Module{
 
 			if(selected == null){
 				for(FrameBufferLayer fl : blayers){
-					if(MathUtils.isEqual(layer.layer, fl.layer)){
+					if(fl.layerEquals(layer.layer)){
 						selected = fl;
-						selected.beginDraw(batch, camera, buffers.get(selected.name));
+						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 						batch.end();
+						buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
 						buffers.begin(selected.name);
+						if(selected.shader != null) batch.setShader(selected.shader);
 						batch.begin();
+						Gdx.gl.glClearColor(0, 0, 0, 0);
 						Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 						break;
 					}
 				}
 			}else{
-				if( !MathUtils.isEqual(selected.layer, layer.layer)){
-					batch.end();
-					buffers.end(selected.name);
-					batch.begin();
-					selected.end();
-					batch.setColor(Color.WHITE);
+				if(!selected.layerEquals(layer.layer)){
+					endBufferLayer(selected);
 					selected = null;
 				}
 			}
 			layer.Draw(this);
 		}
+		if(selected != null){
+			endBufferLayer(selected);
+			selected = null;
+		}
 		layers.clear();
+	}
+	
+	private void endBufferLayer(FrameBufferLayer selected){
+		batch.end();
+		if(selected.shader != null) batch.setShader(null);
+		
+		buffers.end(selected.name);
+		buffers.get(selected.name).bind();;
+		batch.begin();
+		selected.end();
+		batch.setColor(Color.WHITE);
 	}
 
 	void updateCamera(){

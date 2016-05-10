@@ -13,6 +13,7 @@ public class ClientData extends Module{
 		player = new KoruEntity(EntityType.player);
 		player.mapComponent(ConnectionComponent.class).name = "your player";
 		player.mapComponent(ConnectionComponent.class).local = true;
+		player.position().set(460, 90);
 	}
 
 	@Override

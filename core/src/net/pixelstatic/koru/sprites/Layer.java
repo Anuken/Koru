@@ -15,7 +15,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	public static Atlas atlas;
 	boolean temp = false;
-	public static final float shadowlayer = 0, shadowoffset = -10;
+	public static final float shadowlayer = 0, reflectionlayer = 1;
 	public static final Color shadowcolor = new Color(0,0,0,0.14f);
 	public Color color = Color.WHITE.cpy();
 	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height;
@@ -76,8 +76,15 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public Layer addShadow(String name){
 		Layer shadow = obtainLayer();
 		shadow.region = name;
-		shadow.setPosition(x, y)/*.setColor(shadowcolor)*/.setTemp().setLayer(shadowlayer).add();
+		shadow.setPosition(x, y).setTemp().setLayer(shadowlayer).add();
+		addReflection();
 		return this;
+	}
+	
+	public void addReflection(){
+		Layer reflection = obtainLayer();
+		reflection.region = region;
+		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setLayer(reflectionlayer).setScale(1f, -1f).add();
 	}
 	
 	public Layer setHeightOffset(float offset){
