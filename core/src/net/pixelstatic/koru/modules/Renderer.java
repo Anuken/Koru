@@ -138,13 +138,13 @@ public class Renderer extends Module{
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
 		FrameBufferLayer selected = null;
-		Koru.log("--start--");
+		//Koru.log("--start--");
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
 			
 			boolean ended = false;
 			if(selected != null && !selected.layerEquals(layer.layer)){
-				Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
+				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
 				endBufferLayer(selected, blayers);
 				selected = null;
 				ended = true;
@@ -157,7 +157,7 @@ public class Renderer extends Module{
 						if(ended)
 							layer.Draw(this);
 						selected = fl;
-						Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
+						//Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
 						
 						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 						batch.end();
