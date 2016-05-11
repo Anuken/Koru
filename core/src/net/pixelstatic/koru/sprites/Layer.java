@@ -7,19 +7,18 @@ import net.pixelstatic.utils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	public static Atlas atlas;
 	boolean temp = false;
-	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer(-1)+1;
-	public static final Color shadowcolor = new Color(0,0,0,0.14f);
+	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer( -1) + 1;
+	public static final Color shadowcolor = new Color(0, 0, 0, 0.14f);
 	public Color color = Color.WHITE.cpy();
-	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height;
+	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height, vshiftx, vshifty;
 	public boolean scaled;
 	public String region;
 	public LayerType type = LayerType.SPRITE;
@@ -27,9 +26,10 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public TextureRegion texture;
 	public boolean alignbottom = false;
 	public PooledEffect particle;
+	public static Sprite sprite;
 
 	public enum LayerType{
-		SPRITE, TEXT, TEXTURE, SHAPE, PARTICLE
+		SPRITE, TEXT, TEXTURE, SHAPE, PARTICLE, VERTICESPRITE
 	}
 
 	public void Draw(Renderer renderer){
@@ -38,19 +38,40 @@ public class Layer implements Comparable<Layer>, Poolable{
 			float yalign = 0;
 			if(alignbottom){
 				TextureRegion tex = renderer.getRegion(region);
-				yalign = tex.getRegionHeight()/2;
+				yalign = tex.getRegionHeight() / 2;
 			}
 			if(scaled){
-				renderer.drawscl(region, x, y+yalign, scalex, scaley);
+				renderer.drawscl(region, x, y + yalign, scalex, scaley);
 			}else if(rotation == 0){
-				renderer.draw(region, x, y+yalign);
+				renderer.draw(region, x, y + yalign);
 			}else{
-				renderer.draw(region, x, y+yalign, rotation);
+				renderer.draw(region, x, y + yalign, rotation);
 			}
+		}else if(type == LayerType.VERTICESPRITE){
+			float yalign = 0;
+
+			TextureRegion tex = renderer.getRegion(region);
+			if(alignbottom){
+				yalign = tex.getRegionHeight() / 2;
+			}
+			if(sprite == null) sprite = new Sprite(tex);
+			
+			sprite.setRegion(tex);
+
+			sprite.setPosition(x - tex.getRegionWidth()/2, y + yalign + tex.getRegionHeight()/2);
+			sprite.setSize(tex.getRegionWidth(), tex.getRegionHeight());
+			
+			sprite.getVertices()[SpriteBatch.Y2] = sprite.getY()-tex.getRegionHeight()-vshifty;
+			sprite.getVertices()[SpriteBatch.Y3] = sprite.getY()-tex.getRegionHeight() -vshifty;
+			
+			sprite.getVertices()[SpriteBatch.X2] += vshiftx;
+			sprite.getVertices()[SpriteBatch.X3]  += vshiftx;
+		//	renderer.batch()
+			sprite.draw(renderer.batch());
 		}else if(type == LayerType.TEXT){
 			renderer.font().setUseIntegerPositions(false);
 			renderer.font().setColor(color);
-			renderer.font().getData().setScale(scalex/5f);
+			renderer.font().getData().setScale(scalex / 5f);
 			GlyphLayout glyphs = renderer.getBounds(text);
 			renderer.font().draw(renderer.batch(), text, x - glyphs.width / 2, y + glyphs.height / 2);
 		}else if(type == LayerType.TEXTURE){
@@ -62,93 +83,89 @@ public class Layer implements Comparable<Layer>, Poolable{
 			particle.setPosition(x, y);
 			particle.draw(renderer.batch(), Gdx.graphics.getDeltaTime());
 		}
-	
+
 	}
-	
+
 	public Layer add(){
 		list.add(this);
 		return this;
 	}
-	
+
 	public Layer addShadow(){
-		return addShadow("shadow" + (int)(atlas.findRegion(region).getRegionWidth()*0.9f/2f)*2);
+		return addShadow("shadow" + (int)(atlas.findRegion(region).getRegionWidth() * 0.9f / 2f) * 2);
 	}
-	
+
 	public Layer addShadow(String name){
 		Layer shadow = obtainLayer();
-		shadow.region = name;
-		shadow.setPosition(x, y).setTemp().setLayer(shadowlayer).add();
+		shadow.region = region;//name;
+		shadow.type = LayerType.VERTICESPRITE;
+		shadow.vshiftx = atlas.findRegion(region).getRegionWidth()/2f;
+		shadow.vshifty = -atlas.findRegion(region).getRegionHeight()/3f;
+		shadow.setPosition(x, y - atlas.regionHeight(region) / 2).setTemp().setLayer(shadowlayer).add();
 		addReflection();
 		return this;
 	}
-	
+
 	public void addReflection(){
 		//if(this.region.equals("player")) Koru.log(reflectionlayer);
 		Layer reflection = obtainLayer();
 		reflection.region = region;
-		reflection.setPosition(x, y - atlas.regionHeight(region)/2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer - (0.01f) * (y % 1000) / 1000f).add();
+		reflection.setPosition(x, y - atlas.regionHeight(region) / 2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer - (0.01f) * (y % 1000) / 1000f).add();
 	}
-	
+
 	public Layer setHeightOffset(float offset){
 		this.heightoffset = offset;
 		return this;
 	}
-	
+
 	public Layer yLayer(){
 		return yLayer(this.y);
 	}
-	
+
 	public Layer yLayer(float y){
 		this.alignbottom = true;
 		layer = posLayer(y) + heightoffset;
-		if(type == LayerType.SPRITE)addShadow();
+		if(type == LayerType.SPRITE) addShadow();
 		return this;
 	}
-	
+
 	public static float posLayer(float y){
-		return World.worldheight * World.worldheight + World.tilesize -y;
+		return World.worldheight * World.worldheight + World.tilesize - y;
 	}
 
-	
 	public Layer update(float x, float y){
-		setPosition(x,y);
+		setPosition(x, y);
 		yLayer();
 		add();
 		return this;
 	}
-	
+
 	public static Layer obtainLayer(){
 		return list.getLayer();
 	}
-	
+
 	public void free(){
 		list.pool.free(this);
 	}
-	
 
 	protected Layer(){
-		
+
 	}
-	
+
 	public Layer setTemp(){
 		this.temp = true;
 		return this;
 	}
-	
+
 	public Layer alignBottom(){
 		this.alignbottom = true;
 		return this;
 	}
-	
+
 	public Layer set(Layer layer){
-		return this.set(layer.region, layer.x, layer.y)
-		.setColor(layer.color).setScale(layer.scalex, layer.scaley)
-		.setType(layer.type)
-		.setTexture(layer.texture)
-		.setRotation(layer.rotation);
+		return this.set(layer.region, layer.x, layer.y).setColor(layer.color).setScale(layer.scalex, layer.scaley).setType(layer.type).setTexture(layer.texture).setRotation(layer.rotation);
 	}
-	
-	
+
 	public Layer setParticle(PooledEffect effect){
 		this.setType(LayerType.PARTICLE).particle = effect;
 		return this;
@@ -184,12 +201,11 @@ public class Layer implements Comparable<Layer>, Poolable{
 		this.text = text;
 		return this;
 	}
-	
 
 	public Layer setScale(float scale){
 		return setScale(scale, scale);
 	}
-	
+
 	public Layer setScale(float scalex, float scaley){
 		this.scalex = scalex;
 		this.scaley = scaley;
@@ -211,7 +227,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 		this.rotation = rotation;
 		return this;
 	}
-	
+
 	public Layer rotate(float rotation){
 		this.rotation += rotation;
 		return this;
@@ -223,7 +239,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 		this.y = y;
 		return this;
 	}
-	
+
 	public Layer setShape(float width, float height){
 		this.width = width;
 		this.height = height;
@@ -246,7 +262,8 @@ public class Layer implements Comparable<Layer>, Poolable{
 		temp = false;
 		alignbottom = false;
 		heightoffset = 0;
-		width =0; height=0;
+		width = 0;
+		height = 0;
 		//if(particle != null) particle.free();
 	}
 
