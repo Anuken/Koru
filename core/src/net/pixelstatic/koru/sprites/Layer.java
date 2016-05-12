@@ -96,13 +96,29 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 
 	public Layer addShadow(String name){
+		/*
 		Layer shadow = obtainLayer();
 		shadow.region = region;//name;
 		shadow.type = LayerType.VERTICESPRITE;
 		shadow.vshiftx = atlas.findRegion(region).getRegionWidth()/2f;
 		shadow.vshifty = -atlas.findRegion(region).getRegionHeight()/3f;
 		shadow.setPosition(x, y - atlas.regionHeight(region) / 2).setTemp().setLayer(shadowlayer).add();
+		*/
+		addBlobShadow();
 		addReflection();
+		return this;
+	}
+	
+	public Layer addBlobShadow(){
+		addBlobShadow(0);
+		return this;
+	}
+	
+	public Layer addBlobShadow(float offset){
+		Layer shadow = obtainLayer();
+		String region = "shadow" + (int)(atlas.findRegion(this.region).getRegionWidth() * 0.9f / 2f) * 2;
+		shadow.region = region;//name;
+		shadow.setPosition(x, y + offset).setTemp().setLayer(shadowlayer).add();
 		return this;
 	}
 
@@ -112,6 +128,10 @@ public class Layer implements Comparable<Layer>, Poolable{
 		reflection.region = region;
 		reflection.setPosition(x, y - atlas.regionHeight(region) / 2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer - (0.01f) * (y % 1000) / 1000f).add();
 	}
+	
+	public float height(){
+		return atlas.regionHeight(region);
+	}
 
 	public Layer setHeightOffset(float offset){
 		this.heightoffset = offset;
@@ -119,13 +139,17 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 
 	public Layer yLayer(){
-		return yLayer(this.y);
+		return yLayer(this.y, true);
+	}
+	
+	public Layer yLayer(boolean shadow){
+		return yLayer(this.y, shadow);
 	}
 
-	public Layer yLayer(float y){
+	public Layer yLayer(float y, boolean shadow){
 		this.alignbottom = true;
 		layer = posLayer(y) + heightoffset;
-		if(type == LayerType.SPRITE) addShadow();
+		if(type == LayerType.SPRITE && shadow) addShadow();
 		return this;
 	}
 
