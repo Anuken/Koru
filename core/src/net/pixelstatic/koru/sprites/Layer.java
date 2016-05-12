@@ -61,8 +61,8 @@ public class Layer implements Comparable<Layer>, Poolable{
 			sprite.setPosition(x - tex.getRegionWidth()/2, y + yalign + tex.getRegionHeight()/2);
 			sprite.setSize(tex.getRegionWidth(), tex.getRegionHeight());
 			
-			sprite.getVertices()[SpriteBatch.Y2] = sprite.getY()-tex.getRegionHeight()-vshifty;
-			sprite.getVertices()[SpriteBatch.Y3] = sprite.getY()-tex.getRegionHeight() -vshifty;
+			sprite.getVertices()[SpriteBatch.Y2] = sprite.getVertices()[SpriteBatch.Y2]+vshifty;
+			sprite.getVertices()[SpriteBatch.Y3] = sprite.getVertices()[SpriteBatch.Y3]+vshifty;
 			
 			sprite.getVertices()[SpriteBatch.X2] += vshiftx;
 			sprite.getVertices()[SpriteBatch.X3]  += vshiftx;
@@ -96,15 +96,15 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 
 	public Layer addShadow(String name){
-		/*
+		
 		Layer shadow = obtainLayer();
 		shadow.region = region;//name;
 		shadow.type = LayerType.VERTICESPRITE;
-		shadow.vshiftx = atlas.findRegion(region).getRegionWidth()/2f;
-		shadow.vshifty = -atlas.findRegion(region).getRegionHeight()/3f;
+		shadow.vshiftx = atlas.findRegion(region).getRegionWidth()/1.6f;
+		shadow.vshifty = atlas.findRegion(region).getRegionHeight()/10f;
 		shadow.setPosition(x, y - atlas.regionHeight(region) / 2).setTemp().setLayer(shadowlayer).add();
-		*/
-		addBlobShadow();
+		
+		//addBlobShadow();
 		addReflection();
 		return this;
 	}
