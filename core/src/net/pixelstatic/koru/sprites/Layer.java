@@ -15,7 +15,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	public static Atlas atlas;
 	boolean temp = false;
-	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer( -1) + 1;
+	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer( -1) + 1, topshadowlayer = World.worldHeightPixels()+100;
 	public static final Color shadowcolor = new Color(0, 0, 0, 0.14f);
 	public Color color = Color.WHITE.cpy();
 	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height, vshiftx, vshifty;
@@ -57,6 +57,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 			if(sprite == null) sprite = new Sprite(tex);
 			
 			sprite.setRegion(tex);
+			sprite.setColor(color);
 
 			sprite.setPosition(x - tex.getRegionWidth()/2, y + yalign + tex.getRegionHeight()/2);
 			sprite.setSize(tex.getRegionWidth(), tex.getRegionHeight());
@@ -96,17 +97,30 @@ public class Layer implements Comparable<Layer>, Poolable{
 	}
 
 	public Layer addShadow(String name){
-		
+		/*
 		Layer shadow = obtainLayer();
 		shadow.region = region;//name;
 		shadow.type = LayerType.VERTICESPRITE;
 		shadow.vshiftx = atlas.findRegion(region).getRegionWidth()/1.6f;
-		shadow.vshifty = atlas.findRegion(region).getRegionHeight()/10f;
+		shadow.vshifty = -atlas.findRegion(region).getRegionHeight()/10f;
 		shadow.setPosition(x, y - atlas.regionHeight(region) / 2).setTemp().setLayer(shadowlayer).add();
+		*/
+		newShadow();
+		//newShadow().setLayer(layer-0.1f).setColor(shadowcolor);
 		
 		//addBlobShadow();
 		addReflection();
 		return this;
+	}
+	
+	private Layer newShadow(){
+		Layer shadow = obtainLayer();
+		shadow.region = region;//name;
+		shadow.type = LayerType.VERTICESPRITE;
+		shadow.vshiftx = atlas.findRegion(region).getRegionWidth()/1.6f;
+		shadow.vshifty = -atlas.findRegion(region).getRegionHeight()/10f;
+		shadow.setPosition(x, y - atlas.regionHeight(region) / 2).setTemp().setLayer(shadowlayer).add();
+		return shadow;
 	}
 	
 	public Layer addBlobShadow(){

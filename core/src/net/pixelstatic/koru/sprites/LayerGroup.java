@@ -27,10 +27,6 @@ public class LayerGroup{
 		return layers.values();
 	}
 	
-	//public boolean isUpdated(String region){
-	//	
-	//}
-	
 	public void update(float x, float y){
 		for(Layer layer : layers.values()){
 			layer.update(x, y);

@@ -86,7 +86,7 @@ public enum MaterialType{
 	},
 	tree(Hue.rgb(80, 53, 30)){
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(/*material.name()*/"pinetree2", tile(x), tile(y)).yLayer(false).addBlobShadow(-3);
+			renderer.layer(/*material.name()*/"pinetree2", tile(x), tile(y)).yLayer()/*.addBlobShadow(-3)*/;
 			renderer.layer(/*material.name()*/"pinetree2roots", tile(x)+1, tile(y)-3).setLayer(3f);
 			
 		}

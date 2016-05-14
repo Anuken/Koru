@@ -33,233 +33,233 @@ objects/pinetree1
   index: -1
 objects/pinetree2roots
   rotate: false
-  xy: 161, 57
-  size: 40, 6
-  orig: 40, 6
+  xy: 161, 55
+  size: 40, 8
+  orig: 40, 8
   offset: 0, 0
   index: -1
 objects/pinetree2shadow
   rotate: false
-  xy: 161, 45
+  xy: 161, 43
   size: 32, 10
   orig: 32, 10
   offset: 0, 0
   index: -1
 objects/pinetree1shadow
   rotate: false
-  xy: 161, 33
+  xy: 161, 31
   size: 32, 10
   orig: 32, 10
   offset: 0, 0
   index: -1
 objects/pinetree4shadow
   rotate: false
-  xy: 161, 21
+  xy: 161, 19
   size: 32, 10
   orig: 32, 10
-  offset: 0, 0
-  index: -1
-objects/pinetree3shadow
-  rotate: false
-  xy: 161, 9
-  size: 32, 10
-  orig: 32, 10
-  offset: 0, 0
-  index: -1
-objects/box
-  rotate: false
-  xy: 195, 36
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/boxopen
-  rotate: false
-  xy: 195, 15
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/hatcher
-  rotate: false
-  xy: 195, 1
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-4
-  rotate: false
-  xy: 195, 1
-  size: 12, 12
-  orig: 12, 12
   offset: 0, 0
   index: -1
 objects/koru2shadow
   rotate: false
-  xy: 209, 47
+  xy: 161, 1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern2shadow
   rotate: false
-  xy: 209, 29
+  xy: 179, 1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
+objects/pinetree3shadow
+  rotate: false
+  xy: 203, 53
+  size: 32, 10
+  orig: 32, 10
+  offset: 0, 0
+  index: -1
 objects/koru3
   rotate: false
-  xy: 227, 47
+  xy: 237, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/koru1shadow
   rotate: false
-  xy: 209, 11
+  xy: 255, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-objects/tallgrass1
-  rotate: false
-  xy: 209, 1
-  size: 14, 8
-  orig: 14, 8
-  offset: 0, 0
-  index: -1
 objects/koru2
   rotate: false
-  xy: 227, 29
+  xy: 273, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/koru1
   rotate: false
-  xy: 245, 47
+  xy: 291, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern3
   rotate: false
-  xy: 227, 11
+  xy: 309, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-objects/tallgrass3shadow
-  rotate: false
-  xy: 225, 1
-  size: 14, 8
-  orig: 14, 8
-  offset: 0, 0
-  index: -1
-objects/tallgrass1shadow
-  rotate: false
-  xy: 225, 1
-  size: 14, 8
-  orig: 14, 8
-  offset: 0, 0
-  index: -1
-objects/tallgrass2shadow
-  rotate: false
-  xy: 225, 1
-  size: 14, 8
-  orig: 14, 8
-  offset: 0, 0
-  index: -1
 objects/fern3shadow
   rotate: false
-  xy: 245, 29
+  xy: 327, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern1
   rotate: false
-  xy: 263, 47
+  xy: 345, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/koru3shadow
   rotate: false
-  xy: 245, 11
+  xy: 363, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-objects/tallgrass3
-  rotate: false
-  xy: 241, 1
-  size: 14, 8
-  orig: 14, 8
-  offset: 0, 0
-  index: -1
 objects/fern2
   rotate: false
-  xy: 263, 29
+  xy: 381, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern1shadow
   rotate: false
-  xy: 281, 47
+  xy: 399, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-objects/tallgrass2
+objects/box
   rotate: false
-  xy: 257, 1
-  size: 14, 8
-  orig: 14, 8
+  xy: 417, 44
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/boxopen
+  rotate: false
+  xy: 431, 44
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/hatcher
+  rotate: false
+  xy: 445, 51
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-4
+  rotate: false
+  xy: 445, 51
+  size: 12, 12
+  orig: 12, 12
   offset: 0, 0
   index: -1
 objects/hatcher-1
   rotate: false
-  xy: 281, 33
+  xy: 459, 51
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/hatcher-0
   rotate: false
-  xy: 299, 51
+  xy: 473, 51
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/pinecones
   rotate: false
-  xy: 263, 15
+  xy: 487, 51
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
+objects/tallgrass1
+  rotate: false
+  xy: 445, 41
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass3shadow
+  rotate: false
+  xy: 461, 41
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass1shadow
+  rotate: false
+  xy: 461, 41
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass2shadow
+  rotate: false
+  xy: 461, 41
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/tallgrass3
+  rotate: false
+  xy: 477, 41
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/pinesapling
+  rotate: false
+  xy: 501, 55
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 objects/hatcher-2
   rotate: false
-  xy: 313, 51
+  xy: 195, 39
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/hatcher-3
   rotate: false
-  xy: 273, 1
+  xy: 209, 39
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-objects/pinesapling
+objects/tallgrass2
   rotate: false
-  xy: 327, 55
-  size: 8, 8
-  orig: 8, 8
+  xy: 195, 29
+  size: 14, 8
+  orig: 14, 8
   offset: 0, 0
   index: -1
 
