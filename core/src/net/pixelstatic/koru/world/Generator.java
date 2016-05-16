@@ -10,6 +10,13 @@ public class Generator{
 	public Generator(World world){
 		this.world = world;
 	}
+	
+	public void generateSpawn(){
+		world.generateChunk(0, 0);
+		world.generateChunk(-1, 0);
+		world.generateChunk(0, -1);
+		world.generateChunk(-1, -1);
+	}
 
 	private Tile generate(int x, int y){
 		Tile tile = Pools.obtain(Tile.class);

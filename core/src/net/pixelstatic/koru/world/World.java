@@ -14,6 +14,7 @@ import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -27,11 +28,14 @@ public class World extends Module{
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
+	private WorldFile file;
+	public Generator generator;
 	Network network;
 	KoruServer server;
 	//public Tile[][] tiles;
+	public Chunk[][] cchunks; //client-side tiles
 	boolean[][] chunkloaded;
-	public ObjectMap<Integer, Chunk> chunks = new ObjectMap<Integer, Chunk>();
+	public ObjectMap<Integer, Chunk> chunks = new ObjectMap<Integer, Chunk>(); //server-side chunks
 
 	@Override
 	public void update(){
@@ -42,7 +46,7 @@ public class World extends Module{
 	public void loadChunks(ChunkPacket packet){
 		for(int x = packet.x;x < packet.x + chunksize;x ++){
 			for(int y = packet.y;y < packet.y + chunksize;y ++){
-				tiles[x][y] = packet.tiles[x - packet.x][y - packet.y];
+				tile(x,y) = packet.tiles[x - packet.x][y - packet.y];
 			}
 		}
 		chunkloaded[packet.x / chunksize][packet.y / chunksize] = true;
@@ -87,7 +91,7 @@ public class World extends Module{
 				int wx = packet.x + x;
 				int wy = packet.y + y;
 				if(wx < 0 || wy < 0 || wx >= worldwidth || wy >= worldheight) continue;
-				chunk.tiles[x][y] = tiles[wx][wy];
+				chunk.tile(x,y) = tiles[wx][wy];
 			}
 		}
 		return chunk;
@@ -104,40 +108,37 @@ public class World extends Module{
 
 	public World(Koru k){
 		super(k);
-		tiles = new Tile[worldwidth][worldheight];
-		for(int x = 0;x < worldwidth;x ++){
-			for(int y = 0;y < worldwidth;y ++){
-				tiles[x][y] = new Tile();
-			}
-		}
+	//	tiles = new Tile[worldwidth][worldheight];
+		//for(int x = 0;x < worldwidth;x ++){
+		//	for(int y = 0;y < worldwidth;y ++){
+		//		tile(x,y) = new Tile();
+		//	}
+		//}
 		if( !KoruServer.active){
 			chunkloaded = new boolean[worldwidth / chunksize][worldheight / chunksize];
+		}else{
+			file = new WorldFile(Gdx.files.local("world.kwf"));
 		}
 	}
 
 	public World(){
 		this(null);
 	}
-	
-	private void generateChunk(int x, int y){
-		Chunk chunk = Pools.obtain(Chunk.class);
-		chunk.set(x, y);
-		chunks.put(hashCoords(x,y), chunk);
-	}
+
 
 	public static boolean inBounds(int x, int y){
 		return x >= 0 && y >= 0 && x < worldwidth && y < worldheight;
 	}
 
 	public Tile getTile(Point point){
-		return tiles[point.x][point.y];
+		return tile(point.x, point.y);
 	}
 
 	public Tile getTile(float fx, float fy){
 		int x = tile(fx);
 		int y = tile(fy);
 		//if(!bounds(x,y)) return null;
-		return tiles[x][y];
+		return tile(x,y);
 	}
 	
 	public Point findEmptySpace(int x, int y){
@@ -163,7 +164,7 @@ public class World extends Module{
 	
 	public boolean blockSolid(int x, int y){
 		if(!inBounds(x,y)) return true;
-		return tiles[x][y].solid();
+		return tile(x,y).solid();
 	}
 	
 	public boolean isAccesible(int x, int y){
@@ -175,7 +176,7 @@ public class World extends Module{
 	}
 
 	public boolean isType(int x, int y, Material material){
-		return !inBounds(x, y) || tiles[x][y].tile == material;
+		return !inBounds(x, y) || tile(x,y).tile == material;
 	}
 	
 	public Point search(Material material, int x, int y, int range){
@@ -185,7 +186,7 @@ public class World extends Module{
 				int worldx = x + cx;
 				int worldy = y + cy;
 				if(!inBounds(worldx, worldy)) continue;
-				if(tiles[worldx][worldy].block == material || tiles[worldx][worldy].tile == material){
+				if(tile(worldx, worldy).block == material || tile(worldx, worldy).tile == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
 						point.set(worldx, worldy);
@@ -203,9 +204,33 @@ public class World extends Module{
 
 	public void updateTile(int x, int y){
 		updated = true;
-		tiles[x][y].changeEvent();
+		tile(x, y).changeEvent();
 		AIData.updateNode(x, y);
-		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
+		server.sendToAll(new TileUpdatePacket(x, y, tile(x,y)));
+	}
+	
+	
+	protected Chunk generateChunk(int chunkx, int chunky){
+		Chunk chunk = Pools.obtain(Chunk.class);
+		chunk.set(chunkx, chunky);
+		generator.generateChunk(chunk);
+		chunks.put(hashCoords(chunkx,chunky), chunk);
+		return chunk;
+	}
+	
+	public Chunk getChunk(int chunkx, int chunky){
+		Chunk chunk = chunks.get(hashCoords(chunkx,chunky));
+		if(chunk == null) return generateChunk(chunkx, chunky);
+		return chunk;
+	}
+	
+	public Tile tile(int x, int y){
+		int cx = x/chunksize, cy = y/chunksize;
+		return getChunk(cx, cy).getWorldTile(x, y);
+	}
+	
+	public int toChunkCoords(int a){
+		return (a / chunksize);
 	}
 	
     public int hashCoords(int a, int b){

@@ -5,7 +5,8 @@ import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.systems.*;
-import net.pixelstatic.koru.world.*;
+import net.pixelstatic.koru.world.Generator;
+import net.pixelstatic.koru.world.World;
 
 public class KoruUpdater{
 	public static KoruUpdater instance;
@@ -33,12 +34,14 @@ public class KoruUpdater{
 	}
 	
 	void updateTiles(){
+		/*
 		for(int x = 0; x < World.worldwidth; x ++){
 			for(int y = 0; y < World.worldheight; y ++){
 				Tile tile = world.tiles[x][y];
 				if(tile.blockdata instanceof UpdatingTileData) ((UpdatingTileData)tile.blockdata).update(x,y,tile);
 			}
 		}
+		*/
 	}
 
 	public static long frameID(){
@@ -73,7 +76,8 @@ public class KoruUpdater{
 		this.server = server;
 		world = new World(server, true);
 		generator = new Generator(world);
-		generator.generate();
+		world.generator = generator;
+		generator.generateSpawn();
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
 		engine.addSystem(new CollisionSystem());
