@@ -88,12 +88,18 @@ public class Renderer extends Module{
 	void drawMap(){
 		camera.zoom = 1f;
 		int camx = (int)(camera.position.x / World.tilesize), camy = (int)(camera.position.y / World.tilesize);
-		for(int x = camx - viewrange;x < World.worldwidth && x < camx + viewrange;x ++){
-			for(int y = camy - viewrange;y < World.worldheight && y < camy + viewrange;y ++){
-				if(x < 0 || y < 0) continue;
-				Tile tile = world.tiles[x][y];
-				if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, x, y, this, world);
-				if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, x, y, this, world);
+		for(int chunkx = 0;chunkx < World.chunksize * 2;chunkx ++){
+			for(int chunky = 0;chunky < World.chunksize * 2;chunky ++){
+				Chunk chunk = world.chunks[chunkx][chunky];
+				if(chunk == null) continue;
+				for(int x = 0;x < World.chunksize;x ++){
+					for(int y = 0;y < World.chunksize;y ++){
+						Tile tile = chunk.tiles[x][y];
+						
+						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX()+x, chunk.worldY()+y, this, world);
+						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX()+x, chunk.worldY()+y, this, world);
+					}
+				}
 			}
 		}
 	}
@@ -138,7 +144,7 @@ public class Renderer extends Module{
 		//Koru.log("--start--");
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
-			
+
 			boolean ended = false;
 			if(selected != null && !selected.layerEquals(layer.layer)){
 				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
@@ -146,16 +152,15 @@ public class Renderer extends Module{
 				selected = null;
 				ended = true;
 			}
-			
+
 			if(selected == null){
 
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer.layer)){
-						if(ended)
-							layer.Draw(this);
+						if(ended) layer.Draw(this);
 						selected = fl;
 						//Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
-						
+
 						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 						batch.end();
 						buffers.begin(selected.name);
@@ -193,7 +198,6 @@ public class Renderer extends Module{
 
 	void updateCamera(){
 		camera.position.set(player.getX(), player.getY(), 0f);
-		limitCamera();
 		camera.update();
 	}
 
@@ -206,13 +210,6 @@ public class Renderer extends Module{
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale); //resize camera
-	}
-
-	void limitCamera(){
-		if(camera.position.x - camera.viewportWidth / 2 * camera.zoom < 0) camera.position.x = camera.viewportWidth / 2 * camera.zoom;
-		if(camera.position.y - camera.viewportHeight / 2 * camera.zoom < 0) camera.position.y = camera.viewportHeight / 2 * camera.zoom;
-		if(camera.position.x + camera.viewportWidth / 2 * camera.zoom > World.worldWidthPixels()) camera.position.x = World.worldWidthPixels() - camera.viewportWidth / 2 * camera.zoom;
-		if(camera.position.y + camera.viewportHeight / 2 * camera.zoom > World.worldHeightPixels()) camera.position.y = World.worldHeightPixels() - camera.viewportHeight / 2 * camera.zoom;
 	}
 
 	public GlyphLayout getBounds(String text){
@@ -268,7 +265,7 @@ public class Renderer extends Module{
 	public TextureRegion getRegion(String name){
 		return atlas.findRegion(name);
 	}
-	
+
 	public OrthographicCamera camera(){
 		return camera;
 	}

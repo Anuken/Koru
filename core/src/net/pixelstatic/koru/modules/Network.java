@@ -74,14 +74,14 @@ public class Network extends Module{
 					getModule(World.class).loadChunks(packet);
 				}else if(object instanceof TileUpdatePacket){
 					TileUpdatePacket packet = (TileUpdatePacket)object;
-					getModule(World.class).tiles[packet.x][packet.y] = packet.tile;
+					//TODO make this work
+					//getModule(World.class).tiles[packet.x][packet.y] = packet.tile;
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket packet = (EntityRemovePacket)object;
 					entitiesToRemove.add(packet.id);
 				}else if(object instanceof KoruEntity){
 					KoruEntity entity = (KoruEntity)object;
 					queue.add(entity);
-					//entity.addSelf();
 				}
 			}catch(Exception e){
 				e.printStackTrace();

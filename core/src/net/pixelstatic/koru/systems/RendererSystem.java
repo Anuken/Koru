@@ -4,7 +4,6 @@ import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.sprites.Layer;
-import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Family;
 
@@ -20,7 +19,6 @@ public class RendererSystem extends KoruSystem{
 
 	@Override
 	protected void processEntity(KoruEntity entity, float deltaTime){
-		limitPosition(entity);
 		RenderComponent render = entity.mapComponent(RenderComponent.class);
 		
 		render.renderer.renderInternal(entity, render);
@@ -47,13 +45,5 @@ public class RendererSystem extends KoruSystem{
 			hitbox.entityhitbox.update(entity);
 			renderer.layer("hitbox2", hitbox.entityRect().x, hitbox.entityRect().y).setShape(hitbox.entityRect().width, hitbox.entityRect().height).setLayer(99999999);
 		}
-	}
-
-	void limitPosition(KoruEntity player){
-		if(player.getX() < 0) player.position().x = 0;
-		if(player.getY() < 0) player.position().y = 0;
-		if(player.getX() > World.worldWidthPixels()) player.position().x = World.worldWidthPixels();
-		if(player.getY() > World.worldHeightPixels()) player.position().y = World.worldHeightPixels();
-
 	}
 }

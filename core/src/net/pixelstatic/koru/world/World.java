@@ -33,7 +33,7 @@ public class World extends Module{
 	KoruServer server;
 	public Chunk[][] chunks; //client-side tiles
 	boolean[][] chunkloaded;
-	public ObjectMap<Integer, Chunk> loadedchunks = new ObjectMap<Integer, Chunk>(); //server-side chunks
+	private ObjectMap<Integer, Chunk> loadedchunks = new ObjectMap<Integer, Chunk>(); //server-side chunks
 	
 	public World(Koru k){
 		super(k);

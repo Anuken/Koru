@@ -104,8 +104,7 @@ public class CollisionSystem extends KoruSystem{
 		for(int rx = -1;rx <= 1;rx ++){
 			for(int ry = -1;ry <= 1;ry ++){
 				int worldx = tilex + rx, worldy = tiley + ry;
-				if( !World.inBounds(worldx, worldy)) continue;
-				Tile tile = world.tiles[worldx][worldy];
+				Tile tile = world.tile(worldx, worldy);
 				if( !tile.solid()) continue;
 				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, rect))){
 					point.setLocation(worldx, worldy);

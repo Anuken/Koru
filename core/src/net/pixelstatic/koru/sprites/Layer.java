@@ -2,7 +2,6 @@ package net.pixelstatic.koru.sprites;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.world.MaterialType;
-import net.pixelstatic.koru.world.World;
 import net.pixelstatic.utils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
@@ -15,7 +14,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	public static Atlas atlas;
 	boolean temp = false;
-	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer( -1) + 1, topshadowlayer = World.worldHeightPixels()+100;
+	public static final float shadowlayer = 0, reflectionlayer = MaterialType.tilelayer( -1) + 1;
 	public static final Color shadowcolor = new Color(0, 0, 0, 0.14f);
 	public Color color = Color.WHITE.cpy();
 	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height, vshiftx, vshifty;
@@ -162,13 +161,9 @@ public class Layer implements Comparable<Layer>, Poolable{
 
 	public Layer yLayer(float y, boolean shadow){
 		this.alignbottom = true;
-		layer = posLayer(y) + heightoffset;
+		layer = /*posLayer(y)*/1000 + heightoffset;
 		if(type == LayerType.SPRITE && shadow) addShadow();
 		return this;
-	}
-
-	public static float posLayer(float y){
-		return World.worldheight * World.worldheight + World.tilesize - y;
 	}
 
 	public Layer update(float x, float y){
