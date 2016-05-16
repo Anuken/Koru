@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.components;
 
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.network.SyncBuffer.Synced;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;

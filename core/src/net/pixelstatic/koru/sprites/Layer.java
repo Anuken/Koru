@@ -1,8 +1,8 @@
 package net.pixelstatic.koru.sprites;
 
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.world.MaterialType;
+import net.pixelstatic.koru.world.World;
 import net.pixelstatic.utils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
@@ -105,15 +105,15 @@ public class Layer implements Comparable<Layer>, Poolable{
 		shadow.vshifty = -atlas.findRegion(region).getRegionHeight()/10f;
 		shadow.setPosition(x, y - atlas.regionHeight(region) / 2).setTemp().setLayer(shadowlayer).add();
 		*/
-		newShadow();
+		//newShadow();
 		//newShadow().setLayer(layer-0.1f).setColor(shadowcolor);
 		
-		//addBlobShadow();
+		addBlobShadow();
 		addReflection();
 		return this;
 	}
 	
-	private Layer newShadow(){
+	Layer newShadow(){
 		Layer shadow = obtainLayer();
 		shadow.region = region;//name;
 		shadow.type = LayerType.VERTICESPRITE;

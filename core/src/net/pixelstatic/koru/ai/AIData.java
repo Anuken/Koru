@@ -1,9 +1,9 @@
 package net.pixelstatic.koru.ai;
 
 import net.pixelstatic.koru.entities.Effects;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.ai.pfa.PathSmoother;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;

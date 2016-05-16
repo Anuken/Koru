@@ -11,9 +11,7 @@ import net.pixelstatic.koru.network.packets.StoreItemPacket;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.utils.InputType;
 import net.pixelstatic.koru.utils.Point;
-import net.pixelstatic.koru.world.InventoryTileData;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.*;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;

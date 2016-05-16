@@ -1,20 +1,23 @@
-package net.pixelstatic.koru.modules;
+package net.pixelstatic.koru.world;
 
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.ai.AIData;
+import net.pixelstatic.koru.modules.Module;
+import net.pixelstatic.koru.modules.Network;
+import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
 import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.utils.Point;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.utils.DirectionUtils;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Pools;
 
 public class World extends Module{
 	public static final int chunksize = 10;
@@ -26,8 +29,9 @@ public class World extends Module{
 	private Point point = new Point();
 	Network network;
 	KoruServer server;
-	public Tile[][] tiles;
+	//public Tile[][] tiles;
 	boolean[][] chunkloaded;
+	public ObjectMap<Integer, Chunk> chunks = new ObjectMap<Integer, Chunk>();
 
 	@Override
 	public void update(){
@@ -114,6 +118,11 @@ public class World extends Module{
 	public World(){
 		this(null);
 	}
+	
+	private void generateChunk(int x, int y){
+		Chunk chunk = Pools.obtain(Chunk.class);
+		chunks.put(hashCoords(x,y), chunk);
+	}
 
 	public static boolean inBounds(int x, int y){
 		return x >= 0 && y >= 0 && x < worldwidth && y < worldheight;
@@ -197,6 +206,13 @@ public class World extends Module{
 		AIData.updateNode(x, y);
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 	}
+	
+    public int hashCoords(int x, int y){
+        int hash = 17;
+        hash = ((hash + x) << 5) - (hash + x);
+        hash = ((hash + y) << 5) - (hash + y);
+        return hash;
+    }
 	
 	public boolean updated(){
 		return updated;

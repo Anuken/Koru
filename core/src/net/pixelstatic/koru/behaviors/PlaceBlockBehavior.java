@@ -1,9 +1,9 @@
 package net.pixelstatic.koru.behaviors;
 
 import net.pixelstatic.koru.components.VelocityComponent;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.math.Vector2;
 

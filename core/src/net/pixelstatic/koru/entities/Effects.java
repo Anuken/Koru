@@ -1,8 +1,8 @@
 package net.pixelstatic.koru.entities;
 
 import net.pixelstatic.koru.components.*;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.world.Material;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.graphics.Color;
 

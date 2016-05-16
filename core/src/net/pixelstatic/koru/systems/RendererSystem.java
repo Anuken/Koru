@@ -3,8 +3,8 @@ package net.pixelstatic.koru.systems;
 import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.sprites.Layer;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Family;
 

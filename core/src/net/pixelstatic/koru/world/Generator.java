@@ -1,7 +1,6 @@
 package net.pixelstatic.koru.world;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.utils.Noise;
 
 public class Generator{

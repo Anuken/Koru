@@ -5,10 +5,10 @@ import net.pixelstatic.koru.behaviors.groups.Group.TilePoint;
 import net.pixelstatic.koru.behaviors.tasks.BreakBlockTask;
 import net.pixelstatic.koru.behaviors.tasks.GrowPlantTask;
 import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.PinetreeTileData;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.utils.Array;
 

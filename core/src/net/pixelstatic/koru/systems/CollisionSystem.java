@@ -7,9 +7,9 @@ import net.pixelstatic.koru.components.HitboxComponent;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.listeners.CollisionHandler;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;

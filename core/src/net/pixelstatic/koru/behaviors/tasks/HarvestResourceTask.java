@@ -4,11 +4,8 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.InventoryTileData;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.*;
 
 import com.badlogic.gdx.math.Vector2;
 

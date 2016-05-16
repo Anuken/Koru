@@ -2,7 +2,6 @@ package net.pixelstatic.koru.world;
 
 
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.utils.Noise;
 import net.pixelstatic.utils.graphics.Hue;
 

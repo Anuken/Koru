@@ -8,10 +8,10 @@ import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.Tile;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;

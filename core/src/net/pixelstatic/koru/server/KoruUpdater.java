@@ -4,11 +4,8 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.modules.World;
 import net.pixelstatic.koru.systems.*;
-import net.pixelstatic.koru.world.Generator;
-import net.pixelstatic.koru.world.Tile;
-import net.pixelstatic.koru.world.UpdatingTileData;
+import net.pixelstatic.koru.world.*;
 
 public class KoruUpdater{
 	public static KoruUpdater instance;

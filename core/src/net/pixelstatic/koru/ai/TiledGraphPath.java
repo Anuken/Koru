@@ -1,6 +1,6 @@
 package net.pixelstatic.koru.ai;
 
-import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.SmoothableGraphPath;

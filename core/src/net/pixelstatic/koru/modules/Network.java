@@ -7,6 +7,7 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
 import net.pixelstatic.koru.utils.Angles;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

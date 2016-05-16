@@ -2,7 +2,7 @@ package net.pixelstatic.koru.behaviors.groups;
 
 import net.pixelstatic.koru.behaviors.tasks.Task;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.modules.World;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.utils.Array;
 

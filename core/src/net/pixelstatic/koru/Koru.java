@@ -7,6 +7,7 @@ import net.pixelstatic.koru.modules.*;
 import net.pixelstatic.koru.systems.InterpolationSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.RendererSystem;
+import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
