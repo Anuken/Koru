@@ -26,7 +26,7 @@ public class Network extends Module{
 	private boolean initialconnect = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
-	Client client;
+	public Client client;
 
 	public void init(){
 		try{

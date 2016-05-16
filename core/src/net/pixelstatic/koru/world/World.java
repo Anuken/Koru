@@ -24,7 +24,6 @@ public class World extends Module{
 	public static final int chunksize = 10;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
-	public static final int worldwidth = 100, worldheight = 100;
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
@@ -32,30 +31,62 @@ public class World extends Module{
 	public Generator generator;
 	Network network;
 	KoruServer server;
-	//public Tile[][] tiles;
-	public Chunk[][] cchunks; //client-side tiles
+	public Chunk[][] chunks; //client-side tiles
 	boolean[][] chunkloaded;
-	public ObjectMap<Integer, Chunk> chunks = new ObjectMap<Integer, Chunk>(); //server-side chunks
+	public ObjectMap<Integer, Chunk> loadedchunks = new ObjectMap<Integer, Chunk>(); //server-side chunks
+	
+	public World(Koru k){
+		super(k);
+		if( !KoruServer.active){
+			chunkloaded = new boolean[loadrange*2][loadrange*2];
+			chunks = new Chunk[loadrange*2][loadrange*2];
+		}else{
+			file = new WorldFile(Gdx.files.local("world.kwf"));
+		}
+	}
 
+	public World(){
+		this(null);
+	}
+	
 	@Override
 	public void update(){
 		updated = false;
-		if(server == null)sendChunkRequest();
+		if(server != null) return;
+		
+		sendChunkRequest();
 	}
 
 	public void loadChunks(ChunkPacket packet){
-		for(int x = packet.x;x < packet.x + chunksize;x ++){
-			for(int y = packet.y;y < packet.y + chunksize;y ++){
-				tile(x,y) = packet.tiles[x - packet.x][y - packet.y];
-			}
-		}
-		chunkloaded[packet.x / chunksize][packet.y / chunksize] = true;
+		//camera position, in chunk coords
+		int chunkx = toChunkCoords(getModule(Renderer.class).camera.position.x); 
+		int	chunky = toChunkCoords(getModule(Renderer.class).camera.position.y);
+		
+		//the relative position of the packet's chunk, to be put in the client's chunk array
+		int relativex = chunkx - packet.chunk.x + loadrange;
+		int relativey = chunky - packet.chunk.y + loadrange;
+		
+		//if the chunk coords are out of range, stop
+		if(relativex < 0 || relativey < 0 || relativex >= loadrange*2 || relativey >= loadrange*2) return;
+		
+		chunks[relativex][relativey] = packet.chunk;
 	}
 
 	public void sendChunkRequest(){
 		float px = getModule(Renderer.class).camera.position.x;
 		float py = getModule(Renderer.class).camera.position.y;
 		int blockx = (int)(px / tilesize), blocky = (int)(py / tilesize);
+		for(int x = 0; x < loadrange * 2; x ++){
+			for(int y = 0; y < loadrange * 2; y ++){
+				if(chunks[x][y] == null){
+					ChunkRequestPacket packet = new ChunkRequestPacket();
+					packet.x = blockx / chunksize + x - loadrange;
+					packet.y = blocky / chunksize + y - loadrange;
+					network.client.sendTCP(packet);
+				}
+			}
+		}
+		/*
 		for(int cx = -loadrange;cx <= loadrange;cx ++){
 			for(int cy = -loadrange;cy <= loadrange;cy ++){
 				int chunkx = cx + blockx / chunksize, chunky = cy + blocky / chunksize;
@@ -76,12 +107,18 @@ public class World extends Module{
 						
 					}
 				}
-				*/
+				//end?
+				
 			}
 		}
+		 */
 	}
 
-	public ChunkPacket createChunkPacket(ChunkRequestPacket packet){
+	public ChunkPacket createChunkPacket(ChunkRequestPacket request){
+		ChunkPacket packet = new ChunkPacket();
+		packet.chunk = this.getChunk(request.x, request.y);
+		return packet;
+		/*
 		ChunkPacket chunk = new ChunkPacket();
 		chunk.x = packet.x;
 		chunk.y = packet.y;
@@ -95,6 +132,7 @@ public class World extends Module{
 			}
 		}
 		return chunk;
+		*/
 	}
 
 	public static World instance(){
@@ -105,31 +143,7 @@ public class World extends Module{
 		this(null);
 		this.server = server;
 	}
-
-	public World(Koru k){
-		super(k);
-	//	tiles = new Tile[worldwidth][worldheight];
-		//for(int x = 0;x < worldwidth;x ++){
-		//	for(int y = 0;y < worldwidth;y ++){
-		//		tile(x,y) = new Tile();
-		//	}
-		//}
-		if( !KoruServer.active){
-			chunkloaded = new boolean[worldwidth / chunksize][worldheight / chunksize];
-		}else{
-			file = new WorldFile(Gdx.files.local("world.kwf"));
-		}
-	}
-
-	public World(){
-		this(null);
-	}
-
-
-	public static boolean inBounds(int x, int y){
-		return x >= 0 && y >= 0 && x < worldwidth && y < worldheight;
-	}
-
+	
 	public Tile getTile(Point point){
 		return tile(point.x, point.y);
 	}
@@ -163,7 +177,6 @@ public class World extends Module{
 	}
 	
 	public boolean blockSolid(int x, int y){
-		if(!inBounds(x,y)) return true;
 		return tile(x,y).solid();
 	}
 	
@@ -176,7 +189,7 @@ public class World extends Module{
 	}
 
 	public boolean isType(int x, int y, Material material){
-		return !inBounds(x, y) || tile(x,y).tile == material;
+		return tile(x,y).tile == material;
 	}
 	
 	public Point search(Material material, int x, int y, int range){
@@ -185,7 +198,6 @@ public class World extends Module{
 			for(int cy = -range; cy <= range; cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
-				if(!inBounds(worldx, worldy)) continue;
 				if(tile(worldx, worldy).block == material || tile(worldx, worldy).tile == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
@@ -214,13 +226,26 @@ public class World extends Module{
 		Chunk chunk = Pools.obtain(Chunk.class);
 		chunk.set(chunkx, chunky);
 		generator.generateChunk(chunk);
-		chunks.put(hashCoords(chunkx,chunky), chunk);
+		loadedchunks.put(hashCoords(chunkx,chunky), chunk);
 		return chunk;
 	}
 	
+	protected void unloadChunk(Chunk chunk){
+		file.writeChunk(chunk);
+		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
+	}
+	
 	public Chunk getChunk(int chunkx, int chunky){
-		Chunk chunk = chunks.get(hashCoords(chunkx,chunky));
-		if(chunk == null) return generateChunk(chunkx, chunky);
+		Chunk chunk = loadedchunks.get(hashCoords(chunkx,chunky));
+		if(chunk == null){
+			if(file.chunkIsSaved(chunkx, chunky)){
+				Chunk schunk = file.readChunk(chunkx, chunky);
+				loadedchunks.put(hashCoords(chunkx,chunky), schunk);
+				return schunk;
+			}else{
+				return generateChunk(chunkx, chunky);
+			}
+		}
 		return chunk;
 	}
 	
@@ -231,6 +256,10 @@ public class World extends Module{
 	
 	public int toChunkCoords(int a){
 		return (a / chunksize);
+	}
+	
+	public int toChunkCoords(float worldpos){
+		return tile(worldpos) / chunksize;
 	}
 	
     public int hashCoords(int a, int b){
@@ -248,15 +277,6 @@ public class World extends Module{
 	public static float world(int i){
 		return tilesize*i + tilesize/2;
 	}
-
-	public static int worldWidthPixels(){
-		return tilesize * worldwidth;
-	}
-
-	public static int worldHeightPixels(){
-		return tilesize * worldheight;
-	}
-
 	public void init(){
 		network = getModule(Network.class);
 	}

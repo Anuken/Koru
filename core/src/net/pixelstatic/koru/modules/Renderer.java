@@ -25,19 +25,18 @@ import com.badlogic.gdx.utils.Array;
 
 public class Renderer extends Module{
 	public static final int viewrange = 21;
-	final float GUIscale = 5f;
-	final int scale = 4;
-	World world;
-	SpriteBatch batch;
-	OrthographicCamera camera;
-	PooledLayerList layers;
-	Atlas atlas;
-	Matrix4 matrix;
-	GlyphLayout layout;
-	BitmapFont font;
-	//FrameBuffer buffer;
-	GifRecorder recorder;
-	FrameBufferMap buffers;
+	public final float GUIscale = 5f;
+	public final int scale = 4;
+	public World world;
+	public SpriteBatch batch;
+	public OrthographicCamera camera;
+	public PooledLayerList layers;
+	public Atlas atlas;
+	public Matrix4 matrix;
+	public GlyphLayout layout;
+	public BitmapFont font;
+	public GifRecorder recorder;
+	public FrameBufferMap buffers;
 
 	public KoruEntity player;
 
@@ -268,6 +267,10 @@ public class Renderer extends Module{
 
 	public TextureRegion getRegion(String name){
 		return atlas.findRegion(name);
+	}
+	
+	public OrthographicCamera camera(){
+		return camera;
 	}
 
 	public SpriteBatch batch(){

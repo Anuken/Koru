@@ -11,7 +11,7 @@ public class WorldFile{
 	
 	public boolean chunkIsSaved(int x, int y){
 		//TODO
-		return true;
+		return false;
 	}
 	
 	public void writeChunk(Chunk chunk){
