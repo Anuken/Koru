@@ -121,6 +121,7 @@ public class World extends Module{
 	
 	private void generateChunk(int x, int y){
 		Chunk chunk = Pools.obtain(Chunk.class);
+		chunk.set(x, y);
 		chunks.put(hashCoords(x,y), chunk);
 	}
 
@@ -207,11 +208,8 @@ public class World extends Module{
 		server.sendToAll(new TileUpdatePacket(x, y, tiles[x][y]));
 	}
 	
-    public int hashCoords(int x, int y){
-        int hash = 17;
-        hash = ((hash + x) << 5) - (hash + x);
-        hash = ((hash + y) << 5) - (hash + y);
-        return hash;
+    public int hashCoords(int a, int b){
+        return (a + b) * (a + b + 1) / 2 + a;
     }
 	
 	public boolean updated(){
