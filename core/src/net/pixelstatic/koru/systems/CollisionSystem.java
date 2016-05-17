@@ -8,7 +8,6 @@ import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.listeners.CollisionHandler;
 import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Entity;
@@ -95,6 +94,7 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	public Point vectorTerrainCollisions(World world, KoruEntity entity, float mx, float my){
+		/*
 		HitboxComponent component = entity.mapComponent(HitboxComponent.class);
 		float newx = entity.getX() + mx;
 		float newy = entity.getY() + my;
@@ -113,6 +113,7 @@ public class CollisionSystem extends KoruSystem{
 				//	rect.set(0,0,0,0);
 			}
 		}
+		*/
 		return null;
 	}
 	

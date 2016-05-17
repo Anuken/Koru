@@ -1,22 +1,17 @@
 package net.pixelstatic.koru.modules;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.components.GroupComponent;
-import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.sprites.PooledLayerList;
 import net.pixelstatic.koru.sprites.SpriteLayer;
-import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.graphics.Atlas;
 import net.pixelstatic.utils.graphics.FrameBufferMap;
 import net.pixelstatic.utils.graphics.GifRecorder;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -88,8 +83,8 @@ public class Renderer extends Module{
 	void drawMap(){
 		camera.zoom = 1f;
 		int camx = (int)(camera.position.x / World.tilesize), camy = (int)(camera.position.y / World.tilesize);
-		for(int chunkx = 0;chunkx < World.chunksize * 2;chunkx ++){
-			for(int chunky = 0;chunky < World.chunksize * 2;chunky ++){
+		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
+			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
 				Chunk chunk = world.chunks[chunkx][chunky];
 				if(chunk == null) continue;
 				for(int x = 0;x < World.chunksize;x ++){
@@ -106,6 +101,7 @@ public class Renderer extends Module{
 
 	@SuppressWarnings("unchecked")
 	public void drawGUI(){
+		/*
 		Point cursor = getModule(Input.class).cursorblock();
 		float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
 		Tile tile = world.getTile(cursor);
@@ -132,6 +128,7 @@ public class Renderer extends Module{
 			}
 
 		}
+		*/
 		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
 
 	}

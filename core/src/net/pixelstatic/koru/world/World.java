@@ -1,6 +1,8 @@
 package net.pixelstatic.koru.world;
 
 
+import java.io.File;
+
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.ai.AIData;
 import net.pixelstatic.koru.modules.Module;
@@ -14,7 +16,6 @@ import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -24,6 +25,7 @@ public class World extends Module{
 	public static final int chunksize = 10;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
+	private int lastx, lasty;
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
@@ -41,7 +43,7 @@ public class World extends Module{
 			chunkloaded = new boolean[loadrange*2][loadrange*2];
 			chunks = new Chunk[loadrange*2][loadrange*2];
 		}else{
-			file = new WorldFile(Gdx.files.local("world.kwf"));
+			file = new WorldFile(new File("world.kwf"));
 		}
 	}
 
@@ -54,6 +56,23 @@ public class World extends Module{
 		updated = false;
 		if(server != null) return;
 		
+		int newx = toChunkCoords(getModule(Renderer.class).camera.position.x);
+		int newy = toChunkCoords(getModule(Renderer.class).camera.position.y);
+		
+		//camera moved, update chunks
+		if(newx != lastx || newy != lasty){
+			for(int x = 0; x < loadrange * 2; x ++){
+				for(int y = 0; y < loadrange * 2; y ++){
+					if(chunks[x][y] == null) continue;
+					Pools.free(chunks[x][y]);
+					chunks[x][y] = null;
+				}
+			}
+		}
+		
+		lastx = newx;
+		lasty = newy;
+		
 		sendChunkRequest();
 	}
 
@@ -63,25 +82,29 @@ public class World extends Module{
 		int	chunky = toChunkCoords(getModule(Renderer.class).camera.position.y);
 		
 		//the relative position of the packet's chunk, to be put in the client's chunk array
-		int relativex = chunkx - packet.chunk.x + loadrange;
-		int relativey = chunky - packet.chunk.y + loadrange;
+		int relativex = packet.chunk.x - chunkx + loadrange;
+		int relativey = packet.chunk.y - chunky + loadrange;
 		
 		//if the chunk coords are out of range, stop
 		if(relativex < 0 || relativey < 0 || relativex >= loadrange*2 || relativey >= loadrange*2) return;
 		
+		Koru.log("recieving "+ relativex + " " + relativey);
 		chunks[relativex][relativey] = packet.chunk;
 	}
 
 	public void sendChunkRequest(){
-		float px = getModule(Renderer.class).camera.position.x;
-		float py = getModule(Renderer.class).camera.position.y;
-		int blockx = (int)(px / tilesize), blocky = (int)(py / tilesize);
+		//int blockx = (int)(px / tilesize), blocky = (int)(py / tilesize);
+		int chunkx = toChunkCoords(getModule(Renderer.class).camera.position.x); 
+		int	chunky = toChunkCoords(getModule(Renderer.class).camera.position.y);
+		
 		for(int x = 0; x < loadrange * 2; x ++){
 			for(int y = 0; y < loadrange * 2; y ++){
 				if(chunks[x][y] == null){
+					
 					ChunkRequestPacket packet = new ChunkRequestPacket();
-					packet.x = blockx / chunksize + x - loadrange;
-					packet.y = blocky / chunksize + y - loadrange;
+					packet.x = chunkx + x - loadrange;
+					packet.y = chunky + y - loadrange;
+					Koru.log("Sending chunk request for chunk " + x + ", " + y);
 					network.client.sendTCP(packet);
 				}
 			}
@@ -151,7 +174,6 @@ public class World extends Module{
 	public Tile getTile(float fx, float fy){
 		int x = tile(fx);
 		int y = tile(fy);
-		//if(!bounds(x,y)) return null;
 		return tile(x,y);
 	}
 	
@@ -185,7 +207,8 @@ public class World extends Module{
 	}
 
 	public boolean blends(int x, int y, Material material){
-		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
+		return false;
+		//return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
 	public boolean isType(int x, int y, Material material){
@@ -250,6 +273,9 @@ public class World extends Module{
 	}
 	
 	public Tile tile(int x, int y){
+		if(!KoruServer.active){
+			return chunks[x/chunksize][y/chunksize].getWorldTile(x, y);
+		}
 		int cx = x/chunksize, cy = y/chunksize;
 		return getChunk(cx, cy).getWorldTile(x, y);
 	}

@@ -23,16 +23,6 @@ public enum FrameBufferLayer{
 
 		}
 	},
-	topshadow("topshadow", Layer.topshadowlayer){
-		public void end(){
-			//batch.setColor(Layer.shadowcolor);
-			drawFull();
-		}
-
-		protected void begin(){
-
-		}
-	},
 	reflection("reflection", Layer.reflectionlayer){
 		public void end(){
 			batch.setColor(new Color(1, 1, 1, 0.5f));

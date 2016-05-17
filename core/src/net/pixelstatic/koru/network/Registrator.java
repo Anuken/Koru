@@ -57,6 +57,7 @@ public class Registrator{
 		k.register(SyncBuffer.class);
 		k.register(PositionSyncBuffer.class);
 		
+		k.register(Chunk.class);
 		k.register(TileData.class);
 		k.register(InventoryTileData.class);
 		k.register(PinetreeTileData.class);

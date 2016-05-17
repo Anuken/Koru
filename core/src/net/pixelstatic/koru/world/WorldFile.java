@@ -1,11 +1,12 @@
 package net.pixelstatic.koru.world;
 
-import com.badlogic.gdx.files.FileHandle;
+import java.io.File;
+
 
 public class WorldFile{
-	private FileHandle file;
+	private File file;
 	
-	public WorldFile(FileHandle file){
+	public WorldFile(File file){
 		this.file = file;
 	}
 	

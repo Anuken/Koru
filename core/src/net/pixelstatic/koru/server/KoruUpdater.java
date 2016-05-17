@@ -1,9 +1,6 @@
 package net.pixelstatic.koru.server;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.behaviors.groups.Group;
-import net.pixelstatic.koru.entities.EntityType;
-import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.systems.*;
 import net.pixelstatic.koru.world.Generator;
 import net.pixelstatic.koru.world.World;
@@ -84,11 +81,11 @@ public class KoruUpdater{
 		engine.addSystem(new BehaviorSystem());
 		engine.addSystem(new GroupSystem());
 		
-		Group.createGroupEntity(Group.instance()).addSelf();
+		//Group.createGroupEntity(Group.instance()).addSelf();
 
 		for(int i = 0;i < 1;i ++){
-			KoruEntity entity = new KoruEntity(EntityType.egg).addSelf();
-			entity.position().set(20f, 20f);
+		//	KoruEntity entity = new KoruEntity(EntityType.egg).addSelf();
+		//	entity.position().set(20f, 20f);
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package net.pixelstatic.koru.ai;
 
 import net.pixelstatic.koru.entities.Effects;
-import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.world.World;
 
@@ -12,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class AIData{
 	static final boolean debug = false;
-	static Node[][] nodes = new Node[World.worldwidth][World.worldheight];
+	static Node[][] nodes = new Node[1][1];
 	static Graph graph = new Graph();
 	static ManhattanDistanceHueristic heuristic = new ManhattanDistanceHueristic();
 	static IndexedAStarPathFinder<Node> pathfinder;
@@ -29,6 +28,7 @@ public class AIData{
 	int node;
 
 	static{
+		/*
 		if(KoruServer.active){
 			for(int x = 0;x < World.worldwidth;x ++){
 				for(int y = 0;y < World.worldheight;y ++){
@@ -46,6 +46,7 @@ public class AIData{
 			}
 			pathfinder = new IndexedAStarPathFinder<Node>(graph, true);
 		}
+		*/
 	}
 
 	public static void updateNode(int x, int y){
