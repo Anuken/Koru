@@ -1,17 +1,22 @@
 package net.pixelstatic.koru.modules;
 
 import net.pixelstatic.koru.Koru;
+import net.pixelstatic.koru.components.GroupComponent;
+import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.sprites.PooledLayerList;
 import net.pixelstatic.koru.sprites.SpriteLayer;
+import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.graphics.Atlas;
 import net.pixelstatic.utils.graphics.FrameBufferMap;
 import net.pixelstatic.utils.graphics.GifRecorder;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -101,18 +106,25 @@ public class Renderer extends Module{
 
 	@SuppressWarnings("unchecked")
 	public void drawGUI(){
-		/*
-		Point cursor = getModule(Input.class).cursorblock();
-		float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
-		Tile tile = world.getTile(cursor);
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
+		
+		Point cursor = getModule(Input.class).cursorblock();
+		float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
+		if(!world.inBounds(cursor.x, cursor.y)){
+			font.draw(batch, "Out of bounds.", cx, cy);
+			
+			return;
+		}
+		Tile tile = world.getTile(cursor);
+
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
 		int i = 0;
 
 		i ++;
 
-		font.draw(batch, cursor.x + ", " + cursor.y, cx, cy);
+		Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
+		font.draw(batch, cursor.x + ", " + cursor.y + " "+ tile + " chunk: " + chunk.x +  "," + chunk.y, cx, cy);
 
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
@@ -128,7 +140,7 @@ public class Renderer extends Module{
 			}
 
 		}
-		*/
+		
 		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
 
 	}

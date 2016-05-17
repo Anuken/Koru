@@ -25,7 +25,7 @@ public class World extends Module{
 	public static final int chunksize = 10;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
-	private int lastx, lasty;
+	private int lastchunkx, lastchunky;
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
@@ -63,9 +63,9 @@ public class World extends Module{
 		int newy = toChunkCoords(renderer.camera.position.y);
 
 		//camera moved, update chunks
-		if(newx != lastx || newy != lasty){
+		if(newx != lastchunkx || newy != lastchunky){
 			
-			int sx = newx - lastx, sy = newy - lasty;
+			int sx = newx - lastchunkx, sy = newy - lastchunky;
 			
 			for(int x = 0;x < loadrange * 2;x ++){
 				for(int y = 0;y < loadrange * 2;y ++){
@@ -88,20 +88,17 @@ public class World extends Module{
 			}
 		}
 
-		lastx = newx;
-		lasty = newy;
+		lastchunkx = newx;
+		lastchunky = newy;
 
 		sendChunkRequest();
 	}
 
 	public void loadChunks(ChunkPacket packet){
-		//camera position, in chunk coords
-		int camerax = toChunkCoords(renderer.camera.position.x);
-		int cameray = toChunkCoords(renderer.camera.position.y);
 
 		//the relative position of the packet's chunk, to be put in the client's chunk array
-		int relativex = packet.chunk.x - camerax + loadrange;
-		int relativey = packet.chunk.y - cameray + loadrange;
+		int relativex = packet.chunk.x - lastchunkx + loadrange;
+		int relativey = packet.chunk.y - lastchunky + loadrange;
 		
 		//if the chunk coords are out of range, stop
 		if(relativex < 0 || relativey < 0 || relativex >= loadrange * 2 || relativey >= loadrange * 2){
@@ -110,22 +107,18 @@ public class World extends Module{
 		}
 		
 		Koru.log("chunk coords: " + packet.chunk.x + " " + packet.chunk.y);
-		Koru.log("cam coords: " + camerax + ", " + cameray);
 
 		Koru.log("recieving " + relativex + " " + relativey);
 		chunks[relativex][relativey] = packet.chunk;
 	}
 
 	public void sendChunkRequest(){
-		int camerax = toChunkCoords(renderer.camera.position.x);
-		int cameray = toChunkCoords(renderer.camera.position.y);
-		
 		for(int x = 0;x < loadrange * 2;x ++){
 			for(int y = 0;y < loadrange * 2;y ++){
 				if(chunks[x][y] == null){
 					ChunkRequestPacket packet = new ChunkRequestPacket();
-					packet.x = camerax + x - loadrange;
-					packet.y = cameray + y - loadrange;
+					packet.x = lastchunkx + x - loadrange;
+					packet.y = lastchunky + y - loadrange;
 					Koru.log("Sending chunk request for chunk " + x + ", " + y);
 					network.client.sendTCP(packet);
 				}
@@ -136,8 +129,8 @@ public class World extends Module{
 	public ChunkPacket createChunkPacket(ChunkRequestPacket request){
 		ChunkPacket packet = new ChunkPacket();
 		packet.chunk = getChunk(request.x, request.y);
-		Koru.log("Recieved request: " + request.x + ", " + request.y);
-		Koru.log("Chunk: " + packet.chunk);
+		//Koru.log("Recieved request: " + request.x + ", " + request.y);
+		//Koru.log("Chunk: " + packet.chunk);
 		return packet;
 	}
 
@@ -190,7 +183,8 @@ public class World extends Module{
 
 	public boolean blends(int x, int y, Material material){
 		//if(!inBounds(x,y, 1)) return false;
-		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
+		return true;
+	//	return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
 	public boolean isType(int x, int y, Material material){
@@ -235,10 +229,8 @@ public class World extends Module{
 	}
 
 	public Chunk getRelativeChunk(int x, int y){
-		int tx = tile(renderer.camera.position.x);
-		int ty = tile(renderer.camera.position.y);
-		int ax = x / chunksize - tx / chunksize + loadrange;
-		int ay = y / chunksize - ty / chunksize + loadrange;
+		int ax = x / chunksize - lastchunkx + loadrange;
+		int ay = y / chunksize - lastchunky + loadrange;
 		return chunks[ax][ay];
 	}
 
