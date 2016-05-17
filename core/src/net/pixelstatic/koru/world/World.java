@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.world;
 
-
 import java.io.File;
+import java.util.HashMap;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.ai.AIData;
@@ -15,10 +15,10 @@ import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
+import net.pixelstatic.utils.Util;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 public class World extends Module{
@@ -30,18 +30,21 @@ public class World extends Module{
 	private boolean updated;
 	private Point point = new Point();
 	private WorldFile file;
+	private Renderer renderer;
 	public Generator generator;
 	Network network;
 	KoruServer server;
 	public Chunk[][] chunks; //client-side tiles
+	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
-	private ObjectMap<Integer, Chunk> loadedchunks = new ObjectMap<Integer, Chunk>(); //server-side chunks
-	
+	private HashMap<Long, Chunk> loadedchunks = new HashMap<Long, Chunk>(); //server-side chunks
+
 	public World(Koru k){
 		super(k);
 		if( !KoruServer.active){
-			chunkloaded = new boolean[loadrange*2][loadrange*2];
-			chunks = new Chunk[loadrange*2][loadrange*2];
+			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
+			chunks = new Chunk[loadrange * 2][loadrange * 2];
+			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
 		}else{
 			file = new WorldFile(new File("world.kwf"));
 		}
@@ -50,112 +53,92 @@ public class World extends Module{
 	public World(){
 		this(null);
 	}
-	
+
 	@Override
 	public void update(){
 		updated = false;
 		if(server != null) return;
-		
-		int newx = toChunkCoords(getModule(Renderer.class).camera.position.x);
-		int newy = toChunkCoords(getModule(Renderer.class).camera.position.y);
-		
+
+		int newx = toChunkCoords(renderer.camera.position.x);
+		int newy = toChunkCoords(renderer.camera.position.y);
+
 		//camera moved, update chunks
 		if(newx != lastx || newy != lasty){
-			for(int x = 0; x < loadrange * 2; x ++){
-				for(int y = 0; y < loadrange * 2; y ++){
-					if(chunks[x][y] == null) continue;
-					Pools.free(chunks[x][y]);
-					chunks[x][y] = null;
+			
+			int sx = newx - lastx, sy = newy - lasty;
+			
+			for(int x = 0;x < loadrange * 2;x ++){
+				for(int y = 0;y < loadrange * 2;y ++){
+					tempchunks[x][y] = chunks[x][y];
+				//	if(chunks[x][y] == null) continue;
+					//Pools.free(chunks[x][y]);
+					//chunks[x][y] = null;
+				}
+			}
+			
+			for(int x = 0;x < loadrange * 2;x ++){
+				for(int y = 0;y < loadrange * 2;y ++){
+					if(!Util.inBounds(x + sx, y + sy, chunks)){
+						Pools.free(chunks[x][y]);
+						chunks[x][y] = null;
+						continue;
+					}
+					chunks[x][y] = tempchunks[x + sx][y + sy];
 				}
 			}
 		}
-		
+
 		lastx = newx;
 		lasty = newy;
-		
+
 		sendChunkRequest();
 	}
 
 	public void loadChunks(ChunkPacket packet){
 		//camera position, in chunk coords
-		int chunkx = toChunkCoords(getModule(Renderer.class).camera.position.x); 
-		int	chunky = toChunkCoords(getModule(Renderer.class).camera.position.y);
-		
+		int camerax = toChunkCoords(renderer.camera.position.x);
+		int cameray = toChunkCoords(renderer.camera.position.y);
+
 		//the relative position of the packet's chunk, to be put in the client's chunk array
-		int relativex = packet.chunk.x - chunkx + loadrange;
-		int relativey = packet.chunk.y - chunky + loadrange;
+		int relativex = packet.chunk.x - camerax + loadrange;
+		int relativey = packet.chunk.y - cameray + loadrange;
 		
 		//if the chunk coords are out of range, stop
-		if(relativex < 0 || relativey < 0 || relativex >= loadrange*2 || relativey >= loadrange*2) return;
+		if(relativex < 0 || relativey < 0 || relativex >= loadrange * 2 || relativey >= loadrange * 2){
+			Koru.log("Chunk fail!");
+			return;
+		}
 		
-		Koru.log("recieving "+ relativex + " " + relativey);
+		Koru.log("chunk coords: " + packet.chunk.x + " " + packet.chunk.y);
+		Koru.log("cam coords: " + camerax + ", " + cameray);
+
+		Koru.log("recieving " + relativex + " " + relativey);
 		chunks[relativex][relativey] = packet.chunk;
 	}
 
 	public void sendChunkRequest(){
-		//int blockx = (int)(px / tilesize), blocky = (int)(py / tilesize);
-		int chunkx = toChunkCoords(getModule(Renderer.class).camera.position.x); 
-		int	chunky = toChunkCoords(getModule(Renderer.class).camera.position.y);
+		int camerax = toChunkCoords(renderer.camera.position.x);
+		int cameray = toChunkCoords(renderer.camera.position.y);
 		
-		for(int x = 0; x < loadrange * 2; x ++){
-			for(int y = 0; y < loadrange * 2; y ++){
+		for(int x = 0;x < loadrange * 2;x ++){
+			for(int y = 0;y < loadrange * 2;y ++){
 				if(chunks[x][y] == null){
-					
 					ChunkRequestPacket packet = new ChunkRequestPacket();
-					packet.x = chunkx + x - loadrange;
-					packet.y = chunky + y - loadrange;
+					packet.x = camerax + x - loadrange;
+					packet.y = cameray + y - loadrange;
 					Koru.log("Sending chunk request for chunk " + x + ", " + y);
 					network.client.sendTCP(packet);
 				}
 			}
 		}
-		/*
-		for(int cx = -loadrange;cx <= loadrange;cx ++){
-			for(int cy = -loadrange;cy <= loadrange;cy ++){
-				int chunkx = cx + blockx / chunksize, chunky = cy + blocky / chunksize;
-				if(chunkx < 0 || chunky < 0 || chunkx >= worldwidth / chunksize || chunky >= worldheight / chunksize) continue;
-				if(chunkloaded[chunkx][chunky]) continue;
-				ChunkRequestPacket packet = new ChunkRequestPacket();
-				packet.x = chunkx * chunksize;
-				packet.y = chunky * chunksize;
-				network.client.sendTCP(packet);
-				/*
-				int relativeblockx = cx * chunksize - chunksize/2, relativeblocky = cy * chunksize - chunksize/2;
-				ChunkPacket packet = new ChunkPacket();
-				packet.x = relativeblockx;
-				packet.y = relativeblocky;
-				packet.tiles = new Tile[2][chunksize][chunksize];
-				for(int x = relativeblockx; x < relativeblockx + chunksize; x ++){
-					for(int y = relativeblockx; y < relativeblockx + chunksize; y ++){
-						
-					}
-				}
-				//end?
-				
-			}
-		}
-		 */
 	}
 
 	public ChunkPacket createChunkPacket(ChunkRequestPacket request){
 		ChunkPacket packet = new ChunkPacket();
-		packet.chunk = this.getChunk(request.x, request.y);
+		packet.chunk = getChunk(request.x, request.y);
+		Koru.log("Recieved request: " + request.x + ", " + request.y);
+		Koru.log("Chunk: " + packet.chunk);
 		return packet;
-		/*
-		ChunkPacket chunk = new ChunkPacket();
-		chunk.x = packet.x;
-		chunk.y = packet.y;
-		chunk.tiles = new Tile[chunksize][chunksize];
-		for(int x = 0;x < chunksize;x ++){
-			for(int y = 0;y < chunksize;y ++){
-				int wx = packet.x + x;
-				int wy = packet.y + y;
-				if(wx < 0 || wy < 0 || wx >= worldwidth || wy >= worldheight) continue;
-				chunk.tile(x,y) = tiles[wx][wy];
-			}
-		}
-		return chunk;
-		*/
 	}
 
 	public static World instance(){
@@ -166,7 +149,7 @@ public class World extends Module{
 		this(null);
 		this.server = server;
 	}
-	
+
 	public Tile getTile(Point point){
 		return tile(point.x, point.y);
 	}
@@ -174,51 +157,53 @@ public class World extends Module{
 	public Tile getTile(float fx, float fy){
 		int x = tile(fx);
 		int y = tile(fy);
-		return tile(x,y);
+		return tile(x, y);
 	}
-	
+
 	public Point findEmptySpace(int x, int y){
 		//Structure structure = entity.groupc().structure;
-	//	structure.getBuildState(x, y);
-		for(int k = -1; k < 3; k ++){
-			int i = (k+4)%4;
-			int sx =DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
-			if(!blockSolid(x + sx, y + sy) /*&& structure.getBuildState(sx + x, sy + y) == BuildState.completed*/){
-				point.set(x+sx, y+sy);
+		//	structure.getBuildState(x, y);
+		for(int k = -1;k < 3;k ++){
+			int i = (k + 4) % 4;
+			int sx = DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
+			if( !blockSolid(x + sx, y + sy) /*&& structure.getBuildState(sx + x, sy + y) == BuildState.completed*/){
+				point.set(x + sx, y + sy);
 				return point;
 			}
 		}
-	//	Koru.log("Error: empty point not found!");
+		//	Koru.log("Error: empty point not found!");
 		return null;
 	}
 
 	public boolean positionSolid(float x, float y){
-		Tile tile = getTile(x,y);
-		return (tile.block.getType().solid() && tile.block.getType().getRect(tile(x), tile(y), rect).contains(x, y))
-				|| (tile.tile.getType().solid() && tile.tile.getType().getRect(tile(x), tile(y), rect).contains(x, y));
+		Tile tile = getTile(x, y);
+		return (tile.block.getType().solid() && tile.block.getType().getRect(tile(x), tile(y), rect).contains(x, y)) || (tile.tile.getType().solid() && tile.tile.getType().getRect(tile(x), tile(y), rect).contains(x, y));
 	}
-	
+
 	public boolean blockSolid(int x, int y){
-		return tile(x,y).solid();
+		return tile(x, y).solid();
 	}
-	
+
 	public boolean isAccesible(int x, int y){
-		return !blockSolid(x-1,y) || !blockSolid(x+1,y) || !blockSolid(x,y-1) || !blockSolid(x,y+1);
+		return !blockSolid(x - 1, y) || !blockSolid(x + 1, y) || !blockSolid(x, y - 1) || !blockSolid(x, y + 1);
 	}
 
 	public boolean blends(int x, int y, Material material){
-		return false;
-		//return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
+		//if(!inBounds(x,y, 1)) return false;
+		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
 	public boolean isType(int x, int y, Material material){
-		return tile(x,y).tile == material;
+		if( !inBounds(x, y)){
+			return true;
+		}
+		return tile(x, y).tile == material;
 	}
-	
+
 	public Point search(Material material, int x, int y, int range){
 		float nearest = Float.MAX_VALUE;
-		for(int cx = -range; cx <= range; cx ++){
-			for(int cy = -range; cy <= range; cy ++){
+		for(int cx = -range;cx <= range;cx ++){
+			for(int cy = -range;cy <= range;cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
 				if(tile(worldx, worldy).block == material || tile(worldx, worldy).tile == material){
@@ -231,39 +216,58 @@ public class World extends Module{
 				}
 			}
 		}
-		if(nearest > 0)
-			return point;
-		
+		if(nearest > 0) return point;
+
 		return null;
+	}
+
+	public boolean inBounds(int x, int y){
+		int tx = tile(renderer.camera.position.x);
+		int ty = tile(renderer.camera.position.y);
+		if(Math.abs(tx - x) >= loadrange * chunksize - 1 || Math.abs(ty - y) >= loadrange * chunksize - 1) return false;
+		int ax = x / chunksize - tx / chunksize + loadrange;
+		int ay = y / chunksize - ty / chunksize + loadrange;
+		if( !Util.inBounds(ax, ay, chunks)){ 
+			return false;
+		}
+		if(getRelativeChunk(x, y) == null) return false;
+		return true;
+	}
+
+	public Chunk getRelativeChunk(int x, int y){
+		int tx = tile(renderer.camera.position.x);
+		int ty = tile(renderer.camera.position.y);
+		int ax = x / chunksize - tx / chunksize + loadrange;
+		int ay = y / chunksize - ty / chunksize + loadrange;
+		return chunks[ax][ay];
 	}
 
 	public void updateTile(int x, int y){
 		updated = true;
 		tile(x, y).changeEvent();
 		AIData.updateNode(x, y);
-		server.sendToAll(new TileUpdatePacket(x, y, tile(x,y)));
+		server.sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
 	}
-	
-	
+
 	protected Chunk generateChunk(int chunkx, int chunky){
 		Chunk chunk = Pools.obtain(Chunk.class);
 		chunk.set(chunkx, chunky);
 		generator.generateChunk(chunk);
-		loadedchunks.put(hashCoords(chunkx,chunky), chunk);
+		loadedchunks.put(hashCoords(chunkx, chunky), chunk);
 		return chunk;
 	}
-	
+
 	protected void unloadChunk(Chunk chunk){
 		file.writeChunk(chunk);
 		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
 	}
-	
+
 	public Chunk getChunk(int chunkx, int chunky){
-		Chunk chunk = loadedchunks.get(hashCoords(chunkx,chunky));
+		Chunk chunk = loadedchunks.get(hashCoords(chunkx, chunky));
 		if(chunk == null){
 			if(file.chunkIsSaved(chunkx, chunky)){
 				Chunk schunk = file.readChunk(chunkx, chunky);
-				loadedchunks.put(hashCoords(chunkx,chunky), schunk);
+				loadedchunks.put(hashCoords(chunkx, chunky), schunk);
 				return schunk;
 			}else{
 				return generateChunk(chunkx, chunky);
@@ -271,27 +275,27 @@ public class World extends Module{
 		}
 		return chunk;
 	}
-	
+
 	public Tile tile(int x, int y){
-		if(!KoruServer.active){
-			return chunks[x/chunksize][y/chunksize].getWorldTile(x, y);
+		if( !KoruServer.active){
+			return getRelativeChunk(x, y).getWorldTile(x, y);
 		}
-		int cx = x/chunksize, cy = y/chunksize;
+		int cx = x / chunksize, cy = y / chunksize;
 		return getChunk(cx, cy).getWorldTile(x, y);
 	}
-	
+
 	public int toChunkCoords(int a){
 		return (a / chunksize);
 	}
-	
+
 	public int toChunkCoords(float worldpos){
 		return tile(worldpos) / chunksize;
 	}
-	
-    public int hashCoords(int a, int b){
-        return (a + b) * (a + b + 1) / 2 + a;
-    }
-	
+
+	public long hashCoords(int a, int b){
+		return (((long)a) << 32) | (b & 0xffffffffL);
+	}
+
 	public boolean updated(){
 		return updated;
 	}
@@ -299,11 +303,13 @@ public class World extends Module{
 	public static int tile(float i){
 		return (int)(i / tilesize);
 	}
-	
+
 	public static float world(int i){
-		return tilesize*i + tilesize/2;
+		return tilesize * i + tilesize / 2;
 	}
+
 	public void init(){
 		network = getModule(Network.class);
+		renderer = getModule(Renderer.class);
 	}
 }

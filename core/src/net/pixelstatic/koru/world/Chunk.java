@@ -37,4 +37,8 @@ public class Chunk implements Poolable{
 			}
 		}
 	}
+	
+	public String toString(){
+		return ("[Chunk " + x +", "+ y + "]");
+	}
 }

@@ -305,9 +305,9 @@ public class Layer implements Comparable<Layer>, Poolable{
 		if(s.layer == this.layer){
 			return 0;
 		}else if(s.layer > this.layer){
-			return 1;
-		}else{
 			return -1;
+		}else{
+			return 1;
 		}
 	}
 
