@@ -1,10 +1,12 @@
 package net.pixelstatic.koru.world;
 
-import java.io.File;
-import java.util.HashMap;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.ai.AIData;
+import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Module;
 import net.pixelstatic.koru.modules.Network;
 import net.pixelstatic.koru.modules.Renderer;
@@ -13,16 +15,19 @@ import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
 import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.server.KoruUpdater;
+import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
 import net.pixelstatic.utils.Util;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
 public class World extends Module{
-	public static final int chunksize = 10;
+	public static final int chunksize = 16;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
 	public int lastchunkx, lastchunky;
@@ -37,7 +42,7 @@ public class World extends Module{
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
-	private HashMap<Long, Chunk> loadedchunks = new HashMap<Long, Chunk>(); //server-side chunks
+	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
 
 	public World(Koru k){
 		super(k);
@@ -46,8 +51,19 @@ public class World extends Module{
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
 		}else{
-			file = new WorldFile(new File("world.kwf"));
+			file = new WorldFile(Paths.get("world"));
 		}
+		
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+		    @Override
+		    public void run(){
+		    	if(!KoruServer.active) return;
+		    	Koru.log("Saving " + loadedchunks.size() +" chunks...");
+		    	for(Chunk chunk : loadedchunks.values()){
+		    		file.writeChunk(chunk);
+		    	}
+		    }
+		});
 	}
 
 	public World(){
@@ -56,7 +72,10 @@ public class World extends Module{
 
 	@Override
 	public void update(){
+		if(server != null && KoruUpdater.frameID() % 60 == 0) checkUnloadChunks();
 		updated = false;
+		
+		
 		if(server != null) return;
 
 		int newx = toChunkCoords(renderer.camera.position.x);
@@ -79,7 +98,7 @@ public class World extends Module{
 			for(int x = 0;x < loadrange * 2;x ++){
 				for(int y = 0;y < loadrange * 2;y ++){
 					if(!Util.inBounds(x + sx, y + sy, chunks)){
-						Pools.free(chunks[x][y]);
+						//Pools.free(chunks[x][y]);
 						chunks[x][y] = null;
 						continue;
 					}
@@ -92,6 +111,29 @@ public class World extends Module{
 		lastchunky = newy;
 
 		sendChunkRequest();
+	}
+	
+	void checkUnloadChunks(){
+		Koru.log("Loaded chunks: " + loadedchunks.size());
+		Collection<Chunk> chunks = loadedchunks.values();
+		ImmutableArray<Entity> players = KoruUpdater.instance.engine.getEntitiesFor(KoruUpdater.instance.engine.getSystem(SyncSystem.class).getFamily());
+		
+		for(Chunk chunk : chunks){
+			boolean passed = false;
+			for(Entity e : players){
+				KoruEntity entity = (KoruEntity)e;
+				int ecx = toChunkCoords(entity.position().x);
+				int ecy = toChunkCoords(entity.position().y);
+				
+				if(Math.abs(chunk.x - ecx) <= loadrange && Math.abs(chunk.y - ecy) <= loadrange){
+					passed = true;
+					break;
+				}
+			}
+			if(passed) continue;
+			unloadChunk(chunk);
+			//loadedchunks.remove(hashCoords(chunk.x, chunk.y));
+		}
 	}
 
 	public void loadChunks(ChunkPacket packet){
@@ -249,10 +291,13 @@ public class World extends Module{
 		chunk.set(chunkx, chunky);
 		generator.generateChunk(chunk);
 		loadedchunks.put(hashCoords(chunkx, chunky), chunk);
+		
+		//file.writeChunk(chunk);
 		return chunk;
 	}
 
 	protected void unloadChunk(Chunk chunk){
+		Koru.log("Unloading chunk " + chunk);
 		file.writeChunk(chunk);
 		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
 	}
@@ -288,7 +333,7 @@ public class World extends Module{
 		return i;
 	}
 
-	public long hashCoords(int a, int b){
+	public static long hashCoords(int a, int b){
 		return (((long)a) << 32) | (b & 0xffffffffL);
 	}
 
@@ -306,6 +351,10 @@ public class World extends Module{
 
 	public static float world(int i){
 		return tilesize * i + tilesize / 2;
+	}
+	
+	public int totalChunks(){
+		return file.totalChunks();
 	}
 
 	public void init(){

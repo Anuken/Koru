@@ -12,6 +12,7 @@ public class Generator{
 	}
 	
 	public void generateSpawn(){
+		if(world.totalChunks() != 0) return;
 		world.generateChunk(0, 0);
 		world.generateChunk(-1, 0);
 		world.generateChunk(0, -1);

@@ -23,7 +23,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 
 public class Renderer extends Module{
-	public static final int viewrange = 21;
+	public static final int viewrangex = 21;
+	public static final int viewrangey = 15;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
 	public World world;
@@ -36,6 +37,7 @@ public class Renderer extends Module{
 	public BitmapFont font;
 	public GifRecorder recorder;
 	public FrameBufferMap buffers;
+	public boolean debug;
 
 	public KoruEntity player;
 
@@ -86,26 +88,31 @@ public class Renderer extends Module{
 
 	void drawMap(){
 		camera.zoom = 1f;
-		int camx = (int)(camera.position.x / World.tilesize), camy = (int)(camera.position.y / World.tilesize);
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
 				Chunk chunk = world.chunks[chunkx][chunky];
 				if(chunk == null) continue;
 				for(int x = 0;x < World.chunksize;x ++){
 					for(int y = 0;y < World.chunksize;y ++){
+						int worldx =  chunk.worldX() + x;
+						int worldy =  chunk.worldY() + y;
+						
+						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
+						
 						Tile tile = chunk.tiles[x][y];
 						
-						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX()+x, chunk.worldY()+y, this, world);
-						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX()+x, chunk.worldY()+y, this, world);
+						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
+						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 					}
-					layer("", chunk.worldX() * World.tilesize + x*12, chunk.worldY() * World.tilesize)
-					.setType(LayerType.TEXT).setText("" + (x)).setLayer(999999999);
-					
+					if(debug) layer("", chunk.worldX() * World.tilesize + x * 12, chunk.worldY() * World.tilesize).setType(LayerType.TEXT).setText("" + (x)).setLayer(999999999);
+
 				}
-				
-				layer("chunk",60+chunk.worldX() * World.tilesize, 60+chunk.worldY() * World.tilesize).setLayer(99999999);
-				layer("", chunk.worldX() * World.tilesize + 60, chunk.worldY() * World.tilesize + 60)
-				.setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
+
+				if(debug){
+					layer("chunk", 60 + chunk.worldX() * World.tilesize, 60 + chunk.worldY() * World.tilesize).setLayer(99999999);
+					layer("", chunk.worldX() * World.tilesize + 60, chunk.worldY() * World.tilesize + 60).setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
+				}
 			}
 		}
 	}
@@ -115,42 +122,42 @@ public class Renderer extends Module{
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
 		
-		Point cursor = getModule(Input.class).cursorblock();
-		float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
-		if(!world.inBounds(cursor.x, cursor.y)){
-			font.draw(batch, "Out of bounds.", cx, cy);
-			
-			return;
-		}
-		Tile tile = world.getTile(cursor);
-
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
-		int i = 0;
-
-		i ++;
-		
-		Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
-		font.draw(batch, cursor.x + ", " + cursor.y + " "+ tile + " chunk: " + chunk.x +  "," + chunk.y  + 
-				"\nchunk block pos: " +(cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY() ) +"\n"+
-				"chunk pos: " + chunk.x + ", " + chunk.y
-				, cx, cy);
-
-		if(tile.blockdata instanceof InventoryTileData){
-			InventoryTileData data = tile.getBlockData(InventoryTileData.class);
-			font.draw(batch, data.inventory.toString(), cx, cy);
-			i += data.inventory.inventory[0].length;
-		}
-
-		for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
-			KoruEntity entity = (KoruEntity)e;
-			if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
-				font.draw(batch, entity.getID() + "", cx, cy + i * 5);
-				i ++;
-			}
-
-		}
 		
 		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
+
+		if(debug){
+			Point cursor = getModule(Input.class).cursorblock();
+			float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
+			if( !world.inBounds(cursor.x, cursor.y)){
+				font.draw(batch, "Out of bounds.", cx, cy);
+
+				return;
+			}
+			Tile tile = world.getTile(cursor);
+
+				int i = 0;
+
+			i ++;
+
+			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
+			font.draw(batch, cursor.x + ", " + cursor.y + " " + tile + " chunk: " + chunk.x + "," + chunk.y + "\nchunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY()) + "\n" + "chunk pos: " + chunk.x + ", " + chunk.y, cx, cy);
+
+			if(tile.blockdata instanceof InventoryTileData){
+				InventoryTileData data = tile.getBlockData(InventoryTileData.class);
+				font.draw(batch, data.inventory.toString(), cx, cy);
+				i += data.inventory.inventory[0].length;
+			}
+
+			for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
+				KoruEntity entity = (KoruEntity)e;
+				if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
+					font.draw(batch, entity.getID() + "", cx, cy + i * 5);
+					i ++;
+				}
+
+			}
+		}
 
 	}
 

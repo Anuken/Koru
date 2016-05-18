@@ -40,11 +40,15 @@ public class KoruServer{
 
 	private void createUpdater(){
 		updater = new KoruUpdater(this);
-		new Thread(new Runnable(){
+		
+		Thread thread = (new Thread(new Runnable(){
 			public void run(){
 				updater.run();
 			}
-		}).start();
+		}));
+		
+		thread.setDaemon(true);
+		thread.run();
 	}
 
 	class Listen extends Listener{

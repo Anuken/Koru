@@ -17,11 +17,6 @@ public class Chunk implements Poolable{
 	}
 	
 	public Tile getWorldTile(int worldx, int worldy){
-		//Koru.log("--start--");
-		//Koru.log("in: " + worldx);
-	//	if(worldx < 0) worldx = World.chunksize - Math.abs(worldx % World.chunksize);
-		//if(worldy < 0) worldy = World.chunksize - Math.abs(worldy % World.chunksize);
-		//Koru.log("out: "+worldx + " coords are " + x + ", " + y);
 		int tx = worldx - worldX(), ty = worldy -worldY();
 		return tiles[tx][ty];
 	}
