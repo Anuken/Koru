@@ -506,30 +506,37 @@ koru5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+other/chunk
+  rotate: false
+  xy: 1, 4
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
 other/hitbox
   rotate: false
-  xy: 1, 11
+  xy: 123, 104
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 other/hitbox2
   rotate: false
-  xy: 23, 11
+  xy: 123, 82
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 other/error
   rotate: false
-  xy: 1, 1
+  xy: 145, 116
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 other/blank
   rotate: false
-  xy: 45, 30
+  xy: 1, 1
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

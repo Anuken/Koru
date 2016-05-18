@@ -6,9 +6,8 @@ import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
-import net.pixelstatic.koru.sprites.Layer;
-import net.pixelstatic.koru.sprites.PooledLayerList;
-import net.pixelstatic.koru.sprites.SpriteLayer;
+import net.pixelstatic.koru.sprites.*;
+import net.pixelstatic.koru.sprites.Layer.LayerType;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.graphics.Atlas;
@@ -99,7 +98,14 @@ public class Renderer extends Module{
 						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX()+x, chunk.worldY()+y, this, world);
 						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX()+x, chunk.worldY()+y, this, world);
 					}
+					layer("", chunk.worldX() * World.tilesize + x*12, chunk.worldY() * World.tilesize)
+					.setType(LayerType.TEXT).setText("" + (x)).setLayer(999999999);
+					
 				}
+				
+				layer("chunk",60+chunk.worldX() * World.tilesize, 60+chunk.worldY() * World.tilesize).setLayer(99999999);
+				layer("", chunk.worldX() * World.tilesize + 60, chunk.worldY() * World.tilesize + 60)
+				.setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
 			}
 		}
 	}
@@ -122,9 +128,12 @@ public class Renderer extends Module{
 		int i = 0;
 
 		i ++;
-
+		
 		Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
-		font.draw(batch, cursor.x + ", " + cursor.y + " "+ tile + " chunk: " + chunk.x +  "," + chunk.y, cx, cy);
+		font.draw(batch, cursor.x + ", " + cursor.y + " "+ tile + " chunk: " + chunk.x +  "," + chunk.y  + 
+				"\nchunk block pos: " +(cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY() ) +"\n"+
+				"chunk pos: " + chunk.x + ", " + chunk.y
+				, cx, cy);
 
 		if(tile.blockdata instanceof InventoryTileData){
 			InventoryTileData data = tile.getBlockData(InventoryTileData.class);

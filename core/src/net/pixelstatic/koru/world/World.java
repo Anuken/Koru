@@ -25,7 +25,7 @@ public class World extends Module{
 	public static final int chunksize = 10;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
-	private int lastchunkx, lastchunky;
+	public int lastchunkx, lastchunky;
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
@@ -229,8 +229,11 @@ public class World extends Module{
 	}
 
 	public Chunk getRelativeChunk(int x, int y){
-		int ax = x / chunksize - lastchunkx + loadrange;
-		int ay = y / chunksize - lastchunky + loadrange;
+		if(x < -1) x ++;
+		if(y < -1) y ++;
+		int ax = nint((float)x / chunksize) - lastchunkx + loadrange;
+		int ay = nint((float)y / chunksize) - lastchunky + loadrange;
+		if(!Util.inBounds(ax, ay, chunks)) return null;
 		return chunks[ax][ay];
 	}
 
@@ -281,7 +284,8 @@ public class World extends Module{
 	}
 
 	public int toChunkCoords(float worldpos){
-		return tile(worldpos) / chunksize;
+		int i = tile(worldpos) / chunksize;
+		return i;
 	}
 
 	public long hashCoords(int a, int b){
@@ -293,7 +297,11 @@ public class World extends Module{
 	}
 
 	public static int tile(float i){
-		return (int)(i / tilesize);
+		return nint(i/tilesize);
+	}
+	
+	public static int nint(float b){
+		return b < 0 ? (int)(b-1) : (int)b;
 	}
 
 	public static float world(int i){
