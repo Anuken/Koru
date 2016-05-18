@@ -87,6 +87,7 @@ public class WorldFile{
 		long time = TimeUtils.millis();
 		
 		try{
+			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			FileInputStream file = new FileInputStream(path.toFile());
 			
