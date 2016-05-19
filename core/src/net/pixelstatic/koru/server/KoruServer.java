@@ -11,6 +11,7 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Network;
 import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
+import net.pixelstatic.koru.world.InventoryTileData;
 
 import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.kryonet.Connection;
@@ -40,13 +41,13 @@ public class KoruServer{
 
 	private void createUpdater(){
 		updater = new KoruUpdater(this);
-		
+
 		Thread thread = (new Thread(new Runnable(){
 			public void run(){
 				updater.run();
 			}
 		}));
-		
+
 		thread.setDaemon(true);
 		thread.run();
 	}
@@ -77,59 +78,58 @@ public class KoruServer{
 		@Override
 		public void received(Connection connection, Object object){
 			try{
-			if(object instanceof ConnectPacket){
-				try{
-					ConnectPacket connect = (ConnectPacket)object;
+				if(object instanceof ConnectPacket){
+					try{
+						ConnectPacket connect = (ConnectPacket)object;
 
-					KoruEntity player = new KoruEntity(EntityType.player);
-					player.mapComponent(ConnectionComponent.class).connection = connection;
-					player.mapComponent(ConnectionComponent.class).name = connect.name;
+						KoruEntity player = new KoruEntity(EntityType.player);
+						player.mapComponent(ConnectionComponent.class).connection = connection;
+						player.mapComponent(ConnectionComponent.class).name = connect.name;
 
-					DataPacket data = new DataPacket();
-					data.playerid = player.getID();
+						DataPacket data = new DataPacket();
+						data.playerid = player.getID();
 
-					ArrayList<Entity> entities = new ArrayList<Entity>();
-					for(Entity entity : updater.engine.getEntities()){
-						entities.add(entity);
+						ArrayList<Entity> entities = new ArrayList<Entity>();
+						for(Entity entity : updater.engine.getEntities()){
+							entities.add(entity);
+						}
+
+						data.entities = entities;
+						connection.sendTCP(data);
+
+						server.sendToAllExceptTCP(connection.getID(), player);
+
+						player.addSelf();
+						players.put(connection.getID(), player.getID());
+
+						Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connection.getID());
+						Koru.log(connect.name + " has joined.");
+					}catch(Exception e){
+						e.printStackTrace();
+						Koru.log("Critical error: failed sending player!");
+						System.exit(1);
 					}
-
-					data.entities = entities;
-					connection.sendTCP(data);
-
-					server.sendToAllExceptTCP(connection.getID(), player);
-
-					player.addSelf();
-					players.put(connection.getID(), player.getID());
-
-					Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connection.getID());
-					Koru.log(connect.name + " has joined.");
-				}catch(Exception e){
-					e.printStackTrace();
-					Koru.log("Critical error: failed sending player!");
-					System.exit(1);
+				}else if(object instanceof PositionPacket){
+					PositionPacket packet = (PositionPacket)object;
+					if( !players.containsKey(connection.getID())) return;
+					getPlayer(connection.getID()).position().set(packet.x, packet.y);
+					getPlayer(connection.getID()).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
+				}else if(object instanceof ChunkRequestPacket){
+					ChunkRequestPacket packet = (ChunkRequestPacket)object;
+					connection.sendTCP(updater.world.createChunkPacket(packet));
+				}else if(object instanceof InputPacket){
+					InputPacket packet = (InputPacket)object;
+					getPlayer(connection.getID()).mapComponent(InputComponent.class).input.inputEvent(packet.type);
+				}else if(object instanceof StoreItemPacket){
+					StoreItemPacket packet = (StoreItemPacket)object;
+					updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
+					updater.world.updateTile(packet.x, packet.y);
+				}else if(object instanceof BlockInputPacket){
+					BlockInputPacket packet = (BlockInputPacket)object;
+					updater.world.tile(packet.x, packet.y).block = packet.material;
+					updater.world.updateTile(packet.x, packet.y);
 				}
-			}else if(object instanceof PositionPacket){
-				PositionPacket packet = (PositionPacket)object;
-				if(!players.containsKey(connection.getID())) return;
-				getPlayer(connection.getID()).position().set(packet.x, packet.y);
-				getPlayer(connection.getID()).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
-			}else if(object instanceof ChunkRequestPacket){
-				ChunkRequestPacket packet = (ChunkRequestPacket)object;
-				connection.sendTCP(updater.world.createChunkPacket(packet));
-			}else if(object instanceof InputPacket){
-				InputPacket packet = (InputPacket)object;
-				getPlayer(connection.getID()).mapComponent(InputComponent.class).input.inputEvent(packet.type);
-			}else if(object instanceof StoreItemPacket){
-				StoreItemPacket packet = (StoreItemPacket)object;
-				//TODO make this work properly
-				//updater.world.tiles[packet.x][packet.y].getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
-				//updater.world.updateTile(packet.x, packet.y);
-			}else if(object instanceof BlockInputPacket){
-				BlockInputPacket packet = (BlockInputPacket)object;
-				//updater.world.tiles[packet.x][packet.y].block = packet.material;
-				//updater.world.updateTile(packet.x, packet.y);
-			}
-			}catch (Exception e){
+			}catch(Exception e){
 				e.printStackTrace();
 				Koru.log("Packet error!");
 			}
@@ -146,7 +146,7 @@ public class KoruServer{
 	public void sendEntity(KoruEntity entity){
 		server.sendToAllTCP(entity);
 	}
-	
+
 	public void sendToAll(Object object){
 		server.sendToAllTCP(object);
 	}

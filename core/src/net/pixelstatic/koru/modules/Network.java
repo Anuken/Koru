@@ -74,8 +74,8 @@ public class Network extends Module{
 					getModule(World.class).loadChunks(packet);
 				}else if(object instanceof TileUpdatePacket){
 					TileUpdatePacket packet = (TileUpdatePacket)object;
-					//TODO make this work
-					//getModule(World.class).tiles[packet.x][packet.y] = packet.tile;
+					if(getModule(World.class).inBounds(packet.x, packet.y))
+					getModule(World.class).setTile(packet.x, packet.y, packet.tile);
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket packet = (EntityRemovePacket)object;
 					entitiesToRemove.add(packet.id);

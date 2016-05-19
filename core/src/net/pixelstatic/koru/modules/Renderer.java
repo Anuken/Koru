@@ -37,7 +37,7 @@ public class Renderer extends Module{
 	public BitmapFont font;
 	public GifRecorder recorder;
 	public FrameBufferMap buffers;
-	public boolean debug;
+	public boolean debug = false;
 
 	public KoruEntity player;
 
@@ -110,14 +110,13 @@ public class Renderer extends Module{
 				}
 
 				if(debug){
-					layer("chunk", 60 + chunk.worldX() * World.tilesize, 60 + chunk.worldY() * World.tilesize).setLayer(99999999);
-					layer("", chunk.worldX() * World.tilesize + 60, chunk.worldY() * World.tilesize + 60).setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
+					layer("chunk", World.tilesize*World.chunksize/2 + chunk.worldX() * World.tilesize, World.tilesize*World.chunksize/2 + chunk.worldY() * World.tilesize).setLayer(99999999);
+					layer("", chunk.worldX() * World.tilesize + World.tilesize*World.chunksize/2, chunk.worldY() * World.tilesize + World.tilesize*World.chunksize/2).setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
 				}
 			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void drawGUI(){
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);

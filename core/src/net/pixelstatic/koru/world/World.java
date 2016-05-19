@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.ai.AIData;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Module;
 import net.pixelstatic.koru.modules.Network;
@@ -98,7 +97,6 @@ public class World extends Module{
 			for(int x = 0;x < loadrange * 2;x ++){
 				for(int y = 0;y < loadrange * 2;y ++){
 					if(!Util.inBounds(x + sx, y + sy, chunks)){
-						//Pools.free(chunks[x][y]);
 						chunks[x][y] = null;
 						continue;
 					}
@@ -114,7 +112,6 @@ public class World extends Module{
 	}
 	
 	void checkUnloadChunks(){
-		Koru.log("Loaded chunks: " + loadedchunks.size());
 		Collection<Chunk> chunks = loadedchunks.values();
 		ImmutableArray<Entity> players = KoruUpdater.instance.engine.getEntitiesFor(KoruUpdater.instance.engine.getSystem(SyncSystem.class).getFamily());
 		
@@ -132,7 +129,6 @@ public class World extends Module{
 			}
 			if(passed) continue;
 			unloadChunk(chunk);
-			//loadedchunks.remove(hashCoords(chunk.x, chunk.y));
 		}
 	}
 
@@ -144,13 +140,9 @@ public class World extends Module{
 		
 		//if the chunk coords are out of range, stop
 		if(relativex < 0 || relativey < 0 || relativex >= loadrange * 2 || relativey >= loadrange * 2){
-			Koru.log("Chunk fail!");
 			return;
 		}
 		
-		Koru.log("chunk coords: " + packet.chunk.x + " " + packet.chunk.y);
-
-		Koru.log("recieving " + relativex + " " + relativey);
 		chunks[relativex][relativey] = packet.chunk;
 	}
 
@@ -161,7 +153,6 @@ public class World extends Module{
 					ChunkRequestPacket packet = new ChunkRequestPacket();
 					packet.x = lastchunkx + x - loadrange;
 					packet.y = lastchunky + y - loadrange;
-					Koru.log("Sending chunk request for chunk " + x + ", " + y);
 					network.client.sendTCP(packet);
 				}
 			}
@@ -171,8 +162,6 @@ public class World extends Module{
 	public ChunkPacket createChunkPacket(ChunkRequestPacket request){
 		ChunkPacket packet = new ChunkPacket();
 		packet.chunk = getChunk(request.x, request.y);
-		//Koru.log("Recieved request: " + request.x + ", " + request.y);
-		//Koru.log("Chunk: " + packet.chunk);
 		return packet;
 	}
 
@@ -206,7 +195,6 @@ public class World extends Module{
 				return point;
 			}
 		}
-		//	Koru.log("Error: empty point not found!");
 		return null;
 	}
 
@@ -282,7 +270,6 @@ public class World extends Module{
 	public void updateTile(int x, int y){
 		updated = true;
 		tile(x, y).changeEvent();
-		AIData.updateNode(x, y);
 		server.sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
 	}
 
@@ -297,7 +284,6 @@ public class World extends Module{
 	}
 
 	protected void unloadChunk(Chunk chunk){
-		Koru.log("Unloading chunk " + chunk);
 		file.writeChunk(chunk);
 		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
 	}
@@ -320,8 +306,19 @@ public class World extends Module{
 		if( !KoruServer.active){
 			return getRelativeChunk(x, y).getWorldTile(x, y);
 		}
-		int cx = x / chunksize, cy = y / chunksize;
+		int cx = (x < -1 ? x + 1 : x) / chunksize, cy = (y < -1 ? y + 1 : y) / chunksize;
+		if(x < 0) cx --;
+		if(y < 0) cy --;
 		return getChunk(cx, cy).getWorldTile(x, y);
+	}
+	
+	public void setTile(int x, int y, Tile tile){
+		if( !KoruServer.active){
+			getRelativeChunk(x, y).setWorldTile(x, y, tile);
+			return;
+		}
+		int cx = x / chunksize, cy = y / chunksize;
+		getChunk(cx, cy).setWorldTile(x, y, tile);
 	}
 
 	public int toChunkCoords(int a){

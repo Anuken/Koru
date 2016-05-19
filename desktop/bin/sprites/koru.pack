@@ -508,35 +508,35 @@ filter: Nearest,Nearest
 repeat: none
 other/chunk
   rotate: false
-  xy: 1, 4
-  size: 120, 120
-  orig: 120, 120
+  xy: 1, 33
+  size: 192, 192
+  orig: 192, 192
   offset: 0, 0
   index: -1
 other/hitbox
   rotate: false
-  xy: 123, 104
+  xy: 1, 11
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 other/hitbox2
   rotate: false
-  xy: 123, 82
+  xy: 195, 205
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 other/error
   rotate: false
-  xy: 145, 116
+  xy: 1, 1
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 other/blank
   rotate: false
-  xy: 1, 1
+  xy: 23, 30
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

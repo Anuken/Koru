@@ -21,6 +21,11 @@ public class Chunk implements Poolable{
 		return tiles[tx][ty];
 	}
 	
+	public void setWorldTile(int worldx, int worldy, Tile tile){
+		int tx = worldx - worldX(), ty = worldy -worldY();
+		tiles[tx][ty] = tile;
+	}
+	
 	public int worldX(){
 		return x * World.chunksize;
 	}
