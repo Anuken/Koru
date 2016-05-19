@@ -2,7 +2,6 @@ package net.pixelstatic.koru.graphics;
 
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.sprites.Layer;
-import net.pixelstatic.koru.world.MaterialType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -46,7 +45,7 @@ public enum FrameBufferLayer{
 			
 		}
 	},
-	water("water", MaterialType.tilelayer(-1)){
+	water("water", -2){
 		public void end(){
 			batch.setColor(new Color(1, 1, 1, 1f));
 			drawFull();

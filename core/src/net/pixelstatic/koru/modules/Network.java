@@ -6,6 +6,7 @@ import net.pixelstatic.koru.components.SyncComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
+import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.utils.Angles;
 import net.pixelstatic.koru.world.World;
 
@@ -29,6 +30,14 @@ public class Network extends Module{
 	public Client client;
 
 	public void init(){
+		
+		Layer l1 = getModule(Renderer.class).layer("", 10, 10).setTile(2);
+
+		Layer l2 = getModule(Renderer.class).layer("", 10, 10).yLayer();
+		
+		Koru.log("l1 compare l2: " + l1.compareTo(l2));
+		Koru.log("l2 compare l1: " + l2.compareTo(l1));
+		
 		try{
 			int buffer = (int)Math.pow(2, 6);
 			client = new Client(8192 * buffer, 8192 * buffer);

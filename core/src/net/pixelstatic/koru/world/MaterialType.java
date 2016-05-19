@@ -2,6 +2,7 @@ package net.pixelstatic.koru.world;
 
 
 import net.pixelstatic.koru.modules.Renderer;
+import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.utils.Noise;
 import net.pixelstatic.utils.graphics.Hue;
 
@@ -12,8 +13,8 @@ import com.badlogic.gdx.math.Rectangle;
 public enum MaterialType{
 	tile{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(material.ordinal()));
-			if(this.world.blends(x, y, material)) renderer.layer(material.name() + "edge", tile(x), tile(y)).setLayer(tilelayer(material.ordinal()) - 1);
+			renderer.layer(material.name(), tile(x), tile(y)).setTile(material.ordinal());
+			if(this.world.blends(x, y, material)) renderer.layer(material.name() + "edge", tile(x), tile(y)).setTile(material.ordinal()).layer--;
 		}
 	},
 	water{
@@ -21,8 +22,8 @@ public enum MaterialType{
 			float tscl = 8f;
 			float s = 0.2f;
 			float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
-			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(-1)).setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.87f));
-			renderer.layer("riverrock", tile(x), tile(y)).setLayer(tilelayer(-1)-1);
+			renderer.layer(material.name(), tile(x), tile(y)).setTile(-1).setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.87f));
+			renderer.layer("riverrock", tile(x), tile(y)).setTile(-1);
 		}
 		
 		public boolean solid(){
@@ -31,7 +32,7 @@ public enum MaterialType{
 	},
 	overlay{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer(256));
+			renderer.layer(material.name(), tile(x), tile(y)).setTile(256);
 		}
 		
 		public boolean tile(){
@@ -40,8 +41,8 @@ public enum MaterialType{
 	},
 	block{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(material.name(), tile(x), tile(y) - World.tilesize / 2 + 0.5f).yLayer().addShadow("wallshadow");
-			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f - World.tilesize / 2).setLayer(1f).setScale(0.14f);
+			renderer.layer(material.name(), tile(x), tile(y) - World.tilesize / 2 + 0.5f).yLayer();//.addShadow("wallshadow");
+			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f - World.tilesize / 2).setLayer(Layer.shadowlayer).setScale(0.14f);
 		}
 
 		public boolean tile(){
@@ -86,7 +87,7 @@ public enum MaterialType{
 	tree(Hue.rgb(80, 53, 30)){
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(/*material.name()*/"pinetree2", tile(x), tile(y)).yLayer()/*.addBlobShadow(-3)*/;
-			renderer.layer(/*material.name()*/"pinetree2roots", tile(x)+1, tile(y)-3).setLayer(3f);
+			//renderer.layer(/*material.name()*/"pinetree2roots", tile(x)+1, tile(y)-3).setLayer(3f);
 			
 		}
 
@@ -115,7 +116,6 @@ public enum MaterialType{
 	};
 	private Color color = null;
 	protected World world;
-	static final int tilelayer = -1;
 	
 	private MaterialType(){
 		
@@ -124,18 +124,13 @@ public enum MaterialType{
 	private MaterialType(Color color){
 		this.color = color;
 	}
-
-	public static int tilelayer(int id){
-		return tilelayer - (512 - id * 2);
-	}
-
 	public final void drawInternal(Material material, Tile tile, int x, int y, Renderer renderer, World world){
 		this.world = world;
 		draw(material, tile, x, y, renderer);
 	}
 
 	public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-		renderer.layer(material.name(), tile(x), tile(y)).setLayer(tilelayer);
+		renderer.layer(material.name(), tile(x), tile(y)).setTile(0);
 	}
 
 	public boolean solid(){
