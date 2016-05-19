@@ -14,7 +14,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public static PooledLayerList list;
 	public static Atlas atlas;
 	boolean temp = false;
-	public static final float shadowlayer = 257, reflectionlayer = 258;
+	public static final float shadowlayer = 257, reflectionlayer = -1;
 	public static final Color shadowcolor = new Color(0, 0, 0, 0.14f);
 	public Color color = Color.WHITE.cpy();
 	public float layer, x, y, rotation, scalex = 1f, scaley = 1f, heightoffset, width, height, vshiftx, vshifty;
@@ -29,7 +29,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 	public SortType sort = SortType.OBJECT;
 
 	public enum LayerType{
-		SPRITE, TEXT, TEXTURE, SHAPE, PARTICLE, VERTICESPRITE
+		SPRITE, TEXT, TEXTURE, SHAPE, PARTICLE, VERTICESPRITE, REFLECTION
 	}
 
 	public enum SortType{
@@ -62,6 +62,32 @@ public class Layer implements Comparable<Layer>, Poolable{
 			}else{
 				renderer.draw(region, x, y + yalign, rotation);
 			}
+		}else if(type == LayerType.REFLECTION){
+			float yalign = 0;
+			if(alignbottom){
+				TextureRegion tex = renderer.getRegion(region);
+				yalign = tex.getRegionHeight() / 2;
+			}
+			
+			TextureRegion tex = renderer.getRegion(region);
+			if(sprite == null) sprite = new Sprite(tex);
+
+			
+			sprite.setRegion(tex);
+			sprite.setColor(color);
+
+			sprite.setPosition(x - tex.getRegionWidth() / 2, y + yalign + tex.getRegionHeight() / 2);
+			sprite.setSize(tex.getRegionWidth(), -tex.getRegionHeight());
+			
+			Color c = color.cpy();
+			c.a = 0f;
+			float bits = c.toFloatBits();
+			
+			sprite.getVertices()[SpriteBatch.C2] = bits;
+			sprite.getVertices()[SpriteBatch.C3] = bits;
+
+			sprite.draw(renderer.batch);
+			//renderer.drawscl(region, x, y + yalign, 1f, -1f);
 		}else if(type == LayerType.VERTICESPRITE){
 			float yalign = 0;
 
@@ -160,7 +186,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 		//if(this.region.equals("player")) Koru.log(reflectionlayer);
 		Layer reflection = obtainLayer();
 		reflection.region = region;
-		reflection.setSort(SortType.FLOOR).setPosition(x, y - atlas.regionHeight(region) / 2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer - (0.01f) * (y % 1000) / 1000f).add();
+		reflection.setSort(SortType.FLOOR).setType(LayerType.REFLECTION).setPosition(x, y - atlas.regionHeight(region) / 2).setColor(color).setTemp().setScale(1f, -1f).setLayer(reflectionlayer - (0.01f) * (y % 1000) / 1000f).add();
 	}
 
 	public float height(){

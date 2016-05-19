@@ -42,7 +42,7 @@ public class Input extends Module implements InputProcessor{
 		
 		if(Gdx.input.isKeyJustPressed(Keys.R)) sendInput(InputType.r);
 		
-		float speed = 2f;
+		float speed = 4f;
 		
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			vector.y += speed;
@@ -143,6 +143,7 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount){
+		getModule(Renderer.class).camera.zoom += amount/10f;
 		return false;
 	}
 	

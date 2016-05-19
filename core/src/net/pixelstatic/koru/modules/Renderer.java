@@ -8,6 +8,7 @@ import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.sprites.*;
 import net.pixelstatic.koru.sprites.Layer.LayerType;
+import net.pixelstatic.koru.sprites.Layer.SortType;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.graphics.Atlas;
@@ -87,7 +88,7 @@ public class Renderer extends Module{
 	}
 
 	void drawMap(){
-		camera.zoom = 1f;
+	//	camera.zoom = 1f;
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
@@ -170,20 +171,21 @@ public class Renderer extends Module{
 			Layer layer = layers.layers[i];
 
 			boolean ended = false;
-			if(selected != null && !selected.layerEquals(layer.layer)){
+			
+			if(selected != null && (!selected.layerEquals(layer.layer)|| layer.sort != SortType.FLOOR)){
 				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
 				endBufferLayer(selected, blayers);
 				selected = null;
 				ended = true;
 			}
-
-			if(selected == null){
+			
+			if(selected == null && layer.sort == SortType.FLOOR){
 
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer.layer)){
 						if(ended) layer.Draw(this);
 						selected = fl;
-						//Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
+					//	Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
 
 						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 						batch.end();

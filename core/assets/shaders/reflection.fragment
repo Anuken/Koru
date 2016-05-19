@@ -15,6 +15,6 @@ uniform vec2 resolution;
 
 void main()
 {
-	if(texture2D(water, (gl_FragCoord.xy / resolution.xy)).a > 0)
+	if(texture2D(water, (gl_FragCoord.xy / resolution.xy)).r < 10.01)
     gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
 }

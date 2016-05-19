@@ -2,7 +2,7 @@ package net.pixelstatic.koru.world;
 
 
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.koru.sprites.Layer;
+import net.pixelstatic.koru.sprites.Layer.SortType;
 import net.pixelstatic.utils.Noise;
 import net.pixelstatic.utils.graphics.Hue;
 
@@ -23,7 +23,7 @@ public enum MaterialType{
 			float s = 0.2f;
 			float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
 			renderer.layer(material.name(), tile(x), tile(y)).setTile(-1).setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.87f));
-			renderer.layer("riverrock", tile(x), tile(y)).setTile(-1);
+			//renderer.layer("riverrock", tile(x), tile(y)).setTile(-2);
 		}
 		
 		public boolean solid(){
@@ -42,7 +42,7 @@ public enum MaterialType{
 	block{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y) - World.tilesize / 2 + 0.5f).yLayer();//.addShadow("wallshadow");
-			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f - World.tilesize / 2).setLayer(Layer.shadowlayer).setScale(0.14f);
+			renderer.layer("walldropshadow", tile(x), y * World.tilesize + World.tilesize * 0.9f - World.tilesize / 2).setSort(SortType.FLOOR).setLayer(259).setScale(0.14f);
 		}
 
 		public boolean tile(){
