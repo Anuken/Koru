@@ -171,16 +171,12 @@ public class Renderer extends Module{
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
 
 		FrameBufferLayer selected = null;
+		
 		//Koru.log("--start--");
-		//Koru.log("--start-- (begin buffer)");
-		//Gdx.gl.glClearColor(0, 0, 0, 0);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if(gbuffer) buffers.begin("global");
 
 		batch.begin();
-
-		//buffers.get("test").getColorBufferTexture().bind(FrameBufferLayer.glo);
 
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
@@ -213,24 +209,19 @@ public class Renderer extends Module{
 			endBufferLayer(selected, blayers);
 			selected = null;
 		}
-		//Koru.log("end batch");
 		batch.end();
 
-		//	Koru.log("end buffer");
 		if(gbuffer) buffers.end("global");
 		batch.begin();
 
 		batch.setColor(Color.WHITE);
 		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
-		//endBufferLayer(FrameBufferLayer.global, null);
-		layers.clear();
+			layers.clear();
 	}
 
 	private void beginBufferLayer(FrameBufferLayer selected){
 		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
-		//Koru.log("ending global buffer, starting " + selected);
-
-		//Koru.log("ending batch");
+	
 		batch.end();
 		if(gbuffer) buffers.end("global");
 
@@ -240,21 +231,17 @@ public class Renderer extends Module{
 			t.bind(0);
 
 		if(selected.shader != null) batch.setShader(selected.shader);
-		//Koru.log("beginning batch");
 		batch.begin();
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
 	private void endBufferLayer(FrameBufferLayer selected, Array<FrameBufferLayer> layers){
-		//Koru.log("ending batch");
 		batch.end();
 		if(selected.shader != null) batch.setShader(null);
 		buffers.end(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(0);
 		if(gbuffer) buffers.begin("global");
-		//Koru.log("beginning global buffer, ending " + selected);
-		//Koru.log("beginning batch");
 		batch.begin();
 		selected.end();
 		batch.setColor(Color.WHITE);
@@ -262,7 +249,7 @@ public class Renderer extends Module{
 	}
 
 	void updateCamera(){
-		camera.position.set(player.getX(), (player.getY() + 0.5f), 0f);
+		camera.position.set((int)player.getX(), (int)(player.getY()), 0f);
 		camera.update();
 	}
 
@@ -298,7 +285,6 @@ public class Renderer extends Module{
 	}
 
 	public Layer layer(String region, float x, float y){
-		//Koru.log(region);
 		return layers.getLayer().add().setTemp().set(region, x, y);
 	}
 
