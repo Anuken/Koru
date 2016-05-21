@@ -76,15 +76,20 @@ public class Layer implements Comparable<Layer>, Poolable{
 			sprite.setRegion(tex);
 			sprite.setColor(color);
 
-			sprite.setPosition((int)(x - tex.getRegionWidth() / 2), (int)(y + yalign + tex.getRegionHeight() / 2));
+			sprite.setPosition((int)(x - tex.getRegionWidth() / 2f), (int)(y + yalign + tex.getRegionHeight() / 2f));
 			sprite.setSize(tex.getRegionWidth(), -tex.getRegionHeight());
 			
 			Color c = color.cpy();
-			c.a = 0.4f;
-			float bits = c.toFloatBits();
+			c.a = 0.2f;
+			float abits = c.toFloatBits();
+			c.a = 0.9f;
+			float tbits = c.toFloatBits();
 			
-			sprite.getVertices()[SpriteBatch.C2] = bits;
-			sprite.getVertices()[SpriteBatch.C3] = bits;
+			sprite.getVertices()[SpriteBatch.C1] = tbits;
+			sprite.getVertices()[SpriteBatch.C4] = tbits;
+			
+			sprite.getVertices()[SpriteBatch.C2] = abits;
+			sprite.getVertices()[SpriteBatch.C3] = abits;
 
 			sprite.draw(renderer.batch);
 			//renderer.drawscl(region, x, y + yalign, 1f, -1f);

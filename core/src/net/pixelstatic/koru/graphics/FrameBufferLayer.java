@@ -3,8 +3,6 @@ package net.pixelstatic.koru.graphics;
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.sprites.Layer;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -16,13 +14,14 @@ public enum FrameBufferLayer{
 		public void end(){
 			batch.setColor(Layer.shadowcolor);
 			drawFull();
-			
+
 		}
 
 		protected void begin(){
 
 		}
 	},
+	/*
 	reflection("reflection", Layer.reflectionlayer){
 		public void end(){
 			batch.setColor(new Color(1, 1, 1, 0.5f));
@@ -30,22 +29,19 @@ public enum FrameBufferLayer{
 		}
 
 		protected void loadShader(){
-			shader = ShaderLoader.fromFile("default", "reflection");
+			//	shader = ShaderLoader.fromFile("default", "reflection");
 		}
 
 		protected void begin(){
-			
-			shader.begin();
-			shader.setUniformi("water", FrameBufferLayer.water.bind);
-			//TextureRegion region = renderer.atlas().findRegion("water");
-			//	shader.setUniformf("water", region.getRegionX(), region.getRegionY());
-			///shader.setUniformf("cpos", camera.position.cpy().scl(7f));
-			shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			//shader.setUniformf("time", Gdx.graphics.getFrameId()/60f);
-			shader.end();
-			
+
+			//shader.begin();
+			//shader.setUniformi("water", FrameBufferLayer.water.bind);
+			//shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			//shader.end();
+
 		}
 	},
+	/*
 	water("water", -2){
 		public void end(){
 			batch.setColor(new Color(1, 1, 1, 1f));
@@ -66,21 +62,21 @@ public enum FrameBufferLayer{
 			shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			//shader.setUniformf("time", Gdx.graphics.getFrameId()/60f);
 			shader.end();
-			*/
+			
 		}
-	},
+	},*/
 	global("global", 0){
 		public void end(){
 			drawFull();
-		//	batch.draw(fbo.getColorBufferTexture(), camera.position.x, camera.position.y, 100, 100);
+			//	batch.draw(fbo.getColorBufferTexture(), camera.position.x, camera.position.y, 100, 100);
 
 		}
 
 		@Override
 		protected void begin(){
-			
+
 		}
-		
+
 		//public boolean layerEquals(Layer l){
 		//	return l.sort == SortType.FLOOR;
 		//}

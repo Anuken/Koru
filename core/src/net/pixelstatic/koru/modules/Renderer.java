@@ -206,7 +206,7 @@ public class Renderer extends Module{
 					}
 				}
 			}
-			if(layer.sort == SortType.FLOOR && layer.layer < 2) Koru.log("layer " + layer.region);
+			//if(layer.sort == SortType.FLOOR && layer.layer < 2) Koru.log("layer " + layer.region);
 			layer.draw(this);
 		}
 		if(selected != null){
