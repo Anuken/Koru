@@ -132,6 +132,7 @@ public class KoruServer{
 			}catch(Exception e){
 				e.printStackTrace();
 				Koru.log("Packet error!");
+				System.exit(1);
 			}
 		}
 	}

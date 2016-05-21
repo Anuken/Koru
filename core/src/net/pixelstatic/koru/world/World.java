@@ -33,7 +33,7 @@ public class World extends Module{
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
-	private WorldFile file;
+	private volatile WorldFile file;
 	private Renderer renderer;
 	public Generator generator;
 	Network network;
@@ -159,7 +159,7 @@ public class World extends Module{
 		}
 	}
 
-	public ChunkPacket createChunkPacket(ChunkRequestPacket request){
+	public synchronized ChunkPacket createChunkPacket(ChunkRequestPacket request){
 		ChunkPacket packet = new ChunkPacket();
 		packet.chunk = getChunk(request.x, request.y);
 		return packet;

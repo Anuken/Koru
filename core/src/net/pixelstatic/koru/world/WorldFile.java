@@ -107,7 +107,7 @@ public class WorldFile{
 			Koru.log("Error writing chunk!");
 			e.printStackTrace();
 		}
-		return null;
+		throw new RuntimeException("Error reading chunk!");
 	}
 
 	public String fileName(int x, int y){

@@ -42,7 +42,7 @@ public class Input extends Module implements InputProcessor{
 		
 		if(Gdx.input.isKeyJustPressed(Keys.R)) sendInput(InputType.r);
 		
-		float speed = 4f;
+		float speed = 10f;
 		
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			vector.y += speed;
@@ -108,7 +108,7 @@ public class Input extends Module implements InputProcessor{
 		BlockInputPacket packet = new BlockInputPacket();
 		if(button == Buttons.LEFT){
 			sendInput(InputType.leftclick_down);
-			packet.material = Material.woodblock;
+			packet.material = Material.pinetree2;
 		}else if(button == Buttons.RIGHT){
 			sendInput(InputType.rightclick_down);
 			packet.material = Material.air;

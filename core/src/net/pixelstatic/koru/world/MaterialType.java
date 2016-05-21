@@ -23,7 +23,7 @@ public enum MaterialType{
 			float s = 0.2f;
 			float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
 			renderer.layer(material.name(), tile(x), tile(y)).setTile(-1).setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.87f));
-			//renderer.layer("riverrock", tile(x), tile(y)).setTile(-2);
+			renderer.layer("riverrock", tile(x), tile(y)).setTile(-2);
 		}
 		
 		public boolean solid(){
@@ -86,9 +86,8 @@ public enum MaterialType{
 	},
 	tree(Hue.rgb(80, 53, 30)){
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
-			renderer.layer(/*material.name()*/"pinetree2", tile(x), tile(y)).yLayer()/*.addBlobShadow(-3)*/;
-			//renderer.layer(/*material.name()*/"pinetree2roots", tile(x)+1, tile(y)-3).setLayer(3f);
-			
+			renderer.layer(/*material.name()*/"pinetree2", tile(x), tile(y)).yLayer(false).addBlobShadow(-3).addReflection();;
+			renderer.layer(/*material.name()*/"pinetree2roots", tile(x)+1, tile(y)-3).setTile(130);
 		}
 
 		public boolean tile(){

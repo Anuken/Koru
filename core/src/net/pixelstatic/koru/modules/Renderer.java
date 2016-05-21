@@ -39,6 +39,7 @@ public class Renderer extends Module{
 	public GifRecorder recorder;
 	public FrameBufferMap buffers;
 	public boolean debug = false;
+	public final boolean gbuffer = false;
 
 	public KoruEntity player;
 
@@ -58,6 +59,8 @@ public class Renderer extends Module{
 		recorder = new GifRecorder(batch, 1f / GUIscale);
 		FrameBufferLayer.loadShaders();
 		Layer.atlas = this.atlas;
+
+		if(gbuffer) buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 	}
 
 	public void init(){
@@ -88,7 +91,7 @@ public class Renderer extends Module{
 	}
 
 	void drawMap(){
-	//	camera.zoom = 1f;
+		//	camera.zoom = 1f;
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
@@ -96,13 +99,13 @@ public class Renderer extends Module{
 				if(chunk == null) continue;
 				for(int x = 0;x < World.chunksize;x ++){
 					for(int y = 0;y < World.chunksize;y ++){
-						int worldx =  chunk.worldX() + x;
-						int worldy =  chunk.worldY() + y;
-						
+						int worldx = chunk.worldX() + x;
+						int worldy = chunk.worldY() + y;
+
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
-						
+
 						Tile tile = chunk.tiles[x][y];
-						
+
 						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 					}
@@ -111,8 +114,8 @@ public class Renderer extends Module{
 				}
 
 				if(debug){
-					layer("chunk", World.tilesize*World.chunksize/2 + chunk.worldX() * World.tilesize, World.tilesize*World.chunksize/2 + chunk.worldY() * World.tilesize).setLayer(99999999);
-					layer("", chunk.worldX() * World.tilesize + World.tilesize*World.chunksize/2, chunk.worldY() * World.tilesize + World.tilesize*World.chunksize/2).setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
+					layer("chunk", World.tilesize * World.chunksize / 2 + chunk.worldX() * World.tilesize, World.tilesize * World.chunksize / 2 + chunk.worldY() * World.tilesize).setLayer(99999999);
+					layer("", chunk.worldX() * World.tilesize + World.tilesize * World.chunksize / 2, chunk.worldY() * World.tilesize + World.tilesize * World.chunksize / 2).setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
 				}
 			}
 		}
@@ -121,9 +124,9 @@ public class Renderer extends Module{
 	public void drawGUI(){
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
-		
+
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
-		
+
 		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
 
 		if(debug){
@@ -136,7 +139,7 @@ public class Renderer extends Module{
 			}
 			Tile tile = world.getTile(cursor);
 
-				int i = 0;
+			int i = 0;
 
 			i ++;
 
@@ -162,68 +165,104 @@ public class Renderer extends Module{
 	}
 
 	void drawLayers(){
+		batch.end();
 		layers.sort();
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
+
 		FrameBufferLayer selected = null;
-		//Koru.log("--start--");
+		Koru.log("--start--");
+		//Koru.log("--start-- (begin buffer)");
+		//Gdx.gl.glClearColor(0, 0, 0, 0);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		if(gbuffer) buffers.begin("global");
+
+		batch.begin();
+
+		//buffers.get("test").getColorBufferTexture().bind(FrameBufferLayer.glo);
+
 		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
 
 			boolean ended = false;
-			
-			if(selected != null && (!selected.layerEquals(layer.layer)|| layer.sort != SortType.FLOOR)){
-				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
+
+			if(selected != null && ( !selected.layerEquals(layer) || layer.sort != SortType.FLOOR)){
+				Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
 				endBufferLayer(selected, blayers);
 				selected = null;
 				ended = true;
 			}
-			
+
 			if(selected == null && layer.sort == SortType.FLOOR){
 
 				for(FrameBufferLayer fl : blayers){
-					if(fl.layerEquals(layer.layer)){
-						if(ended) layer.Draw(this);
+					if(fl.layerEquals(layer)){
+						if(ended) layer.draw(this);
+						Koru.log("begin layer " + fl);
 						selected = fl;
-					//	Koru.log("starting buffer " + selected + " " + i  + " layer " + layer.region);
-
-						selected.beginDraw(this, batch, camera, buffers.get(selected.name));
-						batch.end();
-						buffers.begin(selected.name);
-						buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
-						for(Texture t : atlas.getTextures())
-							t.bind(0);
-
-						if(selected.shader != null) batch.setShader(selected.shader);
-						batch.begin();
-						Gdx.gl.glClearColor(0, 0, 0, 0);
-						Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+						beginBufferLayer(selected);
 						break;
 					}
 				}
 			}
-			layer.Draw(this);
+			if(layer.sort == SortType.FLOOR && layer.layer < 2) Koru.log("layer " + layer.region);
+			layer.draw(this);
 		}
 		if(selected != null){
 			endBufferLayer(selected, blayers);
 			selected = null;
 		}
+		//Koru.log("end batch");
+		batch.end();
+
+		//	Koru.log("end buffer");
+		if(gbuffer) buffers.end("global");
+		batch.begin();
+
+		batch.setColor(Color.WHITE);
+		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
+		//endBufferLayer(FrameBufferLayer.global, null);
 		layers.clear();
 	}
 
+	private void beginBufferLayer(FrameBufferLayer selected){
+		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
+		//Koru.log("ending global buffer, starting " + selected);
+
+		//Koru.log("ending batch");
+		batch.end();
+		if(gbuffer) buffers.end("global");
+
+		buffers.begin(selected.name);
+		buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
+		for(Texture t : atlas.getTextures())
+			t.bind(0);
+
+		if(selected.shader != null) batch.setShader(selected.shader);
+		//Koru.log("beginning batch");
+		batch.begin();
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	}
+
 	private void endBufferLayer(FrameBufferLayer selected, Array<FrameBufferLayer> layers){
+		//Koru.log("ending batch");
 		batch.end();
 		if(selected.shader != null) batch.setShader(null);
 		buffers.end(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(0);
+		if(gbuffer) buffers.begin("global");
+		//Koru.log("beginning global buffer, ending " + selected);
+		//Koru.log("beginning batch");
 		batch.begin();
 		selected.end();
 		batch.setColor(Color.WHITE);
-		layers.removeValue(selected, true);
+		if(layers != null) layers.removeValue(selected, true);
 	}
 
 	void updateCamera(){
-		camera.position.set(player.getX(), player.getY(), 0f);
+		camera.position.set((int)player.getX(), (int)(player.getY() + 0.5f), 0f);
 		camera.update();
 	}
 
@@ -264,20 +303,16 @@ public class Renderer extends Module{
 	}
 
 	public void draw(String region, float x, float y){
-		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2);
+		batch.draw(atlas.findRegion(region), (int)(x - atlas.regionWidth(region) / 2), (int)(y - atlas.regionHeight(region) / 2));
 	}
 
 	public void drawc(String region, float x, float y){
-		batch.draw(atlas.findRegion(region), x, y);
+		batch.draw(atlas.findRegion(region), (int)x, (int)y);
 	}
 
 	public void drawscl(String region, float x, float y, float sclx, float scly){
 
-		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2, atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), sclx, scly, 0f);
-	}
-
-	public void drawscl(String region, float x, float y, float scl){
-		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2 * scl, y - atlas.regionHeight(region) / 2 * scl, atlas.regionWidth(region) * scl, atlas.regionHeight(region) * scl);
+		batch.draw(atlas.findRegion(region), (int)(x - atlas.regionWidth(region) / 2), (int)(y - atlas.regionHeight(region) / 2), atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), sclx, scly, 0f);
 	}
 
 	public void draw(String region, float x, float y, float rotation){

@@ -47,13 +47,13 @@ public class Layer implements Comparable<Layer>, Poolable{
 		abstract boolean compare(Layer layer, Layer other);
 	}
 
-	public void Draw(Renderer renderer){
+	public void draw(Renderer renderer){
 		renderer.batch().setColor(color);
 		if(type == LayerType.SPRITE){
 			float yalign = 0;
 			if(alignbottom){
 				TextureRegion tex = renderer.getRegion(region);
-				yalign = tex.getRegionHeight() / 2;
+				yalign = tex.getRegionHeight() / 2f;
 			}
 			if(scaled){
 				renderer.drawscl(region, x, y + yalign, scalex, scaley);
@@ -66,7 +66,7 @@ public class Layer implements Comparable<Layer>, Poolable{
 			float yalign = 0;
 			if(alignbottom){
 				TextureRegion tex = renderer.getRegion(region);
-				yalign = tex.getRegionHeight() / 2;
+				yalign = tex.getRegionHeight() / 2f;
 			}
 			
 			TextureRegion tex = renderer.getRegion(region);
@@ -76,11 +76,11 @@ public class Layer implements Comparable<Layer>, Poolable{
 			sprite.setRegion(tex);
 			sprite.setColor(color);
 
-			sprite.setPosition(x - tex.getRegionWidth() / 2, y + yalign + tex.getRegionHeight() / 2);
+			sprite.setPosition((int)(x - tex.getRegionWidth() / 2), (int)(y + yalign + tex.getRegionHeight() / 2));
 			sprite.setSize(tex.getRegionWidth(), -tex.getRegionHeight());
 			
 			Color c = color.cpy();
-			c.a = 0f;
+			c.a = 0.4f;
 			float bits = c.toFloatBits();
 			
 			sprite.getVertices()[SpriteBatch.C2] = bits;
