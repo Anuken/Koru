@@ -42,7 +42,7 @@ public class Input extends Module implements InputProcessor{
 		
 		if(Gdx.input.isKeyJustPressed(Keys.R)) sendInput(InputType.r);
 		
-		float speed = 10f;
+		float speed = 2f;
 		
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			vector.y += speed;

@@ -171,7 +171,7 @@ public class Renderer extends Module{
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
 
 		FrameBufferLayer selected = null;
-		Koru.log("--start--");
+		//Koru.log("--start--");
 		//Koru.log("--start-- (begin buffer)");
 		//Gdx.gl.glClearColor(0, 0, 0, 0);
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -188,7 +188,7 @@ public class Renderer extends Module{
 			boolean ended = false;
 
 			if(selected != null && ( !selected.layerEquals(layer) || layer.sort != SortType.FLOOR)){
-				Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
+				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
 				endBufferLayer(selected, blayers);
 				selected = null;
 				ended = true;
@@ -199,7 +199,7 @@ public class Renderer extends Module{
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer)){
 						if(ended) layer.draw(this);
-						Koru.log("begin layer " + fl);
+						//Koru.log("begin layer " + fl);
 						selected = fl;
 						beginBufferLayer(selected);
 						break;
@@ -262,7 +262,7 @@ public class Renderer extends Module{
 	}
 
 	void updateCamera(){
-		camera.position.set((int)player.getX(), (int)(player.getY() + 0.5f), 0f);
+		camera.position.set(player.getX(), (player.getY() + 0.5f), 0f);
 		camera.update();
 	}
 

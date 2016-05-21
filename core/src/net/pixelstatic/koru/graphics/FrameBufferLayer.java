@@ -21,50 +21,6 @@ public enum FrameBufferLayer{
 
 		}
 	},
-	/*
-	reflection("reflection", Layer.reflectionlayer){
-		public void end(){
-			batch.setColor(new Color(1, 1, 1, 0.5f));
-			drawFull();
-		}
-
-		protected void loadShader(){
-			//	shader = ShaderLoader.fromFile("default", "reflection");
-		}
-
-		protected void begin(){
-
-			//shader.begin();
-			//shader.setUniformi("water", FrameBufferLayer.water.bind);
-			//shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			//shader.end();
-
-		}
-	},
-	/*
-	water("water", -2){
-		public void end(){
-			batch.setColor(new Color(1, 1, 1, 1f));
-			drawFull();
-		}
-
-		protected void loadShader(){
-			//	shader = ShaderLoader.fromFile("default", "water");
-		}
-
-		protected void begin(){
-			/*
-			shader.begin();
-			shader.setUniformi("reflection", FrameBufferLayer.reflection.bind);
-			//TextureRegion region = renderer.atlas().findRegion("water");
-			//	shader.setUniformf("water", region.getRegionX(), region.getRegionY());
-			///shader.setUniformf("cpos", camera.position.cpy().scl(7f));
-			shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			//shader.setUniformf("time", Gdx.graphics.getFrameId()/60f);
-			shader.end();
-			
-		}
-	},*/
 	global("global", 0){
 		public void end(){
 			drawFull();
