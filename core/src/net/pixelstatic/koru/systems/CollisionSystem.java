@@ -8,6 +8,7 @@ import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.listeners.CollisionHandler;
 import net.pixelstatic.koru.server.KoruUpdater;
+import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Entity;
@@ -25,7 +26,6 @@ public class CollisionSystem extends KoruSystem{
 	private Point point = new Point();
 	private Vector2 vector = new Vector2();
 
-	@SuppressWarnings("unchecked")
 	public CollisionSystem(){
 		super(Family.all(HitboxComponent.class, PositionComponent.class).get());
 		handler = new CollisionHandler();
@@ -94,7 +94,7 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	public Point vectorTerrainCollisions(World world, KoruEntity entity, float mx, float my){
-		/*
+		
 		HitboxComponent component = entity.mapComponent(HitboxComponent.class);
 		float newx = entity.getX() + mx;
 		float newy = entity.getY() + my;
@@ -104,6 +104,7 @@ public class CollisionSystem extends KoruSystem{
 		for(int rx = -1;rx <= 1;rx ++){
 			for(int ry = -1;ry <= 1;ry ++){
 				int worldx = tilex + rx, worldy = tiley + ry;
+				if(!world.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tile(worldx, worldy);
 				if( !tile.solid()) continue;
 				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, rect))){
@@ -113,7 +114,6 @@ public class CollisionSystem extends KoruSystem{
 				//	rect.set(0,0,0,0);
 			}
 		}
-		*/
 		return null;
 	}
 	

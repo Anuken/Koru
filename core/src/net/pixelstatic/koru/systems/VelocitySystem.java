@@ -12,7 +12,6 @@ import com.badlogic.ashley.core.Family;
 public class VelocitySystem extends KoruSystem{
 	private CollisionSystem collisions;
 
-	@SuppressWarnings("unchecked")
 	public VelocitySystem(){
 		super(Family.all(PositionComponent.class, VelocityComponent.class).get());
 	}

@@ -1,13 +1,6 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
-import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
-import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.*;
-
-import com.badlogic.gdx.math.Vector2;
 
 public class HarvestResourceTask extends Task{
 	private final int searchrange = 50;
@@ -28,10 +21,12 @@ public class HarvestResourceTask extends Task{
 
 	@Override
 	protected void update(){
+		/*
 		if(quantitygoal <= 0){
 			finish();
 			return;
 		}
+		
 		World world = KoruUpdater.instance.world;
 		int ex = World.tile(entity.position().x);
 		int ey = World.tile(entity.position().y);
@@ -85,10 +80,11 @@ public class HarvestResourceTask extends Task{
 				break;
 			}
 		}
+		
 		int targetx = ex + nearestx;
 		int targety = ey + nearesty;
 		if(selected.reserved())entity.group().reserveBlock(targetx, targety);
 		this.insertTask(new BreakBlockTask(selected, targetx, targety));
-	
+	*/
 	}
 }

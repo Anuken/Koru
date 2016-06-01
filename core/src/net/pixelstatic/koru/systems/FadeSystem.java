@@ -9,7 +9,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 public class FadeSystem extends IteratingSystem{
 
-	@SuppressWarnings("unchecked")
 	public FadeSystem(){
 		super(Family.all(FadeComponent.class).get());
 	}

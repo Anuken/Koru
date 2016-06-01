@@ -9,7 +9,6 @@ import com.badlogic.ashley.core.Family;
 
 public class BehaviorSystem extends KoruSystem{
 	
-	@SuppressWarnings("unchecked")
 	public BehaviorSystem(){
 		super(Family.all(PositionComponent.class, BehaviorComponent.class).get());
 	}

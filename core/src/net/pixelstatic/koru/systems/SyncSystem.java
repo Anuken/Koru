@@ -15,7 +15,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 
-@SuppressWarnings("unchecked")
 public class SyncSystem extends IteratingSystem{
 	Family family = Family.all(SyncComponent.class).get();
 

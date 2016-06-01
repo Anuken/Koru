@@ -17,12 +17,12 @@ public class BreakBlockTask extends Task{
 		blockx = x;
 		blocky = y;
 		this.material = material;
-		if(this.material == null) this.material = World.instance().tiles[blockx][blocky].block;
+	//	if(this.material == null) this.material = World.instance().tiles[blockx][blocky].block;
 	}
 	
 	@Override
 	protected void update(){
-		if(!World.inBounds(blockx, blocky) || entity.group().isBaseBlock(material, blockx, blocky)){ 
+		if(!World.instance().inBounds(blockx, blocky) || entity.group().isBaseBlock(material, blockx, blocky)){ 
 			finish();
 			return;
 		}
@@ -40,12 +40,12 @@ public class BreakBlockTask extends Task{
 		
 		World world = KoruUpdater.instance.world;
 		
-		if((world.tiles[blockx][blocky].block == material && world.tiles[blockx][blocky].tile == material)){
-			finish();
-			return;
-		}
+	////	if((world.tiles[blockx][blocky].block == material && world.tiles[blockx][blocky].tile == material)){
+		//	finish();
+		//	return;
+		//}
 		
-		material.harvestEvent(world.tiles[blockx][blocky]);
+	//	material.harvestEvent(world.tiles[blockx][blocky]);
 		Effects.blockParticle(blockx, blocky, material);
 		world.updateTile(blockx, blocky);
 		entity.mapComponent(InventoryComponent.class).addItems(material.getDrops());

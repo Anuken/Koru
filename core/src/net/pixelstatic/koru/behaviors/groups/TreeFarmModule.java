@@ -8,7 +8,6 @@ import net.pixelstatic.koru.behaviors.tasks.PlaceBlockTask;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.PinetreeTileData;
-import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.utils.Array;
 
@@ -28,7 +27,7 @@ public class TreeFarmModule extends GroupModule{
 				for(int y = -size; y <= size; y ++){
 					int worldx = water.x + x;
 					int worldy = water.y + y;
-					if( !World.inBounds(worldx, worldy)) continue;
+					if( !world.inBounds(worldx, worldy)) continue;
 					if( !world.blockSolid(worldx, worldy)){
 						if(worldy % 2 == 0){
 							group.addPoint(PointType.treefarm, worldx, worldy);

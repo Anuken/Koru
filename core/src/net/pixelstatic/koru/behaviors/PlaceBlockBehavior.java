@@ -21,14 +21,14 @@ public class PlaceBlockBehavior extends Behavior{
 
 	@Override
 	protected void update(){
-		if(!World.inBounds(x, y)) return;
+		//if(!World.inBounds(x, y)) return;
 		float tx = x*12+6, ty = y*12+6;
 		entity.mapComponent(VelocityComponent.class).velocity.set(tx - entity.getX(), ty - entity.getY())
 		.setLength(0.5f);
 		
 		if(placed){
 			World world = KoruUpdater.instance.world;
-			world.tiles[x][y].block = material;
+			//world.tiles[x][y].block = material;
 			world.updateTile(x, y);
 			removeSelf();
 			return;

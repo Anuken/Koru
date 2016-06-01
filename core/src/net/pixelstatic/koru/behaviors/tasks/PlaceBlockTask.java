@@ -1,17 +1,11 @@
 package net.pixelstatic.koru.behaviors.tasks;
 
-
-import net.pixelstatic.koru.components.InventoryComponent;
-import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.MaterialType;
-import net.pixelstatic.koru.world.World;
 
-import com.badlogic.gdx.math.Vector2;
+
 
 public class PlaceBlockTask extends Task{
+	
 	final int x, y;
 	final Material material;
 	private boolean waited = false;
@@ -31,6 +25,7 @@ public class PlaceBlockTask extends Task{
 
 	@Override
 	protected void update(){
+		/*
 		World world = KoruUpdater.instance.world;
 		if(!World.inBounds(x, y)){
 			finish();
@@ -89,5 +84,7 @@ public class PlaceBlockTask extends Task{
 		entity.group().registerBlock(entity, material, x, y);
 		entity.group().unreserveBlock(x, y);
 		finish();
+		*/
 	}
+	
 }

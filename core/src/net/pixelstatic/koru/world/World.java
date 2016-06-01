@@ -17,7 +17,7 @@ import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
-import net.pixelstatic.utils.Util;
+import net.pixelstatic.utils.MiscUtils;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -96,7 +96,7 @@ public class World extends Module{
 			
 			for(int x = 0;x < loadrange * 2;x ++){
 				for(int y = 0;y < loadrange * 2;y ++){
-					if(!Util.inBounds(x + sx, y + sy, chunks)){
+					if(!MiscUtils.inBounds(x + sx, y + sy, chunks)){
 						chunks[x][y] = null;
 						continue;
 					}
@@ -246,12 +246,13 @@ public class World extends Module{
 	}
 
 	public boolean inBounds(int x, int y){
+		if(KoruServer.active) return true;
 		int tx = tile(renderer.camera.position.x);
 		int ty = tile(renderer.camera.position.y);
 		if(Math.abs(tx - x) >= loadrange * chunksize - 1 || Math.abs(ty - y) >= loadrange * chunksize - 1) return false;
 		int ax = x / chunksize - tx / chunksize + loadrange;
 		int ay = y / chunksize - ty / chunksize + loadrange;
-		if( !Util.inBounds(ax, ay, chunks)){ 
+		if( !MiscUtils.inBounds(ax, ay, chunks)){ 
 			return false;
 		}
 		if(getRelativeChunk(x, y) == null) return false;
@@ -263,7 +264,7 @@ public class World extends Module{
 		if(y < -1) y ++;
 		int ax = nint((float)x / chunksize) - lastchunkx + loadrange;
 		int ay = nint((float)y / chunksize) - lastchunky + loadrange;
-		if(!Util.inBounds(ax, ay, chunks)) return null;
+		if(!MiscUtils.inBounds(ax, ay, chunks)) return null;
 		return chunks[ax][ay];
 	}
 

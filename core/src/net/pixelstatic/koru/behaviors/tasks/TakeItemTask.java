@@ -3,7 +3,6 @@ package net.pixelstatic.koru.behaviors.tasks;
 import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.math.Vector2;
@@ -28,13 +27,10 @@ public class TakeItemTask extends Task{
 		}
 
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
-		if(!inventory.hasItem(stack)){
-		//	finish();
-		//	return;
-		}
-		world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.removeItem(stack);
+
+		//world.tiles[blockx][blocky].getBlockData(InventoryTileData.class).inventory.removeItem(stack);
 		inventory.addItem(stack);
-		entity.group().updateStorage(world.tiles[blockx][blocky], stack, false);
+		//entity.group().updateStorage(world.tiles[blockx][blocky], stack, false);
 		world.updateTile(blockx, blocky);
 		finish();
 	}

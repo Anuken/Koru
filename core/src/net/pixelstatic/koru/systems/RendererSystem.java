@@ -11,7 +11,6 @@ public class RendererSystem extends KoruSystem{
 	public static boolean renderHitboxes = false;
 	Renderer renderer;
 
-	@SuppressWarnings("unchecked")
 	public RendererSystem(Renderer renderer){
 		super(Family.all(PositionComponent.class, RenderComponent.class)/*.exclude(ProjectileComponent.class, ConnectionComponent.class)*/.get(), 10);
 		this.renderer = renderer;

@@ -249,11 +249,11 @@ public class Group{
 		public PointState state = PointState.none;
 
 		public Material block(){
-			return World.instance().tiles[x][y].block;
+			return World.instance().tile(x,y).block;
 		}
 
 		public Tile tile(){
-			return World.instance().tiles[x][y];
+			return World.instance().tile(x,y);
 		}
 
 		public boolean reserved(){

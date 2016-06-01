@@ -4,8 +4,6 @@ import net.pixelstatic.koru.components.InventoryComponent;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.Material;
-import net.pixelstatic.koru.world.TreeTileData;
 import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.math.Vector2;
@@ -21,12 +19,12 @@ public class GrowPlantTask extends Task{
 	@Override
 	protected void update(){
 		World world = KoruUpdater.instance.world;
-		Material material = world.tiles[blockx][blocky].block;
-		if(!material.growable()){
+		//Material material = world.tiles[blockx][blocky].block;
+		//if(!material.growable()){
 			//Koru.log("Critical error: lel");
-			finish();
-			return;
-		}
+		//	finish();
+		//	return;
+		//}
 		
 		InventoryComponent inventory = entity.mapComponent(InventoryComponent.class);
 		
@@ -41,7 +39,7 @@ public class GrowPlantTask extends Task{
 			return;
 		}
 		
-		world.tiles[blockx][blocky].getBlockData(TreeTileData.class).addWater();
+	//	world.tiles[blockx][blocky].getBlockData(TreeTileData.class).addWater();
 		world.updateTile(blockx, blocky);
 		inventory.removeItem(water);
 		finish();

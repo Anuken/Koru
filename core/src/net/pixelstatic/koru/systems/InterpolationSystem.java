@@ -9,7 +9,6 @@ import com.badlogic.ashley.core.Family;
 
 public class InterpolationSystem extends KoruSystem{
 
-	@SuppressWarnings("unchecked")
 	public InterpolationSystem(){
 		super(Family.all(SyncComponent.class, PositionComponent.class).get());
 	}

@@ -5,7 +5,6 @@ import net.pixelstatic.koru.components.VelocityComponent;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
 import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.Material;
 import net.pixelstatic.koru.world.World;
 
 import com.badlogic.gdx.math.Vector2;
@@ -36,7 +35,7 @@ public class ChopTreeBehavior extends Behavior{
 				return;
 			}
 			World world = KoruUpdater.instance.world;
-			world.tiles[targetx][targety].block = Material.air;
+			//world.tiles[targetx][targety].block = Material.air;
 			world.updateTile(targetx, targety);
 			broke = false;
 			
@@ -46,13 +45,6 @@ public class ChopTreeBehavior extends Behavior{
 				this.component().insertBehavior(0, new GroupBehavior());
 				removeSelf();
 			}
-		}
-		
-		if(Math.random() < 0.001){
-	//	KoruEntity entity = new KoruEntity(EntityType.testmonster);
-		//	entity.position().set(this.entity.position());
-		//	entity.position().add(MathUtils.random(-60, 60),  MathUtils.random(-60, 60));
-		//	entity.addSelf().sendSelf();
 		}
 	}
 	
@@ -69,15 +61,15 @@ public class ChopTreeBehavior extends Behavior{
 		for(int x = -searchrange; x <= searchrange; x ++){
 			for(int y = -searchrange; y <= searchrange; y ++){
 				int worldx = ex + x, worldy = ey + y;
-				if(!World.inBounds(worldx, worldy)) continue;
-				if(world.tiles[worldx][worldy].block.breakable()){
+				//if(!World.inBounds(worldx, worldy)) continue;
+				//if(world.tiles[worldx][worldy].block.breakable()){
 					float dist = Vector2.dst(0, 0, x, y);
 					if(dist < closest){
 						nearestx = x;
 						nearesty = y;
 						closest = dist;
 					}
-				}
+				//}
 			}
 		}
 		targetx = ex+nearestx;

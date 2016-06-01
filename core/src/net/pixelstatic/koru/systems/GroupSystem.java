@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class GroupSystem extends KoruSystem{
 
-	@SuppressWarnings("unchecked")
 	public GroupSystem(){
 		super(Family.all(GroupComponent.class).exclude(PositionComponent.class).get());
 	}
