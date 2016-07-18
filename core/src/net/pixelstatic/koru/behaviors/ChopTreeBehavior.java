@@ -53,14 +53,14 @@ public class ChopTreeBehavior extends Behavior{
 	}
 	
 	private void targetTree(){
-		World world = KoruUpdater.instance.world;
+		//World world = KoruUpdater.instance.world;
 		int ex= World.tile(entity.position().x);
 		int ey = World.tile(entity.position().y);
 		int nearestx = -1, nearesty = -1;
 		float closest = Float.MAX_VALUE;
 		for(int x = -searchrange; x <= searchrange; x ++){
 			for(int y = -searchrange; y <= searchrange; y ++){
-				int worldx = ex + x, worldy = ey + y;
+				//int worldx = ex + x, worldy = ey + y;
 				//if(!World.inBounds(worldx, worldy)) continue;
 				//if(world.tiles[worldx][worldy].block.breakable()){
 					float dist = Vector2.dst(0, 0, x, y);

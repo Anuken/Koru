@@ -8,7 +8,7 @@ public class PlaceBlockTask extends Task{
 	
 	final int x, y;
 	final Material material;
-	private boolean waited = false;
+	//private boolean waited = false;
 
 	public PlaceBlockTask(int x, int y, Material material){
 		this.x = x;

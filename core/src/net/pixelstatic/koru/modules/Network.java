@@ -6,9 +6,9 @@ import net.pixelstatic.koru.components.SyncComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
-import net.pixelstatic.koru.sprites.Layer;
 import net.pixelstatic.koru.utils.Angles;
 import net.pixelstatic.koru.world.World;
+import net.pixelstatic.utils.modules.Module;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -18,7 +18,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-public class Network extends Module{
+public class Network extends Module<Koru>{
 	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
 	public static final int port = 7575;
 	public static final int ping = 0;
@@ -30,13 +30,6 @@ public class Network extends Module{
 	public Client client;
 
 	public void init(){
-		
-		Layer l1 = getModule(Renderer.class).layer("", 10, 10).setTile(2);
-
-		Layer l2 = getModule(Renderer.class).layer("", 10, 10).yLayer();
-		
-		Koru.log("l1 compare l2: " + l1.compareTo(l2));
-		Koru.log("l2 compare l1: " + l2.compareTo(l1));
 		
 		try{
 			int buffer = (int)Math.pow(2, 6);
@@ -63,7 +56,7 @@ public class Network extends Module{
 				if(object instanceof DataPacket){
 					DataPacket data = (DataPacket)object;
 
-					koru.engine.removeAllEntities();
+					t.engine.removeAllEntities();
 					Koru.log("Recieved " + data.entities.size() + " entities.");
 					for(Entity entity : data.entities){
 						queue.add((KoruEntity)entity);
@@ -74,7 +67,7 @@ public class Network extends Module{
 				}else if(object instanceof WorldUpdatePacket){
 					WorldUpdatePacket packet = (WorldUpdatePacket)object;
 					for(Long key : packet.updates.keySet()){
-						KoruEntity entity = koru.engine.getEntity(key);
+						KoruEntity entity = t.engine.getEntity(key);
 						if(entity == null) continue;
 						entity.mapComponent(SyncComponent.class).type.read(packet.updates.get(key), entity);
 					}
@@ -112,7 +105,7 @@ public class Network extends Module{
 		}
 		
 		for(Long id : entitiesToRemove){
-			koru.engine.removeEntity(id);
+			t.engine.removeEntity(id);
 		}
 		
 		if(entitiesToRemove.size > 10) entitiesToRemove.clear();
@@ -136,9 +129,4 @@ public class Network extends Module{
 	public boolean initialconnect(){
 		return initialconnect;
 	}
-
-	public Network(Koru k){
-		super(k);
-	}
-
 }

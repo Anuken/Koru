@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.modules.Module;
 import net.pixelstatic.koru.modules.Network;
 import net.pixelstatic.koru.modules.Renderer;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
@@ -18,6 +17,7 @@ import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
 import net.pixelstatic.utils.MiscUtils;
+import net.pixelstatic.utils.modules.Module;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -25,7 +25,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
-public class World extends Module{
+public class World extends Module<Koru>{
 	public static final int chunksize = 16;
 	public static final int loadrange = 2;
 	public static final int tilesize = 12;
@@ -33,7 +33,7 @@ public class World extends Module{
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
-	private volatile WorldFile file;
+	private WorldFile file;
 	private Renderer renderer;
 	public Generator generator;
 	Network network;
@@ -43,8 +43,7 @@ public class World extends Module{
 	boolean[][] chunkloaded;
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
 
-	public World(Koru k){
-		super(k);
+	public World(){
 		if( !KoruServer.active){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
@@ -64,9 +63,10 @@ public class World extends Module{
 		    }
 		});
 	}
-
-	public World(){
-		this(null);
+	
+	public World(KoruServer server){
+		this();
+		this.server = server;
 	}
 
 	@Override
@@ -167,11 +167,6 @@ public class World extends Module{
 
 	public static World instance(){
 		return KoruUpdater.instance.world;
-	}
-
-	public World(KoruServer server, boolean kek){
-		this(null);
-		this.server = server;
 	}
 
 	public Tile getTile(Point point){

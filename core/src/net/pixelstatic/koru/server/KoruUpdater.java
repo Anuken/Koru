@@ -71,7 +71,7 @@ public class KoruUpdater{
 	public KoruUpdater(KoruServer server){
 		instance = this;
 		this.server = server;
-		world = new World(server, true);
+		world = new World(server);
 		generator = new Generator(world);
 		world.generator = generator;
 		generator.generateSpawn();

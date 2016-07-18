@@ -3,7 +3,6 @@ package net.pixelstatic.koru.systems;
 import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.koru.sprites.Layer;
 
 import com.badlogic.ashley.core.Family;
 
@@ -30,19 +29,19 @@ public class RendererSystem extends KoruSystem{
 
 	void addFade(KoruEntity entity, RenderComponent render){
 		FadeComponent fade = entity.mapComponent(FadeComponent.class);
-		for(Layer layer : render.layers.values()){
-			if(fade != null && fade.render) layer.color.a = 1f - fade.life / fade.lifetime;
-		}
+		//for(Layer layer : render.layers.values()){
+		//	if(fade != null && fade.render) layer.color.a = 1f - fade.life / fade.lifetime;
+		//}
 	}
 
 	public void renderHitboxes(KoruEntity entity, RenderComponent render){
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox != null){
 			hitbox.terrainhitbox.update(entity);
-			renderer.layer("hitbox", hitbox.terrainRect().x, hitbox.terrainRect().y).setShape(hitbox.terrainRect().width, hitbox.terrainRect().height).setLayer(999999999);
+		//	renderer.layer("hitbox", hitbox.terrainRect().x, hitbox.terrainRect().y).setShape(hitbox.terrainRect().width, hitbox.terrainRect().height).setLayer(999999999);
 
 			hitbox.entityhitbox.update(entity);
-			renderer.layer("hitbox2", hitbox.entityRect().x, hitbox.entityRect().y).setShape(hitbox.entityRect().width, hitbox.entityRect().height).setLayer(99999999);
+		//	renderer.layer("hitbox2", hitbox.entityRect().x, hitbox.entityRect().y).setShape(hitbox.entityRect().width, hitbox.entityRect().height).setLayer(99999999);
 		}
 	}
 }

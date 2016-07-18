@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.entities;
 
 import net.pixelstatic.koru.components.*;
-import net.pixelstatic.koru.sprites.Layer;
+import net.pixelstatic.utils.spritesystem.Renderable;
 
 public enum ProjectileType{
 	bolt;
@@ -17,9 +17,9 @@ public enum ProjectileType{
 	public void draw(KoruEntity entity, RenderComponent render){
 		//render.layers.update(entity.getX(), entity.getY());
 		float x = entity.getX(), y = entity.getY();
-		for(Layer layer : render.layers.values()){
-			layer.update(x, y);
-			layer.rotation = entity.mapComponent(ProjectileComponent.class).getRotation() - 45;
+		for(Renderable renderable : render.group.list()){
+			//layer.update(x, y);
+			//layer.rotation = entity.mapComponent(ProjectileComponent.class).getRotation() - 45;
 		}
 	}
 	

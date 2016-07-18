@@ -12,7 +12,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
 
 public class WaitUntilEmptyTask extends Task{
-	@SuppressWarnings("unchecked")
 	private Family family = Family.all(HitboxComponent.class).get();
 	private Rectangle rect = new Rectangle();
 	public final Material material;

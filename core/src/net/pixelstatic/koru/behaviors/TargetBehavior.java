@@ -9,14 +9,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
-@SuppressWarnings("unchecked")
 public class TargetBehavior extends Behavior{
 	static Family family = Family.all(HealthComponent.class).get();
 	static final int targetTime = 10;
 	public float targetrange = 100f;
 	public EntityType targetType;
 	public KoruEntity target;
-	
+
 	@Override
 	protected void update(){
 		if(KoruUpdater.frameID() % targetTime != 0) return;
@@ -34,15 +33,15 @@ public class TargetBehavior extends Behavior{
 				}
 			}
 		}
-		
-		target = closest;	
+
+		target = closest;
 	}
-	
+
 	public TargetBehavior setRange(float range){
 		targetrange = range;
 		return this;
 	}
-	
+
 	public TargetBehavior setType(EntityType type){
 		targetType = type;
 		return this;

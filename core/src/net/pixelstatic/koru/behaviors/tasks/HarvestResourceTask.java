@@ -3,16 +3,16 @@ package net.pixelstatic.koru.behaviors.tasks;
 import net.pixelstatic.koru.items.Item;
 
 public class HarvestResourceTask extends Task{
-	private final int searchrange = 50;
-	private int quantitygoal = 1; // how many blocks to harvest until it stops
-	private final Item item; // goal item
-	private final boolean usechests;
+	//private final int searchrange = 50;
+	//private int quantitygoal = 1; // how many blocks to harvest until it stops
+	//private final Item item; // goal item
+	//private final boolean usechests;
 
 
 	public HarvestResourceTask(Item item, int goal, boolean usechests){
-		this.item = item;
-		this.quantitygoal = goal;
-		this.usechests = usechests;
+		//this.item = item;
+		//this.quantitygoal = goal;
+		//this.usechests = usechests;
 	}
 	
 	public HarvestResourceTask(Item item, int goal){

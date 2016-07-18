@@ -6,14 +6,13 @@ import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
-import net.pixelstatic.koru.sprites.*;
-import net.pixelstatic.koru.sprites.Layer.LayerType;
-import net.pixelstatic.koru.sprites.Layer.SortType;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.graphics.Atlas;
 import net.pixelstatic.utils.graphics.FrameBufferMap;
 import net.pixelstatic.utils.graphics.GifRecorder;
+import net.pixelstatic.utils.modules.Module;
+import net.pixelstatic.utils.spritesystem.RenderableList;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -23,7 +22,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 
-public class Renderer extends Module{
+public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
 	public static final int viewrangey = 15;
 	public final float GUIscale = 5f;
@@ -31,7 +30,6 @@ public class Renderer extends Module{
 	public World world;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
-	public PooledLayerList layers;
 	public Atlas atlas;
 	public Matrix4 matrix;
 	public GlyphLayout layout;
@@ -43,14 +41,11 @@ public class Renderer extends Module{
 
 	public KoruEntity player;
 
-	public Renderer(Koru k){
-		super(k);
-		SpriteLayer.renderer = this;
+	public Renderer(){
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
 		atlas = new Atlas(Gdx.files.internal("sprites/koru.pack"));
-		layers = new PooledLayerList();
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
@@ -58,7 +53,6 @@ public class Renderer extends Module{
 		buffers = new FrameBufferMap();
 		recorder = new GifRecorder(batch, 1f / GUIscale);
 		FrameBufferLayer.loadShaders();
-		Layer.atlas = this.atlas;
 
 		if(gbuffer) buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 	}
@@ -81,7 +75,7 @@ public class Renderer extends Module{
 	void doRender(){
 		batch.begin();
 		drawMap();
-		drawLayers();
+		RenderableList.getInstance().renderAll(batch);
 		batch.end();
 		batch.setProjectionMatrix(matrix);
 		batch.begin();
@@ -109,13 +103,7 @@ public class Renderer extends Module{
 						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 					}
-					if(debug) layer("", chunk.worldX() * World.tilesize + x * 12, chunk.worldY() * World.tilesize).setType(LayerType.TEXT).setText("" + (x)).setLayer(999999999);
-
-				}
-
-				if(debug){
-					layer("chunk", World.tilesize * World.chunksize / 2 + chunk.worldX() * World.tilesize, World.tilesize * World.chunksize / 2 + chunk.worldY() * World.tilesize).setLayer(99999999);
-					layer("", chunk.worldX() * World.tilesize + World.tilesize * World.chunksize / 2, chunk.worldY() * World.tilesize + World.tilesize * World.chunksize / 2).setType(LayerType.TEXT).setText("chunk " + chunk.x + ", " + chunk.y).setLayer(99999999);
+					
 				}
 			}
 		}
@@ -152,7 +140,7 @@ public class Renderer extends Module{
 				i += data.inventory.inventory[0].length;
 			}
 
-			for(Entity e : koru.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
+			for(Entity e : t.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
 				KoruEntity entity = (KoruEntity)e;
 				if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
 					font.draw(batch, entity.getID() + "", cx, cy + i * 5);
@@ -163,7 +151,7 @@ public class Renderer extends Module{
 		}
 
 	}
-
+	/*
 	void drawLayers(){
 		batch.end();
 		layers.sort();
@@ -216,8 +204,9 @@ public class Renderer extends Module{
 
 		batch.setColor(Color.WHITE);
 		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
-			layers.clear();
+		
 	}
+	*/
 
 	private void beginBufferLayer(FrameBufferLayer selected){
 		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
@@ -282,10 +271,6 @@ public class Renderer extends Module{
 	//returns screen height / scale
 	public float gheight(){
 		return Gdx.graphics.getHeight() / GUIscale;
-	}
-
-	public Layer layer(String region, float x, float y){
-		return layers.getLayer().add().setTemp().set(region, x, y);
 	}
 
 	public void draw(String region, float x, float y){

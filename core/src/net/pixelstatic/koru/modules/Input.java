@@ -12,6 +12,7 @@ import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.utils.InputType;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
+import net.pixelstatic.utils.modules.Module;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;
@@ -19,14 +20,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class Input extends Module implements InputProcessor{
+public class Input extends Module<Koru> implements InputProcessor{
 	private Vector2 vector = new Vector2();
 	CollisionSystem collisions;
 	KoruEntity player;
-
-	public Input(Koru k){
-		super(k);
-	}
 	
 	public void init(){
 		Gdx.input.setInputProcessor(this);

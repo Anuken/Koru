@@ -2,7 +2,6 @@ package net.pixelstatic.koru.systems;
 
 import net.pixelstatic.koru.components.RenderComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.koru.sprites.Layer;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -20,8 +19,7 @@ public class MapListener implements EntityListener{
 	@Override
 	public void entityRemoved(Entity entity){
 		RenderComponent render = entity.getComponent(RenderComponent.class);
-		if(render != null) for(Layer layer : render.layers.values())
-			layer.free();
+		if(render != null) render.group.free();
 
 		entities.remove(((KoruEntity)entity).getID());
 
