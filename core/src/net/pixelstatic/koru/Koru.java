@@ -5,8 +5,9 @@ import net.pixelstatic.koru.systems.InterpolationSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.RendererSystem;
 import net.pixelstatic.koru.world.World;
-import net.pixelstatic.utils.modules.Module;
 import net.pixelstatic.utils.modules.ModuleController;
+
+import com.badlogic.gdx.Gdx;
 
 public class Koru extends ModuleController<Koru>{
 	private static Koru instance;
@@ -28,13 +29,16 @@ public class Koru extends ModuleController<Koru>{
 		engine.addSystem(new RendererSystem(getModule(Renderer.class)));
 
 		engine.addSystem(new InterpolationSystem());
-		//engine.addSystem(new ProjectileRenderSystem());
-		//engine.addSystem(new PlayerRenderSystem());
-		//engine.addSystem(new IndicatorRenderSystem());
-
-		for(Module<?> m : modules.values())
-			m.init();
-
+	}
+	
+	@Override
+	public void render(){
+		try{
+		super.render();
+		}catch (Exception e){
+			e.printStackTrace();
+			Gdx.app.exit();
+		}
 	}
 
 	public static void log(Object o){

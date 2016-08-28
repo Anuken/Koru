@@ -207,9 +207,7 @@ public class World extends Module<Koru>{
 	}
 
 	public boolean blends(int x, int y, Material material){
-		//if(!inBounds(x,y, 1)) return false;
-		return true;
-	//	return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
+		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
 	public boolean isType(int x, int y, Material material){

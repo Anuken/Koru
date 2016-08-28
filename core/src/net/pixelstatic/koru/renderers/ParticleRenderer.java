@@ -41,11 +41,11 @@ public class ParticleRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){
-		render.layers.update(entity.getX(), entity.getY());
-		if(render.layers.layer("particle").particle.isComplete()){
-			entity.removeSelf();
-			render.layers.layer("particle").particle.free();
-		}
+		//render.layers.update(entity.getX(), entity.getY());
+		//if(render.layers.layer("particle").particle.isComplete()){
+		//	entity.removeSelf();
+		//	render.layers.layer("particle").particle.free();
+		//}
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class ParticleRenderer extends EntityRenderer{
 		value[4] = end.g;
 		value[5] = end.b;
 
-		render.layers.layer("particle").setParticle(particle);
+		//render.layers.layer("particle").setParticle(particle);
 	}
 
 }

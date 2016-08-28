@@ -25,6 +25,7 @@ public class Network extends Module<Koru>{
 	public static final int packetFrequency = 3;
 	private boolean connected = true;
 	private boolean initialconnect = false;
+	private boolean chunksAdded = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	public Client client;
@@ -74,6 +75,7 @@ public class Network extends Module<Koru>{
 				}else if(object instanceof ChunkPacket){
 					ChunkPacket packet = (ChunkPacket)object;
 					getModule(World.class).loadChunks(packet);
+					chunksAdded = true;
 				}else if(object instanceof TileUpdatePacket){
 					TileUpdatePacket packet = (TileUpdatePacket)object;
 					if(getModule(World.class).inBounds(packet.x, packet.y))
@@ -106,6 +108,11 @@ public class Network extends Module<Koru>{
 		
 		for(Long id : entitiesToRemove){
 			t.engine.removeEntity(id);
+		}
+		
+		if(chunksAdded){
+			getModule(Renderer.class).updateTiles();
+			chunksAdded = false;
 		}
 		
 		if(entitiesToRemove.size > 10) entitiesToRemove.clear();

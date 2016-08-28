@@ -11,7 +11,7 @@ public class ProjectileRenderer extends EntityRenderer{
 
 	@Override
 	protected void initRender(){
-		render.layer("bolt");
+		//render.layer("bolt");
 	}
 
 }

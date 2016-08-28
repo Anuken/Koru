@@ -1,5 +1,7 @@
 package net.pixelstatic.koru.modules;
 
+import net.pixelstatic.gdxutils.graphics.Atlas;
+import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.components.PositionComponent;
@@ -8,10 +10,9 @@ import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
-import net.pixelstatic.utils.graphics.Atlas;
-import net.pixelstatic.utils.graphics.FrameBufferMap;
-import net.pixelstatic.utils.graphics.GifRecorder;
+import net.pixelstatic.utils.io.GifRecorder;
 import net.pixelstatic.utils.modules.Module;
+import net.pixelstatic.utils.spritesystem.RenderableGroup;
 import net.pixelstatic.utils.spritesystem.RenderableList;
 
 import com.badlogic.ashley.core.Entity;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
 	public static final int viewrangey = 15;
+	public static Renderer i;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
 	public World world;
@@ -38,10 +40,12 @@ public class Renderer extends Module<Koru>{
 	public FrameBufferMap buffers;
 	public boolean debug = false;
 	public final boolean gbuffer = false;
-
 	public KoruEntity player;
+	public RenderableGroup[][] renderables = new RenderableGroup[World.chunksize*World.loadrange*2][World.chunksize*World.loadrange*2];
+	public int lastcamx, lastcamy;
 
 	public Renderer(){
+		i = this;
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
@@ -85,8 +89,20 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void drawMap(){
-		//	camera.zoom = 1f;
+		
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
+		
+		if(lastcamx != camx || lastcamy != camy){
+			updateTiles();
+		}
+		
+		lastcamx = camx;
+		lastcamy = camy;
+	}
+	
+	public void updateTiles(){
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
+		
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
 				Chunk chunk = world.chunks[chunkx][chunky];
@@ -95,13 +111,31 @@ public class Renderer extends Module<Koru>{
 					for(int y = 0;y < World.chunksize;y ++){
 						int worldx = chunk.worldX() + x;
 						int worldy = chunk.worldY() + y;
-
+						int rendx = chunkx*World.chunksize+x, rendy = chunky*World.chunksize+y;
+						
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
 
 						Tile tile = chunk.tiles[x][y];
+						
+						if(renderables[rendx][rendy] != null){
+							renderables[rendx][rendy].free();
+						}else{
+							renderables[rendx][rendy] = new RenderableGroup();
+						}
+						
+						if(tile.tile != Material.air){
+							tile.tile.getType().draw(renderables[rendx][rendy], tile.tile, tile, worldx, worldy);
+						}
+						
+						if(tile.block != Material.air){
+							tile.block.getType().draw(renderables[rendx][rendy], tile.block, tile, worldx, worldy);
+						}
+					//	if(){
+							
+						//}
 
-						if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
-						if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
+						//if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
+						//if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 					}
 					
 				}
@@ -238,7 +272,7 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void updateCamera(){
-		camera.position.set((int)player.getX(), (int)(player.getY()), 0f);
+		camera.position.set(player.getX(), (player.getY()), 0f);
 		camera.update();
 	}
 
