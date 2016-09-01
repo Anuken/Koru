@@ -3,7 +3,8 @@ package net.pixelstatic.koru.world;
 
 import net.pixelstatic.gdxutils.graphics.Hue;
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.utils.spritesystem.RenderableGroup;
+import net.pixelstatic.utils.spritesystem.RenderableList;
+import net.pixelstatic.utils.spritesystem.SortProviders;
 import net.pixelstatic.utils.spritesystem.SpriteRenderable;
 
 import com.badlogic.gdx.graphics.Color;
@@ -17,11 +18,18 @@ public enum MaterialType{
 			if(this.world.blends(x, y, material)) renderer.layer(material.name() + "edge", tile(x), tile(y)).setTile(material.ordinal()).layer--;
 		}
 		*/
-		public void draw(RenderableGroup group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			//System.out.println(Renderer.i.getRegion(material.name()));
 			
-			group.add("tile", new SpriteRenderable(Renderer.i.getRegion(material.name())).setPosition(x*World.tilesize, y*World.tilesize));
-			if(Renderer.i.world.blends(x, y, material)) group.add("blend", new SpriteRenderable(Renderer.i.getRegion(material.name()+ "edge")).setPosition(x*World.tilesize-2, y*World.tilesize-2));
+			
+			new SpriteRenderable(Renderer.i.getRegion(material.name()))
+			.setPosition(x*World.tilesize, y*World.tilesize)
+			.setLayer(-material.ordinal()*2).add(group);
+			
+			if(Renderer.i.world.blends(x, y, material)) 
+			new SpriteRenderable(Renderer.i.getRegion(material.name()+ "edge"))
+			.setPosition(x*World.tilesize-2, y*World.tilesize-2)
+			.setLayer(-material.ordinal()*2+1).add(group);
 
 		}
 	},
@@ -103,7 +111,17 @@ public enum MaterialType{
 			renderer.layer(/*material.name()"pinetree2", tile(x), tile(y)).yLayer(false).addBlobShadow(-3).addReflection();;
 			renderer.layer(/*material.name()"pinetree2roots", tile(x)+1, tile(y)-3).setTile(130);
 		}
-*/
+*/		
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			//System.out.println(Renderer.i.getRegion(material.name()));
+			
+			
+			new SpriteRenderable(Renderer.i.getRegion(material.name()))
+			.setPosition(x*World.tilesize, y*World.tilesize)
+			.addShadow(group, Renderer.i.atlas)
+			.setProvider(SortProviders.object).add(group);
+
+		}
 		public boolean tile(){
 			return false;
 		}
@@ -123,7 +141,18 @@ public enum MaterialType{
 		public void draw(Material material, Tile tile, int x, int y, Renderer renderer){
 			renderer.layer(material.name(), tile(x), tile(y)).setColor(tile.tile.foilageColor()).yLayer();
 		}
-*/
+		
+		
+*/		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			
+			new SpriteRenderable(Renderer.i.getRegion(material.name()))
+			.setPosition(x*World.tilesize, y*World.tilesize)
+			.setColor(tile.tile.foilageColor())
+			.addShadow(group, Renderer.i.atlas)
+			.setProvider(SortProviders.object)
+			.add(group);
+		}
+
 		public boolean tile(){
 			return false;
 		}
@@ -139,7 +168,7 @@ public enum MaterialType{
 		this.color = color;
 	}
 	
-	public void draw(RenderableGroup group, Material material, Tile tile, int x, int y){
+	public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 		
 	}
 	

@@ -1,18 +1,19 @@
 package net.pixelstatic.koru.graphics;
 
 import net.pixelstatic.koru.modules.Renderer;
+import net.pixelstatic.utils.spritesystem.Renderable;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 
 public enum FrameBufferLayer{
-	shadow("shadow", Layers.shadowlayer){
+	shadow("shadow", -999999){
 		public void end(){
 			batch.setColor(Layers.shadowcolor);
 			drawFull();
-
 		}
 
 		protected void begin(){
@@ -38,9 +39,9 @@ public enum FrameBufferLayer{
 
 	abstract protected void begin();
 
-	//public boolean layerEquals(Layer l){
-	//	return MathUtils.isEqual(l.layer, layer, 0.01f);
-	//}
+	public boolean layerEquals(Renderable l){
+		return MathUtils.isEqual(l.layer(), layer, 0.01f);
+	}
 
 	protected void loadShader(){
 

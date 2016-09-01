@@ -12,8 +12,7 @@ import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.io.GifRecorder;
 import net.pixelstatic.utils.modules.Module;
-import net.pixelstatic.utils.spritesystem.RenderableGroup;
-import net.pixelstatic.utils.spritesystem.RenderableList;
+import net.pixelstatic.utils.spritesystem.*;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -41,7 +40,7 @@ public class Renderer extends Module<Koru>{
 	public boolean debug = false;
 	public final boolean gbuffer = false;
 	public KoruEntity player;
-	public RenderableGroup[][] renderables = new RenderableGroup[World.chunksize*World.loadrange*2][World.chunksize*World.loadrange*2];
+	public RenderableList[][] renderables = new RenderableList[World.chunksize*World.loadrange*2][World.chunksize*World.loadrange*2];
 	public int lastcamx, lastcamy;
 
 	public Renderer(){
@@ -56,6 +55,8 @@ public class Renderer extends Module<Koru>{
 		//buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 		buffers = new FrameBufferMap();
 		recorder = new GifRecorder(batch, 1f / GUIscale);
+		RenderableHandler.getInstance().setLayerManager(new LayerManager(){public void draw(Array<Renderable> renderables, Batch batch){drawRenderables(renderables);}});
+		
 		FrameBufferLayer.loadShaders();
 
 		if(gbuffer) buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
@@ -79,7 +80,7 @@ public class Renderer extends Module<Koru>{
 	void doRender(){
 		batch.begin();
 		drawMap();
-		RenderableList.getInstance().renderAll(batch);
+		RenderableHandler.getInstance().renderAll(batch);
 		batch.end();
 		batch.setProjectionMatrix(matrix);
 		batch.begin();
@@ -99,8 +100,9 @@ public class Renderer extends Module<Koru>{
 		lastcamx = camx;
 		lastcamy = camy;
 	}
-	
+
 	public void updateTiles(){
+
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 		
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
@@ -113,6 +115,7 @@ public class Renderer extends Module<Koru>{
 						int worldy = chunk.worldY() + y;
 						int rendx = chunkx*World.chunksize+x, rendy = chunky*World.chunksize+y;
 						
+						if(renderables[rendx][rendy] != null)renderables[rendx][rendy].free();
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
 
 						Tile tile = chunk.tiles[x][y];
@@ -120,7 +123,7 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new RenderableGroup();
+							renderables[rendx][rendy] = new RenderableList();
 						}
 						
 						if(tile.tile != Material.air){
@@ -130,6 +133,7 @@ public class Renderer extends Module<Koru>{
 						if(tile.block != Material.air){
 							tile.block.getType().draw(renderables[rendx][rendy], tile.block, tile, worldx, worldy);
 						}
+						//Koru.log(renderables[rendx][rendy].renderables.size);
 					//	if(){
 							
 						//}
@@ -184,6 +188,59 @@ public class Renderer extends Module<Koru>{
 			}
 		}
 
+	}
+	
+	void drawRenderables(Array<Renderable> renderables){
+		batch.end();
+
+		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
+
+		FrameBufferLayer selected = null;
+		
+		//Koru.log("--start--");
+
+		if(gbuffer) buffers.begin("global");
+
+		batch.begin();
+
+		for(Renderable layer : renderables){
+
+			boolean ended = false;
+
+			if(selected != null && ( !selected.layerEquals(layer))){
+				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
+				endBufferLayer(selected, blayers);
+				selected = null;
+				ended = true;
+			}
+
+			if(selected == null){
+
+				for(FrameBufferLayer fl : blayers){
+					if(fl.layerEquals(layer)){
+						if(ended) layer.draw(batch);
+						//Koru.log("begin layer " + fl);
+						selected = fl;
+						beginBufferLayer(selected);
+						break;
+					}
+				}
+			}
+			//if(layer.sort == SortType.FLOOR && layer.layer < 2) Koru.log("layer " + layer.region);
+			layer.draw(batch);
+		}
+		if(selected != null){
+			endBufferLayer(selected, blayers);
+			selected = null;
+		}
+		batch.end();
+
+		if(gbuffer) buffers.end("global");
+		batch.begin();
+
+		batch.setColor(Color.WHITE);
+		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
+		
 	}
 	/*
 	void drawLayers(){
