@@ -15,10 +15,11 @@ public enum ProjectileType{
 	}
 	
 	public void draw(KoruEntity entity, RenderComponent render){
+		render.group.setPosition(entity.getX(), entity.getY());
 		//render.layers.update(entity.getX(), entity.getY());
 		float x = entity.getX(), y = entity.getY();
 		for(Renderable renderable : render.group.list()){
-			//layer.update(x, y);
+			renderable.sprite().setPosition(x, y, true);
 			//layer.rotation = entity.mapComponent(ProjectileComponent.class).getRotation() - 45;
 		}
 	}

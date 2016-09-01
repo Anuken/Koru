@@ -1,6 +1,8 @@
 package net.pixelstatic.koru.systems;
 
-import net.pixelstatic.koru.components.*;
+import net.pixelstatic.koru.components.HitboxComponent;
+import net.pixelstatic.koru.components.PositionComponent;
+import net.pixelstatic.koru.components.RenderComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Renderer;
 
@@ -28,7 +30,7 @@ public class RendererSystem extends KoruSystem{
 	}
 
 	void addFade(KoruEntity entity, RenderComponent render){
-		FadeComponent fade = entity.mapComponent(FadeComponent.class);
+		//FadeComponent fade = entity.mapComponent(FadeComponent.class);
 		//for(Layer layer : render.layers.values()){
 		//	if(fade != null && fade.render) layer.color.a = 1f - fade.life / fade.lifetime;
 		//}

@@ -196,8 +196,7 @@ public class Renderer extends Module<Koru>{
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
 
 		FrameBufferLayer selected = null;
-		
-		//Koru.log("--start--");
+
 
 		if(gbuffer) buffers.begin("global");
 
@@ -208,7 +207,6 @@ public class Renderer extends Module<Koru>{
 			boolean ended = false;
 
 			if(selected != null && ( !selected.layerEquals(layer))){
-				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
 				endBufferLayer(selected, blayers);
 				selected = null;
 				ended = true;
@@ -219,14 +217,13 @@ public class Renderer extends Module<Koru>{
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer)){
 						if(ended) layer.draw(batch);
-						//Koru.log("begin layer " + fl);
 						selected = fl;
 						beginBufferLayer(selected);
 						break;
 					}
 				}
 			}
-			//if(layer.sort == SortType.FLOOR && layer.layer < 2) Koru.log("layer " + layer.region);
+
 			layer.draw(batch);
 		}
 		if(selected != null){
