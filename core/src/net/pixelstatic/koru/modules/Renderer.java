@@ -17,10 +17,13 @@ import net.pixelstatic.utils.spritesystem.*;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
@@ -40,7 +43,7 @@ public class Renderer extends Module<Koru>{
 	public boolean debug = false;
 	public final boolean gbuffer = false;
 	public KoruEntity player;
-	public RenderableList[][] renderables = new RenderableList[World.chunksize*World.loadrange*2][World.chunksize*World.loadrange*2];
+	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	public int lastcamx, lastcamy;
 
 	public Renderer(){
@@ -52,11 +55,14 @@ public class Renderer extends Module<Koru>{
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
-		//buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 		buffers = new FrameBufferMap();
 		recorder = new GifRecorder(batch, 1f / GUIscale);
-		RenderableHandler.getInstance().setLayerManager(new LayerManager(){public void draw(Array<Renderable> renderables, Batch batch){drawRenderables(renderables);}});
-		
+		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
+			public void draw(Array<Renderable> renderables, Batch batch){
+				drawRenderables(renderables);
+			}
+		});
+
 		FrameBufferLayer.loadShaders();
 
 		if(gbuffer) buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
@@ -70,11 +76,19 @@ public class Renderer extends Module<Koru>{
 
 	@Override
 	public void update(){
+		//	Gdx.gl.glRenderbufferStorage(GL20.GL_RENDERBUFFER, GL20.GL_RGBA, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//batch.setBlendFunction(-1, -1);
+		//Gdx.gl.glBlendFuncSeparate(
+		//    GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ZERO, GL20.GL_ONE);
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
 		clearScreen();
 		doRender();
 		updateCamera();
+
+		if(Gdx.input.isKeyJustPressed(Keys.Q)){
+			takeScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		}
 	}
 
 	void doRender(){
@@ -90,13 +104,13 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void drawMap(){
-		
+
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
-		
+
 		if(lastcamx != camx || lastcamy != camy){
 			updateTiles();
 		}
-		
+
 		lastcamx = camx;
 		lastcamy = camy;
 	}
@@ -104,7 +118,7 @@ public class Renderer extends Module<Koru>{
 	public void updateTiles(){
 
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
-		
+
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
 				Chunk chunk = world.chunks[chunkx][chunky];
@@ -113,35 +127,27 @@ public class Renderer extends Module<Koru>{
 					for(int y = 0;y < World.chunksize;y ++){
 						int worldx = chunk.worldX() + x;
 						int worldy = chunk.worldY() + y;
-						int rendx = chunkx*World.chunksize+x, rendy = chunky*World.chunksize+y;
-						
-						if(renderables[rendx][rendy] != null)renderables[rendx][rendy].free();
+						int rendx = chunkx * World.chunksize + x, rendy = chunky * World.chunksize + y;
+
+						if(renderables[rendx][rendy] != null) renderables[rendx][rendy].free();
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
 
 						Tile tile = chunk.tiles[x][y];
-						
+
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
 							renderables[rendx][rendy] = new RenderableList();
 						}
-						
+
 						if(tile.tile != Material.air){
 							tile.tile.getType().draw(renderables[rendx][rendy], tile.tile, tile, worldx, worldy);
 						}
-						
+
 						if(tile.block != Material.air){
 							tile.block.getType().draw(renderables[rendx][rendy], tile.block, tile, worldx, worldy);
 						}
-						//Koru.log(renderables[rendx][rendy].renderables.size);
-					//	if(){
-							
-						//}
-
-						//if(tile.tile != Material.air) tile.tile.getType().drawInternal(tile.tile, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
-						//if(tile.block != Material.air) tile.block.getType().drawInternal(tile.block, tile, chunk.worldX() + x, chunk.worldY() + y, this, world);
 					}
-					
 				}
 			}
 		}
@@ -189,14 +195,13 @@ public class Renderer extends Module<Koru>{
 		}
 
 	}
-	
+
 	void drawRenderables(Array<Renderable> renderables){
 		batch.end();
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
 
 		FrameBufferLayer selected = null;
-
 
 		if(gbuffer) buffers.begin("global");
 
@@ -237,68 +242,12 @@ public class Renderer extends Module<Koru>{
 
 		batch.setColor(Color.WHITE);
 		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
-		
+
 	}
-	/*
-	void drawLayers(){
-		batch.end();
-		layers.sort();
-
-		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
-
-		FrameBufferLayer selected = null;
-		
-		//Koru.log("--start--");
-
-		if(gbuffer) buffers.begin("global");
-
-		batch.begin();
-
-		for(int i = 0;i < layers.count;i ++){
-			Layer layer = layers.layers[i];
-
-			boolean ended = false;
-
-			if(selected != null && ( !selected.layerEquals(layer) || layer.sort != SortType.FLOOR)){
-				//Koru.log("ending buffer " + selected + " " + i + " invalid layer " + layer.region);
-				endBufferLayer(selected, blayers);
-				selected = null;
-				ended = true;
-			}
-
-			if(selected == null && layer.sort == SortType.FLOOR){
-
-				for(FrameBufferLayer fl : blayers){
-					if(fl.layerEquals(layer)){
-						if(ended) layer.draw(this);
-						//Koru.log("begin layer " + fl);
-						selected = fl;
-						beginBufferLayer(selected);
-						break;
-					}
-				}
-			}
-			//if(layer.sort == SortType.FLOOR && layer.layer < 2) Koru.log("layer " + layer.region);
-			layer.draw(this);
-		}
-		if(selected != null){
-			endBufferLayer(selected, blayers);
-			selected = null;
-		}
-		batch.end();
-
-		if(gbuffer) buffers.end("global");
-		batch.begin();
-
-		batch.setColor(Color.WHITE);
-		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
-		
-	}
-	*/
 
 	private void beginBufferLayer(FrameBufferLayer selected){
 		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
-	
+
 		batch.end();
 		if(gbuffer) buffers.end("global");
 
@@ -325,6 +274,42 @@ public class Renderer extends Module<Koru>{
 		if(layers != null) layers.removeValue(selected, true);
 	}
 
+	Pixmap takeScreenshot(int x, int y, int w, int h){
+		byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
+
+		Pixmap p = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
+		BufferUtils.copy(pixels, 0, p.getPixels(), pixels.length);
+
+		processPixmap(p);
+		
+		
+		PixmapIO.writePNG(Gdx.files.local("screenshot.png"), p);
+
+		return p;
+	}
+
+	void processPixmap(Pixmap pixmap){
+		Color color = new Color();
+		for(int x = 0;x < pixmap.getWidth();x ++){
+			for(int y = 0;y < pixmap.getHeight();y ++){
+				color.set(pixmap.getPixel(x, y));
+				color.a = 1f;
+				pixmap.setColor(color);
+				pixmap.drawPixel(x, y);
+			}
+		}
+		
+		for(int x = 0;x < pixmap.getWidth();x ++){
+			for(int y = 0;y < pixmap.getHeight();y ++){
+				color.set(pixmap.getPixel(x, y));
+				color.a = 1f;
+				pixmap.setColor(color);
+				pixmap.drawPixel(x, y);
+			}
+		}
+
+	}
+
 	void updateCamera(){
 		camera.position.set(player.getX(), (player.getY()), 0f);
 		camera.update();
@@ -332,7 +317,7 @@ public class Renderer extends Module<Koru>{
 
 	void clearScreen(){
 		Color clear = Color.SKY.cpy().sub(0.1f, 0.1f, 0.1f, 0f);
-		Gdx.gl.glClearColor(clear.r, clear.g, clear.b, 0);
+		Gdx.gl.glClearColor(clear.r, clear.g, clear.b, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 

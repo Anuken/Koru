@@ -19,6 +19,7 @@ public class KoruEntity extends Entity{
 	private EntityType type;
 	private static long nextID;
 	private long id;
+	private PositionComponent pos;
 
 	public static class Mappers{
 		public static HashMap<Class<?>, ComponentMapper<?>> map = new HashMap<Class<?>, ComponentMapper<?>>();
@@ -31,11 +32,11 @@ public class KoruEntity extends Entity{
 			return c.cast(map.get(c).get(entity));
 		}
 	}
-	
+
 	@SuppressWarnings("unused")
 	private KoruEntity(){
 	}
-	
+
 	public static KoruEntity loadedEntity(EntityType type, long id){
 		KoruEntity entity = new KoruEntity(type);
 		entity.id = id;
@@ -50,23 +51,25 @@ public class KoruEntity extends Entity{
 			this.add(component);
 		this.type.init(this);
 	}
-	
+
 	public PositionComponent position(){
-		return this.mapComponent(PositionComponent.class);
+		if(pos == null) pos = this.mapComponent(PositionComponent.class);
+
+		return pos;
 	}
-	
+
 	public float getX(){
 		return this.mapComponent(PositionComponent.class).x;
 	}
-	
+
 	public float getY(){
 		return this.mapComponent(PositionComponent.class).y;
 	}
-	
+
 	public Group group(){
 		return this.mapComponent(GroupComponent.class).group;
 	}
-	
+
 	public GroupComponent groupc(){
 		return this.mapComponent(GroupComponent.class);
 	}
@@ -78,7 +81,7 @@ public class KoruEntity extends Entity{
 	public <T>T mapComponent(Class<T> c){
 		return c.cast(Mappers.get(c.asSubclass(Component.class), this));
 	}
-	
+
 	public void log(Object object){
 		Koru.log("[" + id + "]: " + object);
 	}
@@ -90,48 +93,48 @@ public class KoruEntity extends Entity{
 	public boolean isType(EntityType type){
 		return this.type == type;
 	}
-	
+
 	public KoruEntity addSelf(){
 		engine.addEntity(this);
 		return this;
 	}
-	
+
 	public KoruEntity sendSelf(){
 		server.sendEntity(this);
 		return this;
 	}
-	
+
 	public void removeSelfServer(){
-		if(!server()) return;
+		if( !server()) return;
 		server.removeEntity(this);
 	}
-	
+
 	public void removeSelf(){
-		if(!server()){
+		if( !server()){
 			engine.removeEntity(this);
 		}else{
 			engine.removeEntity(this);
 		}
 	}
-	
+
 	//ONLY CALL THIS ON RECONNECT
 	public void resetID(long id){
 		this.id = id;
 		nextID ++;
 	}
-	
+
 	public static boolean server(){
 		return server != null;
 	}
-	
+
 	public static void setEngine(KoruEngine e){
 		engine = e;
 	}
-	
+
 	public static void setServer(KoruServer e){
 		server = e;
 	}
-	
+
 	public String toString(){
 		return "Entity: " + this.type + " #" + id;
 	}
