@@ -40,7 +40,9 @@ public class Network extends Module<Koru>{
 			client.start();
 			client.connect(12000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = System.getProperty("user.name");
+			String launcher = System.getProperty("sun.java.command");
+			launcher = launcher.substring(launcher.lastIndexOf(".")+1, launcher.length()).replace("Launcher", "");
+			packet.name = launcher;
 			client.sendTCP(packet);
 			initialconnect = true;
 			Koru.log("Connecting to server..");

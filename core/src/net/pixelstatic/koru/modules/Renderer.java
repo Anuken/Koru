@@ -76,10 +76,6 @@ public class Renderer extends Module<Koru>{
 
 	@Override
 	public void update(){
-		//	Gdx.gl.glRenderbufferStorage(GL20.GL_RENDERBUFFER, GL20.GL_RGBA, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		//batch.setBlendFunction(-1, -1);
-		//Gdx.gl.glBlendFuncSeparate(
-		//    GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ZERO, GL20.GL_ONE);
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
 		clearScreen();
@@ -87,7 +83,7 @@ public class Renderer extends Module<Koru>{
 		updateCamera();
 
 		if(Gdx.input.isKeyJustPressed(Keys.Q)){
-			takeScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			recorder.takeScreenshot();
 		}
 	}
 
@@ -104,7 +100,7 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void drawMap(){
-
+		if(Gdx.graphics.getFrameId() == 5) updateTiles();
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		if(lastcamx != camx || lastcamy != camy){
@@ -158,6 +154,16 @@ public class Renderer extends Module<Koru>{
 		font.setColor(Color.WHITE);
 
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
+		
+		String launcher = System.getProperty("sun.java.command");
+		launcher = launcher.substring(launcher.lastIndexOf(".")+1, launcher.length());
+		
+		layout.setText(font, launcher);
+		
+		font.setColor(Color.CORAL);
+		font.draw(batch, launcher, gwidth()/2 - layout.width/2, gheight());
+		
+		font.setColor(Color.WHITE);
 
 		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
 
@@ -281,7 +287,6 @@ public class Renderer extends Module<Koru>{
 		BufferUtils.copy(pixels, 0, p.getPixels(), pixels.length);
 
 		processPixmap(p);
-		
 		
 		PixmapIO.writePNG(Gdx.files.local("screenshot.png"), p);
 

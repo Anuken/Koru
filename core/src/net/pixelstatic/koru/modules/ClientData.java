@@ -7,7 +7,7 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.utils.modules.Module;
 
 public class ClientData extends Module<Koru>{
-	KoruEntity player;
+	public final KoruEntity player;
 	
 	public ClientData(){
 		player = new KoruEntity(EntityType.player);

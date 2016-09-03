@@ -112,7 +112,6 @@ public class KoruServer{
 				}else if(object instanceof PositionPacket){
 					PositionPacket packet = (PositionPacket)object;
 					if( !players.containsKey(connection.getID())) return;
-					Koru.log(getPlayer(connection.getID()));
 					getPlayer(connection.getID()).position().set(packet.x, packet.y);
 					getPlayer(connection.getID()).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
 				}else if(object instanceof ChunkRequestPacket){

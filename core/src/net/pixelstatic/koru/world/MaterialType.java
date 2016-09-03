@@ -24,7 +24,8 @@ public enum MaterialType{
 			
 			if(Renderer.i.world.blends(x, y, material)) 
 			new SpriteRenderable(Renderer.i.getRegion(material.name()+ "edge"))
-			.setPosition(x*World.tilesize-2, y*World.tilesize-2)
+			.setPosition(x*World.tilesize+World.tilesize/2, y*World.tilesize+World.tilesize/2)
+			.center()
 			.setLayer(-material.ordinal()*2+1).add(group);
 
 		}

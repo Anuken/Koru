@@ -22,7 +22,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Input extends Module<Koru> implements InputProcessor{
 	private Vector2 vector = new Vector2();
-	CollisionSystem collisions;
+	public CollisionSystem collisions;
 	KoruEntity player;
 	
 	public void init(){
