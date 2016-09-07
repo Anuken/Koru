@@ -27,6 +27,10 @@ public class WebServer extends WebSocketServer implements Runnable{
 			}
 		}
 	}
+	
+	public void sendObject(WebSocket socket, Object object){
+		
+	}
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake){

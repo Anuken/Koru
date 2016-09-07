@@ -214,7 +214,7 @@ public class KoruServer extends IServer{
 
 	public void send(ConnectionInfo info, Object object, boolean udp){
 		if(info.isWeb()){
-			info.socket.send(new byte[]{});
+			webserver.sendObject(info.socket, object);
 		}else{
 			if(udp){
 				info.connection.sendUDP(object);
