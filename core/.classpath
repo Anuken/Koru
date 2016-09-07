@@ -3,12 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry kind="lib" path="lib/kryonet-2.21-all.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/cobalt/Downloads/kryonet-2.21/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GdxUtils"/>
+	<classpathentry kind="lib" path="lib/kryo.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,8 +3,6 @@ package net.pixelstatic.koru.modules;
 import net.pixelstatic.gdxutils.graphics.Atlas;
 import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.components.GroupComponent;
-import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
@@ -14,8 +12,6 @@ import net.pixelstatic.utils.io.GifRecorder;
 import net.pixelstatic.utils.modules.Module;
 import net.pixelstatic.utils.spritesystem.*;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
@@ -177,9 +173,6 @@ public class Renderer extends Module<Koru>{
 			}
 			Tile tile = world.getTile(cursor);
 
-			int i = 0;
-
-			i ++;
 
 			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
 			font.draw(batch, cursor.x + ", " + cursor.y + " " + tile + " chunk: " + chunk.x + "," + chunk.y + "\nchunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY()) + "\n" + "chunk pos: " + chunk.x + ", " + chunk.y, cx, cy);
@@ -187,16 +180,6 @@ public class Renderer extends Module<Koru>{
 			if(tile.blockdata instanceof InventoryTileData){
 				InventoryTileData data = tile.getBlockData(InventoryTileData.class);
 				font.draw(batch, data.inventory.toString(), cx, cy);
-				i += data.inventory.inventory[0].length;
-			}
-
-			for(Entity e : t.engine.getEntitiesFor(Family.all(GroupComponent.class, PositionComponent.class).get())){
-				KoruEntity entity = (KoruEntity)e;
-				if(entity.position().blockX() == cursor.x && entity.position().blockY() == cursor.y){
-					font.draw(batch, entity.getID() + "", cx, cy + i * 5);
-					i ++;
-				}
-
 			}
 		}
 

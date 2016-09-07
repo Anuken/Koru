@@ -5,10 +5,10 @@ import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.components.SyncComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Network;
+import net.pixelstatic.koru.network.IServer;
 import net.pixelstatic.koru.network.SyncBuffer;
 import net.pixelstatic.koru.network.SyncBuffer.PositionSyncBuffer;
 import net.pixelstatic.koru.network.packets.WorldUpdatePacket;
-import net.pixelstatic.koru.server.KoruUpdater;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -24,7 +24,7 @@ public class SyncSystem extends IteratingSystem{
 
 	@Override
 	protected void processEntity(Entity aentity, float deltaTime){
-		if(KoruUpdater.frameID() % Network.packetFrequency != 0) return;
+		if(IServer.instance().getFrameID() % Network.packetFrequency != 0) return;
 		KoruEntity player = (KoruEntity)aentity;
 		ImmutableArray<Entity> entities = getEngine().getEntitiesFor(family);
 
@@ -34,7 +34,7 @@ public class SyncSystem extends IteratingSystem{
 			KoruEntity ko = (KoruEntity)entity;
 			packet.updates.put(ko.getID(), ko.mapComponent(SyncComponent.class).type.write(ko));
 		}
-		if(packet.updates.size() != 0) player.mapComponent(ConnectionComponent.class).connection.sendTCP(packet);
+		if(packet.updates.size() != 0) IServer.instance().sendTCP(player.mapComponent(ConnectionComponent.class).connectionID, packet);
 	}
 
 	public enum SyncType{

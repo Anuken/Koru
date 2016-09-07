@@ -1,15 +1,8 @@
 package net.pixelstatic.koru.ai;
 
-import net.pixelstatic.koru.entities.Effects;
-import net.pixelstatic.koru.server.KoruUpdater;
-import net.pixelstatic.koru.world.World;
-
-import com.badlogic.gdx.ai.pfa.PathSmoother;
-import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 
 public class AIData{
+	/*
 	static final boolean debug = false;
 	static Node[][] nodes = new Node[1][1];
 	static Graph graph = new Graph();
@@ -46,7 +39,7 @@ public class AIData{
 			}
 			pathfinder = new IndexedAStarPathFinder<Node>(graph, true);
 		}
-		*/
+		//end
 	}
 
 	public static void updateNode(int x, int y){
@@ -55,14 +48,7 @@ public class AIData{
 		updateConnections(x + 1, y);
 		updateConnections(x, y - 1);
 		updateConnections(x, y + 1);
-		/*
-		node.connections.clear();
-		
-		addNodeNeighbour(node, x + 1, y);
-		addNodeNeighbour(node, x - 1, y);
-		addNodeNeighbour(node, x, y + 1);
-		addNodeNeighbour(node, x, y - 1);
-		*/
+
 	}
 
 	private static void updateConnections(int x, int y){
@@ -77,7 +63,7 @@ public class AIData{
 
 	public Vector2 pathfindTo(float x, float y, float targetx, float targety){
 
-		if(straight /*|| !cast(x, y, targetx, targety)*/) return v.set(targetx, targety);
+		if(straight ) return v.set(targetx, targety);
 
 		if(lastpos.dst(v.set(targetx, targety)) > changerange || path == null || World.instance().updated() || KoruUpdater.frameID() % 180 == 0){
 			if(debug) Effects.indicator("recalc", Color.GREEN, x, y + 10, 100);
@@ -125,4 +111,5 @@ public class AIData{
 		node.addNeighbour(nodes[x][y]);
 
 	}
+	*/
 }

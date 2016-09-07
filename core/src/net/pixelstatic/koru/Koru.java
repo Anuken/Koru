@@ -1,6 +1,7 @@
 package net.pixelstatic.koru;
 
 import net.pixelstatic.koru.modules.*;
+import net.pixelstatic.koru.network.IClient;
 import net.pixelstatic.koru.systems.InterpolationSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.RendererSystem;
@@ -10,9 +11,14 @@ import net.pixelstatic.utils.modules.ModuleController;
 import com.badlogic.gdx.Gdx;
 
 public class Koru extends ModuleController<Koru>{
+	private IClient client;
 	private static Koru instance;
 	public KoruEngine engine;
 	private static Thread thread;
+	
+	public Koru(IClient client){
+		this.client = client;
+	}
 
 	@Override
 	public void init(){
@@ -25,6 +31,8 @@ public class Koru extends ModuleController<Koru>{
 		addModule(Input.class);
 		addModule(ClientData.class);
 		addModule(World.class);
+		
+		getModule(Network.class).client = client;
 
 		engine.addSystem(new RendererSystem(getModule(Renderer.class)));
 

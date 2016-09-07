@@ -14,6 +14,6 @@ public class DesktopLauncher {
 		config.width = Toolkit.getDefaultToolkit().getScreenSize().width;
 
 		config.height = Toolkit.getDefaultToolkit().getScreenSize().height;
-		new LwjglApplication(new Koru(), config);
+		new LwjglApplication(new Koru(new KryoClient()), config);
 	}
 }

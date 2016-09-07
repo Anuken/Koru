@@ -7,7 +7,7 @@ import net.pixelstatic.koru.components.HitboxComponent;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.listeners.CollisionHandler;
-import net.pixelstatic.koru.server.KoruUpdater;
+import net.pixelstatic.koru.network.IServer;
 import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.koru.world.World;
 
@@ -122,9 +122,9 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	private void checkFrame(){
-		if(KoruUpdater.frameID() != lastFrameID){
+		if(IServer.instance().getFrameID() != lastFrameID){
 			iterated.clear();
-			lastFrameID = KoruUpdater.frameID();
+			lastFrameID = IServer.instance().getFrameID();
 		}
 	}
 

@@ -8,11 +8,10 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Network;
 import net.pixelstatic.koru.modules.Renderer;
+import net.pixelstatic.koru.network.IServer;
 import net.pixelstatic.koru.network.packets.ChunkPacket;
 import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
-import net.pixelstatic.koru.server.KoruServer;
-import net.pixelstatic.koru.server.KoruUpdater;
 import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
@@ -37,14 +36,14 @@ public class World extends Module<Koru>{
 	private Renderer renderer;
 	public Generator generator;
 	Network network;
-	KoruServer server;
+	IServer server;
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
 
 	public World(){
-		if( !KoruServer.active){
+		if( !IServer.active()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
@@ -55,7 +54,7 @@ public class World extends Module<Koru>{
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 		    @Override
 		    public void run(){
-		    	if(!KoruServer.active) return;
+		    	if(!IServer.active()) return;
 		    	Koru.log("Saving " + loadedchunks.size() +" chunks...");
 		    	for(Chunk chunk : loadedchunks.values()){
 		    		file.writeChunk(chunk);
@@ -64,14 +63,14 @@ public class World extends Module<Koru>{
 		});
 	}
 	
-	public World(KoruServer server){
+	public World(IServer server){
 		this();
 		this.server = server;
 	}
 
 	@Override
 	public void update(){
-		if(server != null && KoruUpdater.frameID() % 60 == 0) checkUnloadChunks();
+		if(server != null && server.getFrameID() % 60 == 0) checkUnloadChunks();
 		updated = false;
 		
 		
@@ -113,7 +112,7 @@ public class World extends Module<Koru>{
 	
 	void checkUnloadChunks(){
 		Collection<Chunk> chunks = loadedchunks.values();
-		ImmutableArray<Entity> players = KoruUpdater.instance.engine.getEntitiesFor(KoruUpdater.instance.engine.getSystem(SyncSystem.class).getFamily());
+		ImmutableArray<Entity> players = server.getEngine().getEntitiesFor(server.getEngine().getSystem(SyncSystem.class).getFamily());
 		
 		for(Chunk chunk : chunks){
 			boolean passed = false;
@@ -166,7 +165,7 @@ public class World extends Module<Koru>{
 	}
 
 	public static World instance(){
-		return KoruUpdater.instance.world;
+		return IServer.instance().getWorld();
 	}
 
 	public Tile getTile(Point point){
@@ -239,7 +238,7 @@ public class World extends Module<Koru>{
 	}
 
 	public boolean inBounds(int x, int y){
-		if(KoruServer.active) return true;
+		if(IServer.active()) return true;
 		int tx = tile(renderer.camera.position.x);
 		int ty = tile(renderer.camera.position.y);
 		if(Math.abs(tx - x) >= loadrange * chunksize - 1 || Math.abs(ty - y) >= loadrange * chunksize - 1) return false;
@@ -297,7 +296,7 @@ public class World extends Module<Koru>{
 	}
 
 	public Tile tile(int x, int y){
-		if( !KoruServer.active){
+		if( !IServer.active()){
 			return getRelativeChunk(x, y).getWorldTile(x, y);
 		}
 		int cx = (x < -1 ? x + 1 : x) / chunksize, cy = (y < -1 ? y + 1 : y) / chunksize;
@@ -307,7 +306,7 @@ public class World extends Module<Koru>{
 	}
 	
 	public void setTile(int x, int y, Tile tile){
-		if( !KoruServer.active){
+		if( !IServer.active()){
 			getRelativeChunk(x, y).setWorldTile(x, y, tile);
 			return;
 		}

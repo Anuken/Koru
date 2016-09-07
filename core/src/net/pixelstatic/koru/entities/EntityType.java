@@ -1,14 +1,10 @@
 package net.pixelstatic.koru.entities;
 
-import net.pixelstatic.koru.behaviors.GroupBehavior;
-import net.pixelstatic.koru.behaviors.MoveTowardBehavior;
-import net.pixelstatic.koru.behaviors.TargetBehavior;
-import net.pixelstatic.koru.behaviors.groups.Group;
 import net.pixelstatic.koru.components.*;
+import net.pixelstatic.koru.network.IServer;
+import net.pixelstatic.koru.network.InputHandler;
 import net.pixelstatic.koru.network.Interpolator;
 import net.pixelstatic.koru.renderers.*;
-import net.pixelstatic.koru.server.InputHandler;
-import net.pixelstatic.koru.server.KoruServer;
 import net.pixelstatic.koru.systems.SyncSystem.SyncType;
 
 import com.badlogic.ashley.core.Component;
@@ -54,58 +50,6 @@ public enum EntityType{
 			return entity.mapComponent(DamageComponent.class).source != other.getID();
 		}
 	},
-	genericmonster{
-		public Component[] defaultComponents(){
-			return new Component[]{new PositionComponent(), new RenderComponent(new MonsterRenderer()),
-					new HitboxComponent(), new SyncComponent(SyncType.position, new Interpolator()),
-					new BehaviorComponent(), new HealthComponent(), new VelocityComponent(), new InventoryComponent(5, 5), 
-					new GroupComponent(Group.instance())};
-		}
-
-		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
-			hitbox.terrainRect().set(0, 0, 4, 2);
-			hitbox.collideterrain = true;
-
-			hitbox.entityRect().set(0, 0, 4, 4);
-			hitbox.alignBottom();
-			hitbox.height = 8;
-		}
-
-		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
-			behavior.addBehavior(TargetBehavior.class).setRange(100f).setType(EntityType.player);
-			behavior.addBehavior(MoveTowardBehavior.class);
-		}
-
-		public boolean collide(KoruEntity entity, KoruEntity other){
-			return other.getType() == EntityType.projectile;
-		}
-	},
-	egg{
-		public Component[] defaultComponents(){
-			return genericmonster.defaultComponents();
-		}
-		
-		public boolean collide(KoruEntity entity, KoruEntity other){
-			return genericmonster.collide(entity, other);
-		}
-		
-		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
-			genericmonster.initHitbox(entity, hitbox);
-		}
-		
-		void initBehavior(KoruEntity entity, BehaviorComponent behavior){
-		//	behavior.addBehavior(ChopTreeBehavior.class);
-		//	behavior.addBehavior(TargetBehavior.class).setRange(100f).setType(EntityType.player);
-			behavior.addBehavior(GroupBehavior.class);
-			entity.mapComponent(GroupComponent.class).init(entity);
-		}
-		
-	},
-	group{
-		public Component[] defaultComponents(){
-			return new Component[]{new GroupComponent(null)};
-		}
-	},
 	damageindicator{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new IndicatorRenderer()),
@@ -125,13 +69,10 @@ public enum EntityType{
 
 	final void init(KoruEntity entity){
 		InputComponent input = entity.mapComponent(InputComponent.class);
-		if(input != null && KoruServer.active) input.input = new InputHandler(entity);
+		if(input != null && IServer.active()) input.input = new InputHandler(entity);
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox != null) initHitbox(entity, hitbox);
-
-		BehaviorComponent behavior = entity.mapComponent(BehaviorComponent.class);
-		if(behavior != null) initBehavior(entity, behavior);
 		
 		
 	}
@@ -150,8 +91,6 @@ public enum EntityType{
 	void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 	}
 
-	void initBehavior(KoruEntity entity, BehaviorComponent component){
-	}
 
 	public Component[] defaultComponents(){
 		return new Component[]{};

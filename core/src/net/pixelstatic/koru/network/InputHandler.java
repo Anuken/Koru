@@ -1,4 +1,4 @@
-package net.pixelstatic.koru.server;
+package net.pixelstatic.koru.network;
 
 import java.util.HashMap;
 

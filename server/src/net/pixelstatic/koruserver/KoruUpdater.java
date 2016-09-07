@@ -1,19 +1,20 @@
-package net.pixelstatic.koru.server;
+package net.pixelstatic.koruserver;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.systems.*;
+import net.pixelstatic.koru.systems.CollisionSystem;
+import net.pixelstatic.koru.systems.KoruEngine;
+import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.world.Generator;
 import net.pixelstatic.koru.world.World;
 
 public class KoruUpdater{
-	public static KoruUpdater instance;
 	KoruServer server;
 	public KoruEngine engine;
 	public World world;
 	Generator generator;
 	private boolean isRunning = true;
 	final int maxfps = 60;
-	static long frameid;
+	long frameid;
 	float delta = 1f;
 	long lastFpsTime;
 	final int blockupdatetime = 60*6;
@@ -41,10 +42,6 @@ public class KoruUpdater{
 		*/
 	}
 
-	public static long frameID(){
-		return frameid;
-	}
-
 	public float delta(){
 		return delta;
 	}
@@ -69,17 +66,14 @@ public class KoruUpdater{
 	}
 
 	public KoruUpdater(KoruServer server){
-		instance = this;
 		this.server = server;
-		world = new World(server);
+		world = new World();
 		generator = new Generator(world);
 		world.generator = generator;
 		generator.generateSpawn();
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
 		engine.addSystem(new CollisionSystem());
-		engine.addSystem(new BehaviorSystem());
-		engine.addSystem(new GroupSystem());
 		
 		//Group.createGroupEntity(Group.instance()).addSelf();
 

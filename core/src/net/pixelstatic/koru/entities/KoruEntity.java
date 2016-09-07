@@ -3,10 +3,8 @@ package net.pixelstatic.koru.entities;
 import java.util.HashMap;
 
 import net.pixelstatic.koru.Koru;
-import net.pixelstatic.koru.behaviors.groups.Group;
-import net.pixelstatic.koru.components.GroupComponent;
 import net.pixelstatic.koru.components.PositionComponent;
-import net.pixelstatic.koru.server.KoruServer;
+import net.pixelstatic.koru.network.IServer;
 import net.pixelstatic.koru.systems.KoruEngine;
 
 import com.badlogic.ashley.core.Component;
@@ -14,7 +12,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 
 public class KoruEntity extends Entity{
-	private static KoruServer server;
 	private static KoruEngine engine;
 	private EntityType type;
 	private static long nextID;
@@ -66,14 +63,6 @@ public class KoruEntity extends Entity{
 		return this.mapComponent(PositionComponent.class).y;
 	}
 
-	public Group group(){
-		return this.mapComponent(GroupComponent.class).group;
-	}
-
-	public GroupComponent groupc(){
-		return this.mapComponent(GroupComponent.class);
-	}
-
 	public long getID(){
 		return id;
 	}
@@ -100,13 +89,13 @@ public class KoruEntity extends Entity{
 	}
 
 	public KoruEntity sendSelf(){
-		server.sendEntity(this);
+		IServer.instance().sendEntity(this);
 		return this;
 	}
 
 	public void removeSelfServer(){
 		if( !server()) return;
-		server.removeEntity(this);
+		IServer.instance().removeEntity(this);
 	}
 
 	public void removeSelf(){
@@ -124,15 +113,11 @@ public class KoruEntity extends Entity{
 	}
 
 	public static boolean server(){
-		return server != null;
+		return IServer.active();
 	}
 
 	public static void setEngine(KoruEngine e){
 		engine = e;
-	}
-
-	public static void setServer(KoruServer e){
-		server = e;
 	}
 
 	public String toString(){

@@ -4,6 +4,8 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.components.SyncComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
+import net.pixelstatic.koru.network.IClient;
+import net.pixelstatic.koru.network.NetworkListener;
 import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
 import net.pixelstatic.koru.utils.Angles;
@@ -14,9 +16,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 
 public class Network extends Module<Koru>{
 	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
@@ -28,17 +27,18 @@ public class Network extends Module<Koru>{
 	private boolean chunksAdded = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
-	public Client client;
+	public IClient client;
 
 	public void init(){
 		
 		try{
 			int buffer = (int)Math.pow(2, 6);
-			client = new Client(8192 * buffer, 8192 * buffer);
+			//client = new Client(8192 * buffer, 8192 * buffer);
 			Registrator.register(client.getKryo());
-			client.addListener(new Listener.LagListener(ping, ping, new Listen()));
-			client.start();
-			client.connect(12000, ip, port, port);
+			client.addListener(new Listen());
+			//client.addListener(new Listener.LagListener(ping, ping, new Listen()));
+			//client.start();
+			//client.connect(12000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
 			String launcher = System.getProperty("sun.java.command");
 			launcher = launcher.substring(launcher.lastIndexOf(".")+1, launcher.length()).replace("Launcher", "");
@@ -49,12 +49,13 @@ public class Network extends Module<Koru>{
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Connection failed!");
+			Gdx.app.exit();
 		}
 	}
 
-	class Listen extends Listener{
+	class Listen extends NetworkListener{
 		@Override
-		public void received(Connection connection, Object object){
+		public void received(Object object){
 			try{
 				if(object instanceof DataPacket){
 					DataPacket data = (DataPacket)object;
