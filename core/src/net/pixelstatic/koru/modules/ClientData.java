@@ -1,10 +1,10 @@
 package net.pixelstatic.koru.modules;
 
+import net.pixelstatic.gdxutils.modules.Module;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.ConnectionComponent;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.utils.modules.Module;
 
 public class ClientData extends Module<Koru>{
 	public final KoruEntity player;

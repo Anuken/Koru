@@ -1,9 +1,9 @@
 package net.pixelstatic.koru.world;
 
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.pixelstatic.gdxutils.modules.Module;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Network;
@@ -16,7 +16,6 @@ import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.utils.DirectionUtils;
 import net.pixelstatic.utils.MiscUtils;
-import net.pixelstatic.utils.modules.Module;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -32,7 +31,7 @@ public class World extends Module<Koru>{
 	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private Point point = new Point();
-	private WorldFile file;
+	private WorldLoader file;
 	private Renderer renderer;
 	public Generator generator;
 	Network network;
@@ -40,14 +39,17 @@ public class World extends Module<Koru>{
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
+	
+	public World(WorldLoader loader){
+		this();
+		file = loader;
+	}
 
 	public World(){
 		if( !IServer.active()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
-		}else{
-			file = new WorldFile(Paths.get("world"));
 		}
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){

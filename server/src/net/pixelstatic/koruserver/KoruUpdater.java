@@ -1,5 +1,7 @@
 package net.pixelstatic.koruserver;
 
+import java.nio.file.Paths;
+
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
@@ -67,7 +69,7 @@ public class KoruUpdater{
 
 	public KoruUpdater(KoruServer server){
 		this.server = server;
-		world = new World();
+		world = new World(new WorldFile(Paths.get("world")));
 		generator = new Generator(world);
 		world.generator = generator;
 		generator.generateSpawn();

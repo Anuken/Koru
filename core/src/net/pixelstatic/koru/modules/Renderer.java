@@ -2,6 +2,7 @@ package net.pixelstatic.koru.modules;
 
 import net.pixelstatic.gdxutils.graphics.Atlas;
 import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
+import net.pixelstatic.gdxutils.modules.Module;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
@@ -9,7 +10,6 @@ import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 import net.pixelstatic.utils.io.GifRecorder;
-import net.pixelstatic.utils.modules.Module;
 import net.pixelstatic.utils.spritesystem.*;
 
 import com.badlogic.gdx.Gdx;

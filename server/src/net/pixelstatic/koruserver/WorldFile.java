@@ -1,4 +1,4 @@
-package net.pixelstatic.koru.world;
+package net.pixelstatic.koruserver;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -7,6 +7,9 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import net.pixelstatic.koru.Koru;
+import net.pixelstatic.koru.world.Chunk;
+import net.pixelstatic.koru.world.World;
+import net.pixelstatic.koru.world.WorldLoader;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -15,13 +18,14 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class WorldFile{
+public class WorldFile extends WorldLoader{
 	public final String filename = "chunk", extension = ".kw";
 	private Path file;
 	private ObjectMap<String, Path> files = new ObjectMap<String, Path>();
 	private Kryo kryo;
 
 	public WorldFile(Path file){
+		super(file);
 		if( !Files.isDirectory(file)) throw new RuntimeException("World file has to be a directory!");
 
 		kryo = new Kryo();

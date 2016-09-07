@@ -1,5 +1,6 @@
 package net.pixelstatic.koru.modules;
 
+import net.pixelstatic.gdxutils.modules.Module;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.components.SyncComponent;
@@ -9,7 +10,6 @@ import net.pixelstatic.koru.network.NetworkListener;
 import net.pixelstatic.koru.network.packets.*;
 import net.pixelstatic.koru.utils.Angles;
 import net.pixelstatic.koru.world.World;
-import net.pixelstatic.utils.modules.Module;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

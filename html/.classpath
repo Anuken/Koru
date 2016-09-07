@@ -3,12 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry kind="src" path="assets"/>
-	<classpathentry kind="lib" path="/Koru-core/lib/kryonet-2.21-all.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/cobalt/Downloads/kryonet-2.21/javadoc/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GdxUtils"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="/Koru-core/lib/gwt-websockets-1.0.4.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

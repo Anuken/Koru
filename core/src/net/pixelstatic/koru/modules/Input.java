@@ -1,6 +1,7 @@
 package net.pixelstatic.koru.modules;
 
 
+import net.pixelstatic.gdxutils.modules.Module;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.items.Item;
@@ -12,7 +13,6 @@ import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.utils.InputType;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
-import net.pixelstatic.utils.modules.Module;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;

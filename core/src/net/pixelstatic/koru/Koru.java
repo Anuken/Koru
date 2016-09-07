@@ -1,12 +1,12 @@
 package net.pixelstatic.koru;
 
+import net.pixelstatic.gdxutils.modules.ModuleController;
 import net.pixelstatic.koru.modules.*;
 import net.pixelstatic.koru.network.IClient;
 import net.pixelstatic.koru.systems.InterpolationSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.RendererSystem;
 import net.pixelstatic.koru.world.World;
-import net.pixelstatic.utils.modules.ModuleController;
 
 import com.badlogic.gdx.Gdx;
 
