@@ -16,7 +16,7 @@ public class KoruEntity extends Entity{
 	private EntityType type;
 	private static long nextID;
 	private long id;
-	private PositionComponent pos;
+	private transient PositionComponent pos;
 
 	public static class Mappers{
 		public static HashMap<Class<?>, ComponentMapper<?>> map = new HashMap<Class<?>, ComponentMapper<?>>();

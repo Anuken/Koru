@@ -25,7 +25,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 public class KoruServer extends IServer{
-	//HashMap<Integer, Long> players = new HashMap<Integer, Long>();
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
 	ObjectMap<Connection, ConnectionInfo> kryomap = new ObjectMap<Connection, ConnectionInfo>();
 	ObjectMap<WebSocket, ConnectionInfo> webmap = new ObjectMap<WebSocket, ConnectionInfo>();
@@ -102,39 +101,7 @@ public class KoruServer extends IServer{
 
 	public void recieved(ConnectionInfo info, Object object){
 		try{
-			if(object instanceof ConnectPacket){
-				try{
-
-					ConnectPacket connect = (ConnectPacket)object;
-
-					KoruEntity player = new KoruEntity(EntityType.player);
-					player.mapComponent(ConnectionComponent.class).connectionID = info.id;
-					player.mapComponent(ConnectionComponent.class).name = connect.name;
-
-					DataPacket data = new DataPacket();
-					data.playerid = player.getID();
-
-					ArrayList<Entity> entities = new ArrayList<Entity>();
-					for(Entity entity : updater.engine.getEntities()){
-						entities.add(entity);
-					}
-
-					data.entities = entities;
-
-					sendTCP(info.id, data);
-
-					sendToAllExceptTCP(info.id, player);
-
-					player.addSelf();
-
-					Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
-					Koru.log(connect.name + " has joined.");
-				}catch(Exception e){
-					e.printStackTrace();
-					Koru.log("Critical error: failed sending player!");
-					System.exit(1);
-				}
-			}else if(object instanceof PositionPacket){
+			if(object instanceof PositionPacket){
 				PositionPacket packet = (PositionPacket)object;
 				if( !connections.containsKey(info.id)) return;
 
@@ -192,7 +159,6 @@ public class KoruServer extends IServer{
 
 		@Override
 		public void received(Connection con, Object object){
-
 			if(object instanceof ConnectPacket){
 				ConnectPacket packet = (ConnectPacket)object;
 				if( !kryomap.containsKey(con)){
@@ -233,11 +199,13 @@ public class KoruServer extends IServer{
 	}
 
 	public void sendEntity(KoruEntity entity){
-		server.sendToAllTCP(entity);
+		sendToAll(entity);
 	}
 
 	public void sendToAll(Object object){
-		server.sendToAllTCP(object);
+		for(ConnectionInfo info : connections.values()){
+			send(info, object, false);
+		}
 	}
 
 	public KoruEntity getPlayer(ConnectionInfo info){
@@ -248,31 +216,37 @@ public class KoruServer extends IServer{
 		if(info.isWeb()){
 			info.socket.send(new byte[]{});
 		}else{
-			info.connection.sendTCP(object);
+			if(udp){
+				info.connection.sendUDP(object);
+			}else{
+				info.connection.sendTCP(object);
+			}
+		}
+	}
+	
+	
+	public void sendToAllExceptTCP(int id, Object object){
+		for(ConnectionInfo info : connections.values()){
+			if(info.id != id)
+			send(info, object, false);
 		}
 	}
 
-	//byte[] serialize(Object object){
-	//	Output output = new Output();
-	//	return server.getKryo().writeClass(output, type);
-	//}
-
-	public void sendToAllExceptTCP(int id, Object object){
-
-	}
-
 	public void sendToAllExceptUDP(int id, Object object){
-
+		for(ConnectionInfo info : connections.values()){
+			if(info.id != id)
+			send(info, object, true);
+		}
 	}
 
 	@Override
 	public void sendTCP(int id, Object object){
-
+		send(connections.get(id), object, false);
 	}
 
 	@Override
 	public void sendUDP(int id, Object object){
-
+		send(connections.get(id), object, true);
 	}
 
 	@Override

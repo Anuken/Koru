@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import net.pixelstatic.koru.network.IClient;
 import net.pixelstatic.koru.network.NetworkListener;
+import net.pixelstatic.koru.network.Registrator;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -16,6 +17,7 @@ public class KryoClient extends IClient{
 	{	
 		int buffer = (int)Math.pow(2, 6)*8192;
 		client = new Client(buffer, buffer);
+		Registrator.register(client.getKryo());
 	}
 	
 	
@@ -36,7 +38,8 @@ public class KryoClient extends IClient{
 
 	@Override
 	public void connect(String ip, int port) throws IOException{
-		client.connect(1000, ip, port, port);
+		client.start();
+		client.connect(12000, ip, port, port);
 	}
 
 	@Override

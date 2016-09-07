@@ -6,7 +6,6 @@ import net.pixelstatic.koru.components.SyncComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.network.IClient;
 import net.pixelstatic.koru.network.NetworkListener;
-import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
 import net.pixelstatic.koru.utils.Angles;
 import net.pixelstatic.koru.world.World;
@@ -34,11 +33,11 @@ public class Network extends Module<Koru>{
 		try{
 		//	int buffer = (int)Math.pow(2, 6);
 			//client = new Client(8192 * buffer, 8192 * buffer);
-			Registrator.register(client.getKryo());
+			//Registrator.register(client.getKryo());
 			client.addListener(new Listen());
 			//client.addListener(new Listener.LagListener(ping, ping, new Listen()));
 			//client.start();
-			//client.connect(12000, ip, port, port);
+			client.connect(ip, port);
 			ConnectPacket packet = new ConnectPacket();
 			String launcher = System.getProperty("sun.java.command");
 			launcher = launcher.substring(launcher.lastIndexOf(".")+1, launcher.length()).replace("Launcher", "");

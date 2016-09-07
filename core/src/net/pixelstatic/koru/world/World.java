@@ -36,7 +36,6 @@ public class World extends Module<Koru>{
 	private Renderer renderer;
 	public Generator generator;
 	Network network;
-	IServer server;
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
@@ -62,19 +61,13 @@ public class World extends Module<Koru>{
 		    }
 		});
 	}
-	
-	public World(IServer server){
-		this();
-		this.server = server;
-	}
 
 	@Override
 	public void update(){
-		if(server != null && server.getFrameID() % 60 == 0) checkUnloadChunks();
+		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
 		updated = false;
 		
-		
-		if(server != null) return;
+		if(IServer.active()) return;
 
 		int newx = toChunkCoords(renderer.camera.position.x);
 		int newy = toChunkCoords(renderer.camera.position.y);
@@ -112,7 +105,7 @@ public class World extends Module<Koru>{
 	
 	void checkUnloadChunks(){
 		Collection<Chunk> chunks = loadedchunks.values();
-		ImmutableArray<Entity> players = server.getEngine().getEntitiesFor(server.getEngine().getSystem(SyncSystem.class).getFamily());
+		ImmutableArray<Entity> players = IServer.instance().getEngine().getEntitiesFor(IServer.instance().getEngine().getSystem(SyncSystem.class).getFamily());
 		
 		for(Chunk chunk : chunks){
 			boolean passed = false;
@@ -263,7 +256,7 @@ public class World extends Module<Koru>{
 	public void updateTile(int x, int y){
 		updated = true;
 		tile(x, y).changeEvent();
-		server.sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
+		IServer.instance().sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
 	}
 
 	protected Chunk generateChunk(int chunkx, int chunky){
