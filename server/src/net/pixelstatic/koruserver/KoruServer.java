@@ -16,6 +16,8 @@ import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.world.InventoryTileData;
 import net.pixelstatic.koru.world.World;
 
+import org.java_websocket.WebSocket;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryonet.Connection;
@@ -24,7 +26,10 @@ import com.esotericsoftware.kryonet.Server;
 
 public class KoruServer extends IServer{
 	//HashMap<Integer, Long> players = new HashMap<Integer, Long>();
-	ObjectMap<Integer, ConnectionInfo> players = new ObjectMap<Integer, ConnectionInfo>();
+	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
+	ObjectMap<Connection, ConnectionInfo> kryomap = new ObjectMap<Connection, ConnectionInfo>();
+	ObjectMap<WebSocket, ConnectionInfo> webmap = new ObjectMap<WebSocket, ConnectionInfo>();
+
 	Server server;
 	WebServer webserver;
 	KoruUpdater updater;
@@ -36,8 +41,7 @@ public class KoruServer extends IServer{
 			server.addListener(new Listener.LagListener(Network.ping, Network.ping, new Listen(this)));
 			server.start();
 			server.bind(Network.port, Network.port);
-			
-			
+
 			webserver = new WebServer(this, new InetSocketAddress(Network.port));
 			Koru.log("Server up.");
 		}catch(Exception e){
@@ -58,76 +62,116 @@ public class KoruServer extends IServer{
 		thread.setDaemon(true);
 		thread.run();
 	}
-	
-	public void recieved(ConnectionInfo info, Object object){
-		if(object instanceof ConnectPacket){
-			
-			try{
-				ConnectPacket connect = (ConnectPacket)object;
 
-				KoruEntity player = new KoruEntity(EntityType.player);
-				player.mapComponent(ConnectionComponent.class).connectionID = info.id;
-				player.mapComponent(ConnectionComponent.class).name = connect.name;
+	public void connectPacketRecieved(ConnectPacket packet, WebSocket socket, Connection connection){
+		try{
 
-				DataPacket data = new DataPacket();
-				data.playerid = player.getID();
+			KoruEntity player = new KoruEntity(EntityType.player);
 
-				ArrayList<Entity> entities = new ArrayList<Entity>();
-				for(Entity entity : updater.engine.getEntities()){
-					entities.add(entity);
-				}
+			ConnectionInfo info = socket == null ? new ConnectionInfo(player.getID(), connection) : new ConnectionInfo(player.getID(), socket);
 
-				data.entities = entities;
-				
-				
-				
-				sendTCP(info.id, data);
+			registerConnection(info);
 
-				sendToAllExceptTCP(info.id, player);
-				
+			player.mapComponent(ConnectionComponent.class).connectionID = info.id;
+			player.mapComponent(ConnectionComponent.class).name = packet.name;
 
-				player.addSelf();
+			DataPacket data = new DataPacket();
+			data.playerid = player.getID();
 
-				Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
-				Koru.log(connect.name + " has joined.");
-			}catch(Exception e){
-				e.printStackTrace();
-				Koru.log("Critical error: failed sending player!");
-				System.exit(1);
+			ArrayList<Entity> entities = new ArrayList<Entity>();
+			for(Entity entity : updater.engine.getEntities()){
+				entities.add(entity);
 			}
-		}else if(object instanceof PositionPacket){
-			PositionPacket packet = (PositionPacket)object;
-			if( !players.containsKey(info.id)) return;
-			
-			getPlayer(info).position().set(packet.x, packet.y);
-			getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
-			
-		}else if(object instanceof ChunkRequestPacket){
-			ChunkRequestPacket packet = (ChunkRequestPacket)object;
-			sendTCP(info.id, updater.world.createChunkPacket(packet));
-		}else if(object instanceof InputPacket){
-			InputPacket packet = (InputPacket)object;
-			getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type);
-		}else if(object instanceof StoreItemPacket){
-			StoreItemPacket packet = (StoreItemPacket)object;
-			updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
-			updater.world.updateTile(packet.x, packet.y);
-		}else if(object instanceof BlockInputPacket){
-			BlockInputPacket packet = (BlockInputPacket)object;
-			updater.world.tile(packet.x, packet.y).block = packet.material;
-			updater.world.updateTile(packet.x, packet.y);
+
+			data.entities = entities;
+
+			sendTCP(info.id, data);
+
+			sendToAllExceptTCP(info.id, player);
+
+			player.addSelf();
+
+			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
+			Koru.log(packet.name + " has joined.");
+		}catch(Exception e){
+			e.printStackTrace();
+			Koru.log("Critical error: failed sending player!");
+			System.exit(1);
 		}
 	}
-	
+
+	public void recieved(ConnectionInfo info, Object object){
+		try{
+			if(object instanceof ConnectPacket){
+				try{
+
+					ConnectPacket connect = (ConnectPacket)object;
+
+					KoruEntity player = new KoruEntity(EntityType.player);
+					player.mapComponent(ConnectionComponent.class).connectionID = info.id;
+					player.mapComponent(ConnectionComponent.class).name = connect.name;
+
+					DataPacket data = new DataPacket();
+					data.playerid = player.getID();
+
+					ArrayList<Entity> entities = new ArrayList<Entity>();
+					for(Entity entity : updater.engine.getEntities()){
+						entities.add(entity);
+					}
+
+					data.entities = entities;
+
+					sendTCP(info.id, data);
+
+					sendToAllExceptTCP(info.id, player);
+
+					player.addSelf();
+
+					Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
+					Koru.log(connect.name + " has joined.");
+				}catch(Exception e){
+					e.printStackTrace();
+					Koru.log("Critical error: failed sending player!");
+					System.exit(1);
+				}
+			}else if(object instanceof PositionPacket){
+				PositionPacket packet = (PositionPacket)object;
+				if( !connections.containsKey(info.id)) return;
+
+				getPlayer(info).position().set(packet.x, packet.y);
+				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
+
+			}else if(object instanceof ChunkRequestPacket){
+				ChunkRequestPacket packet = (ChunkRequestPacket)object;
+				sendTCP(info.id, updater.world.createChunkPacket(packet));
+			}else if(object instanceof InputPacket){
+				InputPacket packet = (InputPacket)object;
+				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type);
+			}else if(object instanceof StoreItemPacket){
+				StoreItemPacket packet = (StoreItemPacket)object;
+				updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
+				updater.world.updateTile(packet.x, packet.y);
+			}else if(object instanceof BlockInputPacket){
+				BlockInputPacket packet = (BlockInputPacket)object;
+				updater.world.tile(packet.x, packet.y).block = packet.material;
+				updater.world.updateTile(packet.x, packet.y);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			Koru.log("Packet error!");
+			System.exit(1);
+		}
+	}
+
 	public void disconnected(ConnectionInfo info){
 		try{
-			if( !players.containsKey(info.id)){
+			if(info == null){
 				Koru.log("An unknown player has disconnected.");
 				return;
 			}
 			Koru.log(getPlayer(info).mapComponent(ConnectionComponent.class).name + " has disconnected.");
 			getPlayer(info).removeSelfServer();
-			players.remove(info.id);
+			removeConnection(info);
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Critical error: disconnect fail!");
@@ -142,20 +186,42 @@ public class KoruServer extends IServer{
 		}
 
 		@Override
-		public void disconnected(Connection connection){
-			//TODO
-			
+		public void disconnected(Connection con){
+			KoruServer.this.disconnected(kryomap.get(con) == null ? null : kryomap.get(con));
 		}
 
 		@Override
-		public void received(Connection connection, Object object){
-			try{
-				//TODO
-			}catch(Exception e){
-				e.printStackTrace();
-				Koru.log("Packet error!");
-				System.exit(1);
+		public void received(Connection con, Object object){
+
+			if(object instanceof ConnectPacket){
+				ConnectPacket packet = (ConnectPacket)object;
+				if( !kryomap.containsKey(con)){
+					connectPacketRecieved(packet, null, con);
+				}else{
+					//already connected, ignore?
+				}
+			}else if(kryomap.containsKey(con)){
+				recieved(kryomap.get(con), object);
 			}
+
+		}
+	}
+
+	public void registerConnection(ConnectionInfo info){
+		connections.put(info.id, info);
+		if(info.isWeb()){
+			webmap.put(info.socket, info);
+		}else{
+			kryomap.put(info.connection, info);
+		}
+	}
+
+	public void removeConnection(ConnectionInfo info){
+		connections.remove(info.id);
+		if(info.isWeb()){
+			webmap.remove(info.socket);
+		}else{
+			kryomap.remove(info.connection);
 		}
 	}
 
@@ -177,7 +243,7 @@ public class KoruServer extends IServer{
 	public KoruEntity getPlayer(ConnectionInfo info){
 		return updater.engine.getEntity(info.playerid);
 	}
-	
+
 	public void send(ConnectionInfo info, Object object, boolean udp){
 		if(info.isWeb()){
 			info.socket.send(new byte[]{});
@@ -185,28 +251,28 @@ public class KoruServer extends IServer{
 			info.connection.sendTCP(object);
 		}
 	}
-	
+
 	//byte[] serialize(Object object){
 	//	Output output = new Output();
 	//	return server.getKryo().writeClass(output, type);
 	//}
-	
+
 	public void sendToAllExceptTCP(int id, Object object){
-		
+
 	}
-	
+
 	public void sendToAllExceptUDP(int id, Object object){
-		
+
 	}
 
 	@Override
 	public void sendTCP(int id, Object object){
-		
+
 	}
 
 	@Override
 	public void sendUDP(int id, Object object){
-		
+
 	}
 
 	@Override
@@ -223,7 +289,6 @@ public class KoruServer extends IServer{
 	public World getWorld(){
 		return updater.world;
 	}
-	
 
 	public static void main(String[] args){
 		new KoruServer().start();

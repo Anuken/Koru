@@ -32,7 +32,7 @@ public class Network extends Module<Koru>{
 	public void init(){
 		
 		try{
-			int buffer = (int)Math.pow(2, 6);
+		//	int buffer = (int)Math.pow(2, 6);
 			//client = new Client(8192 * buffer, 8192 * buffer);
 			Registrator.register(client.getKryo());
 			client.addListener(new Listen());

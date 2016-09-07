@@ -2,6 +2,8 @@ package net.pixelstatic.koruserver;
 
 import java.net.InetSocketAddress;
 
+import net.pixelstatic.koru.network.packets.ConnectPacket;
+
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -33,12 +35,24 @@ public class WebServer extends WebSocketServer implements Runnable{
 
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote){
-		
+		server.disconnected(server.webmap.get(conn) == null ? null : server.webmap.get(conn));
 	}
 
 	@Override
 	public void onMessage(WebSocket conn, String message){
-		//byte[] data = message.getBytes();
+		
+		Object object = message.getBytes();//TODO make this deserialize
+		
+		if(object instanceof ConnectPacket){
+			ConnectPacket packet = (ConnectPacket)object;
+			if(!server.webmap.containsKey(conn)){
+				server.connectPacketRecieved(packet, conn, null);
+			}else{
+				//already connected, ignore?
+			}
+		}else if(server.webmap.containsKey(conn)){
+			server.recieved(server.webmap.get(conn), object);
+		}
 	}
 
 	@Override
