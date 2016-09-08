@@ -3,23 +3,19 @@ package net.pixelstatic.koru.modules;
 import net.pixelstatic.gdxutils.graphics.Atlas;
 import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
 import net.pixelstatic.gdxutils.modules.Module;
+import net.pixelstatic.gdxutils.spritesystem.*;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.graphics.FrameBufferLayer;
 import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
-import net.pixelstatic.utils.io.GifRecorder;
-import net.pixelstatic.utils.spritesystem.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
@@ -34,7 +30,6 @@ public class Renderer extends Module<Koru>{
 	public Matrix4 matrix;
 	public GlyphLayout layout;
 	public BitmapFont font;
-	public GifRecorder recorder;
 	public FrameBufferMap buffers;
 	public boolean debug = false;
 	public final boolean gbuffer = false;
@@ -52,7 +47,6 @@ public class Renderer extends Module<Koru>{
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
-		recorder = new GifRecorder(batch, 1f / GUIscale);
 		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
 				drawRenderables(renderables);
@@ -78,9 +72,6 @@ public class Renderer extends Module<Koru>{
 		doRender();
 		updateCamera();
 
-		if(Gdx.input.isKeyJustPressed(Keys.Q)){
-			recorder.takeScreenshot();
-		}
 	}
 
 	void doRender(){
@@ -160,8 +151,6 @@ public class Renderer extends Module<Koru>{
 		font.draw(batch, launcher, gwidth()/2 - layout.width/2, gheight());
 		
 		font.setColor(Color.WHITE);
-
-		recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
 
 		if(debug){
 			Point cursor = getModule(Input.class).cursorblock();
@@ -261,41 +250,6 @@ public class Renderer extends Module<Koru>{
 		selected.end();
 		batch.setColor(Color.WHITE);
 		if(layers != null) layers.removeValue(selected, true);
-	}
-
-	Pixmap takeScreenshot(int x, int y, int w, int h){
-		byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
-
-		Pixmap p = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
-		BufferUtils.copy(pixels, 0, p.getPixels(), pixels.length);
-
-		processPixmap(p);
-		
-		PixmapIO.writePNG(Gdx.files.local("screenshot.png"), p);
-
-		return p;
-	}
-
-	void processPixmap(Pixmap pixmap){
-		Color color = new Color();
-		for(int x = 0;x < pixmap.getWidth();x ++){
-			for(int y = 0;y < pixmap.getHeight();y ++){
-				color.set(pixmap.getPixel(x, y));
-				color.a = 1f;
-				pixmap.setColor(color);
-				pixmap.drawPixel(x, y);
-			}
-		}
-		
-		for(int x = 0;x < pixmap.getWidth();x ++){
-			for(int y = 0;y < pixmap.getHeight();y ++){
-				color.set(pixmap.getPixel(x, y));
-				color.a = 1f;
-				pixmap.setColor(color);
-				pixmap.drawPixel(x, y);
-			}
-		}
-
 	}
 
 	void updateCamera(){

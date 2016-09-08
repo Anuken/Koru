@@ -1,7 +1,6 @@
 package net.pixelstatic.koru.world;
 
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.gdxutils.modules.Module;
 import net.pixelstatic.koru.Koru;
@@ -14,14 +13,11 @@ import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.TileUpdatePacket;
 import net.pixelstatic.koru.systems.SyncSystem;
 import net.pixelstatic.koru.utils.Point;
-import net.pixelstatic.utils.DirectionUtils;
-import net.pixelstatic.utils.MiscUtils;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pools;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
@@ -33,12 +29,10 @@ public class World extends Module<Koru>{
 	private Point point = new Point();
 	private WorldLoader file;
 	private Renderer renderer;
-	public Generator generator;
 	Network network;
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
-	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
 	
 	public World(WorldLoader loader){
 		this();
@@ -51,17 +45,6 @@ public class World extends Module<Koru>{
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
 		}
-		
-		Runtime.getRuntime().addShutdownHook(new Thread(){
-		    @Override
-		    public void run(){
-		    	if(!IServer.active()) return;
-		    	Koru.log("Saving " + loadedchunks.size() +" chunks...");
-		    	for(Chunk chunk : loadedchunks.values()){
-		    		file.writeChunk(chunk);
-		    	}
-		    }
-		});
 	}
 
 	@Override
@@ -90,7 +73,7 @@ public class World extends Module<Koru>{
 			
 			for(int x = 0;x < loadrange * 2;x ++){
 				for(int y = 0;y < loadrange * 2;y ++){
-					if(!MiscUtils.inBounds(x + sx, y + sy, chunks)){
+					if(!inBounds(x + sx, y + sy, chunks)){
 						chunks[x][y] = null;
 						continue;
 					}
@@ -106,7 +89,7 @@ public class World extends Module<Koru>{
 	}
 	
 	void checkUnloadChunks(){
-		Collection<Chunk> chunks = loadedchunks.values();
+		Collection<Chunk> chunks = file.getLoadedChunks();
 		ImmutableArray<Entity> players = IServer.instance().getEngine().getEntitiesFor(IServer.instance().getEngine().getSystem(SyncSystem.class).getFamily());
 		
 		for(Chunk chunk : chunks){
@@ -122,7 +105,7 @@ public class World extends Module<Koru>{
 				}
 			}
 			if(passed) continue;
-			unloadChunk(chunk);
+			file.unloadChunk(chunk);
 		}
 	}
 
@@ -155,7 +138,7 @@ public class World extends Module<Koru>{
 
 	public synchronized ChunkPacket createChunkPacket(ChunkRequestPacket request){
 		ChunkPacket packet = new ChunkPacket();
-		packet.chunk = getChunk(request.x, request.y);
+		packet.chunk = file.getChunk(request.x, request.y);
 		return packet;
 	}
 
@@ -171,20 +154,6 @@ public class World extends Module<Koru>{
 		int x = tile(fx);
 		int y = tile(fy);
 		return tile(x, y);
-	}
-
-	public Point findEmptySpace(int x, int y){
-		//Structure structure = entity.groupc().structure;
-		//	structure.getBuildState(x, y);
-		for(int k = -1;k < 3;k ++){
-			int i = (k + 4) % 4;
-			int sx = DirectionUtils.toX(i), sy = DirectionUtils.toY(i);
-			if( !blockSolid(x + sx, y + sy) /*&& structure.getBuildState(sx + x, sy + y) == BuildState.completed*/){
-				point.set(x + sx, y + sy);
-				return point;
-			}
-		}
-		return null;
 	}
 
 	public boolean positionSolid(float x, float y){
@@ -239,7 +208,7 @@ public class World extends Module<Koru>{
 		if(Math.abs(tx - x) >= loadrange * chunksize - 1 || Math.abs(ty - y) >= loadrange * chunksize - 1) return false;
 		int ax = x / chunksize - tx / chunksize + loadrange;
 		int ay = y / chunksize - ty / chunksize + loadrange;
-		if( !MiscUtils.inBounds(ax, ay, chunks)){ 
+		if( !inBounds(ax, ay, chunks)){ 
 			return false;
 		}
 		if(getRelativeChunk(x, y) == null) return false;
@@ -251,7 +220,7 @@ public class World extends Module<Koru>{
 		if(y < -1) y ++;
 		int ax = nint((float)x / chunksize) - lastchunkx + loadrange;
 		int ay = nint((float)y / chunksize) - lastchunky + loadrange;
-		if(!MiscUtils.inBounds(ax, ay, chunks)) return null;
+		if(!inBounds(ax, ay, chunks)) return null;
 		return chunks[ax][ay];
 	}
 
@@ -261,34 +230,7 @@ public class World extends Module<Koru>{
 		IServer.instance().sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
 	}
 
-	protected Chunk generateChunk(int chunkx, int chunky){
-		Chunk chunk = Pools.obtain(Chunk.class);
-		chunk.set(chunkx, chunky);
-		generator.generateChunk(chunk);
-		loadedchunks.put(hashCoords(chunkx, chunky), chunk);
-		
-		//file.writeChunk(chunk);
-		return chunk;
-	}
 
-	protected void unloadChunk(Chunk chunk){
-		file.writeChunk(chunk);
-		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
-	}
-
-	public Chunk getChunk(int chunkx, int chunky){
-		Chunk chunk = loadedchunks.get(hashCoords(chunkx, chunky));
-		if(chunk == null){
-			if(file.chunkIsSaved(chunkx, chunky)){
-				Chunk schunk = file.readChunk(chunkx, chunky);
-				loadedchunks.put(hashCoords(chunkx, chunky), schunk);
-				return schunk;
-			}else{
-				return generateChunk(chunkx, chunky);
-			}
-		}
-		return chunk;
-	}
 
 	public Tile tile(int x, int y){
 		if( !IServer.active()){
@@ -297,7 +239,7 @@ public class World extends Module<Koru>{
 		int cx = (x < -1 ? x + 1 : x) / chunksize, cy = (y < -1 ? y + 1 : y) / chunksize;
 		if(x < 0) cx --;
 		if(y < 0) cy --;
-		return getChunk(cx, cy).getWorldTile(x, y);
+		return file.getChunk(cx, cy).getWorldTile(x, y);
 	}
 	
 	public void setTile(int x, int y, Tile tile){
@@ -306,7 +248,7 @@ public class World extends Module<Koru>{
 			return;
 		}
 		int cx = x / chunksize, cy = y / chunksize;
-		getChunk(cx, cy).setWorldTile(x, y, tile);
+		file.getChunk(cx, cy).setWorldTile(x, y, tile);
 	}
 
 	public int toChunkCoords(int a){
@@ -316,10 +258,6 @@ public class World extends Module<Koru>{
 	public int toChunkCoords(float worldpos){
 		int i = tile(worldpos) / chunksize;
 		return i;
-	}
-
-	public static long hashCoords(int a, int b){
-		return (((long)a) << 32) | (b & 0xffffffffL);
 	}
 
 	public boolean updated(){
@@ -338,8 +276,8 @@ public class World extends Module<Koru>{
 		return tilesize * i + tilesize / 2;
 	}
 	
-	public int totalChunks(){
-		return file.totalChunks();
+	public static <T>boolean inBounds(int x, int y, T[][] array){
+		return x >= 0 && y >= 0 && x < array.length && y < array[0].length;
 	}
 
 	public void init(){

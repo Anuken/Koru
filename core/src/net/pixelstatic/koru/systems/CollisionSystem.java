@@ -1,13 +1,12 @@
 package net.pixelstatic.koru.systems;
 
-import java.awt.Point;
-
 import net.pixelstatic.koru.components.DestroyOnTerrainHitComponent;
 import net.pixelstatic.koru.components.HitboxComponent;
 import net.pixelstatic.koru.components.PositionComponent;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.listeners.CollisionHandler;
 import net.pixelstatic.koru.network.IServer;
+import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.Tile;
 import net.pixelstatic.koru.world.World;
 
@@ -108,7 +107,7 @@ public class CollisionSystem extends KoruSystem{
 				Tile tile = world.tile(worldx, worldy);
 				if( !tile.solid()) continue;
 				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, rect))){
-					point.setLocation(worldx, worldy);
+					point.set(worldx, worldy);
 					return point;
 				}
 				//	rect.set(0,0,0,0);

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import net.pixelstatic.koru.network.IClient;
 import net.pixelstatic.koru.network.NetworkListener;
-import net.pixelstatic.koru.network.Registrator;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;

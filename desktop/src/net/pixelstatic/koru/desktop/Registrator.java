@@ -1,4 +1,4 @@
-package net.pixelstatic.koru.network;
+package net.pixelstatic.koru.desktop;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.entities.ProjectileType;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
+import net.pixelstatic.koru.network.SyncBuffer;
 import net.pixelstatic.koru.network.SyncBuffer.PositionSyncBuffer;
 import net.pixelstatic.koru.network.SyncBuffer.Synced;
 import net.pixelstatic.koru.network.packets.*;
@@ -28,6 +29,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 public class Registrator{
+	
 	public static void register(Kryo k){
 		k.register(ConnectPacket.class);
 		k.register(PositionPacket.class);

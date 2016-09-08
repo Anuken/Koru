@@ -22,11 +22,12 @@ public class KoruEntity extends Entity{
 		public static HashMap<Class<?>, ComponentMapper<?>> map = new HashMap<Class<?>, ComponentMapper<?>>();
 		public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
 
-		public static <T>Component get(Class<? extends Component> c, KoruEntity entity){
+		@SuppressWarnings("unchecked")
+		public static <T> Component get(Class<T> c, KoruEntity entity){
 			if( !map.containsKey(c)){
-				map.put(c, ComponentMapper.getFor(c));
+				map.put(c, ComponentMapper.getFor((Class<? extends Component>)c));
 			}
-			return c.cast(map.get(c).get(entity));
+			return (Component)(map.get(c).get(entity));
 		}
 	}
 
@@ -68,7 +69,7 @@ public class KoruEntity extends Entity{
 	}
 
 	public <T>T mapComponent(Class<T> c){
-		return c.cast(Mappers.get(c.asSubclass(Component.class), this));
+		return (T)(Mappers.get(c, this));
 	}
 
 	public void log(Object object){

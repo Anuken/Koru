@@ -1,9 +1,9 @@
 package net.pixelstatic.koru.renderers;
 
+import net.pixelstatic.gdxutils.spritesystem.TextRenderable;
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.*;
 import net.pixelstatic.koru.entities.KoruEntity;
-import net.pixelstatic.utils.spritesystem.TextRenderable;
 
 public class IndicatorRenderer extends EntityRenderer{
 

@@ -6,14 +6,12 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.SyncSystem;
-import net.pixelstatic.koru.world.Generator;
 import net.pixelstatic.koru.world.World;
 
 public class KoruUpdater{
 	KoruServer server;
 	public KoruEngine engine;
 	public World world;
-	Generator generator;
 	private boolean isRunning = true;
 	final int maxfps = 60;
 	long frameid;
@@ -69,10 +67,7 @@ public class KoruUpdater{
 
 	public KoruUpdater(KoruServer server){
 		this.server = server;
-		world = new World(new WorldFile(Paths.get("world")));
-		generator = new Generator(world);
-		world.generator = generator;
-		generator.generateSpawn();
+		world = new World(new WorldFile(Paths.get("world"), new DefaultGenerator(world)));
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
 		engine.addSystem(new CollisionSystem());

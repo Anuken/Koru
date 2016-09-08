@@ -1,10 +1,10 @@
 package net.pixelstatic.koru.renderers;
 
+import net.pixelstatic.gdxutils.spritesystem.SortProviders;
+import net.pixelstatic.gdxutils.spritesystem.SpriteRenderable;
+import net.pixelstatic.gdxutils.spritesystem.TextRenderable;
 import net.pixelstatic.koru.components.ConnectionComponent;
 import net.pixelstatic.koru.utils.Resources;
-import net.pixelstatic.utils.spritesystem.SortProviders;
-import net.pixelstatic.utils.spritesystem.SpriteRenderable;
-import net.pixelstatic.utils.spritesystem.TextRenderable;
 
 import com.badlogic.gdx.graphics.Color;
 

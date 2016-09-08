@@ -14,7 +14,6 @@ public class Koru extends ModuleController<Koru>{
 	private IClient client;
 	private static Koru instance;
 	public KoruEngine engine;
-	private static Thread thread;
 	
 	public Koru(IClient client){
 		this.client = client;
@@ -24,7 +23,6 @@ public class Koru extends ModuleController<Koru>{
 	public void init(){
 		instance = this;
 		engine = new KoruEngine();
-		thread = Thread.currentThread();
 		
 		addModule(Network.class);
 		addModule(Renderer.class);
@@ -55,10 +53,6 @@ public class Koru extends ModuleController<Koru>{
 		if(o instanceof Exception){
 			((Exception)o).printStackTrace();
 		}
-	}
-
-	public static Thread getThread(){
-		return thread;
 	}
 	
 	public static KoruEngine getEngine(){

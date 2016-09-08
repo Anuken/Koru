@@ -36,6 +36,7 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
+		compile fileTree(dir: '../desktop/lib', include: '*.jar')
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
@@ -48,6 +49,7 @@ project(":html") {
 
     dependencies {
         compile project(":core")
+		compile fileTree(dir: '../html/lib', include: '*.jar')
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
@@ -64,6 +66,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+		compile fileTree(dir: '../lib', include: '*.jar')
     }
 }
 

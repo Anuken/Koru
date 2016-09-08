@@ -39,8 +39,4 @@ public class Node{
 		return World.instance().blockSolid(x, y);
 	}
 
-	public String toString(){
-		return String.format("Index:%d x:%d y:%d", index, x, y);
-	}
-
 }

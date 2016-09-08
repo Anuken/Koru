@@ -12,5 +12,6 @@
 			<attribute name="javadoc_location" value="file:/home/cobalt/Downloads/kryonet-2.21/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/Koru-desktop"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

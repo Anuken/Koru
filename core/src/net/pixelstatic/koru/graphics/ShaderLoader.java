@@ -16,7 +16,6 @@
 
 package net.pixelstatic.koru.graphics;
 
-import javax.swing.JOptionPane;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -54,7 +53,7 @@ public final class ShaderLoader {
 
 		if( !shader.isCompiled() ) {
 			Gdx.app.error( "ShaderLoader", shader.getLog() );
-			JOptionPane.showMessageDialog(null, "Error loading shader: " + vertexName);
+			Gdx.app.error("Shaders", "Error loading shader: " + vertexName);
 			Gdx.app.exit();
 		}
 

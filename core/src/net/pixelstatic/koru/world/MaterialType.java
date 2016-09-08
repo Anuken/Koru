@@ -1,12 +1,12 @@
 package net.pixelstatic.koru.world;
 
 
+import net.pixelstatic.gdxutils.Noise;
 import net.pixelstatic.gdxutils.graphics.Hue;
+import net.pixelstatic.gdxutils.spritesystem.RenderableList;
+import net.pixelstatic.gdxutils.spritesystem.SortProviders;
+import net.pixelstatic.gdxutils.spritesystem.SpriteRenderable;
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.utils.Noise;
-import net.pixelstatic.utils.spritesystem.RenderableList;
-import net.pixelstatic.utils.spritesystem.SortProviders;
-import net.pixelstatic.utils.spritesystem.SpriteRenderable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -31,10 +31,10 @@ public enum MaterialType{
 		}
 	},
 	water{
+		final float tscl = 10f;
+		final float s = 0.2f;
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			float tscl = 10f;
-			float s = 0.2f;
+		public void draw(final RenderableList group, final Material material, final Tile tile, final int x, final int y){
 			
 			new SpriteRenderable(Renderer.i.getRegion("riverrock"))
 			.setPosition(x*World.tilesize, y*World.tilesize)

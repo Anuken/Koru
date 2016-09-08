@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.entities;
 
+import net.pixelstatic.gdxutils.spritesystem.Renderable;
 import net.pixelstatic.koru.components.*;
-import net.pixelstatic.utils.spritesystem.Renderable;
 
 public enum ProjectileType{
 	bolt;

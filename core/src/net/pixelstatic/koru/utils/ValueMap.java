@@ -9,8 +9,9 @@ public class ValueMap{
 		values = new ObjectMap<String, Object>();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> T getValue(String name, Class<T> c){
-		return c.cast(values.get(name));
+		return (T)(values.get(name));
 	}
 	
 	public void addValue(String name, Object object){

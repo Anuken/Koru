@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.graphics;
 
+import net.pixelstatic.gdxutils.spritesystem.Renderable;
 import net.pixelstatic.koru.modules.Renderer;
-import net.pixelstatic.utils.spritesystem.Renderable;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

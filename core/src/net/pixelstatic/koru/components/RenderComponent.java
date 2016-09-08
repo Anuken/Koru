@@ -1,7 +1,7 @@
 package net.pixelstatic.koru.components;
 
+import net.pixelstatic.gdxutils.spritesystem.RenderableGroup;
 import net.pixelstatic.koru.renderers.EntityRenderer;
-import net.pixelstatic.utils.spritesystem.RenderableGroup;
 
 import com.badlogic.ashley.core.Component;
 

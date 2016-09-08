@@ -6,6 +6,8 @@
 	<inherits name='com.badlogic.gdx.ai' />
 
 	<inherits name='Koru' />
+	<inherits name='Utils' />
+	<inherits name="com.sksamuel.gwt.GwtWebsockets" />
 	<entry-point class='net.pixelstatic.koru.client.HtmlLauncher' />
 	
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />
