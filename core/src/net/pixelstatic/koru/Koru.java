@@ -49,7 +49,10 @@ public class Koru extends ModuleController<Koru>{
 	}
 
 	public static void log(Object o){
-		System.out.println(o);
+		if (Gdx.app == null)
+			System.out.println("" + o);
+		else
+			Gdx.app.log("Koru:", "" + o);
 		if(o instanceof Exception){
 			((Exception)o).printStackTrace();
 		}

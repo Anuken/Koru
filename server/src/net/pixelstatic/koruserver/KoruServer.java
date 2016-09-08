@@ -33,7 +33,7 @@ public class KoruServer extends IServer{
 	WebServer webserver;
 	KoruUpdater updater;
 
-	void start(){
+	void setup(){
 		try{
 			server = new Server(16384 * 256, 16384 * 256);
 			Registrator.register(server.getKryo());
@@ -41,7 +41,7 @@ public class KoruServer extends IServer{
 			server.start();
 			server.bind(Network.port, Network.port);
 
-			webserver = new WebServer(this, new InetSocketAddress(Network.port));
+			webserver = new WebServer(this, new InetSocketAddress(Network.port+1));
 			Koru.log("Server up.");
 		}catch(Exception e){
 			e.printStackTrace();
@@ -265,6 +265,6 @@ public class KoruServer extends IServer{
 	}
 
 	public static void main(String[] args){
-		new KoruServer().start();
+		new KoruServer().setup();
 	}
 }

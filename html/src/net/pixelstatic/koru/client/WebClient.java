@@ -27,7 +27,8 @@ public class WebClient extends IClient{
 
 	@Override
 	public void connect(String ip, int port) throws IOException{
-		socket = new Websocket("ws://" + ip + ":" + port);
+		socket = new Websocket("ws://127.0.0.1:" + (port+1));
+		socket.open();
 		socket.addListener(new WebsocketListener(){
 			@Override
 			public void onClose(CloseEvent event){
@@ -44,7 +45,6 @@ public class WebClient extends IClient{
 			}
 			
 		});
-		socket.open();
 	}
 
 	@Override

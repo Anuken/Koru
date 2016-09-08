@@ -12,6 +12,7 @@ import net.pixelstatic.koru.utils.Angles;
 import net.pixelstatic.koru.world.World;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -48,7 +49,7 @@ public class Network extends Module<Koru>{
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Connection failed!");
-			Gdx.app.exit();
+			if(Gdx.app.getType() != ApplicationType.WebGL) Gdx.app.exit();
 		}
 	}
 

@@ -2,12 +2,14 @@ package net.pixelstatic.koruserver;
 
 import java.net.InetSocketAddress;
 
+import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.network.packets.ConnectPacket;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
@@ -21,6 +23,10 @@ public class WebServer extends WebSocketServer implements Runnable{
 	public WebServer(KoruServer server, InetSocketAddress address){
 		super(address);
 		this.server = server;
+		this.start();
+		Koru.log(this.getAddress());
+		sendThread.start();
+		Koru.log("Started web server.");
 	}
 	
 	class Request implements Poolable{
@@ -60,11 +66,12 @@ public class WebServer extends WebSocketServer implements Runnable{
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake){
-		
+		Gdx.app.log("Koru", "Web client connection opened!");
 	}
 
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote){
+		Gdx.app.log("Koru", "Web client connection closed! " + reason);
 		server.disconnected(server.webmap.get(conn) == null ? null : server.webmap.get(conn));
 	}
 
@@ -87,7 +94,7 @@ public class WebServer extends WebSocketServer implements Runnable{
 
 	@Override
 	public void onError(WebSocket conn, Exception ex){
-		
+		Koru.log("error: " + ex);
 	}
 
 }

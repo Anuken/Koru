@@ -8,6 +8,9 @@
 	<inherits name='Koru' />
 	<inherits name='Utils' />
 	<inherits name="com.sksamuel.gwt.GwtWebsockets" />
+
+	<extend-configuration-property name="gdx.reflect.include" value="net.pixelstatic.koru" />
+	<extend-configuration-property name="gdx.reflect.include" value="net.pixelstatic.koru.network.packets" />
 	<entry-point class='net.pixelstatic.koru.client.HtmlLauncher' />
 	
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />
