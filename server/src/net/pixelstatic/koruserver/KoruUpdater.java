@@ -31,6 +31,10 @@ public class KoruUpdater{
 		}
 	}
 	
+	void stop(){
+		isRunning = false;
+	}
+	
 	void updateTiles(){
 		/*
 		for(int x = 0; x < World.worldwidth; x ++){

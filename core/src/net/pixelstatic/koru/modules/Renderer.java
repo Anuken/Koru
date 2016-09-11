@@ -11,6 +11,7 @@ import net.pixelstatic.koru.renderers.ParticleRenderer;
 import net.pixelstatic.koru.utils.Point;
 import net.pixelstatic.koru.world.*;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -123,11 +124,11 @@ public class Renderer extends Module<Koru>{
 							renderables[rendx][rendy] = new RenderableList();
 						}
 
-						if(tile.tile != Material.air){
+						if(tile.tile != Materials.air){
 							tile.tile.getType().draw(renderables[rendx][rendy], tile.tile, tile, worldx, worldy);
 						}
 
-						if(tile.block != Material.air){
+						if(tile.block != Materials.air){
 							tile.block.getType().draw(renderables[rendx][rendy], tile.block, tile, worldx, worldy);
 						}
 					}
@@ -142,8 +143,14 @@ public class Renderer extends Module<Koru>{
 
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
 		
-		String launcher = System.getProperty("sun.java.command");
-		launcher = launcher.substring(launcher.lastIndexOf(".")+1, launcher.length());
+		String launcher = "";
+		
+		if(Gdx.app.getType() != ApplicationType.WebGL){
+			launcher = System.getProperty("sun.java.command");
+			launcher = launcher.substring(launcher.lastIndexOf(".") + 1, launcher.length()).replace("Launcher", "");
+		}else{
+			launcher = "GWT";
+		}
 		
 		layout.setText(font, launcher);
 		

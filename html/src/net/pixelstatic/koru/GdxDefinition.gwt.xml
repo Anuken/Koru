@@ -8,6 +8,7 @@
 	<inherits name='Koru' />
 	<inherits name='Utils' />
 	<inherits name="com.sksamuel.gwt.GwtWebsockets" />
+	<inherits name="Kryo" />
 
 	<extend-configuration-property name="gdx.reflect.include" value="net.pixelstatic.koru" />
 	<extend-configuration-property name="gdx.reflect.include" value="net.pixelstatic.koru.network.packets" />

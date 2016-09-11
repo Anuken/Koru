@@ -11,6 +11,5 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/GdxUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Utils"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Koru-html"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,20 +3,21 @@ package net.pixelstatic.koruserver;
 import java.net.InetSocketAddress;
 
 import net.pixelstatic.koru.Koru;
+import net.pixelstatic.koru.network.Serializer;
+import net.pixelstatic.koru.network.packets.ChunkRequestPacket;
 import net.pixelstatic.koru.network.packets.ConnectPacket;
+import net.pixelstatic.koru.network.packets.PositionPacket;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class WebServer extends WebSocketServer implements Runnable{
+public class WebServer extends WebSocketServer{
 	final KoruServer server;
-	final Thread sendThread = new Thread(this, "WebServer Thread");
-	//CopyOnWriteArrayList<Request> requests = new CopyOnWriteArrayList<Request>();
+	final Thread sendThread = new Thread(new Runner(), "WebServer Thread");
 	AtomicQueue<Request> requests = new AtomicQueue<Request>(1000);
 	Json json = new Json();
 
@@ -24,15 +25,20 @@ public class WebServer extends WebSocketServer implements Runnable{
 		super(address);
 		this.server = server;
 		this.start();
-		Koru.log(this.getAddress());
+		sendThread.setDaemon(true);
 		sendThread.start();
 		Koru.log("Started web server.");
+		
 	}
-	
-	class Request implements Poolable{
+
+	public static class Request implements Poolable{
 		WebSocket socket;
 		Object object;
 		
+		public Request(){
+			
+		}
+
 		public Request set(WebSocket socket, Object object){
 			this.socket = socket;
 			this.object = object;
@@ -44,21 +50,23 @@ public class WebServer extends WebSocketServer implements Runnable{
 			socket = null;
 		}
 	}
-	
-	public void run(){
-		while(true){
-			Request request = null;
-			while((request = requests.poll()) != null){
-				request.socket.send(json.toJson(request.object));
-			}
-			try{
-				Thread.sleep(9999999999L);
-			}catch (Exception e){
-				System.out.println("Interrupted!");
+
+	class Runner implements Runnable{
+		public void run(){
+			while(true){
+				Request request = null;
+				while((request = requests.poll()) != null){
+					String string = Serializer.serialize(request.object);
+					request.socket.send(string);
+				}
+				try{
+					Thread.sleep(9999999999L);
+				}catch(Exception e){
+				}
 			}
 		}
 	}
-	
+
 	public void sendObject(WebSocket socket, Object object){
 		requests.put(Pools.obtain(Request.class).set(socket, object));
 		sendThread.interrupt();
@@ -66,23 +74,25 @@ public class WebServer extends WebSocketServer implements Runnable{
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake){
-		Gdx.app.log("Koru", "Web client connection opened!");
+		Koru.log("Web client connection opened!");
 	}
 
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote){
-		Gdx.app.log("Koru", "Web client connection closed! " + reason);
+		Koru.log("Web client connection closed! " + reason);
 		server.disconnected(server.webmap.get(conn) == null ? null : server.webmap.get(conn));
 	}
 
 	@Override
 	public void onMessage(WebSocket conn, String message){
-		
-		Object object = message.getBytes();//TODO make this deserialize
+		Object object = Serializer.deserialize(message);
+		if(!(object instanceof ChunkRequestPacket) && !(object instanceof PositionPacket))
+			Koru.log(object.getClass());
 		
 		if(object instanceof ConnectPacket){
+			Koru.log("Recieved connect packet.");
 			ConnectPacket packet = (ConnectPacket)object;
-			if(!server.webmap.containsKey(conn)){
+			if( !server.webmap.containsKey(conn)){
 				server.connectPacketRecieved(packet, conn, null);
 			}else{
 				//already connected, ignore?
@@ -94,7 +104,8 @@ public class WebServer extends WebSocketServer implements Runnable{
 
 	@Override
 	public void onError(WebSocket conn, Exception ex){
-		Koru.log("error: " + ex);
+		//Koru.log("error: " + ex);
+		ex.printStackTrace();
 	}
 
 }

@@ -68,6 +68,7 @@ public class KoruEntity extends Entity{
 		return id;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T>T mapComponent(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}

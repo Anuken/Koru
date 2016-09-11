@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Bits;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -118,7 +119,8 @@ public class Registrator{
 			this.id = entity.getID();
 			this.type = entity.getType();
 			for(Component component : entity.getComponents()){
-				if(component.getClass().isAnnotationPresent(Synced.class)){
+			
+				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
 					//if(component instanceof FadeComponent)Koru.log("sent:" + ((FadeComponent)component).lifetime);
 					components.put(component.getClass(), component);
 				}
@@ -131,7 +133,7 @@ public class Registrator{
 			ImmutableArray<Component> icomponents = entity.getComponents();
 			for(Component component : icomponents){
 				//Koru.log("Iterating component: " + component.getClass().getSimpleName());
-				if(component.getClass().isAnnotationPresent(Synced.class)){
+				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
 					//if(component instanceof FadeComponent)Koru.log("recieved:" + ((FadeComponent)component).lifetime);
 					toadd.add(components.get(component.getClass()));
 				//	Koru.log("Adding synced component: " + components.get(component.getClass()).getClass().getSimpleName());

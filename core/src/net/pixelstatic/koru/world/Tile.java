@@ -4,9 +4,16 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 public class Tile implements Poolable{
-	public Material tile = Material.air;
-	public Material block = Material.air;
+	public Material tile = Materials.air;
+	public Material block = Materials.air;
 	public TileData tiledata, blockdata;
+	
+	public Tile(){}
+	
+	public Tile(Material tile, Material block){
+		this.tile = tile;
+		this.block = block;
+	}
 
 	public Tile setTileMaterial(Material m){
 		this.tile = m;
@@ -27,7 +34,7 @@ public class Tile implements Poolable{
 	}
 
 	public boolean solid(){
-		return tile.solid() || block.solid();
+		return tile.getType().solid() || block.getType().solid();
 	}
 
 	public Material solidMaterial(){
@@ -63,8 +70,8 @@ public class Tile implements Poolable{
 
 	@Override
 	public void reset(){
-		tile = Material.air;
-		block = Material.air;
+		tile = Materials.air;
+		block = Materials.air;
 		tiledata = null;
 		blockdata = null;
 	}

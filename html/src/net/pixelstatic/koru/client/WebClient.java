@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import net.pixelstatic.koru.network.IClient;
 import net.pixelstatic.koru.network.NetworkListener;
+import net.pixelstatic.koru.network.Serializer;
 
-import com.badlogic.gdx.utils.Json;
 import com.sksamuel.gwt.websockets.CloseEvent;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
@@ -13,11 +13,10 @@ import com.sksamuel.gwt.websockets.WebsocketListener;
 public class WebClient extends IClient{
 	Websocket socket;
 	NetworkListener listener;
-	Json json = new Json();
 
 	@Override
 	public void sendTCP(Object object){
-		socket.send(json.toJson(object));
+		socket.send(Serializer.serialize(object));
 	}
 
 	@Override
@@ -36,14 +35,13 @@ public class WebClient extends IClient{
 			}
 			@Override
 			public void onMessage(String msg){
-				listener.received(json.fromJson(null, msg));
+				listener.received(Serializer.deserialize(msg));
 			}
 
 			@Override
 			public void onOpen(){
 				
 			}
-			
 		});
 	}
 

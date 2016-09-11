@@ -20,13 +20,13 @@ public enum MaterialType{
 			
 			new SpriteRenderable(Renderer.i.getRegion(material.name()))
 			.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(-material.ordinal()*2).add(group);
+			.setLayer(-material.id()*2).add(group);
 			
 			if(Renderer.i.world.blends(x, y, material)) 
 			new SpriteRenderable(Renderer.i.getRegion(material.name()+ "edge"))
 			.setPosition(x*World.tilesize+World.tilesize/2, y*World.tilesize+World.tilesize/2)
 			.center()
-			.setLayer(-material.ordinal()*2+1).add(group);
+			.setLayer(-material.id()*2+1).add(group);
 
 		}
 	},

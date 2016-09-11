@@ -30,21 +30,17 @@ public class Network extends Module<Koru>{
 	public IClient client;
 
 	public void init(){
-		
+
 		try{
-		//	int buffer = (int)Math.pow(2, 6);
+			//	int buffer = (int)Math.pow(2, 6);
 			//client = new Client(8192 * buffer, 8192 * buffer);
 			//Registrator.register(client.getKryo());
 			client.addListener(new Listen());
 			//client.addListener(new Listener.LagListener(ping, ping, new Listen()));
 			//client.start();
 			client.connect(ip, port);
-			ConnectPacket packet = new ConnectPacket();
-			String launcher = System.getProperty("sun.java.command");
-			launcher = launcher.substring(launcher.lastIndexOf(".")+1, launcher.length()).replace("Launcher", "");
-			packet.name = launcher;
-			client.sendTCP(packet);
-			initialconnect = true;
+			
+
 			Koru.log("Connecting to server..");
 		}catch(Exception e){
 			e.printStackTrace();
@@ -81,8 +77,7 @@ public class Network extends Module<Koru>{
 					chunksAdded = true;
 				}else if(object instanceof TileUpdatePacket){
 					TileUpdatePacket packet = (TileUpdatePacket)object;
-					if(getModule(World.class).inBounds(packet.x, packet.y))
-					getModule(World.class).setTile(packet.x, packet.y, packet.tile);
+					if(getModule(World.class).inBounds(packet.x, packet.y)) getModule(World.class).setTile(packet.x, packet.y, packet.tile);
 					chunksAdded = true;
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket packet = (EntityRemovePacket)object;
@@ -100,6 +95,19 @@ public class Network extends Module<Koru>{
 
 	@Override
 	public void update(){
+		if(!initialconnect){
+			ConnectPacket packet = new ConnectPacket();
+			if(Gdx.app.getType() != ApplicationType.WebGL){
+				String launcher = System.getProperty("sun.java.command");
+				launcher = launcher.substring(launcher.lastIndexOf(".") + 1, launcher.length()).replace("Launcher", "");
+				packet.name = launcher;
+			}else{
+				packet.name = "GWT";
+			}
+			client.sendTCP(packet);
+			initialconnect = true;
+		}
+		
 		while(queue.size != 0){
 			KoruEntity entity = queue.pop();
 			if(entity == null) continue;
@@ -109,16 +117,16 @@ public class Network extends Module<Koru>{
 			}
 			entity.addSelf();
 		}
-		
+
 		for(Long id : entitiesToRemove){
 			t.engine.removeEntity(id);
 		}
-		
+
 		if(chunksAdded){
 			getModule(Renderer.class).updateTiles();
 			chunksAdded = false;
 		}
-		
+
 		if(entitiesToRemove.size > 10) entitiesToRemove.clear();
 
 		if(Gdx.graphics.getFrameId() % packetFrequency == 0) sendUpdate();

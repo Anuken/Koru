@@ -19,6 +19,9 @@ import net.pixelstatic.koru.world.World;
 import org.java_websocket.WebSocket;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -32,6 +35,7 @@ public class KoruServer extends IServer{
 	Server server;
 	WebServer webserver;
 	KoruUpdater updater;
+	Renderer renderer;
 
 	void setup(){
 		try{
@@ -47,6 +51,20 @@ public class KoruServer extends IServer{
 			e.printStackTrace();
 		}
 		createUpdater();
+		/*
+		
+		Koru.log("---------");
+		ChunkRequestPacket request = new ChunkRequestPacket();
+		ChunkPacket packet = updater.world.createChunkPacket(request);
+		
+		String s = Serializer.serialize(packet);
+		
+		Koru.log(s);
+		
+		ChunkPacket out = (ChunkPacket)Serializer.deserialize(s);
+		
+		Koru.log(out);
+		*/
 	}
 
 	private void createUpdater(){
@@ -59,7 +77,40 @@ public class KoruServer extends IServer{
 		}));
 
 		thread.setDaemon(true);
-		thread.run();
+		thread.start();
+		
+		renderer = new Renderer();
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setTitle("Koru Server");
+		config.setWindowListener(new Lwjgl3WindowListener() {
+			   @Override
+			   public void iconified () {
+				   
+			   }
+			 
+			   @Override
+			   public void deiconified () {     
+				   
+			   }
+			 
+			   @Override
+			   public void focusLost () {
+				   
+			   }
+			 
+			   @Override
+			   public void focusGained () {
+				   
+			   }
+			 
+			   @Override
+			   public boolean windowIsClosing () {
+				   updater.stop();
+				   System.out.println(Thread.getAllStackTraces().keySet());
+				   return true;
+			   }
+			});
+		new Lwjgl3Application(renderer, config);
 	}
 
 	public void connectPacketRecieved(ConnectPacket packet, WebSocket socket, Connection connection){
@@ -223,7 +274,6 @@ public class KoruServer extends IServer{
 			}
 		}
 	}
-	
 	
 	public void sendToAllExceptTCP(int id, Object object){
 		for(ConnectionInfo info : connections.values()){

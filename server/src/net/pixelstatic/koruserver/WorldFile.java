@@ -29,9 +29,10 @@ public class WorldFile extends WorldLoader{
 	private Kryo kryo;
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
 	private Generator generator;
+	private Object lock = new Object();
 
 	public WorldFile(Path file, Generator generator){
-		
+
 		if( !Files.isDirectory(file)) throw new RuntimeException("World file has to be a directory!");
 
 		kryo = new Kryo();
@@ -56,24 +57,24 @@ public class WorldFile extends WorldLoader{
 		}else{
 			Koru.log("Found empty world.");
 		}
-		
+
 		Runtime.getRuntime().addShutdownHook(new Thread(){
-		    @Override
-		    public void run(){
-		    	if(!IServer.active()) return;
-		    	Koru.log("Saving " + loadedchunks.size() +" chunks...");
-		    	for(Chunk chunk : loadedchunks.values()){
-		    		writeChunk(chunk);
-		    	}
-		    }
+			@Override
+			public void run(){
+				if( !IServer.active()) return;
+				Koru.log("Saving " + loadedchunks.size() + " chunks...");
+				for(Chunk chunk : loadedchunks.values()){
+					writeChunk(chunk);
+				}
+			}
 		});
-		
+
 		if(totalChunks() != 0) return;
 		generateChunk(0, 0);
-		generateChunk(-1, 0);
+		generateChunk( -1, 0);
 		generateChunk(0, -1);
-		generateChunk(-1, -1);
-		
+		generateChunk( -1, -1);
+
 	}
 
 	public boolean chunkIsSaved(int x, int y){
@@ -81,70 +82,79 @@ public class WorldFile extends WorldLoader{
 	}
 
 	public void writeChunk(Chunk chunk){
-		Path path = Paths.get(file.toString(), "/" + fileName(chunk.x, chunk.y));
-		
-		long time = TimeUtils.millis();
-		
-		try{
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			Output output = new Output(stream);
-			kryo.writeObject(output, chunk);
-			output.close();
-			
-			ByteArrayInputStream in = new ByteArrayInputStream(stream.toByteArray());
-			FileOutputStream file = new FileOutputStream(path.toString());
-			
-			Lzma.compress(in, file);	
-			
-			stream.close();
-			in.close();
-			file.close();
-	
-			Koru.log("Chunk write time elapsed: " + TimeUtils.timeSinceMillis(time));
-		}catch(Exception e){
-			Koru.log("Error writing chunk!");
-			e.printStackTrace();
+		synchronized (lock){
+			Koru.log(Consolec.RED + "BEGIN" + Consolec.BLUE + " write chunk" + Consolec.RESET);
+			Path path = Paths.get(file.toString(), "/" + fileName(chunk.x, chunk.y));
+
+			long time = TimeUtils.millis();
+
+			try{
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				Output output = new Output(stream);
+				kryo.writeObject(output, chunk);
+				output.close();
+
+				ByteArrayInputStream in = new ByteArrayInputStream(stream.toByteArray());
+				FileOutputStream file = new FileOutputStream(path.toString());
+
+				Lzma.compress(in, file);
+
+				stream.close();
+				in.close();
+				file.close();
+
+				Koru.log("Chunk write time elapsed: " + TimeUtils.timeSinceMillis(time));
+			}catch(Exception e){
+				Koru.log("Error writing chunk!");
+				e.printStackTrace();
+			}
+			files.put(path.getFileName().toString(), path);
+
+			Koru.log(Consolec.GREEN + "END" + Consolec.BLUE + " write chunk" + Consolec.RESET);
 		}
-		files.put(path.getFileName().toString(), path);
 	}
 
 	public Chunk readChunk(int x, int y){
-		Path path = getPath(x, y);
+		synchronized (lock){
+			Koru.log(Consolec.RED + "BEGIN" + Consolec.YELLOW + " read chunk" + Consolec.RESET);
+			Path path = getPath(x, y);
 
-		long time = TimeUtils.millis();
-		
-		try{
-			
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			FileInputStream file = new FileInputStream(path.toFile());
-			
-			Lzma.decompress(file, out);		
-			ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-			
-			Input input = new Input(in);
-			Chunk chunk = kryo.readObject(input, Chunk.class);
-			
-			input.close();
-			out.close();
-			in.close();
-			file.close();
-			
-			Koru.log("Chunk read time elapsed: " + TimeUtils.timeSinceMillis(time));
-			
-			return chunk;
-		}catch(Exception e){
-			Koru.log("Error writing chunk!");
-			e.printStackTrace();
+			long time = TimeUtils.millis();
+
+			try{
+
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				FileInputStream file = new FileInputStream(path.toFile());
+
+				Lzma.decompress(file, out);
+				ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+
+				Input input = new Input(in);
+				Chunk chunk = kryo.readObject(input, Chunk.class);
+
+				input.close();
+				out.close();
+				in.close();
+				file.close();
+
+				Koru.log("Chunk read time elapsed: " + TimeUtils.timeSinceMillis(time));
+
+				Koru.log(Consolec.GREEN + "END" + Consolec.YELLOW + " read chunk" + Consolec.RESET);
+				return chunk;
+			}catch(Exception e){
+				Koru.log("Error writing chunk!");
+				e.printStackTrace();
+			}
+			throw new RuntimeException("Error reading chunk!");
 		}
-		throw new RuntimeException("Error reading chunk!");
 	}
-	
+
 	public Chunk generateChunk(int chunkx, int chunky){
 		Chunk chunk = Pools.obtain(Chunk.class);
 		chunk.set(chunkx, chunky);
 		generator.generateChunk(chunk);
 		loadedchunks.put(hashCoords(chunkx, chunky), chunk);
-		
+
 		//file.writeChunk(chunk);
 		return chunk;
 	}
@@ -154,7 +164,7 @@ public class WorldFile extends WorldLoader{
 		writeChunk(chunk);
 		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
 	}
-	
+
 	@Override
 	public Chunk getChunk(int chunkx, int chunky){
 		Chunk chunk = loadedchunks.get(hashCoords(chunkx, chunky));
@@ -169,7 +179,7 @@ public class WorldFile extends WorldLoader{
 		}
 		return chunk;
 	}
-	
+
 	public Collection<Chunk> getLoadedChunks(){
 		return loadedchunks.values();
 	}
@@ -185,7 +195,7 @@ public class WorldFile extends WorldLoader{
 	private Path getPath(int x, int y){
 		return files.get(fileName(x, y));
 	}
-	
+
 	public static long hashCoords(int a, int b){
 		return (((long)a) << 32) | (b & 0xffffffffL);
 	}
