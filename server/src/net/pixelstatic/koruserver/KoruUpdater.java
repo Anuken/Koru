@@ -6,18 +6,22 @@ import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.systems.CollisionSystem;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.systems.SyncSystem;
+import net.pixelstatic.koru.world.Chunk;
+import net.pixelstatic.koru.world.MaterialManager;
 import net.pixelstatic.koru.world.World;
 
 public class KoruUpdater{
 	KoruServer server;
 	public KoruEngine engine;
 	public World world;
+	public final WorldFile file;
 	private boolean isRunning = true;
 	final int maxfps = 60;
 	long frameid;
 	float delta = 1f;
 	long lastFpsTime;
-	final int blockupdatetime = 60*6;
+	final int blockupdatetime = 60 * 6;
+	final MaterialManager materials = new MaterialManager();
 
 	void Loop(){
 		try{
@@ -30,11 +34,11 @@ public class KoruUpdater{
 			System.exit(1);
 		}
 	}
-	
+
 	void stop(){
 		isRunning = false;
 	}
-	
+
 	void updateTiles(){
 		/*
 		for(int x = 0; x < World.worldwidth; x ++){
@@ -71,16 +75,26 @@ public class KoruUpdater{
 
 	public KoruUpdater(KoruServer server){
 		this.server = server;
-		world = new World(new WorldFile(Paths.get("world"), new DefaultGenerator(world)));
+		file = new WorldFile(Paths.get("world"), new DefaultGenerator(world));
+		world = new World(file);
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
 		engine.addSystem(new CollisionSystem());
-		
-		//Group.createGroupEntity(Group.instance()).addSelf();
 
-		for(int i = 0;i < 1;i ++){
-		//	KoruEntity entity = new KoruEntity(EntityType.egg).addSelf();
-		//	entity.position().set(20f, 20f);
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+			@Override
+			public void run(){
+				saveAll();
+			}
+		});
+	}
+
+	void saveAll(){
+		Koru.log("Saving " + file.getLoadedChunks().size() + " chunks...");
+		for(Chunk chunk : file.getLoadedChunks()){
+			file.writeChunk(chunk);
 		}
+		Koru.log("Saving objects...");
+		//Gdx.files.local(Variables.objectDirectory).writeString(Resources.getJson().toJson(materials.objects), false);
 	}
 }

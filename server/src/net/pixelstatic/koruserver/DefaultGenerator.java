@@ -3,10 +3,12 @@ package net.pixelstatic.koruserver;
 import net.pixelstatic.gdxutils.Noise;
 import net.pixelstatic.koru.world.*;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
 public class DefaultGenerator implements Generator{
 	World world;
+	int sx, sy;
 
 	public DefaultGenerator(World world){
 		this.world = world;
@@ -36,6 +38,16 @@ public class DefaultGenerator implements Generator{
 		if(Math.random() < 0.01) tile.setBlockMaterial(Materials.next(Materials.koru1, 3));
 		if(Math.random() < 0.002) tile.setBlockMaterial(Materials.pinesapling);
 		if(Math.random() < 0.001) tile.setMaterial(Materials.pinecones);
+		
+		if(Math.random() < 0.001){
+			sx = x;
+			sy = y;
+		}
+		
+		if(Vector2.dst(x, y, sx, sy) < 10){
+			tile.setMaterial(Materials.stonefloor);
+			tile.setBlockMaterial(Materials.air);
+		}
 		//	if(Math.random() < 0.01)
 		//		tile.setMaterial(Materials.box);
 

@@ -1,4 +1,4 @@
-package net.pixelstatic.koru.desktop;
+package net.pixelstatic.koru.network;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,6 @@ import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.entities.ProjectileType;
 import net.pixelstatic.koru.items.Item;
 import net.pixelstatic.koru.items.ItemStack;
-import net.pixelstatic.koru.network.SyncBuffer;
 import net.pixelstatic.koru.network.SyncBuffer.PositionSyncBuffer;
 import net.pixelstatic.koru.network.SyncBuffer.Synced;
 import net.pixelstatic.koru.network.packets.*;
@@ -68,7 +67,7 @@ public class Registrator{
 		k.register(Tile[].class);
 		k.register(Tile[][].class);
 		k.register(Tile[][][].class);
-		k.register(Material.class);
+		k.register(Materials.class);
 		k.register(ItemStack.class);
 		k.register(ItemStack[].class);
 		k.register(ItemStack[][].class);
@@ -87,6 +86,18 @@ public class Registrator{
 		k.register(Class.class);
 
 		k.register(KoruEntity.class, new EntitySerializer());
+	}
+	
+	public static class MaterialSerializer extends Serializer<Material>{
+		@Override
+		public Material read(Kryo k, Input i, Class<Material> c){
+			return Materials.values()[k.readObject(i, Integer.class)];
+		}
+
+		@Override
+		public void write(Kryo k, Output o, Material m){
+			k.writeObject(o, new Integer(m.id()));
+		}
 	}
 
 	static class EntitySerializer extends Serializer<KoruEntity>{

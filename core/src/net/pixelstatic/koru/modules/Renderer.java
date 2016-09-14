@@ -128,7 +128,7 @@ public class Renderer extends Module<Koru>{
 							tile.tile.getType().draw(renderables[rendx][rendy], tile.tile, tile, worldx, worldy);
 						}
 
-						if(tile.block != Materials.air){
+						if(tile.block != Materials.air && tile.block != null){
 							tile.block.getType().draw(renderables[rendx][rendy], tile.block, tile, worldx, worldy);
 						}
 					}

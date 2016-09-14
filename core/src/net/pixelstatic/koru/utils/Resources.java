@@ -5,8 +5,11 @@ import net.pixelstatic.koru.modules.Renderer;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Json;
 
 public class Resources{
+	private static Json json;
+	
 	public static AtlasRegion findRegion(String name){
 		return Renderer.i.atlas.findRegion(name);
 	}
@@ -17,5 +20,10 @@ public class Resources{
 	
 	public static BitmapFont getFont(){
 		return Renderer.i.font;
+	}
+	
+	public static Json getJson(){
+		if(json == null) json = new Json();
+		return json;
 	}
 }

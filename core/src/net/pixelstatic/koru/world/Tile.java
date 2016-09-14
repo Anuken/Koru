@@ -1,7 +1,6 @@
 package net.pixelstatic.koru.world;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 public class Tile implements Poolable{
 	public Material tile = Materials.air;
@@ -61,7 +60,7 @@ public class Tile implements Poolable{
 	}
 
 	public boolean invalidData(Material material, TileData data){
-		return material.getDataClass() == null || data == null || ClassReflection.getSimpleName(material.getDataClass()).equals(ClassReflection.getSimpleName(data.getClass()));
+		return material.getDataClass() == null || data == null || !material.getDataClass().equals(data.getClass());
 	}
 
 	public String toString(){

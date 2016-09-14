@@ -13,10 +13,6 @@ public enum Materials implements Material{
 	grass(Hue.rgb(69, 109, 29,0.04f)), 
 	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){
 		{addDrop(Item.water, 1);}
-		
-		public boolean reserved(){
-			return false;
-		}
 	},
 	riveredge,
 	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){
@@ -78,9 +74,7 @@ public enum Materials implements Material{
 	private Array<ItemStack> drops = new Array<ItemStack>();
 	private Color color = Color.CLEAR;
 	
-	private Materials(){
-		
-	}
+	private Materials(){}
 	
 	private Materials(MaterialType type){
 		this.type = type;
@@ -92,11 +86,9 @@ public enum Materials implements Material{
 		this.color = color;
 	}
 	
-	
 	private Materials(MaterialType type, int breaktime){
 		this(type, breaktime, Color.WHITE);
 	}
-	
 
 	private Materials(MaterialType type, int breaktime, boolean collisions){
 		this.type = type;
@@ -162,7 +154,7 @@ public enum Materials implements Material{
 	}
 	
 	public void growEvent(Tile tile){
-		tile.block = growMaterial();
+		//tile.block = (Materials)growMaterial();
 	}
 	
 	public Color getColor(){

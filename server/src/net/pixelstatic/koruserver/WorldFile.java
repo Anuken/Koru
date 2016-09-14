@@ -10,9 +10,7 @@ import java.util.stream.Stream;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.network.IServer;
-import net.pixelstatic.koru.world.Chunk;
-import net.pixelstatic.koru.world.Generator;
-import net.pixelstatic.koru.world.WorldLoader;
+import net.pixelstatic.koru.world.*;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
@@ -37,6 +35,7 @@ public class WorldFile extends WorldLoader{
 
 		kryo = new Kryo();
 		kryo.register(Chunk.class);
+		kryo.register(Materials.class);
 		this.file = file;
 		this.generator = generator;
 

@@ -1,19 +1,19 @@
 package net.pixelstatic.koruserver;
 
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
 import net.pixelstatic.koru.Koru;
 import net.pixelstatic.koru.components.ConnectionComponent;
 import net.pixelstatic.koru.components.InputComponent;
-import net.pixelstatic.koru.desktop.Registrator;
 import net.pixelstatic.koru.entities.EntityType;
 import net.pixelstatic.koru.entities.KoruEntity;
 import net.pixelstatic.koru.modules.Network;
 import net.pixelstatic.koru.network.IServer;
+import net.pixelstatic.koru.network.Registrator;
 import net.pixelstatic.koru.network.packets.*;
 import net.pixelstatic.koru.systems.KoruEngine;
 import net.pixelstatic.koru.world.InventoryTileData;
+import net.pixelstatic.koru.world.Materials;
 import net.pixelstatic.koru.world.World;
 
 import org.java_websocket.WebSocket;
@@ -45,26 +45,12 @@ public class KoruServer extends IServer{
 			server.start();
 			server.bind(Network.port, Network.port);
 
-			webserver = new WebServer(this, new InetSocketAddress(Network.port+1));
+		//	webserver = new WebServer(this, new InetSocketAddress(Network.port+1));
 			Koru.log("Server up.");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		createUpdater();
-		/*
-		
-		Koru.log("---------");
-		ChunkRequestPacket request = new ChunkRequestPacket();
-		ChunkPacket packet = updater.world.createChunkPacket(request);
-		
-		String s = Serializer.serialize(packet);
-		
-		Koru.log(s);
-		
-		ChunkPacket out = (ChunkPacket)Serializer.deserialize(s);
-		
-		Koru.log(out);
-		*/
 	}
 
 	private void createUpdater(){
@@ -79,6 +65,10 @@ public class KoruServer extends IServer{
 		thread.setDaemon(true);
 		thread.start();
 		
+	//	createGDX();
+	}
+	
+	void createGDX(){
 		renderer = new Renderer();
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("Koru Server");
@@ -106,7 +96,6 @@ public class KoruServer extends IServer{
 			   @Override
 			   public boolean windowIsClosing () {
 				   updater.stop();
-				   System.out.println(Thread.getAllStackTraces().keySet());
 				   return true;
 			   }
 			});
@@ -171,7 +160,7 @@ public class KoruServer extends IServer{
 				updater.world.updateTile(packet.x, packet.y);
 			}else if(object instanceof BlockInputPacket){
 				BlockInputPacket packet = (BlockInputPacket)object;
-				updater.world.tile(packet.x, packet.y).block = packet.material;
+				updater.world.tile(packet.x, packet.y).block = (Materials)packet.material;
 				updater.world.updateTile(packet.x, packet.y);
 			}
 		}catch(Exception e){
@@ -265,7 +254,7 @@ public class KoruServer extends IServer{
 
 	public void send(ConnectionInfo info, Object object, boolean udp){
 		if(info.isWeb()){
-			webserver.sendObject(info.socket, object);
+			//webserver.sendObject(info.socket, object); //screw GWT!
 		}else{
 			if(udp){
 				info.connection.sendUDP(object);

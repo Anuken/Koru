@@ -10,7 +10,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Koru-core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Koru-desktop"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Fluxe-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
