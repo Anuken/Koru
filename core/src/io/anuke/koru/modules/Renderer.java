@@ -1,15 +1,5 @@
 package io.anuke.koru.modules;
 
-import io.anuke.koru.Koru;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.FrameBufferLayer;
-import io.anuke.koru.renderers.ParticleRenderer;
-import io.anuke.koru.world.*;
-import net.pixelstatic.gdxutils.graphics.Atlas;
-import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
-import net.pixelstatic.gdxutils.modules.Module;
-import net.pixelstatic.gdxutils.spritesystem.*;
-
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -17,6 +7,17 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
+
+import io.anuke.koru.Koru;
+import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.graphics.FrameBufferLayer;
+import io.anuke.koru.renderers.ParticleRenderer;
+import io.anuke.koru.world.*;
+import io.anuke.utils.MiscUtils;
+import net.pixelstatic.gdxutils.graphics.Atlas;
+import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
+import net.pixelstatic.gdxutils.modules.Module;
+import net.pixelstatic.gdxutils.spritesystem.*;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
@@ -39,6 +40,7 @@ public class Renderer extends Module<Koru>{
 	public int lastcamx, lastcamy;
 
 	public Renderer(){
+		MiscUtils.maximizeWindow();
 		i = this;
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
@@ -280,11 +282,6 @@ public class Renderer extends Module<Koru>{
 		return layout;
 	}
 
-	public void drawFont(String text, float x, float y){
-		layout.setText(font, text);
-		font.draw(batch, text, x - layout.width / 2, y + layout.height / 2);
-	}
-
 	//returns screen width / scale
 	public float gwidth(){
 		return Gdx.graphics.getWidth() / GUIscale;
@@ -293,23 +290,6 @@ public class Renderer extends Module<Koru>{
 	//returns screen height / scale
 	public float gheight(){
 		return Gdx.graphics.getHeight() / GUIscale;
-	}
-
-	public void draw(String region, float x, float y){
-		batch.draw(atlas.findRegion(region), (int)(x - atlas.regionWidth(region) / 2), (int)(y - atlas.regionHeight(region) / 2));
-	}
-
-	public void drawc(String region, float x, float y){
-		batch.draw(atlas.findRegion(region), (int)x, (int)y);
-	}
-
-	public void drawscl(String region, float x, float y, float sclx, float scly){
-
-		batch.draw(atlas.findRegion(region), (int)(x - atlas.regionWidth(region) / 2), (int)(y - atlas.regionHeight(region) / 2), atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), sclx, scly, 0f);
-	}
-
-	public void draw(String region, float x, float y, float rotation){
-		batch.draw(atlas.findRegion(region), x - atlas.regionWidth(region) / 2, y - atlas.regionHeight(region) / 2, atlas.regionWidth(region) / 2, atlas.regionHeight(region) / 2, atlas.regionWidth(region), atlas.regionHeight(region), 1f, 1f, rotation);
 	}
 
 	public TextureAtlas atlas(){

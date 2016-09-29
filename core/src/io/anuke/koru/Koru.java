@@ -1,5 +1,7 @@
 package io.anuke.koru;
 
+import com.badlogic.gdx.Gdx;
+
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.systems.InterpolationSystem;
@@ -7,8 +9,6 @@ import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.RendererSystem;
 import io.anuke.koru.world.World;
 import net.pixelstatic.gdxutils.modules.ModuleController;
-
-import com.badlogic.gdx.Gdx;
 
 public class Koru extends ModuleController<Koru>{
 	private IClient client;
@@ -52,7 +52,7 @@ public class Koru extends ModuleController<Koru>{
 		if (Gdx.app == null)
 			System.out.println("" + o);
 		else
-			Gdx.app.log("Koru:", "" + o);
+			Gdx.app.log("Koru", "" + o);
 		if(o instanceof Exception){
 			((Exception)o).printStackTrace();
 		}

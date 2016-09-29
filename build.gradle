@@ -16,11 +16,12 @@ allprojects {
     version = '1.0'
     ext {
         appName = "Koru"
-        gdxVersion = '1.9.2'
+        gdxVersion = '1.9.4'
         roboVMVersion = '1.12.0'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+		visuiVersion = '1.2.2'
     }
 
     repositories {
@@ -37,7 +38,7 @@ project(":desktop") {
     dependencies {
         compile project(":core")
 		compile fileTree(dir: '../desktop/lib', include: '*.jar')
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }
@@ -66,6 +67,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 		compile fileTree(dir: '../lib', include: '*.jar')
     }
 }
