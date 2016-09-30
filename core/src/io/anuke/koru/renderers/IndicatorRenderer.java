@@ -3,7 +3,7 @@ package io.anuke.koru.renderers;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
-import net.pixelstatic.gdxutils.spritesystem.TextRenderable;
+import io.anuke.ucore.spritesystem.TextRenderable;
 
 public class IndicatorRenderer extends EntityRenderer{
 

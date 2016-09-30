@@ -4,7 +4,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
-import net.pixelstatic.gdxutils.modules.Module;
+import io.anuke.ucore.modules.Module;
 
 public class ClientData extends Module<Koru>{
 	public final KoruEntity player;

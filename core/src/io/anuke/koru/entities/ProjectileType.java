@@ -1,7 +1,7 @@
 package io.anuke.koru.entities;
 
 import io.anuke.koru.components.*;
-import net.pixelstatic.gdxutils.spritesystem.Renderable;
+import io.anuke.ucore.spritesystem.Renderable;
 
 public enum ProjectileType{
 	bolt;

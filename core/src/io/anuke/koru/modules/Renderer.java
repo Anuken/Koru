@@ -13,11 +13,14 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.world.*;
+import io.anuke.ucore.graphics.Atlas;
+import io.anuke.ucore.graphics.FrameBufferMap;
+import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.spritesystem.LayerManager;
+import io.anuke.ucore.spritesystem.Renderable;
+import io.anuke.ucore.spritesystem.RenderableHandler;
+import io.anuke.ucore.spritesystem.RenderableList;
 import io.anuke.utils.MiscUtils;
-import net.pixelstatic.gdxutils.graphics.Atlas;
-import net.pixelstatic.gdxutils.graphics.FrameBufferMap;
-import net.pixelstatic.gdxutils.modules.Module;
-import net.pixelstatic.gdxutils.spritesystem.*;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
@@ -283,12 +286,12 @@ public class Renderer extends Module<Koru>{
 	}
 
 	//returns screen width / scale
-	public float gwidth(){
+	public float uiwidth(){
 		return Gdx.graphics.getWidth() / GUIscale;
 	}
 
 	//returns screen height / scale
-	public float gheight(){
+	public float uiheight(){
 		return Gdx.graphics.getHeight() / GUIscale;
 	}
 

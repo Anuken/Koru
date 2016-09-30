@@ -9,10 +9,9 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
+import io.anuke.ucore.modules.Module;
 
 import java.util.Collection;
-
-import net.pixelstatic.gdxutils.modules.Module;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;

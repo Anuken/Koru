@@ -1,7 +1,7 @@
 package io.anuke.koru.graphics;
 
 import io.anuke.koru.modules.Renderer;
-import net.pixelstatic.gdxutils.spritesystem.Renderable;
+import io.anuke.ucore.spritesystem.Renderable;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

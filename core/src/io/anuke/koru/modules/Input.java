@@ -11,7 +11,7 @@ import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.*;
-import net.pixelstatic.gdxutils.modules.Module;
+import io.anuke.ucore.modules.Module;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;

@@ -1,7 +1,7 @@
 package io.anuke.koru.components;
 
 import io.anuke.koru.renderers.EntityRenderer;
-import net.pixelstatic.gdxutils.spritesystem.RenderableGroup;
+import io.anuke.ucore.spritesystem.RenderableGroup;
 
 import com.badlogic.ashley.core.Component;
 

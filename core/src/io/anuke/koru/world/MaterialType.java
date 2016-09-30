@@ -2,11 +2,11 @@ package io.anuke.koru.world;
 
 
 import io.anuke.koru.modules.Renderer;
-import net.pixelstatic.gdxutils.Noise;
-import net.pixelstatic.gdxutils.graphics.Hue;
-import net.pixelstatic.gdxutils.spritesystem.RenderableList;
-import net.pixelstatic.gdxutils.spritesystem.SortProviders;
-import net.pixelstatic.gdxutils.spritesystem.SpriteRenderable;
+import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.Noise;
+import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

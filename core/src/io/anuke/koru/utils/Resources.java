@@ -1,7 +1,7 @@
 package io.anuke.koru.utils;
 
 import io.anuke.koru.modules.Renderer;
-import net.pixelstatic.gdxutils.graphics.Atlas;
+import io.anuke.ucore.graphics.Atlas;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;

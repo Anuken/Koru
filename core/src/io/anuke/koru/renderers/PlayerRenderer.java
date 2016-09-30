@@ -2,9 +2,9 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.utils.Resources;
-import net.pixelstatic.gdxutils.spritesystem.SortProviders;
-import net.pixelstatic.gdxutils.spritesystem.SpriteRenderable;
-import net.pixelstatic.gdxutils.spritesystem.TextRenderable;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.ucore.spritesystem.TextRenderable;
 
 import com.badlogic.gdx.graphics.Color;
 

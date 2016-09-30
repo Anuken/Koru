@@ -60,6 +60,7 @@ public class Tile implements Poolable{
 	}
 
 	public boolean invalidData(Material material, TileData data){
+		
 		return material.getDataClass() == null || data == null || !material.getDataClass().equals(data.getClass());
 	}
 

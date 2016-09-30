@@ -9,7 +9,7 @@ import io.anuke.koru.network.NetworkListener;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.utils.Angles;
 import io.anuke.koru.world.World;
-import net.pixelstatic.gdxutils.modules.Module;
+import io.anuke.ucore.modules.Module;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -45,7 +45,6 @@ public class Network extends Module<Koru>{
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Connection failed!");
-			if(Gdx.app.getType() != ApplicationType.WebGL) Gdx.app.exit();
 		}
 	}
 

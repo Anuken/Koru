@@ -3,8 +3,8 @@ package io.anuke.koru.desktop;
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.utils.Resources;
-import net.pixelstatic.gdxutils.modules.Module;
-import net.pixelstatic.utils.io.GifRecorder;
+import io.anuke.ucore.modules.Module;
+import io.anuke.utils.io.GifRecorder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

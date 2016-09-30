@@ -2,11 +2,11 @@ package io.anuke.koru.world;
 
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
-import net.pixelstatic.gdxutils.graphics.Hue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import io.anuke.ucore.graphics.Hue;
 
 public enum Materials implements Material{
 	air, 

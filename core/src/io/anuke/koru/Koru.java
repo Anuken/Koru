@@ -8,7 +8,7 @@ import io.anuke.koru.systems.InterpolationSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.RendererSystem;
 import io.anuke.koru.world.World;
-import net.pixelstatic.gdxutils.modules.ModuleController;
+import io.anuke.ucore.modules.ModuleController;
 
 public class Koru extends ModuleController<Koru>{
 	private IClient client;
@@ -29,6 +29,7 @@ public class Koru extends ModuleController<Koru>{
 		addModule(Input.class);
 		addModule(ClientData.class);
 		addModule(World.class);
+		addModule(UI.class);
 		
 		getModule(Network.class).client = client;
 

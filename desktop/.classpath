@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry kind="src" path="assets"/>
-	<classpathentry kind="lib" path="/Koru-core/lib/kryonet-2.21-all.jar">
+	<classpathentry kind="src" path="src">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/cobalt/Downloads/kryonet-2.21/javadoc/"/>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/GdxUtils"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Utils"/>
+	<classpathentry kind="src" path="assets"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
+	<classpathentry kind="lib" path="/Koru-core/lib/kryonet-2.21-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
