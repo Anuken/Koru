@@ -36,6 +36,7 @@ project(":desktop") {
 
 
     dependencies {
+		compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile project(":core")
 		compile fileTree(dir: '../desktop/lib', include: '*.jar')
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
@@ -64,6 +65,7 @@ project(":core") {
 
 
     dependencies {
+		compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 		compile "com.kotcrab.vis:vis-ui:$visuiVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"

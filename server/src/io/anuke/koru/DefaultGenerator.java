@@ -1,6 +1,5 @@
 package io.anuke.koru;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.world.Chunk;
@@ -12,7 +11,6 @@ import io.anuke.ucore.Noise;
 
 public class DefaultGenerator implements Generator{
 	World world;
-	int sx, sy;
 
 	public DefaultGenerator(World world){
 		this.world = world;
@@ -43,20 +41,8 @@ public class DefaultGenerator implements Generator{
 		if(Math.random() < 0.002) tile.setBlockMaterial(Materials.pinesapling);
 		if(Math.random() < 0.001) tile.setMaterial(Materials.pinecones);
 		
-		if(Math.random() < 0.001){
-			sx = x;
-			sy = y;
-		}
-		
-		if(Vector2.dst(x, y, sx, sy) < 10){
-			tile.setMaterial(Materials.stonefloor);
-			tile.setBlockMaterial(Materials.air);
-		}
-		//	if(Math.random() < 0.01)
-		//		tile.setMaterial(Materials.box);
-
-		//if(Math.random() < 0.1)
-		//	world.tiles[x][y].setTileMaterial(Materials.stone);
+		if(Math.random() < 0.01)
+			tile.setMaterial(Materials.box);
 
 		tile.changeEvent();
 		return tile;
@@ -70,47 +56,4 @@ public class DefaultGenerator implements Generator{
 			}
 		}
 	}
-	/*
-		public void generate(){
-			int seed = 0;
-			for(int x = 0;x < World.worldwidth;x ++){
-				for(int y = 0;y < World.worldwidth;y ++){
-					if(Noise.normalNoise(x + seed, y + seed, 20f, 7f) > 3){
-						world.tiles[x][y].setMaterial(Materials.water);
-						continue;
-					}else if(Noise.normalNoise(x + seed, y + seed, 20f, 7f) > 2.7f){
-						world.tiles[x][y].setMaterial(Materials.riveredge);
-						continue;
-					}
-					
-					if(Noise.normalNoise(x + 100+seed, y + 100+seed, 20f, 6f) > 2f){
-						world.tiles[x][y].setMaterial(Materials.stone);
-						continue;
-					}
-
-					world.tiles[x][y].setTileMaterial(Materials.grass);
-					if(Math.random() < 0.05) world.tiles[x][y].setBlockMaterial(Materials.next(Materials.pinetree1, 4));
-					if(Math.random() < 0.1) world.tiles[x][y].setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
-					if(Math.random() < 0.03) world.tiles[x][y].setBlockMaterial(Materials.next(Materials.fern1, 3));
-					if(Math.random() < 0.01) world.tiles[x][y].setBlockMaterial(Materials.next(Materials.koru1, 3));
-					if(Math.random() < 0.002) world.tiles[x][y].setBlockMaterial(Materials.pinesapling);
-					if(Math.random() < 0.001) world.tiles[x][y].setMaterial(Materials.pinecones);
-					//	if(Math.random() < 0.01)
-					//		world.tiles[x][y].setMaterial(Materials.box);
-
-					//if(Math.random() < 0.1)
-					//	world.tiles[x][y].setTileMaterial(Materials.stone);
-
-				}
-			}
-			
-			for(int x = 0;x < World.worldwidth;x ++){
-				for(int y = 0;y < World.worldwidth;y ++){
-					world.tiles[x][y].changeEvent();
-				}
-			}
-
-			Koru.log("Generated world.");
-		}
-		*/
 }

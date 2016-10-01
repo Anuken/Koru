@@ -1,5 +1,9 @@
 package io.anuke.koru;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.java_websocket.WebSocket;
@@ -18,6 +22,7 @@ import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.BlockInputPacket;
+import io.anuke.koru.network.packets.ChatPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
@@ -38,7 +43,7 @@ public class KoruServer extends IServer{
 	Server server;
 	WebServer webserver;
 	KoruUpdater updater;
-	Renderer renderer;
+	GraphicsHandler renderer;
 
 	void setup(){
 		try{
@@ -115,7 +120,10 @@ public class KoruServer extends IServer{
 
 				getPlayer(info).position().set(packet.x, packet.y);
 				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
-
+			}else if(object instanceof ChatPacket){
+				ChatPacket packet = (ChatPacket)object;
+				packet.id = info.playerid;
+				sendToAll(packet);
 			}else if(object instanceof ChunkRequestPacket){
 				ChunkRequestPacket packet = (ChunkRequestPacket)object;
 				sendTCP(info.id, updater.world.createChunkPacket(packet));
@@ -272,6 +280,21 @@ public class KoruServer extends IServer{
 	}
 
 	public static void main(String[] args){
+		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
+			Koru.log("Clearing world.");
+			try {
+				Files.list(Paths.get("world")).forEach((Path path)->{
+					try {
+						Files.delete(path);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 		new KoruServer().setup();
 	}
 }

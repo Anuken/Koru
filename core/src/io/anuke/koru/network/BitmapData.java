@@ -6,9 +6,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 
 public class BitmapData{
-	final private ObjectMap<Byte, Integer> colors;
-	final private byte[] data;
-	final private int width, height;
+	final public ObjectMap<Byte, Integer> colors;
+	final public byte[] data;
+	final public int width, height;
 	
 	public BitmapData(Pixmap pixmap){
 		data = new  byte[pixmap.getWidth()*pixmap.getHeight()];

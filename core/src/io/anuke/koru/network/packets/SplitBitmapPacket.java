@@ -10,5 +10,4 @@ public class SplitBitmapPacket{
 		public ObjectMap<Byte, Integer> colors;
 		public int width, height, id;
 	}
-	
 }

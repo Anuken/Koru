@@ -1,11 +1,10 @@
 package io.anuke.koru.utils;
 
-import io.anuke.koru.modules.Renderer;
-import io.anuke.ucore.graphics.Atlas;
-
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Json;
+
+import io.anuke.koru.modules.Renderer;
 
 public class Resources{
 	private static Json json;
@@ -14,7 +13,7 @@ public class Resources{
 		return Renderer.i.atlas.findRegion(name);
 	}
 	
-	public static Atlas getAtlas(){
+	public static RepackableAtlas getAtlas(){
 		return Renderer.i.atlas;
 	}
 	

@@ -1,18 +1,5 @@
 package io.anuke.koru.network;
 
-import io.anuke.koru.components.*;
-import io.anuke.koru.entities.EntityType;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.entities.ProjectileType;
-import io.anuke.koru.items.Item;
-import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
-import io.anuke.koru.network.SyncBuffer.Synced;
-import io.anuke.koru.network.packets.*;
-import io.anuke.koru.systems.SyncSystem.SyncType;
-import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,6 +15,44 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import io.anuke.koru.components.ChildComponent;
+import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.FadeComponent;
+import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.ParticleComponent;
+import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.components.ProjectileComponent;
+import io.anuke.koru.components.TextComponent;
+import io.anuke.koru.components.VelocityComponent;
+import io.anuke.koru.entities.EntityType;
+import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.ProjectileType;
+import io.anuke.koru.items.Item;
+import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
+import io.anuke.koru.network.SyncBuffer.Synced;
+import io.anuke.koru.network.packets.BlockInputPacket;
+import io.anuke.koru.network.packets.ChatPacket;
+import io.anuke.koru.network.packets.ChunkPacket;
+import io.anuke.koru.network.packets.ChunkRequestPacket;
+import io.anuke.koru.network.packets.ConnectPacket;
+import io.anuke.koru.network.packets.DataPacket;
+import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.StoreItemPacket;
+import io.anuke.koru.network.packets.TileUpdatePacket;
+import io.anuke.koru.network.packets.WorldUpdatePacket;
+import io.anuke.koru.systems.SyncSystem.SyncType;
+import io.anuke.koru.utils.InputType;
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.InventoryTileData;
+import io.anuke.koru.world.Material;
+import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.PinetreeTileData;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.TileData;
+
 public class Registrator{
 	
 	public static void register(Kryo k){
@@ -42,6 +67,7 @@ public class Registrator{
 		k.register(TileUpdatePacket.class);
 		k.register(BlockInputPacket.class);
 		k.register(StoreItemPacket.class);
+		k.register(ChatPacket.class);
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);

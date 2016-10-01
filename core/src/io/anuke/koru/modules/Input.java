@@ -45,6 +45,12 @@ public class Input extends Module<Koru> implements InputProcessor{
 			Gdx.app.exit();
 		}
 		
+		if(Gdx.input.isKeyJustPressed(Keys.ENTER)){
+			getModule(UI.class).chat.enterPressed();
+		}
+		
+		if(!getModule(Network.class).connected() || getModule(UI.class).chat.chatOpen()) return;
+		
 		if(Gdx.input.isKeyJustPressed(Keys.R)) sendInput(InputType.r);
 		
 		float speed = 2f;

@@ -1,14 +1,13 @@
 package io.anuke.koru;
 
-import io.anuke.koru.Koru;
+import java.nio.file.Paths;
+
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.MaterialManager;
 import io.anuke.koru.world.World;
-
-import java.nio.file.Paths;
 
 public class KoruUpdater{
 	KoruServer server;
@@ -27,7 +26,6 @@ public class KoruUpdater{
 		try{
 			engine.update(delta);
 			world.update();
-			if(frameid % (blockupdatetime) == 0) updateTiles();
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Entity update loop error!");
@@ -38,18 +36,7 @@ public class KoruUpdater{
 	void stop(){
 		isRunning = false;
 	}
-
-	void updateTiles(){
-		/*
-		for(int x = 0; x < World.worldwidth; x ++){
-			for(int y = 0; y < World.worldheight; y ++){
-				Tile tile = world.tiles[x][y];
-				if(tile.blockdata instanceof UpdatingTileData) ((UpdatingTileData)tile.blockdata).update(x,y,tile);
-			}
-		}
-		*/
-	}
-
+	
 	public float delta(){
 		return delta;
 	}
