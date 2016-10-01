@@ -1,7 +1,6 @@
 package io.anuke.koru.modules;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -29,6 +28,7 @@ public class Network extends Module<Koru>{
 	public static final int ping = 0;
 	public static final int packetFrequency = 3;
 	public boolean initialconnect = false;
+	public boolean connecting;
 	private boolean chunksAdded = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
@@ -36,13 +36,21 @@ public class Network extends Module<Koru>{
 	
 	public void connect(){
 		try{
+			connecting =  true;
 			client.addListener(new Listen());
 			client.connect(ip, port);
 			Koru.log("Connecting to server..");
+			
+			ConnectPacket packet = new ConnectPacket();
+			packet.name = "a player";
+			client.sendTCP(packet);
+			Koru.log("Sent packet.");
 		}catch(Exception e){
+			connecting = false;
 			e.printStackTrace();
 			Koru.log("Connection failed!");
 		}
+		connecting = false;
 		initialconnect = true;
 	}
 
@@ -92,19 +100,6 @@ public class Network extends Module<Koru>{
 
 	@Override
 	public void update(){
-		if(!initialconnect){
-			ConnectPacket packet = new ConnectPacket();
-			if(Gdx.app.getType() != ApplicationType.WebGL){
-				String launcher = System.getProperty("sun.java.command");
-				launcher = launcher.substring(launcher.lastIndexOf(".") + 1, launcher.length()).replace("Launcher", "");
-				packet.name = launcher;
-			}else{
-				packet.name = "GWT";
-			}
-			client.sendTCP(packet);
-			initialconnect = true;
-		}
-		
 		while(queue.size != 0){
 			KoruEntity entity = queue.pop();
 			if(entity == null) continue;
