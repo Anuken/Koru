@@ -7,4 +7,5 @@ public abstract class IClient{
 	public abstract void sendUDP(Object object);
 	public abstract void connect(String ip, int port) throws IOException;
 	public abstract void addListener(NetworkListener listener);
+	public abstract boolean isConnected();
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.network.KryoClient;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

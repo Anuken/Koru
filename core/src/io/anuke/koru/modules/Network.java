@@ -1,51 +1,49 @@
 package io.anuke.koru.modules;
 
-import io.anuke.koru.Koru;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.SyncComponent;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.network.IClient;
-import io.anuke.koru.network.NetworkListener;
-import io.anuke.koru.network.packets.*;
-import io.anuke.koru.utils.Angles;
-import io.anuke.koru.world.World;
-import io.anuke.ucore.modules.Module;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 
+import io.anuke.koru.Koru;
+import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.components.SyncComponent;
+import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.network.IClient;
+import io.anuke.koru.network.NetworkListener;
+import io.anuke.koru.network.packets.ChunkPacket;
+import io.anuke.koru.network.packets.ConnectPacket;
+import io.anuke.koru.network.packets.DataPacket;
+import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.TileUpdatePacket;
+import io.anuke.koru.network.packets.WorldUpdatePacket;
+import io.anuke.koru.utils.Angles;
+import io.anuke.koru.world.World;
+import io.anuke.ucore.modules.Module;
+
 public class Network extends Module<Koru>{
 	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
 	public static final int port = 7575;
 	public static final int ping = 0;
 	public static final int packetFrequency = 3;
-	private boolean connected = true;
-	private boolean initialconnect = false;
+	public boolean initialconnect = false;
 	private boolean chunksAdded = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	public IClient client;
-
-	public void init(){
-
+	
+	public void connect(){
 		try{
-			//	int buffer = (int)Math.pow(2, 6);
-			//client = new Client(8192 * buffer, 8192 * buffer);
-			//Registrator.register(client.getKryo());
 			client.addListener(new Listen());
-			//client.addListener(new Listener.LagListener(ping, ping, new Listen()));
-			//client.start();
 			client.connect(ip, port);
-			
-
 			Koru.log("Connecting to server..");
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Connection failed!");
 		}
+		initialconnect = true;
 	}
 
 	class Listen extends NetworkListener{
@@ -137,11 +135,10 @@ public class Network extends Module<Koru>{
 		pos.y = getModule(ClientData.class).player.mapComponent(PositionComponent.class).y;
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(), getModule(ClientData.class).player.getY());
 		client.sendUDP(pos);
-
 	}
 
 	public boolean connected(){
-		return connected;
+		return client.isConnected();
 	}
 
 	public boolean initialconnect(){

@@ -1,8 +1,4 @@
-package io.anuke.koru.desktop;
-
-import io.anuke.koru.network.IClient;
-import io.anuke.koru.network.NetworkListener;
-import io.anuke.koru.network.Registrator;
+package io.anuke.koru.network;
 
 import java.io.IOException;
 
@@ -43,6 +39,11 @@ public class KryoClient extends IClient{
 				listener.received(object);
 			}
 		});
+	}
+
+	@Override
+	public boolean isConnected() {
+		return client.isConnected();
 	}
 
 }

@@ -1,6 +1,15 @@
 package io.anuke.koru.modules;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
@@ -10,15 +19,11 @@ import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.*;
+import io.anuke.koru.world.InventoryTileData;
+import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
-
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 public class Input extends Module<Koru> implements InputProcessor{
 	private Vector2 vector = new Vector2();
@@ -26,7 +31,10 @@ public class Input extends Module<Koru> implements InputProcessor{
 	KoruEntity player;
 	
 	public void init(){
-		Gdx.input.setInputProcessor(this);
+		InputMultiplexer plex = new InputMultiplexer();
+		plex.addProcessor(getModule(UI.class).stage);
+		plex.addProcessor(this);
+		Gdx.input.setInputProcessor(plex);
 		player = getModule(ClientData.class).player;
 		collisions = new CollisionSystem();
 	}
