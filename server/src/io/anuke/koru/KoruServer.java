@@ -1,6 +1,15 @@
 package io.anuke.koru;
 
-import io.anuke.koru.Koru;
+import java.util.ArrayList;
+
+import org.java_websocket.WebSocket;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.entities.EntityType;
@@ -8,24 +17,18 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
-import io.anuke.koru.network.packets.*;
+import io.anuke.koru.network.packets.BlockInputPacket;
+import io.anuke.koru.network.packets.ChunkRequestPacket;
+import io.anuke.koru.network.packets.ConnectPacket;
+import io.anuke.koru.network.packets.DataPacket;
+import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.World;
-
-import java.util.ArrayList;
-
-import org.java_websocket.WebSocket;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
 
 public class KoruServer extends IServer{
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
@@ -65,41 +68,6 @@ public class KoruServer extends IServer{
 		thread.setDaemon(true);
 		thread.start();
 		
-	//	createGDX();
-	}
-	
-	void createGDX(){
-		renderer = new Renderer();
-		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setTitle("Koru Server");
-		config.setWindowListener(new Lwjgl3WindowListener() {
-			   @Override
-			   public void iconified () {
-				   
-			   }
-			 
-			   @Override
-			   public void deiconified () {     
-				   
-			   }
-			 
-			   @Override
-			   public void focusLost () {
-				   
-			   }
-			 
-			   @Override
-			   public void focusGained () {
-				   
-			   }
-			 
-			   @Override
-			   public boolean windowIsClosing () {
-				   updater.stop();
-				   return true;
-			   }
-			});
-		new Lwjgl3Application(renderer, config);
 	}
 
 	public void connectPacketRecieved(ConnectPacket packet, WebSocket socket, Connection connection){

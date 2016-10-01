@@ -36,10 +36,13 @@ public class Network extends Module<Koru>{
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	public IClient client;
 	
+	public void init(){
+		client.addListener(new Listen());
+	}
+	
 	public void connect(){
 		try{
 			connecting =  true;
-			client.addListener(new Listen());
 			client.connect(ip, port);
 			Koru.log("Connecting to server..");
 			
@@ -66,6 +69,7 @@ public class Network extends Module<Koru>{
 		public void received(Object object){
 			try{
 				if(object instanceof DataPacket){
+					Koru.log("Recieving a data packet... ");
 					DataPacket data = (DataPacket)object;
 
 					t.engine.removeAllEntities();

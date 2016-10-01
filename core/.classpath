@@ -9,6 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
-	<classpathentry kind="lib" path="lib/kryonet-2.21-all.jar"/>
+	<classpathentry kind="lib" path="lib/kryonet-2.21-all.jar" sourcepath="/home/cobalt/Documents/Other Documents/kryonet-2.20/java/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

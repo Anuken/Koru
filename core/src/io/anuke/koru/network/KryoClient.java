@@ -6,8 +6,11 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import io.anuke.koru.Koru;
+
 public class KryoClient extends IClient{
 	private Client client;
+	private boolean started;
 	
 	{	
 		int buffer = (int)Math.pow(2, 6)*8192;
@@ -27,7 +30,11 @@ public class KryoClient extends IClient{
 
 	@Override
 	public void connect(String ip, int port) throws IOException{
-		client.start();
+		if(!started){
+			Koru.log("starting");
+			client.start();
+			started = true;
+		}
 		client.connect(12000, ip, port, port);
 	}
 

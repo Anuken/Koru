@@ -1,10 +1,14 @@
 package io.anuke.koru;
 
-import io.anuke.koru.world.*;
-import net.pixelstatic.gdxutils.Noise;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
+
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Generator;
+import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.World;
+import io.anuke.ucore.Noise;
 
 public class DefaultGenerator implements Generator{
 	World world;

@@ -2,9 +2,9 @@ package io.anuke.koru.modules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
@@ -52,7 +52,7 @@ public class UI extends Module<Koru>{
 		name.setTextFieldListener(new TextFieldListener(){
 			@Override
 			public void keyTyped(VisTextField textField, char c) {
-				if(c == '\n') button.fire(new ChangeListener.ChangeEvent());
+				if(c == '\n') ((ClickListener)button.getListeners().get(2)).clicked(null, 0, 0);;
 			}
 		});
 		
@@ -63,9 +63,10 @@ public class UI extends Module<Koru>{
 		table.add(name).row();
 		table.add(button).colspan(2).fillX().padTop(5);
 		
-		button.addListener(new ChangeListener(){
+		button.addListener(new ClickListener(){
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void clicked (InputEvent event, float x, float y) {
+				if(!network.connecting && !network.connected())
 				network.connect();
 			}
 		});
