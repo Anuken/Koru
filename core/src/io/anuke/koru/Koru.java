@@ -2,7 +2,11 @@ package io.anuke.koru;
 
 import com.badlogic.gdx.Gdx;
 
-import io.anuke.koru.modules.*;
+import io.anuke.koru.modules.ClientData;
+import io.anuke.koru.modules.Input;
+import io.anuke.koru.modules.Network;
+import io.anuke.koru.modules.Renderer;
+import io.anuke.koru.modules.UI;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.systems.InterpolationSystem;
 import io.anuke.koru.systems.KoruEngine;

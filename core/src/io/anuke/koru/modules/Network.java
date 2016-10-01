@@ -106,8 +106,13 @@ public class Network extends Module<Koru> {
 					Koru.log(t.engine.getEntity(packet.id));
 					Koru.log(packet.id + " size: " + t.engine.getEntities().size());
 					Gdx.app.postRunnable(() -> {
-						getModule(UI.class).chat.addMessage(packet.message, packet.id,
-								t.engine.getEntity(packet.id).getComponent(ConnectionComponent.class).name);
+						if (t.engine.getEntity(packet.id) == null) {
+							getModule(UI.class).chat.addMessage(packet.message, packet.id, "UNKNOWN #" + packet.id);
+						} else {
+							getModule(UI.class).chat.addMessage(packet.message, packet.id,
+									t.engine.getEntity(packet.id).getComponent(ConnectionComponent.class).name);
+						}
+
 					});
 				} else if (object instanceof KoruEntity) {
 					KoruEntity entity = (KoruEntity) object;
@@ -122,15 +127,20 @@ public class Network extends Module<Koru> {
 
 	@Override
 	public void update() {
+		
 		if (connected && !client.isConnected()) {
 			connected = false;
 			lastError = "Connection error: Timed out.";
 		}
 
 		while (entityQueue.size != 0) {
+			
 			KoruEntity entity = entityQueue.pop();
+			
+			
 			if (entity == null)
 				continue;
+			
 			if (entitiesToRemove.contains(entity.getID())) {
 				entitiesToRemove.remove(entity.getID());
 				continue;

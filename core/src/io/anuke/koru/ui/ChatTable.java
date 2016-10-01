@@ -27,13 +27,14 @@ public class ChatTable extends VisTable{
 	
 	public ChatTable(){
 		super();
-		font = VisUI.getSkin().getFont("border-font");
+		font = VisUI.getSkin().getFont("pixel-font");
 		font.getData().markupEnabled = true;
 		addListener(input);
 		
 		chatfield = new VisTextField("", new VisTextField.VisTextFieldStyle(VisUI.getSkin().get(VisTextFieldStyle.class)));
 		chatfield.getStyle().background = chatfield.getStyle().focusBorder;
 		chatfield.getStyle().backgroundOver = null;
+		chatfield.getStyle().font = VisUI.getSkin().getFont("smooth-font");
 		bottom().left().padBottom(offsety).padLeft(offsetx).add(fieldlabel);
 		
 		add(chatfield).padBottom(offsety).padLeft(offsetx).growX().padRight(offsetx);

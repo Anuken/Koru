@@ -65,7 +65,7 @@ public class UI extends Module<Koru> {
 			skin.addRegions(atlas);
 		}
 		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/prose.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/smooth.ttf"));
 		
 		FreeTypeFontParameter normalparameter = new FreeTypeFontParameter();
 		normalparameter.size = (int)(22 * s);
@@ -74,28 +74,39 @@ public class UI extends Module<Koru> {
 		largeparameter.size = (int)(26 * s);
 
 		FreeTypeFontParameter borderparameter = new FreeTypeFontParameter();
-		borderparameter.mono = true;
-		borderparameter.size = (int)(32 * s);
+		borderparameter.size = (int)(26 * s);
 		borderparameter.borderWidth = 2*s;
-		borderparameter.borderStraight = true;
 		borderparameter.borderColor = Color.BLACK;
 		borderparameter.spaceX = -2;
 
 		BitmapFont font = generator.generateFont(normalparameter);
-		font.getData().markupEnabled = true;
 		BitmapFont largefont = generator.generateFont(largeparameter);
 		BitmapFont borderfont = generator.generateFont(borderparameter);
-		borderfont.getData().markupEnabled = true;
 
 		skin.add("default-font", font);
+		skin.add("smooth-font", font);
 		skin.add("large-font", largefont);
 		skin.add("border-font", borderfont);
+		
+		FreeTypeFontGenerator pgenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/prose.ttf"));
+		FreeTypeFontParameter pixelparameter = new FreeTypeFontParameter();
+		pixelparameter.borderStraight = true;
+		pixelparameter.mono = true;
+		pixelparameter.size = 16;
+		pixelparameter.borderWidth = 1;
+		pixelparameter.borderColor = new Color(0,0,0,1);
+		pixelparameter.spaceX = -1;
+		
+		BitmapFont pixelfont = pgenerator.generateFont(pixelparameter);
+		pixelfont.getData().setScale(2f);
+		skin.add("pixel-font", pixelfont);
 
 		skin.load(skinFile);
 
 		VisUI.load(skin);
 
 		generator.dispose();
+		pgenerator.dispose();
 	}
 
 	void setupMenu() {
@@ -135,6 +146,7 @@ public class UI extends Module<Koru> {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!network.connecting && !network.connected()){
 					getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
+					name.getStage().setKeyboardFocus(null);
 					network.connect();
 				}
 			}
