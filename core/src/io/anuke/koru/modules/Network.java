@@ -29,6 +29,8 @@ public class Network extends Module<Koru>{
 	public static final int packetFrequency = 3;
 	public boolean initialconnect = false;
 	public boolean connecting;
+	private boolean connected;
+	private String lastError;
 	private boolean chunksAdded = false;
 	private Array<KoruEntity> queue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
@@ -45,11 +47,16 @@ public class Network extends Module<Koru>{
 			packet.name = "a player";
 			client.sendTCP(packet);
 			Koru.log("Sent packet.");
+			
+			connected = true;
 		}catch(Exception e){
 			connecting = false;
+			connected = false;
 			e.printStackTrace();
+			lastError = "Failed to connect to server:\n" + e.getCause().getMessage();
 			Koru.log("Connection failed!");
 		}
+		
 		connecting = false;
 		initialconnect = true;
 	}
@@ -100,6 +107,11 @@ public class Network extends Module<Koru>{
 
 	@Override
 	public void update(){
+		if(connected && !client.isConnected()){
+			connected = false;
+			lastError = "Connection error: Timed out.";
+		}
+		
 		while(queue.size != 0){
 			KoruEntity entity = queue.pop();
 			if(entity == null) continue;
@@ -131,9 +143,13 @@ public class Network extends Module<Koru>{
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(), getModule(ClientData.class).player.getY());
 		client.sendUDP(pos);
 	}
+	
+	public String getError(){
+		return lastError;
+	}
 
 	public boolean connected(){
-		return client.isConnected();
+		return connected;
 	}
 
 	public boolean initialconnect(){
