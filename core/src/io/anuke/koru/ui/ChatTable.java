@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.FocusManager;
@@ -30,10 +31,10 @@ public class ChatTable extends VisTable{
 	private VisLabel fieldlabel = new VisLabel(">");
 	private BitmapFont font;
 	private GlyphLayout layout = new GlyphLayout();
-	private float offsetx = 4, offsety = 4;
-	private float textWidth = 500;
+	private float offsetx = 4, offsety = 4, fontoffsetx = 2, chatspace = 50;
+	private float textWidth = 600;
 	private Color shadowColor = new Color(0,0,0,0.4f);
-	private float textspacing = 5;
+	private float textspacing = 10;
 	
 	
 	public ChatTable(){
@@ -41,26 +42,32 @@ public class ChatTable extends VisTable{
 		font = VisUI.getSkin().getFont("pixel-font");
 		font.getData().markupEnabled = true;
 		addListener(input);
-		
+		fieldlabel.setStyle(new LabelStyle(fieldlabel.getStyle()));
+		fieldlabel.getStyle().font = font;
+		fieldlabel.setStyle(fieldlabel.getStyle());
+		fieldlabel.setFontScale(2);
 		chatfield = new VisTextField("", new VisTextField.VisTextFieldStyle(VisUI.getSkin().get(VisTextFieldStyle.class)));
-		chatfield.getStyle().background = VisUI.getSkin().getDrawable("white");
+		
+		chatfield.getStyle().background = VisUI.getSkin().getDrawable("blank");
 		chatfield.getStyle().fontColor = Color.WHITE;
 		chatfield.getStyle().focusBorder = null;
 		chatfield.getStyle().backgroundOver = null;
-		chatfield.setColor(shadowColor);
-		chatfield.getStyle().font = VisUI.getSkin().getFont("smooth-font");
-		bottom().left().padBottom(offsety).padLeft(offsetx).add(fieldlabel);
+		chatfield.getStyle().font = VisUI.getSkin().getFont("pixel-font");
+		bottom().left().padBottom(offsety).padLeft(offsetx*2).add(fieldlabel);
 		
-		add(chatfield).padBottom(offsety).padLeft(offsetx).growX().padRight(offsetx);
+		add(chatfield).padBottom(offsety).padLeft(offsetx).growX().padRight(offsetx).height(28);
 	}
 	
 	@Override
 	public void draw(Batch batch, float alpha){
+		if(chatOpen)
+			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight());
 		super.draw(batch, alpha);
+		
 		font.getData().down = -21.5f;
 		font.getData().lineHeight = 22f;
 		
-		float spacing = 50;
+		float spacing = chatspace;
 		
 		chatfield.setVisible(chatOpen);
 		fieldlabel.setVisible(chatOpen);
@@ -84,7 +91,7 @@ public class ChatTable extends VisTable{
 			if(i == 0)theight -= textspacing+1;
 			
 			font.getCache().clear();
-			font.getCache().addText(messages.get(i).formattedMessage, offsetx, offsety + theight, textWidth, Align.bottomLeft, true);
+			font.getCache().addText(messages.get(i).formattedMessage, fontoffsetx + offsetx, offsety + theight, textWidth, Align.bottomLeft, true);
 			
 			if(fadetime-i < 1f && fadetime-i >= 0f){
 				font.getCache().setAlphas(fadetime-i);
@@ -92,7 +99,7 @@ public class ChatTable extends VisTable{
 					
 			}
 			
-			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, theight-layout.height+1, textWidth, layout.height+textspacing);
+			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, theight-layout.height+1-4, textWidth, layout.height+textspacing);
 			batch.setColor(shadowColor);
 			
 			font.getCache().draw(batch);
@@ -134,8 +141,8 @@ public class ChatTable extends VisTable{
 		return chatOpen;
 	}
 	
-	public void addMessage(String message, long senderid, String sender){
-		messages.insert(0, new ChatMessage(message, senderid, sender));
+	public void addMessage(String message, String sender){
+		messages.insert(0, new ChatMessage(message, sender));
 		
 		fadetime += 1f;
 		fadetime = Math.min(fadetime, messagesShown)+2f;
@@ -147,16 +154,14 @@ public class ChatTable extends VisTable{
 	
 	@SuppressWarnings("unused")
 	private static class ChatMessage{
-		public final long id;
 		public final String sender;
 		public final String message;
 		public final String formattedMessage;
 		
-		public ChatMessage(String message, long senderid, String sender){
-			id = senderid;
+		public ChatMessage(String message, String sender){
 			this.message = message;
 			this.sender = sender;
-			if(id == -1){ //no sender id, this is a server message
+			if(sender == null){ //no sender, this is a server message
 				formattedMessage = message;
 			}else{
 				formattedMessage = "[ROYAL]["+sender+"]: [YELLOW]"+message;

@@ -130,7 +130,7 @@ public class KoruServer extends IServer{
 				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof ChatPacket){
 				ChatPacket packet = (ChatPacket)object;
-				packet.id = info.playerid;
+				packet.sender = updater.engine.getEntity(info.playerid).getComponent(ConnectionComponent.class).name;
 				sendToAll(packet);
 			}else if(object instanceof ChunkRequestPacket){
 				ChunkRequestPacket packet = (ChunkRequestPacket)object;
@@ -200,7 +200,6 @@ public class KoruServer extends IServer{
 	
 	public void sendChatMessage(String message){
 		ChatPacket packet = new ChatPacket();
-		packet.id = -1;
 		packet.message = message;
 		sendToAll(packet);
 	}	
