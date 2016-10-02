@@ -21,6 +21,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(d.width, d.height);
 		config.setTitle("Koru");
 		config.useVsync(true);
+		
 		new Lwjgl3Application(new Koru(new KryoClient()), config);
 		
 	}

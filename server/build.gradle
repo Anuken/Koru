@@ -22,6 +22,8 @@ dependencies {
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
     compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
 test {

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="lib" path="/Koru-core/lib/Java-WebSocket-1.3.0.jar"/>
 	<classpathentry kind="lib" path="/Koru-core/lib/kryonet-2.21-all.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Koru-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Fluxe-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
