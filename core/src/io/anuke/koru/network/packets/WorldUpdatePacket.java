@@ -1,9 +1,9 @@
 package io.anuke.koru.network.packets;
 
+import com.badlogic.gdx.utils.ObjectMap;
+
 import io.anuke.koru.network.SyncBuffer;
 
-import java.util.HashMap;
-
 public class WorldUpdatePacket{
-	public HashMap<Long, SyncBuffer> updates = new HashMap<Long, SyncBuffer>();
+	public ObjectMap<Long, SyncBuffer> updates = new ObjectMap<Long, SyncBuffer>();
 }

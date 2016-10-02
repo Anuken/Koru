@@ -26,13 +26,13 @@ import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.LayerManager;
 import io.anuke.ucore.spritesystem.Renderable;
 import io.anuke.ucore.spritesystem.RenderableHandler;
 import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.utils.MiscUtils;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 21;
@@ -55,7 +55,7 @@ public class Renderer extends Module<Koru>{
 	public int lastcamx, lastcamy;
 
 	public Renderer(){
-		MiscUtils.maximizeWindow();
+		UCore.maximizeWindow();
 		i = this;
 		batch = new SpriteBatch();
 		matrix = new Matrix4();

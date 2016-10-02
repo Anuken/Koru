@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Bits;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -108,6 +109,7 @@ public class Registrator{
 		k.register(Color.class);
 		k.register(Vector2.class);
 		k.register(ArrayList.class);
+		k.register(ObjectMap.class);
 		k.register(HashMap.class);
 		k.register(Class.class);
 

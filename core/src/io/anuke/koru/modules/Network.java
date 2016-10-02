@@ -83,7 +83,7 @@ public class Network extends Module<Koru> {
 					Koru.log("Recieved data packet.");
 				} else if (object instanceof WorldUpdatePacket) {
 					WorldUpdatePacket packet = (WorldUpdatePacket) object;
-					for (Long key : packet.updates.keySet()) {
+					for (Long key : packet.updates.keys()) {
 						KoruEntity entity = t.engine.getEntity(key);
 						if (entity == null)
 							continue;
@@ -103,16 +103,16 @@ public class Network extends Module<Koru> {
 					entitiesToRemove.add(packet.id);
 				} else if (object instanceof ChatPacket) {
 					ChatPacket packet = (ChatPacket) object;
-					Koru.log(t.engine.getEntity(packet.id));
-					Koru.log(packet.id + " size: " + t.engine.getEntities().size());
+					
 					Gdx.app.postRunnable(() -> {
-						if (t.engine.getEntity(packet.id) == null) {
+						if(packet.id == -1){
+							getModule(UI.class).chat.addMessage(packet.message, -1, null);
+						}else if (t.engine.getEntity(packet.id) == null) {
 							getModule(UI.class).chat.addMessage(packet.message, packet.id, "UNKNOWN #" + packet.id);
 						} else {
 							getModule(UI.class).chat.addMessage(packet.message, packet.id,
 									t.engine.getEntity(packet.id).getComponent(ConnectionComponent.class).name);
 						}
-
 					});
 				} else if (object instanceof KoruEntity) {
 					KoruEntity entity = (KoruEntity) object;

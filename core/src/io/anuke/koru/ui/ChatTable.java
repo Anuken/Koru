@@ -1,5 +1,6 @@
 package io.anuke.koru.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -18,6 +19,7 @@ import io.anuke.koru.network.packets.ChatPacket;
 public class ChatTable extends VisTable{
 	private final static int messagesShown = 10;
 	private Array<ChatMessage> messages = new Array<ChatMessage>();
+	private float fadetime;
 	private boolean chatOpen = false;
 	private VisTextField chatfield;
 	private VisLabel fieldlabel = new VisLabel(">");
@@ -38,11 +40,6 @@ public class ChatTable extends VisTable{
 		bottom().left().padBottom(offsety).padLeft(offsetx).add(fieldlabel);
 		
 		add(chatfield).padBottom(offsety).padLeft(offsetx).growX().padRight(offsetx);
-		
-		
-		//addMessage("some random text", 0, "ya boi");
-		//addMessage("wew lad", 0, "dat boi");
-		//addMessage("test", 0, "ye boi");
 	}
 	
 	@Override
@@ -57,9 +54,18 @@ public class ChatTable extends VisTable{
 		//	font.draw(batch, "> enter some text or something", offsetx, offsety + spacing);
 		//}
 		
-		for(int i = 0; i < messagesShown && i < messages.size; i ++){
-			font.draw(batch, messages.get(i).formattedMessage, offsetx, offsety + spacing + (i+1)*spacing);
+		for(int i = 0; i < messagesShown && i < messages.size && i < fadetime; i ++){
+			font.getCache().clear();
+			font.getCache().addText(messages.get(i).formattedMessage, offsetx, offsety + spacing + (i+1)*spacing);
+			
+			if(fadetime-i < 1f) 
+				font.getCache().setAlphas(fadetime-i);
+			
+			font.getCache().draw(batch);
 		}
+		
+		if(fadetime > 0)
+		fadetime -= Gdx.graphics.getDeltaTime()*60f/120f;
 	}
 	
 	private void sendMessage(){
@@ -91,6 +97,7 @@ public class ChatTable extends VisTable{
 	
 	public void addMessage(String message, long senderid, String sender){
 		messages.insert(0, new ChatMessage(message, senderid, sender));
+		fadetime = Math.min(messages.size, messagesShown)+2f;
 	}
 	
 	InputListener input = new InputListener(){
@@ -108,7 +115,11 @@ public class ChatTable extends VisTable{
 			id = senderid;
 			this.message = message;
 			this.sender = sender;
-			formattedMessage = "[ROYAL]["+sender+"]: [YELLOW]"+message;
+			if(id == -1){ //no sender id, this is a server message
+				formattedMessage = message;
+			}else{
+				formattedMessage = "[ROYAL]["+sender+"]: [YELLOW]"+message;
+			}
 		}
 	}
 }

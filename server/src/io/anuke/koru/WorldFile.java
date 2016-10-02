@@ -1,10 +1,9 @@
 package io.anuke.koru;
 
-import io.anuke.koru.Koru;
-import io.anuke.koru.network.IServer;
-import io.anuke.koru.world.*;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +19,12 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import io.anuke.koru.network.IServer;
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Generator;
+import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.WorldLoader;
+
 public class WorldFile extends WorldLoader{
 	public final String filename = "chunk", extension = ".kw";
 	private Path file;
@@ -28,6 +33,7 @@ public class WorldFile extends WorldLoader{
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); //server-side chunks
 	private Generator generator;
 	private Object lock = new Object();
+	private boolean debug;
 
 	public WorldFile(Path file, Generator generator){
 
@@ -82,6 +88,7 @@ public class WorldFile extends WorldLoader{
 
 	public void writeChunk(Chunk chunk){
 		synchronized (lock){
+			if(debug)
 			Koru.log(Consolec.RED + "BEGIN" + Consolec.BLUE + " write chunk" + Consolec.RESET);
 			Path path = Paths.get(file.toString(), "/" + fileName(chunk.x, chunk.y));
 
@@ -108,13 +115,14 @@ public class WorldFile extends WorldLoader{
 				e.printStackTrace();
 			}
 			files.put(path.getFileName().toString(), path);
-
+			if(debug)
 			Koru.log(Consolec.GREEN + "END" + Consolec.BLUE + " write chunk" + Consolec.RESET);
 		}
 	}
 
 	public Chunk readChunk(int x, int y){
 		synchronized (lock){
+			if(debug)
 			Koru.log(Consolec.RED + "BEGIN" + Consolec.YELLOW + " read chunk" + Consolec.RESET);
 			Path path = getPath(x, y);
 
@@ -135,9 +143,11 @@ public class WorldFile extends WorldLoader{
 				out.close();
 				in.close();
 				file.close();
-
+				
+				if(debug)
 				Koru.log("Chunk read time elapsed: " + TimeUtils.timeSinceMillis(time));
-
+				
+				if(debug)
 				Koru.log(Consolec.GREEN + "END" + Consolec.YELLOW + " read chunk" + Consolec.RESET);
 				return chunk;
 			}catch(Exception e){

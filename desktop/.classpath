@@ -8,8 +8,7 @@
 	<classpathentry kind="src" path="assets"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
 	<classpathentry kind="lib" path="/Koru-core/lib/kryonet-2.21-all.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

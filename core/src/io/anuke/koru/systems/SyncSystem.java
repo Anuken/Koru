@@ -1,5 +1,10 @@
 package io.anuke.koru.systems;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.SyncComponent;
@@ -9,11 +14,6 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.SyncBuffer;
 import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
 
 public class SyncSystem extends IteratingSystem{
 	Family family = Family.all(SyncComponent.class).get();
@@ -34,7 +34,8 @@ public class SyncSystem extends IteratingSystem{
 			KoruEntity ko = (KoruEntity)entity;
 			packet.updates.put(ko.getID(), ko.mapComponent(SyncComponent.class).type.write(ko));
 		}
-		if(packet.updates.size() != 0) IServer.instance().sendTCP(player.mapComponent(ConnectionComponent.class).connectionID, packet);
+
+		if(packet.updates.size != 0) IServer.instance().sendTCP(player.mapComponent(ConnectionComponent.class).connectionID, packet);
 	}
 
 	public enum SyncType{

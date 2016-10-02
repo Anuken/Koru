@@ -102,7 +102,8 @@ public class KoruServer extends IServer{
 			sendToAllExceptTCP(info.id, player);
 
 			player.addSelf();
-
+			
+			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
 		}catch(Exception e){
@@ -152,6 +153,7 @@ public class KoruServer extends IServer{
 				Koru.log("An unknown player has disconnected.");
 				return;
 			}
+			sendChatMessage("[GREEN]" + getPlayer(info).mapComponent(ConnectionComponent.class).name + " [CORAL]has disconnected.");
 			Koru.log(getPlayer(info).mapComponent(ConnectionComponent.class).name + " has disconnected.");
 			getPlayer(info).removeSelfServer();
 			removeConnection(info);
@@ -188,6 +190,13 @@ public class KoruServer extends IServer{
 
 		}
 	}
+	
+	public void sendChatMessage(String message){
+		ChatPacket packet = new ChatPacket();
+		packet.id = -1;
+		packet.message = message;
+		sendToAll(packet);
+	}	
 
 	public void registerConnection(ConnectionInfo info){
 		connections.put(info.id, info);

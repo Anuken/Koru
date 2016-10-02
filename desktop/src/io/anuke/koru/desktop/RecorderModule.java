@@ -1,19 +1,21 @@
 package io.anuke.koru.desktop;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.modules.Renderer;
-import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.modules.Module;
-import io.anuke.utils.io.GifRecorder;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 
 public class RecorderModule extends Module<Koru>{
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+	/*
 	public GifRecorder recorder = new GifRecorder(Renderer.i.batch, 1f/Renderer.i.GUIscale);
 	
 	@Override
 	public void update(){
+	
 		if(Gdx.input.isKeyJustPressed(Keys.Q)){
 			recorder.takeScreenshot();
 		}
@@ -21,4 +23,5 @@ public class RecorderModule extends Module<Koru>{
 		recorder.update(Resources.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
 
 	}
+	*/
 }
