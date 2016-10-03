@@ -1,13 +1,13 @@
 package io.anuke.koru.network.packets;
 
-import com.badlogic.gdx.utils.ObjectMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SplitBitmapPacket{
 	public byte[] data;
 	public int id;
 	
 	public static class Header{
-		public ObjectMap<Byte, Integer> colors;
+		public ConcurrentHashMap<Byte, Integer> colors;
 		public int width, height, id;
 	}
 }

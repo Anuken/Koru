@@ -33,6 +33,7 @@ import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.KoruEngine;
+import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.World;
@@ -45,7 +46,7 @@ public class KoruServer extends IServer{
 	Server server;
 	WebServer webserver;
 	KoruUpdater updater;
-	GraphicsHandler renderer;
+	GraphicsHandler graphics;
 
 	void setup(){
 		try{
@@ -78,7 +79,7 @@ public class KoruServer extends IServer{
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
 		
-		new Lwjgl3Application(new GraphicsHandler(), config);
+		new Lwjgl3Application((graphics=new GraphicsHandler()), config);
 		
 	}
 
@@ -113,6 +114,9 @@ public class KoruServer extends IServer{
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
+			
+			graphics.generateAndSend(info.id);
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Critical error: failed sending player!");
@@ -295,6 +299,8 @@ public class KoruServer extends IServer{
 	}
 
 	public static void main(String[] args){
+		System.out.println(Text.FLUSH);
+		System.out.flush();
 		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
 			Koru.log("Clearing world.");
 			try {

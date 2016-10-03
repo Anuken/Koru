@@ -20,6 +20,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 import io.anuke.koru.network.IServer;
+import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Materials;
@@ -89,7 +90,7 @@ public class WorldFile extends WorldLoader{
 	public void writeChunk(Chunk chunk){
 		synchronized (lock){
 			if(debug)
-			Koru.log(Consolec.RED + "BEGIN" + Consolec.BLUE + " write chunk" + Consolec.RESET);
+			Koru.log(Text.RED + "BEGIN" + Text.BLUE + " write chunk" + Text.RESET);
 			Path path = Paths.get(file.toString(), "/" + fileName(chunk.x, chunk.y));
 
 			long time = TimeUtils.millis();
@@ -109,21 +110,21 @@ public class WorldFile extends WorldLoader{
 				in.close();
 				file.close();
 
-				Koru.log("Chunk write time elapsed: " + TimeUtils.timeSinceMillis(time));
+				if(debug) Koru.log("Chunk write time elapsed: " + TimeUtils.timeSinceMillis(time));
 			}catch(Exception e){
 				Koru.log("Error writing chunk!");
 				e.printStackTrace();
 			}
 			files.put(path.getFileName().toString(), path);
 			if(debug)
-			Koru.log(Consolec.GREEN + "END" + Consolec.BLUE + " write chunk" + Consolec.RESET);
+			Koru.log(Text.GREEN + "END" + Text.BLUE + " write chunk" + Text.RESET);
 		}
 	}
 
 	public Chunk readChunk(int x, int y){
 		synchronized (lock){
 			if(debug)
-			Koru.log(Consolec.RED + "BEGIN" + Consolec.YELLOW + " read chunk" + Consolec.RESET);
+			Koru.log(Text.RED + "BEGIN" + Text.YELLOW + " read chunk" + Text.RESET);
 			Path path = getPath(x, y);
 
 			long time = TimeUtils.millis();
@@ -148,7 +149,7 @@ public class WorldFile extends WorldLoader{
 				Koru.log("Chunk read time elapsed: " + TimeUtils.timeSinceMillis(time));
 				
 				if(debug)
-				Koru.log(Consolec.GREEN + "END" + Consolec.YELLOW + " read chunk" + Consolec.RESET);
+				Koru.log(Text.GREEN + "END" + Text.YELLOW + " read chunk" + Text.RESET);
 				return chunk;
 			}catch(Exception e){
 				Koru.log("Error writing chunk!");

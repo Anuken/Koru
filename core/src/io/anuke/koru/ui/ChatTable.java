@@ -60,6 +60,7 @@ public class ChatTable extends VisTable{
 	
 	@Override
 	public void draw(Batch batch, float alpha){
+		batch.setColor(shadowColor);
 		if(chatOpen)
 			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight());
 		super.draw(batch, alpha);

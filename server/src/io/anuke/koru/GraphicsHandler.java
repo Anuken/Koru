@@ -10,16 +10,29 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.fluxe.generation.Crux;
+import io.anuke.fluxe.generation.DefaultRasterizer;
 import io.anuke.fluxe.generation.Fluxor;
+import io.anuke.fluxe.generation.TreeVoxelizer;
 import io.anuke.koru.network.BitmapData;
+import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.SplitBitmapPacket;
+import io.anuke.koru.utils.Text;
 import io.anuke.ucore.UCore;
 
 public class GraphicsHandler extends ApplicationAdapter{
 	private static int nextBitmapID;
-	final int maxImagePacketSize = 256;
+	final int maxImagePacketSize = 512;
 	Crux crux;
 	Fluxor flux;
+	
+	public void generateAndSend(int id){
+		Gdx.app.postRunnable(()->{
+			Array<Object> packets = generateBitmapPacketList(generate());
+			Koru.log("Sending " + Text.LIGHT_MAGENTA + packets.size + Text.LIGHT_GREEN+ " split bitmap packets to " + id + ".");
+			for(Object o : packets)
+				IServer.instance().sendTCP(id, o);
+		});
+	}
 	
 	public Array<Object> generateBitmapPacketList(Pixmap pixmap){
 		Array<Object> packets = new Array<Object>();
@@ -32,7 +45,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		header.id = nextBitmapID++;
 		packets.add(header);
 		
-		for(int i = 0; i < data.data.length/maxImagePacketSize; i++){
+		for(int i = 0; i < data.data.length/maxImagePacketSize+1; i++){
 			SplitBitmapPacket packet = new SplitBitmapPacket();
 			int len = Math.min(maxImagePacketSize, data.data.length-i*maxImagePacketSize);
 			byte[] bytes = new byte[len];
@@ -48,6 +61,9 @@ public class GraphicsHandler extends ApplicationAdapter{
 	public void create(){
 		GLFW.glfwHideWindow(UCore.getWindowHandle());
 		Gdx.graphics.setContinuousRendering(false);
+		
+		crux = new Crux();
+		flux = new Fluxor(new TreeVoxelizer(), new DefaultRasterizer());
 	}
 
 	public void render(){
@@ -60,6 +76,8 @@ public class GraphicsHandler extends ApplicationAdapter{
 	}
 	
 	public Pixmap generate(){
-		return crux.render(flux);
+		Pixmap p = crux.render(flux);
+		PixmapIO.writePNG(Gdx.files.local("tree.png"), p);
+		return p;
 	}
 }

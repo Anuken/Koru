@@ -2,6 +2,7 @@ package io.anuke.koru.network;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -41,6 +42,7 @@ import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.SplitBitmapPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
@@ -69,6 +71,9 @@ public class Registrator{
 		k.register(BlockInputPacket.class);
 		k.register(StoreItemPacket.class);
 		k.register(ChatPacket.class);
+		k.register(SplitBitmapPacket.class);
+		k.register(SplitBitmapPacket.Header.class);
+
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);
@@ -110,7 +115,10 @@ public class Registrator{
 		k.register(Vector2.class);
 		k.register(ArrayList.class);
 		k.register(ObjectMap.class);
+		k.register(ConcurrentHashMap.class);
+		k.register(ObjectMap.Keys.class);
 		k.register(HashMap.class);
+		k.register(byte[].class);
 		k.register(Class.class);
 
 		k.register(KoruEntity.class, new EntitySerializer());

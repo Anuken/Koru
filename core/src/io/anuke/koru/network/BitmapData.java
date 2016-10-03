@@ -1,51 +1,76 @@
 package io.anuke.koru.network;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.IntSet;
+import com.badlogic.gdx.utils.IntSet.IntSetIterator;
+
+import io.anuke.koru.Koru;
 
 public class BitmapData{
-	final public ObjectMap<Byte, Integer> colors;
+	final public ConcurrentHashMap<Byte, Integer> colors;
 	final public byte[] data;
 	final public int width, height;
+	transient int byteIndex = 0;
 	
 	public BitmapData(Pixmap pixmap){
 		data = new  byte[pixmap.getWidth()*pixmap.getHeight()];
-		ObjectSet<Integer> colorset = new ObjectSet<Integer>();
-		colors = new ObjectMap<Byte, Integer>();
+		IntSet colorset = new IntSet();
+		colors = new ConcurrentHashMap<Byte, Integer>();
 		this.width = pixmap.getWidth();
 		this.height = pixmap.getHeight();
 		
 		for(int x = 0; x < pixmap.getWidth(); x ++){
-			for(int y = 0; y < pixmap.getWidth(); y ++){
+			for(int y = 0; y < pixmap.getHeight(); y ++){
 				int color = pixmap.getPixel(x, y);
 				colorset.add(color);
 			}
 		}
 		
+		Koru.log(colorset.size);
+		
 		byte index = 0;
-		for(Integer i : colorset){
+		IntSetIterator it = colorset.iterator();
+		for(int i = 0; it.hasNext; i = it.next()){
 			colors.put(index ++, i);
 		}
 		
-		ObjectMap<Integer, Byte> rmap = new ObjectMap<Integer, Byte>();
-		for(Byte b : colors.keys()){
+		ConcurrentHashMap<Integer, Byte> rmap = new ConcurrentHashMap<Integer, Byte>();
+		for(Byte b : colors.keySet()){
 			rmap.put(colors.get(b), b);
 		}
 		
 		for(int x = 0; x < pixmap.getWidth(); x ++){
-			for(int y = 0; y < pixmap.getWidth(); y ++){
-				data[x + y*pixmap.getHeight()] = rmap.get(pixmap.getPixel(x, y));
+			for(int y = 0; y < pixmap.getHeight(); y ++){
+				Byte b = rmap.get(pixmap.getPixel(x, y));
+				data[x + y*pixmap.getWidth()] = (b == null ? 5 : b);
 			}
 		}
+	}
+	
+	public BitmapData(int width, int height, ConcurrentHashMap<Byte, Integer> colors){
+		this.width = width;
+		this.height = height;
+		this.colors = colors;
+		this.data = new byte[width*height];
+	}
+	
+	public void pushBytes(byte[] bytes){
+		System.arraycopy(bytes, 0, data, byteIndex, bytes.length);
+		byteIndex += bytes.length;
+	}
+	
+	public boolean isDone(){
+		return byteIndex >= data.length;
 	}
 	
 	public Pixmap toPixmap(){
 		Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
 		for(int x = 0; x < pixmap.getWidth(); x ++){
-			for(int y = 0; y < pixmap.getWidth(); y ++){
-				pixmap.drawPixel(x, y, colors.get(data[x + y*height]));
+			for(int y = 0; y < pixmap.getHeight(); y ++){
+				pixmap.drawPixel(x, y, colors.get(data[x + y*width]));
 			}
 		}
 		return pixmap;

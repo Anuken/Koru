@@ -7,7 +7,6 @@
 	<classpathentry kind="lib" path="/Koru-core/lib/kryonet-2.21-all.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Koru-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Fluxe-core"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Fluxe-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
