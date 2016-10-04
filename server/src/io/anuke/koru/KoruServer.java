@@ -115,8 +115,6 @@ public class KoruServer extends IServer{
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
 			
-			graphics.generateAndSend(info.id);
-			
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Critical error: failed sending player!");

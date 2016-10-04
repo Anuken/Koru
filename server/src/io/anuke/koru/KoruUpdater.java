@@ -6,7 +6,6 @@ import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.MaterialManager;
 import io.anuke.koru.world.World;
 
 public class KoruUpdater{
@@ -20,7 +19,6 @@ public class KoruUpdater{
 	float delta = 1f;
 	long lastFpsTime;
 	final int blockupdatetime = 60 * 6;
-	final MaterialManager materials = new MaterialManager();
 
 	void Loop(){
 		try{

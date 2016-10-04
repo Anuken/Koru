@@ -1,12 +1,16 @@
-package io.anuke.koru.world;
+package io.anuke.koru.generation;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class GeneratedMaterial implements Material{
+import io.anuke.koru.world.Material;
+import io.anuke.koru.world.MaterialType;
+
+public class GeneratedMaterial extends GeneratedObject implements Material{
 	private final MaterialType type;
 	private final int id;
 	
 	public GeneratedMaterial(MaterialType type, int id){
+		super("material", "gen-material-"+id);
 		this.id = id;
 		this.type = type;
 	}
@@ -23,7 +27,7 @@ public class GeneratedMaterial implements Material{
 
 	@Override
 	public String name(){
-		return "gen-object-"+id;
+		return name;
 	}
 
 	@Override

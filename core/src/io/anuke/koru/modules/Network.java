@@ -2,7 +2,6 @@ package io.anuke.koru.modules;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -21,7 +20,7 @@ import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.PositionPacket;
-import io.anuke.koru.network.packets.SplitBitmapPacket;
+import io.anuke.koru.network.packets.ObjectPiecePacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.utils.Angles;
@@ -115,18 +114,19 @@ public class Network extends Module<Koru>{
 				}else if(object instanceof KoruEntity){
 					KoruEntity entity = (KoruEntity) object;
 					entityQueue.add(entity);
-				}else if(object instanceof SplitBitmapPacket.Header){
-					SplitBitmapPacket.Header packet = (SplitBitmapPacket.Header) object;
+				}else if(object instanceof ObjectPiecePacket.Header){
+					ObjectPiecePacket.Header packet = (ObjectPiecePacket.Header) object;
 					Koru.log("Recieved bitmap header: " + packet.id + " [" + packet.width + "x" + packet.height + "]");
 					BitmapData data = new BitmapData(packet.width, packet.height, packet.colors);
 					bitmaps.put(packet.id, data);
-				}else if(object instanceof SplitBitmapPacket){
-					SplitBitmapPacket packet = (SplitBitmapPacket) object;
+				}else if(object instanceof ObjectPiecePacket){
+					ObjectPiecePacket packet = (ObjectPiecePacket) object;
 					Koru.log("Recieved split bitmap: " + packet.id + " [" + packet.data.length + " bytes]");
 					bitmaps.get(packet.id).pushBytes(packet.data);
 					if(bitmaps.get(packet.id).isDone()){
 						Gdx.app.postRunnable(()->{
-							PixmapIO.writePNG(Gdx.files.local("recieved.png"), bitmaps.get(packet.id).toPixmap());
+							getModule(TextureManager.class).bitmapRecieved(bitmaps.get(packet.id));
+							bitmaps.remove(packet.id);
 						});
 					}
 				}
@@ -148,7 +148,6 @@ public class Network extends Module<Koru>{
 		while(entityQueue.size != 0){
 
 			KoruEntity entity = entityQueue.pop();
-
 			if(entity == null)
 				continue;
 
@@ -156,6 +155,7 @@ public class Network extends Module<Koru>{
 				entitiesToRemove.remove(entity.getID());
 				continue;
 			}
+			
 			entity.addSelf();
 		}
 

@@ -4,10 +4,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.IntSet.IntSetIterator;
-
-import io.anuke.koru.Koru;
 
 public class BitmapData{
 	final public ConcurrentHashMap<Byte, Integer> colors;
@@ -29,11 +28,10 @@ public class BitmapData{
 			}
 		}
 		
-		Koru.log(colorset.size);
-		
 		byte index = 0;
 		IntSetIterator it = colorset.iterator();
-		for(int i = 0; it.hasNext; i = it.next()){
+		IntArray array = it.toArray();
+		for(int i : array.items){
 			colors.put(index ++, i);
 		}
 		
@@ -70,7 +68,8 @@ public class BitmapData{
 		Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
 		for(int x = 0; x < pixmap.getWidth(); x ++){
 			for(int y = 0; y < pixmap.getHeight(); y ++){
-				pixmap.drawPixel(x, y, colors.get(data[x + y*width]));
+				Integer i = colors.get(data[x + y*width]);
+				pixmap.drawPixel(x, y, i);
 			}
 		}
 		return pixmap;
