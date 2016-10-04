@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.Texture;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.network.BitmapData;
+import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.modules.Module;
 
-public class TextureManager extends Module<Koru>{
+public class ObjectHandler extends Module<Koru>{
 	private final FileHandle objectDirectory = Gdx.files.local("objects");
 	
-	@Override
-	public void update(){
+	public void materialPacketRecieved(GeneratedMaterialPacket packet){
 		
 	}
 	

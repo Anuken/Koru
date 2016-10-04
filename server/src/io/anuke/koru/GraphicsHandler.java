@@ -18,7 +18,8 @@ import io.anuke.koru.generation.GeneratedObject;
 import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.network.packets.ObjectPiecePacket;
+import io.anuke.koru.network.packets.BitmapDataPacket;
+import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.ucore.UCore;
@@ -30,8 +31,21 @@ public class GraphicsHandler extends ApplicationAdapter{
 	Crux crux;
 	Fluxor flux;
 	
-	public void sendMaterial(GeneratedMaterial mat){
+	/**Thread safe.*/
+	public void sendMaterial(int id, GeneratedMaterial mat){
+		
+		
 		Pixmap pix = mat.getPixmap();
+		Array<Object> packets = generateBitmapPacketList(pix);
+		BitmapDataPacket.Header header = (BitmapDataPacket.Header)packets.get(0);
+		GeneratedMaterialPacket packet = new GeneratedMaterialPacket();
+		packet.bitmapID = header.id;
+		packet.material = mat;
+		IServer.instance().sendTCP(id, packet);
+		
+		Koru.log("Sending " + Text.LIGHT_MAGENTA + packets.size + Text.LIGHT_GREEN+ " split bitmap packets to " + id + ".");
+		for(Object o : packets)
+			IServer.instance().sendTCP(id, o);
 	}
 	
 	public void generateNewMaterial(MaterialType type, Object... params){
@@ -60,7 +74,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		Array<Object> packets = new Array<Object>();
 		BitmapData data = new BitmapData(pixmap);
 		
-		ObjectPiecePacket.Header header = new ObjectPiecePacket.Header();
+		BitmapDataPacket.Header header = new BitmapDataPacket.Header();
 		header.colors = data.colors;
 		header.width = data.width;
 		header.height = data.height;
@@ -68,7 +82,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		packets.add(header);
 		
 		for(int i = 0; i < data.data.length/maxImagePacketSize+1; i++){
-			ObjectPiecePacket packet = new ObjectPiecePacket();
+			BitmapDataPacket packet = new BitmapDataPacket();
 			int len = Math.min(maxImagePacketSize, data.data.length-i*maxImagePacketSize);
 			byte[] bytes = new byte[len];
 			System.arraycopy(data.data, i*maxImagePacketSize, bytes, 0, len);

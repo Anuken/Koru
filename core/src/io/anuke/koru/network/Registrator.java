@@ -42,7 +42,7 @@ import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.PositionPacket;
-import io.anuke.koru.network.packets.ObjectPiecePacket;
+import io.anuke.koru.network.packets.BitmapDataPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
@@ -71,8 +71,8 @@ public class Registrator{
 		k.register(BlockInputPacket.class);
 		k.register(StoreItemPacket.class);
 		k.register(ChatPacket.class);
-		k.register(ObjectPiecePacket.class);
-		k.register(ObjectPiecePacket.Header.class);
+		k.register(BitmapDataPacket.class);
+		k.register(BitmapDataPacket.Header.class);
 
 
 		k.register(EntityType.class);

@@ -14,13 +14,14 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.NetworkListener;
+import io.anuke.koru.network.packets.BitmapDataPacket;
 import io.anuke.koru.network.packets.ChatPacket;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.PositionPacket;
-import io.anuke.koru.network.packets.ObjectPiecePacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.utils.Angles;
@@ -114,21 +115,25 @@ public class Network extends Module<Koru>{
 				}else if(object instanceof KoruEntity){
 					KoruEntity entity = (KoruEntity) object;
 					entityQueue.add(entity);
-				}else if(object instanceof ObjectPiecePacket.Header){
-					ObjectPiecePacket.Header packet = (ObjectPiecePacket.Header) object;
+				}else if(object instanceof BitmapDataPacket.Header){
+					BitmapDataPacket.Header packet = (BitmapDataPacket.Header) object;
 					Koru.log("Recieved bitmap header: " + packet.id + " [" + packet.width + "x" + packet.height + "]");
 					BitmapData data = new BitmapData(packet.width, packet.height, packet.colors);
 					bitmaps.put(packet.id, data);
-				}else if(object instanceof ObjectPiecePacket){
-					ObjectPiecePacket packet = (ObjectPiecePacket) object;
+				}else if(object instanceof BitmapDataPacket){
+					BitmapDataPacket packet = (BitmapDataPacket) object;
 					Koru.log("Recieved split bitmap: " + packet.id + " [" + packet.data.length + " bytes]");
 					bitmaps.get(packet.id).pushBytes(packet.data);
 					if(bitmaps.get(packet.id).isDone()){
 						Gdx.app.postRunnable(()->{
-							getModule(TextureManager.class).bitmapRecieved(bitmaps.get(packet.id));
+							getModule(ObjectHandler.class).bitmapRecieved(bitmaps.get(packet.id));
 							bitmaps.remove(packet.id);
 						});
 					}
+				
+				}else if(object instanceof GeneratedMaterialPacket){
+					GeneratedMaterialPacket packet = (GeneratedMaterialPacket) object;
+					getModule(ObjectHandler.class).materialPacketRecieved(packet);
 				}
 			}catch(Exception e){
 				e.printStackTrace();

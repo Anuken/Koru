@@ -6,7 +6,7 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Input;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.Renderer;
-import io.anuke.koru.modules.TextureManager;
+import io.anuke.koru.modules.ObjectHandler;
 import io.anuke.koru.modules.UI;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.IServer;
@@ -36,7 +36,7 @@ public class Koru extends ModuleController<Koru>{
 		addModule(Input.class);
 		addModule(ClientData.class);
 		addModule(World.class);
-		addModule(TextureManager.class);
+		addModule(ObjectHandler.class);
 		addModule(UI.class);
 
 		getModule(Network.class).client = client;
