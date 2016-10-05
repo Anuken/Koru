@@ -9,11 +9,17 @@ public class GeneratedMaterial extends GeneratedObject implements Material{
 	private final MaterialType type;
 	private final int id;
 	
-	public GeneratedMaterial(MaterialType type, int id){
-		super("material", "gen-material-"+id);
+	protected GeneratedMaterial(MaterialType type, int id){
+		super("gen-material-"+id);
 		this.id = id;
 		this.type = type;
 	}
+	
+	String getObjectType(){
+		return "material";
+	}
+	
+	protected GeneratedMaterial(){super(null); type = null; id=0;}
 
 	@Override
 	public Color foilageColor(){

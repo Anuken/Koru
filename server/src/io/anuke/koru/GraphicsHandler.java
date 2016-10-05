@@ -27,30 +27,28 @@ import io.anuke.ucore.UCore;
 public class GraphicsHandler extends ApplicationAdapter{
 	private static int nextBitmapID;
 	final int maxImagePacketSize = 512;
-	private int lastMaterialID;
 	Crux crux;
 	Fluxor flux;
 	
 	/**Thread safe.*/
 	public void sendMaterial(int id, GeneratedMaterial mat){
-		
-		
 		Pixmap pix = mat.getPixmap();
 		Array<Object> packets = generateBitmapPacketList(pix);
 		BitmapDataPacket.Header header = (BitmapDataPacket.Header)packets.get(0);
 		GeneratedMaterialPacket packet = new GeneratedMaterialPacket();
 		packet.bitmapID = header.id;
 		packet.material = mat;
-		IServer.instance().sendTCP(id, packet);
 		
 		Koru.log("Sending " + Text.LIGHT_MAGENTA + packets.size + Text.LIGHT_GREEN+ " split bitmap packets to " + id + ".");
 		for(Object o : packets)
 			IServer.instance().sendTCP(id, o);
+		
+		IServer.instance().sendTCP(id, packet);
 	}
 	
+	/**Not thread safe.*/
 	public void generateNewMaterial(MaterialType type, Object... params){
-		GeneratedMaterial mat = new GeneratedMaterial(type, ++lastMaterialID);
-		MaterialManager.instance().registerMaterial(mat);
+		GeneratedMaterial mat = MaterialManager.instance().createMaterial(type);
 		Pixmap pix = generatePixmap(mat, params);
 		mat.loadPixmap(pix);
 		PixmapIO.writePNG(mat.getImageFile(), pix);
@@ -98,7 +96,11 @@ public class GraphicsHandler extends ApplicationAdapter{
 		GLFW.glfwHideWindow(UCore.getWindowHandle());
 		Gdx.graphics.setContinuousRendering(false);
 		
+		Koru.log("Loading materials...");
+		MaterialManager.instance().loadMaterials(Directories.materials);
+		
 		crux = new Crux();
+		
 		flux = new Fluxor(new TreeVoxelizer(), new DefaultRasterizer());
 	}
 

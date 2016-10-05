@@ -3,15 +3,19 @@ package io.anuke.koru.generation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 
-public class GeneratedObject{
-	public final String type, name;
-	private Pixmap pixmap;
+import io.anuke.koru.utils.Resources;
+
+public abstract class GeneratedObject{
+	public final String name;
+	private transient Pixmap pixmap;
 	
-	public GeneratedObject(String type, String name){
-		this.type = type;
+	public GeneratedObject(String name){
 		this.name = name;
 	}
+	
+	abstract String getObjectType();
 	
 	/**Server-side only.*/
 	public Pixmap getPixmap(){
@@ -23,11 +27,16 @@ public class GeneratedObject{
 		pixmap = new Pixmap(getImageFile());
 	}
 	
+	/**Client-side only.*/
+	public void loadTexture(){
+		Resources.getAtlas().addTexture(name, new Texture(getImageFile()));
+	}
+	
 	public void loadPixmap(Pixmap pixmap){
 		this.pixmap = pixmap;
 	}
 	
 	public FileHandle getImageFile(){
-		return Gdx.files.local("downloaded/" + type + "s/" + name + ".png");
+		return Gdx.files.local("objects/" + getObjectType() + "s/" + name + ".png");
 	}
 }

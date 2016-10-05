@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Input;
 import io.anuke.koru.modules.Network;
-import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.modules.ObjectHandler;
+import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.modules.UI;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.IServer;
@@ -64,7 +64,7 @@ public class Koru extends ModuleController<Koru>{
 		if(IServer.active() || Gdx.app == null){
 			if(Gdx.app == null){
 				System.out.println(
-						Text.BACK_DEFAULT + Text.BOLD + Text.LIGHT_BLUE + "[" + name + "]: " + Text.LIGHT_GREEN + o);
+						Text.BACK_DEFAULT + Text.BOLD + Text.LIGHT_BLUE + "[" + name + "]: " + Text.LIGHT_GREEN + o + Text.RED);
 			}else{
 				Gdx.app.log(
 						Text.BACK_DEFAULT + Text.LIGHT_BLUE + "[" + Text.BLUE + name + Text.BACK_DEFAULT + "::"

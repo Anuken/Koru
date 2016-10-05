@@ -2,6 +2,7 @@ package io.anuke.koru;
 
 import java.nio.file.Paths;
 
+import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
@@ -79,7 +80,7 @@ public class KoruUpdater{
 		for(Chunk chunk : file.getLoadedChunks()){
 			file.writeChunk(chunk);
 		}
-		Koru.log("Saving objects...");
-		//Gdx.files.local(Variables.objectDirectory).writeString(Resources.getJson().toJson(materials.objects), false);
+		Koru.log("Saving materials...");
+		MaterialManager.instance().saveMaterials(Directories.materials);
 	}
 }

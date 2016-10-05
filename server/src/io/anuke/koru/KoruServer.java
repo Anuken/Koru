@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.java_websocket.WebSocket;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -20,6 +21,7 @@ import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
@@ -114,7 +116,9 @@ public class KoruServer extends IServer{
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
-			
+			Gdx.app.postRunnable(()->{
+				graphics.sendMaterial(info.id, MaterialManager.instance().getMaterial(0));
+			});
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Critical error: failed sending player!");

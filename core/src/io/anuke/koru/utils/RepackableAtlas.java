@@ -18,7 +18,7 @@ public class RepackableAtlas extends Atlas{
 	}
 
 	public AtlasRegion findRegion(String name){
-		if(extraRegions.containsKey(name)){
+		if(extraRegions != null && extraRegions.containsKey(name)){
 			return extraRegions.get(name);
 		}
 		return super.findRegion(name);

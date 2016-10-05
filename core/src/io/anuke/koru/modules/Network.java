@@ -125,15 +125,17 @@ public class Network extends Module<Koru>{
 					Koru.log("Recieved split bitmap: " + packet.id + " [" + packet.data.length + " bytes]");
 					bitmaps.get(packet.id).pushBytes(packet.data);
 					if(bitmaps.get(packet.id).isDone()){
-						Gdx.app.postRunnable(()->{
-							getModule(ObjectHandler.class).bitmapRecieved(bitmaps.get(packet.id));
+						Gdx.app.postRunnable(() -> {
+							getModule(ObjectHandler.class).bitmapRecieved(packet.id, bitmaps.get(packet.id));
 							bitmaps.remove(packet.id);
 						});
 					}
-				
+
 				}else if(object instanceof GeneratedMaterialPacket){
 					GeneratedMaterialPacket packet = (GeneratedMaterialPacket) object;
-					getModule(ObjectHandler.class).materialPacketRecieved(packet);
+					Gdx.app.postRunnable(() -> {
+						getModule(ObjectHandler.class).materialPacketRecieved(packet);
+					});
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -160,7 +162,7 @@ public class Network extends Module<Koru>{
 				entitiesToRemove.remove(entity.getID());
 				continue;
 			}
-			
+
 			entity.addSelf();
 		}
 
