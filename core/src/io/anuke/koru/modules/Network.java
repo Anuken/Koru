@@ -130,7 +130,6 @@ public class Network extends Module<Koru>{
 							bitmaps.remove(packet.id);
 						});
 					}
-
 				}else if(object instanceof GeneratedMaterialPacket){
 					GeneratedMaterialPacket packet = (GeneratedMaterialPacket) object;
 					Gdx.app.postRunnable(() -> {

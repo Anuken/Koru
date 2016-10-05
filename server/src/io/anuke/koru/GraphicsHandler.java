@@ -14,6 +14,7 @@ import io.anuke.fluxe.generation.DefaultRasterizer;
 import io.anuke.fluxe.generation.Fluxor;
 import io.anuke.fluxe.generation.TreeVoxelizer;
 import io.anuke.koru.generation.GeneratedMaterial;
+import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.GeneratedObject;
 import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.network.BitmapData;
@@ -37,7 +38,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		BitmapDataPacket.Header header = (BitmapDataPacket.Header)packets.get(0);
 		GeneratedMaterialPacket packet = new GeneratedMaterialPacket();
 		packet.bitmapID = header.id;
-		packet.material = mat;
+		packet.wrapper = new GeneratedMaterialWrapper(mat);
 		
 		Koru.log("Sending " + Text.LIGHT_MAGENTA + packets.size + Text.LIGHT_GREEN+ " split bitmap packets to " + id + ".");
 		for(Object o : packets)
@@ -88,7 +89,6 @@ public class GraphicsHandler extends ApplicationAdapter{
 			packet.id = header.id;
 			packets.add(packet);
 		}
-		
 		return packets;
 	}
 

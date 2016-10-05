@@ -117,7 +117,7 @@ public class KoruServer extends IServer{
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
 			Gdx.app.postRunnable(()->{
-				graphics.sendMaterial(info.id, MaterialManager.instance().getMaterial(0));
+				graphics.sendMaterial(info.id, MaterialManager.instance().getGeneratedMaterial(0));
 			});
 		}catch(Exception e){
 			e.printStackTrace();

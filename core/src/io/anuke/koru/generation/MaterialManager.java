@@ -7,32 +7,47 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.utils.Text;
+import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
+import io.anuke.koru.world.Materials;
 
+/**Materials IDs < 0 are generated.*/
 public class MaterialManager{
 	private static MaterialManager instance = new MaterialManager();
-	private int lastMaterialID;
+	private int lastMaterialID = Integer.MIN_VALUE;
 	private ObjectMap<Integer, GeneratedMaterial> objects = new ObjectMap<Integer, GeneratedMaterial>();
+	private Materials[] values = Materials.values();
 
-	private MaterialManager() {
-	}
+	private MaterialManager() {}
 
 	public static MaterialManager instance(){
 		return instance;
 	}
+	
+	public Material getMaterial(int id){
+		if(id < 0){
+			return objects.get(id);
+		}
+		return values[id];
+	}
 
-	public GeneratedMaterial getMaterial(int id){
+	public GeneratedMaterial getGeneratedMaterial(int id){
 		return objects.get(id);
+	}
+	
+	/**Client-side only.*/
+	public void registerMaterial(GeneratedMaterial mat){
+		objects.put(mat.id(), mat);
 	}
 
 	public GeneratedMaterial createMaterial(MaterialType type){
 		GeneratedMaterial mat = new GeneratedMaterial(type, lastMaterialID++);
 		objects.put(mat.id(), mat);
-
 		return mat;
 	}
 
 	public void saveMaterials(FileHandle file){
+		Koru.log("Saving " + objects.size +" materials...");
 		Resources.getJson().toJson(objects, file);
 	}
 
@@ -58,7 +73,7 @@ public class MaterialManager{
 				}
 				objects.put(material.id(), material);
 			}
-			if(objects.size != 0)lastMaterialID++;
+			if(objects.size != 0) lastMaterialID++;
 		}catch(Exception e){
 			Koru.log("Material file corrupted or not found.");
 		}

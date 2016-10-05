@@ -23,12 +23,13 @@ public class ObjectHandler extends Module<Koru>{
 	}
 	
 	public void materialPacketRecieved(GeneratedMaterialPacket packet){
+		GeneratedMaterial mat = packet.wrapper.asMaterial();
 		Pixmap pix = materials.get(packet.bitmapID);
+		MaterialManager.instance().registerMaterial(mat);
 		//TODO save image on separate thread
 		if(pix == null) throw new GdxRuntimeException("Error: Material sent but bitmap not found!");
 		
-		PixmapIO.writePNG(packet.material.getImageFile(), pix); 
-		GeneratedMaterial mat = packet.material;
+		PixmapIO.writePNG(mat.getImageFile(), pix); 
 		
 		Texture texture = new Texture(pix);
 		Resources.getAtlas().addTexture(mat.name(), texture);
@@ -37,16 +38,6 @@ public class ObjectHandler extends Module<Koru>{
 	public void bitmapRecieved(int id, BitmapData data){
 		Pixmap pix = data.toPixmap();
 		materials.put(id, pix);
-	}
-	
-	static class LoadingMaterial{
-		public Pixmap pixmap;
-		public final int id;
-		
-		public LoadingMaterial(Pixmap pixmap, int id){
-			this.id = id;
-			this.pixmap = pixmap;
-		}
 	}
 	
 	@Override

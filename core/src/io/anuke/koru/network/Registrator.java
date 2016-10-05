@@ -30,6 +30,8 @@ import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.generation.GeneratedMaterial;
+import io.anuke.koru.generation.GeneratedMaterialWrapper;
+import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
@@ -52,7 +54,6 @@ import io.anuke.koru.systems.SyncSystem.SyncType;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.PinetreeTileData;
@@ -102,9 +103,10 @@ public class Registrator{
 		k.register(Tile[].class);
 		k.register(Tile[][].class);
 		k.register(Tile[][][].class);
-		k.register(Materials.class);
+		k.register(Materials.class, new MaterialsSerializer());
 		k.register(MaterialType.class);
-		k.register(GeneratedMaterial.class);
+		k.register(GeneratedMaterial.class, new GeneratedMaterialSerializer());
+		k.register(GeneratedMaterialWrapper.class);
 		k.register(ItemStack.class);
 		k.register(ItemStack[].class);
 		k.register(ItemStack[][].class);
@@ -129,15 +131,27 @@ public class Registrator{
 		k.register(KoruEntity.class, new EntitySerializer());
 	}
 	
-	public static class MaterialSerializer extends Serializer<Material>{
+	public static class MaterialsSerializer extends Serializer<Materials>{
 		@Override
-		public Material read(Kryo k, Input i, Class<Material> c){
-			return Materials.values()[k.readObject(i, Integer.class)];
+		public Materials read(Kryo k, Input i, Class<Materials> c){
+			return (Materials)MaterialManager.instance().getMaterial(k.readObject(i, int.class));
 		}
 
 		@Override
-		public void write(Kryo k, Output o, Material m){
-			k.writeObject(o, new Integer(m.id()));
+		public void write(Kryo k, Output o, Materials m){
+			k.writeObject(o, m.id());
+		}
+	}
+	
+	public static class GeneratedMaterialSerializer extends Serializer<GeneratedMaterial>{
+		@Override
+		public GeneratedMaterial read(Kryo k, Input i, Class<GeneratedMaterial> c){
+			return MaterialManager.instance().getGeneratedMaterial(k.readObject(i, int.class));
+		}
+
+		@Override
+		public void write(Kryo k, Output o, GeneratedMaterial m){
+			k.writeObject(o, m.id());
 		}
 	}
 
