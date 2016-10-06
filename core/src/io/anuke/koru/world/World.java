@@ -1,5 +1,13 @@
 package io.anuke.koru.world;
 
+import java.util.Collection;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
@@ -10,14 +18,6 @@ import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.ucore.modules.Module;
-
-import java.util.Collection;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
@@ -158,7 +158,9 @@ public class World extends Module<Koru>{
 
 	public boolean positionSolid(float x, float y){
 		Tile tile = getTile(x, y);
-		return (tile.block.getType().solid() && tile.block.getType().getRect(tile(x), tile(y), rect).contains(x, y)) || (tile.tile.getType().solid() && tile.tile.getType().getRect(tile(x), tile(y), rect).contains(x, y));
+		Material block = tile.block();
+		Material tilem = tile.tile();
+		return (block.getType().solid() && block.getType().getRect(tile(x), tile(y), rect).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getRect(tile(x), tile(y), rect).contains(x, y));
 	}
 
 	public boolean blockSolid(int x, int y){
@@ -177,7 +179,7 @@ public class World extends Module<Koru>{
 		if( !inBounds(x, y)){
 			return true;
 		}
-		return tile(x, y).tile == material;
+		return tile(x, y).tile() == material;
 	}
 
 	public GridPoint2 search(Material material, int x, int y, int range){
@@ -186,7 +188,7 @@ public class World extends Module<Koru>{
 			for(int cy = -range;cy <= range;cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
-				if(tile(worldx, worldy).block == material || tile(worldx, worldy).tile == material){
+				if(tile(worldx, worldy).block() == material || tile(worldx, worldy).tile() == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
 						point.set(worldx, worldy);

@@ -1,11 +1,11 @@
 package io.anuke.koru.world;
 
-import io.anuke.koru.items.Item;
-import io.anuke.koru.items.ItemStack;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+
+import io.anuke.koru.items.Item;
+import io.anuke.koru.items.ItemStack;
 import io.anuke.ucore.graphics.Hue;
 
 public enum Materials implements Material{
@@ -129,7 +129,7 @@ public enum Materials implements Material{
 		if(getType().tile()){
 			//tile.tile = Material.air;
 		}else{
-			tile.block = Materials.air;
+			//tile.blockid = 0;
 		}
 	}
 	

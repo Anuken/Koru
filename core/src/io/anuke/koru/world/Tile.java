@@ -2,43 +2,60 @@ package io.anuke.koru.world;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import io.anuke.koru.generation.MaterialManager;
+
 public class Tile implements Poolable{
-	public Material tile = Materials.air;
-	public Material block = Materials.air;
-	public TileData tiledata, blockdata;
+	public int tileid, blockid;
+	public transient TileData tiledata, blockdata;
 	
 	public Tile(){}
 	
 	public Tile(Material tile, Material block){
-		this.tile = tile;
-		this.block = block;
+		tileid = tile.id();
+		blockid = block.id();
+	}
+	
+	public Material tile(){
+		return MaterialManager.instance().getMaterial(tileid);
+	}
+	
+	public Material block(){
+		return MaterialManager.instance().getMaterial(blockid);
+	}
+	
+	public boolean tileEmpty(){
+		return tileid == 0;
+	}
+	
+	public boolean blockEmpty(){
+		return blockid == 0;
 	}
 
 	public Tile setTileMaterial(Material m){
-		this.tile = m;
+		tileid = m.id();
 		return this;
 	}
 
 	public Tile setBlockMaterial(Material m){
-		this.block = m;
+		blockid = m.id();
 		return this;
 	}
 
 	public void setMaterial(Material m){
 		if(m.getType().tile()){
-			tile = m;
+			tileid = m.id();
 		}else{
-			block = m;
+			blockid = m.id();
 		}
 	}
 
 	public boolean solid(){
-		return tile.getType().solid() || block.getType().solid();
+		return tile().getType().solid() || block().getType().solid();
 	}
 
 	public Material solidMaterial(){
-		if(block.getType().solid()) return block;
-		if(tile.getType().solid()) return tile;
+		if(block().getType().solid()) return block();
+		if(tile().getType().solid()) return tile();
 		return null;
 	}
 
@@ -48,30 +65,29 @@ public class Tile implements Poolable{
 	}
 
 	public void changeEvent(){
-		if(invalidData(tile, tiledata)){
-			tiledata = tile.getDefaultData();
+		if(invalidData(tile(), tiledata)){
+			tiledata = tile().getDefaultData();
 		}
 
-		if(invalidData(block, blockdata)){
-			blockdata = block.getDefaultData();
+		if(invalidData(block(), blockdata)){
+			blockdata = block().getDefaultData();
 		}
-		tile.changeEvent(this);
-		block.changeEvent(this);
+		tile().changeEvent(this);
+		block().changeEvent(this);
 	}
 
 	public boolean invalidData(Material material, TileData data){
-		
 		return material.getDataClass() == null || data == null || !material.getDataClass().equals(data.getClass());
 	}
 
 	public String toString(){
-		return "Tile:[block=" + block + " tile=" + tile + "]";
+		return "Tile:[block=" + tile() + " tile=" + block() + "]";
 	}
 
 	@Override
 	public void reset(){
-		tile = Materials.air;
-		block = Materials.air;
+		tileid = 0;
+		blockid = 0;
 		tiledata = null;
 		blockdata = null;
 	}

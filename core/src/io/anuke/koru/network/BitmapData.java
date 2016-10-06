@@ -1,23 +1,19 @@
 package io.anuke.koru.network;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntSet;
-import com.badlogic.gdx.utils.IntSet.IntSetIterator;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class BitmapData{
-	final public ConcurrentHashMap<Byte, Integer> colors;
 	final public byte[] data;
 	final public int width, height;
+	final public int[] colors;
 	transient int byteIndex = 0;
 	
 	public BitmapData(Pixmap pixmap){
 		data = new  byte[pixmap.getWidth()*pixmap.getHeight()];
 		IntSet colorset = new IntSet();
-		colors = new ConcurrentHashMap<Byte, Integer>();
 		this.width = pixmap.getWidth();
 		this.height = pixmap.getHeight();
 		
@@ -28,16 +24,16 @@ public class BitmapData{
 			}
 		}
 		
+		colors = new int[colorset.size];
+		
 		byte index = 0;
-		IntSetIterator it = colorset.iterator();
-		IntArray array = it.toArray();
-		for(int i : array.items){
-			colors.put(index ++, i);
+		for(int i : colorset.iterator().toArray().items){
+			colors[index ++] = i;
 		}
 		
-		ConcurrentHashMap<Integer, Byte> rmap = new ConcurrentHashMap<Integer, Byte>();
-		for(Byte b : colors.keySet()){
-			rmap.put(colors.get(b), b);
+		ObjectMap<Integer, Byte> rmap = new ObjectMap<Integer, Byte>();
+		for(byte i = 0; i < colors.length; i ++){
+			rmap.put(colors[i], i);
 		}
 		
 		for(int x = 0; x < pixmap.getWidth(); x ++){
@@ -48,7 +44,7 @@ public class BitmapData{
 		}
 	}
 	
-	public BitmapData(int width, int height, ConcurrentHashMap<Byte, Integer> colors){
+	public BitmapData(int width, int height, int[] colors){
 		this.width = width;
 		this.height = height;
 		this.colors = colors;
@@ -68,7 +64,7 @@ public class BitmapData{
 		Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
 		for(int x = 0; x < pixmap.getWidth(); x ++){
 			for(int y = 0; y < pixmap.getHeight(); y ++){
-				Integer i = colors.get(data[x + y*width]);
+				Integer i = colors[data[x + y*width]];
 				pixmap.drawPixel(x, y, i);
 			}
 		}

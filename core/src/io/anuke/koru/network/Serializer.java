@@ -1,10 +1,13 @@
 package io.anuke.koru.network;
 
-import io.anuke.koru.network.packets.ChunkPacket;
-import io.anuke.koru.world.*;
-
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+
+import io.anuke.koru.network.packets.ChunkPacket;
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.World;
 
 public class Serializer{
 	static Json json = new Json();
@@ -15,19 +18,21 @@ public class Serializer{
 	}
 	
 	public static String serialize(Object object){
+		/*
 		if(object instanceof ChunkPacket){
 			ChunkPacket packet = (ChunkPacket)object;
 			String string = "chunkpacket";
 			string += "{"+packet.chunk.x + "," + packet.chunk.y+"}";
 			for(int x = 0; x < World.chunksize; x ++){
 				for(int y = 0; y < World.chunksize; y ++){
-					string += (char)(packet.chunk.tiles[x][y].tile.id());
-					string += (char)(packet.chunk.tiles[x][y].block.id());
+					string += (char)(packet.chunk.tiles[x][y].tileid);
+					string += (char)(packet.chunk.tiles[x][y].blockid);
 				//	Koru.log(string.substring(string.length()-2));
 				}
 			}
 			return string;
 		}
+		*/
 		return "`"+object.getClass().getName() + "`"+ json.toJson(object);
 	}
 	

@@ -16,7 +16,7 @@ public abstract class TreeTileData extends UpdatingTileData{
 	
 	public void update(int x, int y, Tile tile){
 		if(water >= maxwater){
-			tile.block.growEvent(tile);
+			tile.block().growEvent(tile);
 			water = 0;
 		}
 	}

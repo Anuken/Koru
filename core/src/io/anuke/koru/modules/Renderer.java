@@ -23,7 +23,6 @@ import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.UCore;
@@ -141,12 +140,12 @@ public class Renderer extends Module<Koru>{
 							renderables[rendx][rendy] = new RenderableList();
 						}
 
-						if(tile.tile != Materials.air){
-							tile.tile.getType().draw(renderables[rendx][rendy], tile.tile, tile, worldx, worldy);
+						if(!tile.tileEmpty()){
+							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 						}
 
-						if(tile.block != Materials.air && tile.block != null){
-							tile.block.getType().draw(renderables[rendx][rendy], tile.block, tile, worldx, worldy);
+						if(!tile.blockEmpty()){
+							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
 					}
 				}

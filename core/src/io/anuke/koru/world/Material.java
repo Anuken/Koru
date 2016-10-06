@@ -1,9 +1,9 @@
 package io.anuke.koru.world;
 
-import io.anuke.koru.items.ItemStack;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+
+import io.anuke.koru.items.ItemStack;
 
 public interface Material{
 	public Color foilageColor();

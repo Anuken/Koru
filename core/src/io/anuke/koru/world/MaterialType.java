@@ -1,17 +1,17 @@
 package io.anuke.koru.world;
 
 
-import io.anuke.koru.modules.Renderer;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.SortProviders;
-import io.anuke.ucore.Noise;
-import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+
+import io.anuke.koru.modules.Renderer;
+import io.anuke.ucore.Noise;
+import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public enum MaterialType{
 	tile{
@@ -126,7 +126,7 @@ public enum MaterialType{
 			
 			new SpriteRenderable(Renderer.i.getRegion(material.name()))
 			.setPosition(tile(x), tile(y)).centerX()
-			.setColor(tile.tile.foilageColor())
+			.setColor(tile.tile().foilageColor())
 			.addShadow(group, Renderer.i.atlas)
 			.setProvider(SortProviders.object)
 			.add(group);

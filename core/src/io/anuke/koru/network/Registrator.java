@@ -146,7 +146,7 @@ public class Registrator{
 	public static class GeneratedMaterialSerializer extends Serializer<GeneratedMaterial>{
 		@Override
 		public GeneratedMaterial read(Kryo k, Input i, Class<GeneratedMaterial> c){
-			return MaterialManager.instance().getGeneratedMaterial(k.readObject(i, int.class));
+			return (GeneratedMaterial)MaterialManager.instance().getMaterial(k.readObject(i, int.class));
 		}
 
 		@Override
