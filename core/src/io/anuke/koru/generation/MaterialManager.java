@@ -55,8 +55,8 @@ public class MaterialManager{
 	
 	/**Client-side only.*/
 	public void registerMaterial(GeneratedMaterial mat){
-		genMaterials.setSize(mat.id()+goffset+1);
-		genMaterials.set(mat.id()+goffset, mat);
+		genMaterials.setSize(Math.max(mat.id()-goffset+1, genMaterials.size));
+		genMaterials.set(mat.id()-goffset, mat);
 	}
 
 	public GeneratedMaterial createMaterial(MaterialType type){

@@ -38,7 +38,7 @@ public class ObjectHandler extends Module<Koru>{
 	
 	/**Called on the main GDX thread.*/
 	public void materialPacketRecieved(GeneratedMaterialPacket packet){
-		Koru.log("Recieved material packet.");
+		Koru.log("Recieved material packet: " + packet.wrapper.id());
 		GeneratedMaterial mat = packet.wrapper.asMaterial();
 		Pixmap pix = materials.get(packet.bitmapID);
 		MaterialManager.instance().registerMaterial(mat);
