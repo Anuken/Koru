@@ -66,9 +66,11 @@ public class GraphicsHandler extends ApplicationAdapter{
 	/** Not thread safe. */
 	public GeneratedMaterial generateNewMaterial(MaterialType type, Object... params){
 		GeneratedMaterial mat = MaterialManager.instance().createMaterial(type);
+		Koru.log("Generating a new material with ID " + mat.id() + ".");
 		Pixmap pix = generatePixmap(mat, params);
 		mat.loadPixmap(pix);
 		PixmapIO.writePNG(mat.getImageFile(), pix);
+		Koru.log("Done generating material pixmap.");
 		return mat;
 	}
 	
@@ -102,6 +104,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		for(int i = 0; i < data.data.length / maxImagePacketSize + 1; i++){
 			BitmapDataPacket packet = new BitmapDataPacket();
 			int len = Math.min(maxImagePacketSize, data.data.length - i * maxImagePacketSize);
+			if(len == 0) continue;
 			byte[] bytes = new byte[len];
 			System.arraycopy(data.data, i * maxImagePacketSize, bytes, 0, len);
 			packet.data = bytes;
@@ -121,6 +124,11 @@ public class GraphicsHandler extends ApplicationAdapter{
 		crux = new Crux();
 
 		flux = new Fluxor(new TreeVoxelizer(), new DefaultRasterizer());
+		
+		if(MaterialManager.instance().generatedMaterialSize() == 0){
+			for(int i = 0; i < 5; i ++)
+			generateNewMaterial(MaterialType.tree);
+		}
 	}
 
 	public void render(){

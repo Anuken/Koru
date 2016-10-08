@@ -47,7 +47,7 @@ public class Renderer extends Module<Koru>{
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
-	public boolean debug = false;
+	public boolean debug = true;
 	public final boolean gbuffer = false;
 	public KoruEntity player;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
@@ -59,7 +59,7 @@ public class Renderer extends Module<Koru>{
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
-		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.pack"));
+		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
@@ -133,12 +133,14 @@ public class Renderer extends Module<Koru>{
 						int worldx = chunk.worldX() + x;
 						int worldy = chunk.worldY() + y;
 						int rendx = chunkx * World.chunksize + x, rendy = chunky * World.chunksize + y;
-
+						
+						Tile tile = chunk.tiles[x][y];
+						
+						if(resetID != 0 && (tile.blockid != resetID && tile.tileid != resetID)) continue;
+						
 						if(renderables[rendx][rendy] != null) renderables[rendx][rendy].free();
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
-
-						Tile tile = chunk.tiles[x][y];
-						if(resetID != 0 && (tile.blockid != resetID && tile.tileid != resetID)) continue;
+						
 						
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
@@ -164,7 +166,9 @@ public class Renderer extends Module<Koru>{
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
 
-		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, Gdx.graphics.getHeight() / GUIscale);
+		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, uiheight());
+		
+		
 		
 		String launcher = "";
 		

@@ -16,7 +16,7 @@ import io.anuke.koru.world.Materials;
 public class MaterialManager{
 	private static final MaterialManager instance = new MaterialManager();
 	private static final Materials[] values = Materials.values();
-	private int goffset = Integer.MIN_VALUE+1;
+	private int goffset = Integer.MIN_VALUE;
 	private int lastMaterialID = goffset;
 	private Array<GeneratedMaterial> genMaterials = new Array<GeneratedMaterial>();
 	//private ObjectMap<Integer, GeneratedMaterial> genMaterials = new ObjectMap<>();
@@ -36,10 +36,21 @@ public class MaterialManager{
 			if(mat == null && !IServer.active()){
 				ObjectHandler.instance().notifyMaterialUnknown(id);
 				return values[0];
+			}else if(mat == null){
+				Koru.log(Text.RED+"Unknown material with ID "+ Text.LIGHT_CYAN+ id + Text.RED + ". Exiting.");
+				System.exit(-1);
 			}
 			return mat;
 		}
 		return values[id];
+	}
+	
+	public GeneratedMaterial getGeneratedMaterial(int id){
+		return (GeneratedMaterial) getMaterial(id+goffset);
+	}
+	
+	public int generatedMaterialSize(){
+		return genMaterials.size;
 	}
 	
 	/**Client-side only.*/
