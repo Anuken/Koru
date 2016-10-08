@@ -107,7 +107,7 @@ public enum MaterialType{
 			
 			SpriteRenderable sprite = (SpriteRenderable)new SpriteRenderable(Renderer.i.getRegion(material.name()))
 			.setPosition(tile(x), tile(y)-offset).centerX()
-			.addShadow(group, Renderer.i.atlas, 5)
+			.addShadow(group, Renderer.i.atlas, 1)
 			.setProvider(SortProviders.object);
 			
 			sprite.setLayer(sprite.sprite.getY() +offset);

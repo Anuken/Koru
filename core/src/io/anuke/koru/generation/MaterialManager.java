@@ -76,6 +76,10 @@ public class MaterialManager{
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadMaterials(FileHandle file){
+		//TODO disable loading for now
+		genMaterials = new Array<GeneratedMaterial>();
+		if(genMaterials != null) return;
+		
 		try{
 			genMaterials = Resources.getJson().fromJson(Array.class, file);
 			for(GeneratedMaterial material : genMaterials){
@@ -98,6 +102,7 @@ public class MaterialManager{
 			Koru.log("Material file corrupted or not found.");
 			genMaterials = new Array<GeneratedMaterial>();
 		}
+		
 		
 		Koru.log("Successfuly loaded " + genMaterials.size + " generated materials.");
 	}
