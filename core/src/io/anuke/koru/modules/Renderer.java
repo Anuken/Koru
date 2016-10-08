@@ -114,8 +114,13 @@ public class Renderer extends Module<Koru>{
 		lastcamx = camx;
 		lastcamy = camy;
 	}
-
+	
 	public void updateTiles(){
+		updateTiles(0);
+	}
+
+	/**If resetID does not equal 0, it will only updated tiles whose ID is resetID*/
+	public void updateTiles(int resetID){
 
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
@@ -133,7 +138,8 @@ public class Renderer extends Module<Koru>{
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
 
 						Tile tile = chunk.tiles[x][y];
-
+						if(resetID != 0 && (tile.blockid != resetID && tile.tileid != resetID)) continue;
+						
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
@@ -152,6 +158,7 @@ public class Renderer extends Module<Koru>{
 			}
 		}
 	}
+	
 
 	public void drawGUI(){
 		font.getData().setScale(1 / GUIscale);

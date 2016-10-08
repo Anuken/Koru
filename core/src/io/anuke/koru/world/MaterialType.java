@@ -63,6 +63,13 @@ public enum MaterialType{
 		}
 	},
 	block{
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			new SpriteRenderable(Renderer.i.getRegion(material.name()))
+			.setPosition(tile(x), tile(y)).centerX()
+			.addShadow(group, Renderer.i.atlas)
+			.setProvider(SortProviders.object)
+			.sprite().add(group);
+		}
 
 		public boolean tile(){
 			return false;

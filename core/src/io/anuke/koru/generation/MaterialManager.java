@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.modules.ObjectHandler;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.utils.Text;
@@ -18,6 +19,7 @@ public class MaterialManager{
 	private int goffset = Integer.MIN_VALUE+1;
 	private int lastMaterialID = goffset;
 	private Array<GeneratedMaterial> genMaterials = new Array<GeneratedMaterial>();
+	//private ObjectMap<Integer, GeneratedMaterial> genMaterials = new ObjectMap<>();
 	//private ObjectMap<Integer, GeneratedMaterial> objects = new ObjectMap<Integer, GeneratedMaterial>();
 	
 
@@ -29,7 +31,13 @@ public class MaterialManager{
 	
 	public Material getMaterial(int id){
 		if(id < 0){
-			return genMaterials.get(goffset+id);
+			GeneratedMaterial mat = goffset+id >= genMaterials.size ? null : genMaterials.get(goffset+id);
+			//if it's a client and the material is being loaded, return air
+			if(mat == null && !IServer.active()){
+				ObjectHandler.instance().notifyMaterialUnknown(id);
+				return values[0];
+			}
+			return mat;
 		}
 		return values[id];
 	}
@@ -60,6 +68,7 @@ public class MaterialManager{
 		try{
 			genMaterials = Resources.getJson().fromJson(Array.class, file);
 			for(GeneratedMaterial material : genMaterials){
+				if(material == null) continue;
 				lastMaterialID = Math.max(material.id(), lastMaterialID);
 				try{
 					if(IServer.active()){
@@ -74,7 +83,9 @@ public class MaterialManager{
 			}
 			if(genMaterials.size != 0) lastMaterialID++;
 		}catch(Exception e){
+			e.printStackTrace();
 			Koru.log("Material file corrupted or not found.");
+			genMaterials = new Array<GeneratedMaterial>();
 		}
 		
 		Koru.log("Successfuly loaded " + genMaterials.size + " generated materials.");

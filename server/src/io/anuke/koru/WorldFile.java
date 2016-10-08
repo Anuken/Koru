@@ -75,11 +75,13 @@ public class WorldFile extends WorldLoader{
 			}
 		});
 
+		/*
 		if(totalChunks() != 0) return;
 		generateChunk(0, 0);
 		generateChunk( -1, 0);
 		generateChunk(0, -1);
 		generateChunk( -1, -1);
+		*/
 
 	}
 

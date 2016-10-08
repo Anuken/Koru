@@ -46,6 +46,7 @@ import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
@@ -78,6 +79,8 @@ public class Registrator{
 		k.register(BitmapDataPacket.class);
 		k.register(BitmapDataPacket.Header.class);
 		k.register(GeneratedMaterialPacket.class);
+		k.register(MaterialRequestPacket.class);
+
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);
@@ -126,6 +129,7 @@ public class Registrator{
 		k.register(ObjectMap.Keys.class);
 		k.register(HashMap.class);
 		k.register(byte[].class);
+		k.register(int[].class);
 		k.register(Class.class);
 
 		k.register(KoruEntity.class, new EntitySerializer());

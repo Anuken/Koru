@@ -20,6 +20,8 @@ import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.generation.GeneratedMaterial;
+import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
@@ -30,11 +32,13 @@ import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.InventoryTileData;
+import io.anuke.koru.world.Material;
 import io.anuke.koru.world.World;
 
 public class KoruServer extends IServer{
@@ -146,6 +150,15 @@ public class KoruServer extends IServer{
 				BlockInputPacket packet = (BlockInputPacket)object;
 				updater.world.tile(packet.x, packet.y).setMaterial(packet.material);
 				updater.world.updateTile(packet.x, packet.y);
+			}else if(object instanceof MaterialRequestPacket){
+				MaterialRequestPacket packet = (MaterialRequestPacket)object;
+				Material mat = MaterialManager.instance().getMaterial(packet.id);
+				if(mat == null || !(mat instanceof GeneratedMaterial)){
+					Koru.log("Invalid material requested: " + mat.id());
+					return;
+				}
+				Koru.log("Sending material type to player: " + info.id);
+				graphics.sendMaterial(info.id, (GeneratedMaterial)mat);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -250,7 +263,9 @@ public class KoruServer extends IServer{
 			if(udp){
 				info.connection.sendUDP(object);
 			}else{
-				Koru.log("Sending " + object.getClass().getSimpleName() + ": " +info.connection.sendTCP(object) + "b");
+				/*int size = */info.connection.sendTCP(object);
+				
+				//Koru.log("Sending " + object.getClass().getSimpleName() + ": " +size  + "b");
 			}
 		}
 	}
@@ -313,5 +328,9 @@ public class KoruServer extends IServer{
 
 		}
 		new KoruServer().setup();
+	}
+	
+	public static KoruServer instance(){
+		return (KoruServer)IServer.instance();
 	}
 }
