@@ -40,5 +40,9 @@ public class GeneratedMaterial extends GeneratedObject implements Material{
 	public MaterialType getType(){
 		return type;
 	}
+	
+	public String toString(){
+		return name();
+	}
 
 }

@@ -34,8 +34,8 @@ import io.anuke.ucore.spritesystem.RenderableHandler;
 import io.anuke.ucore.spritesystem.RenderableList;
 
 public class Renderer extends Module<Koru>{
-	public static final int viewrangex = 21;
-	public static final int viewrangey = 15;
+	public static final int viewrangex = 28;
+	public static final int viewrangey = 20;
 	public static Renderer i;
 	public final float GUIscale = 5f;
 	public final int scale = 4;

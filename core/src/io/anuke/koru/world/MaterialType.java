@@ -103,11 +103,11 @@ public enum MaterialType{
 	tree(Hue.rgb(80, 53, 30)){
 	
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			float offset = 7;
+			float offset = 4;
 			
 			SpriteRenderable sprite = (SpriteRenderable)new SpriteRenderable(Renderer.i.getRegion(material.name()))
 			.setPosition(tile(x), tile(y)-offset).centerX()
-			.addShadow(group, Renderer.i.atlas, 1)
+			.addShadow(group, Renderer.i.atlas, 5)
 			.setProvider(SortProviders.object);
 			
 			sprite.setLayer(sprite.sprite.getY() +offset);
@@ -135,6 +135,20 @@ public enum MaterialType{
 			new SpriteRenderable(Renderer.i.getRegion(material.name()))
 			.setPosition(tile(x), tile(y)).centerX()
 			.setColor(tile.tile().foilageColor())
+			.addShadow(group, Renderer.i.atlas)
+			.setProvider(SortProviders.object)
+			.add(group);
+		}
+
+		public boolean tile(){
+			return false;
+		}
+	},
+	object{
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			
+			new SpriteRenderable(Renderer.i.getRegion(material.name()))
+			.setPosition(tile(x), tile(y)).centerX()
 			.addShadow(group, Renderer.i.atlas)
 			.setProvider(SortProviders.object)
 			.add(group);

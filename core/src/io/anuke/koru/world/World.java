@@ -21,7 +21,7 @@ import io.anuke.ucore.modules.Module;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
-	public static final int loadrange = 2;
+	public static final int loadrange = 3;
 	public static final int tilesize = 12;
 	public int lastchunkx, lastchunky;
 	private static Rectangle rect = new Rectangle();

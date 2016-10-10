@@ -7,12 +7,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.fluxe.generation.Crux;
-import io.anuke.fluxe.generation.DefaultRasterizer;
+import io.anuke.fluxe.generation.ColorPalette;
+import io.anuke.fluxe.generation.Filters;
+import io.anuke.fluxe.generation.Filters.ColorModFilter;
+import io.anuke.fluxe.generation.Filters.DitherColorFilter;
+import io.anuke.fluxe.generation.Filters.LimitColorFilter;
+import io.anuke.fluxe.generation.Filters.NoiseColorFilter;
+import io.anuke.fluxe.generation.Filters.OutlineFilter;
+import io.anuke.fluxe.generation.FluxeFilter;
+import io.anuke.fluxe.generation.FluxeGenerator;
+import io.anuke.fluxe.generation.FluxeRenderer;
 import io.anuke.fluxe.generation.Fluxor;
-import io.anuke.fluxe.generation.TreeVoxelizer;
+import io.anuke.fluxe.generation.Generators;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.GeneratedObject;
@@ -28,7 +37,7 @@ import io.anuke.ucore.UCore;
 public class GraphicsHandler extends ApplicationAdapter{
 	private static int nextBitmapID;
 	final int maxImagePacketSize = 512;
-	Crux crux;
+	FluxeRenderer renderer;
 	Fluxor flux;
 
 	/** Thread safe. */
@@ -73,12 +82,6 @@ public class GraphicsHandler extends ApplicationAdapter{
 		Koru.log("Done generating material pixmap.");
 		return mat;
 	}
-	
-	/** Not thread safe.*/
-	private Pixmap generatePixmap(GeneratedMaterial mat, Object... args){
-		Pixmap p = crux.render(flux);
-		return p;
-	}
 
 	public void sendPixmap(Pixmap pix, GeneratedObject object, int id){
 		Gdx.app.postRunnable(() -> {
@@ -113,6 +116,28 @@ public class GraphicsHandler extends ApplicationAdapter{
 		}
 		return packets;
 	}
+	
+	/** Not thread safe.*/
+	private Pixmap generatePixmap(GeneratedMaterial mat, Object... args){
+		setParams(args);
+		flux.size = MathUtils.random(30, 50);
+		Pixmap p = renderer.render(flux);
+		return p;
+	}
+	
+	private void setParams(Object... args){
+		for(Object o : args){
+			if(o instanceof FluxeGenerator){
+				flux.generator = (FluxeGenerator)o;
+			}else if(o instanceof FluxeFilter){
+				flux.filter = (FluxeFilter)o;
+			}else if(o instanceof ColorPalette){
+				flux.palette = (ColorPalette)o;
+			}else if(o instanceof Float){
+				flux.zoom = (Float)o;
+			}
+		}
+	}
 
 	public void create(){
 		GLFW.glfwHideWindow(UCore.getWindowHandle());
@@ -121,13 +146,36 @@ public class GraphicsHandler extends ApplicationAdapter{
 		Koru.log("Loading materials...");
 		MaterialManager.instance().loadMaterials(Directories.materials);
 
-		crux = new Crux();
+		renderer = new FluxeRenderer();
 
-		flux = new Fluxor(new TreeVoxelizer(), new DefaultRasterizer());
+		flux = 
+		new Fluxor(Generators.bush, 
+				Filters.sequence(
+						new ColorModFilter(
+								new DitherColorFilter(),
+								new NoiseColorFilter(),
+								new LimitColorFilter()
+						),
+						new OutlineFilter()),
+				new ColorPalette("548e31", "965f18")
+		);
 		
 		if(MaterialManager.instance().generatedMaterialSize() == 0){
+			
+			flux.palette = new ColorPalette("548e31", "965f18");
 			for(int i = 0; i < 5; i ++)
-			generateNewMaterial(MaterialType.tree);
+				generateNewMaterial(MaterialType.object, Generators.bush, 0.08f);
+			
+			flux.palette = new ColorPalette("518a30", "965f18");
+			for(int i = 0; i < 5; i ++)
+				generateNewMaterial(MaterialType.tree, Generators.simplepinetree, 0.12f);
+				
+			flux.palette = new ColorPalette("447428", "875616");
+			for(int i = 0; i < 5; i ++)
+				generateNewMaterial(MaterialType.tree, Generators.simpletree, 0.15f);
+			
+			//for(int i = 0; i < 6; i ++)
+			//	generateNewMaterial(MaterialType.object, Generators.grass, 0.05f, new ColorPalette("4f7727"));
 		}
 	}
 
@@ -136,13 +184,13 @@ public class GraphicsHandler extends ApplicationAdapter{
 			Gdx.app.exit();
 
 		if(Gdx.input.isKeyJustPressed(Keys.E)){
-			Pixmap pixmap = crux.render(flux);
+			Pixmap pixmap = renderer.render(flux);
 			PixmapIO.writePNG(Gdx.files.local("tree.png"), pixmap);
 		}
 	}
 
 	public Pixmap generate(){
-		Pixmap p = crux.render(flux);
+		Pixmap p = renderer.render(flux);
 		PixmapIO.writePNG(Gdx.files.local("tree.png"), p);
 		return p;
 	}

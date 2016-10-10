@@ -81,6 +81,7 @@ public class KoruServer extends IServer{
 		
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
+		config.setInitialVisible(false);
 		
 		new Lwjgl3Application((graphics=new GraphicsHandler()), config);
 		
@@ -157,7 +158,7 @@ public class KoruServer extends IServer{
 					Koru.log("Invalid material requested: " + mat.id());
 					return;
 				}
-				Koru.log("Sending material type to player: " + info.id);
+				Koru.log("Sending material type to player: " + packet.id);
 				graphics.sendMaterial(info.id, (GeneratedMaterial)mat);
 			}
 		}catch(Exception e){
