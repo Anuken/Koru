@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.modules.Renderer;
 import io.anuke.ucore.Noise;
+import io.anuke.ucore.g3d.ModelList;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.spritesystem.RenderableList;
 import io.anuke.ucore.spritesystem.SortProviders;
@@ -169,7 +170,7 @@ public enum MaterialType{
 		this.color = color;
 	}
 	
-	public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+	public void draw(ModelList group, Material material, Tile tile, int x, int y){
 		
 	}
 	

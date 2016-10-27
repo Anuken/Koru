@@ -1,9 +1,7 @@
 package io.anuke.koru;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pools;
 
-import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Materials;
@@ -38,27 +36,6 @@ public class DefaultGenerator implements Generator{
 		}
 
 		tile.setTileMaterial(Materials.grass);
-		//if(Math.random() < 0.05) tile.setBlockMaterial(Materials.next(Materials.pinetree1, 4));
-		
-		//bush
-		if(Math.random() < 0.02) tile.setBlockMaterial(MaterialManager.instance().getGeneratedMaterial(MathUtils.random(0, 4)));
-		
-		//pinetrees
-		if(Noise.normalNoise(x, y, 100f, 10f) > 2f || Noise.normalNoise(x+99, y+99, 40f, 10f) > 2f){
-			if(Math.random() < 0.03) tile.setBlockMaterial(MaterialManager.instance().getGeneratedMaterial(MathUtils.random(0, 4)));
-			
-			if(Math.random() < 0.03) tile.setBlockMaterial(MaterialManager.instance().getGeneratedMaterial(MathUtils.random(5, 9)));
-			
-		}
-		
-		//trees
-		if(Noise.normalNoise(x+99, y+99, 70f, 10f) > 2f || Noise.normalNoise(x, y, 30f, 10f) > 2f){
-			if(Math.random() < 0.03) tile.setBlockMaterial(MaterialManager.instance().getGeneratedMaterial(MathUtils.random(0, 4)));
-			
-			if(Math.random() < 0.02) tile.setBlockMaterial(MaterialManager.instance().getGeneratedMaterial(MathUtils.random(10, 14)));
-		}
-		//if(Math.random() < 0.4) tile.setBlockMaterial(MaterialManager.instance().getGeneratedMaterial(MathUtils.random(10, 15)));
-		
 		
 		if(Math.random() < 0.1) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
 		if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.fern1, 3));

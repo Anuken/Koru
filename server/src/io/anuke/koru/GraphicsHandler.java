@@ -160,6 +160,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 				new ColorPalette("548e31", "965f18")
 		);
 		
+		/*
 		if(MaterialManager.instance().generatedMaterialSize() == 0){
 			
 			flux.palette = new ColorPalette("548e31", "965f18");
@@ -173,10 +174,8 @@ public class GraphicsHandler extends ApplicationAdapter{
 			flux.palette = new ColorPalette("447428", "875616");
 			for(int i = 0; i < 5; i ++)
 				generateNewMaterial(MaterialType.tree, Generators.simpletree, 0.15f);
-			
-			//for(int i = 0; i < 6; i ++)
-			//	generateNewMaterial(MaterialType.object, Generators.grass, 0.05f, new ColorPalette("4f7727"));
 		}
+		*/
 	}
 
 	public void render(){

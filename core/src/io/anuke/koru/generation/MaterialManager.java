@@ -78,7 +78,6 @@ public class MaterialManager{
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadMaterials(FileHandle file){
-		
 		genMaterials = new Array<GeneratedMaterial>();
 		//TODO disabled loading for now
 		if(genMaterials != null) return;
