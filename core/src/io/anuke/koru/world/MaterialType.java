@@ -1,57 +1,18 @@
 package io.anuke.koru.world;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.anuke.koru.modules.Renderer;
-import io.anuke.ucore.Noise;
 import io.anuke.ucore.g3d.ModelList;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.SortProviders;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public enum MaterialType{
 	tile{
 
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(-material.id()*2).add(group);
-			
-			if(Renderer.i.world.blends(x, y, material)) 
-			new SpriteRenderable(Renderer.i.getRegion(material.name()+ "edge"))
-			.setPosition(x*World.tilesize+World.tilesize/2, y*World.tilesize+World.tilesize/2)
-			.center()
-			.setLayer(-material.id()*2+1).add(group);
-
-		}
 	},
 	water{
-		final float tscl = 10f;
-		final float s = 0.2f;
 		
-		public void draw(final RenderableList group, final Material material, final Tile tile, final int x, final int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion("riverrock"))
-			.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(2).add(group);
-			
-			new SpriteRenderable(Renderer.i.getRegion("water")){
-				public void draw(Batch batch){
-					float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
-					setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.8f));
-					super.draw(batch);
-				}
-			}.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(1)
-			.setColor(new Color(1,1,1,0.3f)).add(group);
-			
-		}
 		
 		public boolean solid(){
 			return true;
@@ -64,9 +25,6 @@ public enum MaterialType{
 		}
 	},
 	block{
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-		}
 
 		public boolean tile(){
 			return false;
@@ -102,20 +60,6 @@ public enum MaterialType{
 		}
 	},
 	tree(Hue.rgb(80, 53, 30)){
-	
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			float offset = 4;
-			
-			SpriteRenderable sprite = (SpriteRenderable)new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)-offset).centerX()
-			.addShadow(group, Renderer.i.atlas, 5)
-			.setProvider(SortProviders.object);
-			
-			sprite.setLayer(sprite.sprite.getY() +offset);
-			
-			sprite.add(group);
-
-		}
 		public boolean tile(){
 			return false;
 		}
@@ -131,29 +75,12 @@ public enum MaterialType{
 		}
 	},
 	grass(Hue.rgb(69, 109, 29,0.02f)){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)).centerX()
-			.setColor(tile.tile().foilageColor())
-			.addShadow(group, Renderer.i.atlas)
-			.setProvider(SortProviders.object)
-			.add(group);
-		}
 
 		public boolean tile(){
 			return false;
 		}
 	},
 	object{
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)).centerX()
-			.addShadow(group, Renderer.i.atlas)
-			.setProvider(SortProviders.object)
-			.add(group);
-		}
 
 		public boolean tile(){
 			return false;

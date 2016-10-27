@@ -3,16 +3,17 @@ package io.anuke.koru.modules;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Matrix4;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
@@ -25,6 +26,7 @@ import io.anuke.koru.world.World;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.g3d.ModelHandler;
 import io.anuke.ucore.g3d.ModelList;
+import io.anuke.ucore.g3d.Models;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 
@@ -37,9 +39,9 @@ public class Renderer extends Module<Koru>{
 	public World world;
 	public SpriteBatch batch;
 	public ModelBatch mbatch;
+	public Environment environment;
 	public OrthographicCamera camera;
 	public RepackableAtlas atlas;
-	public Matrix4 matrix;
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
@@ -53,13 +55,28 @@ public class Renderer extends Module<Koru>{
 		i = this;
 		batch = new SpriteBatch();
 		mbatch = new ModelBatch();
-		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
+		camera.lookAt(0, 0, 0);
+		camera.update();
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
+		
+		environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+        ModelHandler.instance().setEnvironment(environment);
+        
+        /*
+        ObjLoader loader = new ObjLoader();
+        Model model = loader.loadModel(Gdx.files.internal("models/char.obj"));
+        ModelInstance instance = new ModelInstance(model);
+        instance.transform.rotate(new Vector3(1,0,0), 45);
+        */
+        //ModelHandler.instance().add(instance);
+        
 	}
 
 	public void init(){
@@ -71,26 +88,26 @@ public class Renderer extends Module<Koru>{
 	@Override
 	public void update(){
 		updateCamera();
-		batch.setProjectionMatrix(camera.combined);
-		clearScreen();
-		doRender();
-		updateCamera();
-
-	}
-
-	void doRender(){
-		batch.begin();
-		drawMap();
+		updateMap();
+		
+		UCore.clearScreen(Color.SKY);
+		mbatch.begin(camera);
 		ModelHandler.instance().render(mbatch);
-		batch.end();
-		batch.setProjectionMatrix(matrix);
+		mbatch.end();
+		
 		batch.begin();
 		drawGUI();
 		batch.end();
 		batch.setColor(Color.WHITE);
+		updateCamera();
+	}
+	
+	void updateCamera(){
+		camera.position.set(player.getX(), player.getY(), 15f);
+		camera.update();
 	}
 
-	void drawMap(){
+	void updateMap(){
 		if(Gdx.graphics.getFrameId() == 5) updateTiles();
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
@@ -193,19 +210,8 @@ public class Renderer extends Module<Koru>{
 
 	}
 
-	void updateCamera(){
-		camera.position.set(player.getX(), player.getY(), 10f);
-		camera.update();
-	}
-
-	void clearScreen(){
-		Color clear = Color.SKY.cpy().sub(0.1f, 0.1f, 0.1f, 0f);
-		Gdx.gl.glClearColor(clear.r, clear.g, clear.b, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
-
 	public void resize(int width, int height){
-		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
+		batch.getProjectionMatrix().setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale); //resize camera
 	}
 
@@ -242,5 +248,9 @@ public class Renderer extends Module<Koru>{
 
 	public BitmapFont font(){
 		return font;
+	}
+	
+	public void dispose(){
+		Models.dispose();
 	}
 }
