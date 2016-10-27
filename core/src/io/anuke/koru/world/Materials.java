@@ -66,7 +66,6 @@ public enum Materials implements Material{
 			return InventoryTileData.class;
 		}
 	};
-	
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
 	private int breaktime;
@@ -167,8 +166,8 @@ public enum Materials implements Material{
 		drops.add(new ItemStack(item, amount));
 	}
 	
-	public Array<ItemStack> getDrops(){
-		return drops;
+	public ItemStack[] getDrops(){
+		return drops.toArray(ItemStack.class);
 	}
 	
 	public boolean dropsItem(Item item){

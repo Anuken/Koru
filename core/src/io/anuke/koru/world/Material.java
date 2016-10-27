@@ -1,7 +1,6 @@
 package io.anuke.koru.world;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.items.ItemStack;
 
@@ -34,5 +33,5 @@ public interface Material{
 	
 	public default Color getColor(){return Color.WHITE;}
 	
-	public default Array<ItemStack> getDrops(){return null;}
+	public default ItemStack[] getDrops(){return null;}
 }
