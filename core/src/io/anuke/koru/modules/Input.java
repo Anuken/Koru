@@ -153,7 +153,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		getModule(Renderer.class).camera.zoom += amount / 10f;
+		//getModule(Renderer.class).camera.zoom += amount / 10f;
 		return false;
 	}
 

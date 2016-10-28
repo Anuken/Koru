@@ -24,7 +24,6 @@ import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
-import io.anuke.koru.utils.Angles;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
 
@@ -185,8 +184,8 @@ public class Network extends Module<Koru>{
 		PositionPacket pos = new PositionPacket();
 		pos.x = getModule(ClientData.class).player.mapComponent(PositionComponent.class).x;
 		pos.y = getModule(ClientData.class).player.mapComponent(PositionComponent.class).y;
-		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(),
-				getModule(ClientData.class).player.getY());
+		//pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(),
+				//getModule(ClientData.class).player.getY());
 		client.sendUDP(pos);
 	}
 

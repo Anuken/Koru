@@ -2,8 +2,9 @@ package io.anuke.koru.modules;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,7 +41,7 @@ public class Renderer extends Module<Koru>{
 	public SpriteBatch batch;
 	public ModelBatch mbatch;
 	public Environment environment;
-	public OrthographicCamera camera;
+	public Camera camera;
 	public RepackableAtlas atlas;
 	public GlyphLayout layout;
 	public BitmapFont font;
@@ -55,9 +56,7 @@ public class Renderer extends Module<Koru>{
 		i = this;
 		batch = new SpriteBatch();
 		mbatch = new ModelBatch();
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
-		camera.lookAt(0, 0, 0);
-		camera.update();
+		camera = new PerspectiveCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
@@ -103,13 +102,15 @@ public class Renderer extends Module<Koru>{
 	}
 	
 	void updateCamera(){
-		camera.position.set(player.getX(), player.getY(), 15f);
+		camera.position.set(player.getX(), 200f,  player.getY() - 70f);
+		camera.lookAt(player.getX(), 0f,  player.getY());
+		camera.far = 1000f;
 		camera.update();
 	}
 
 	void updateMap(){
 		if(Gdx.graphics.getFrameId() == 5) updateTiles();
-		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
+		int camx = Math.round(player.getX() / World.tilesize), camy = Math.round(player.getY() / World.tilesize);
 
 		if(lastcamx != camx || lastcamy != camy){
 			updateTiles();
@@ -126,7 +127,7 @@ public class Renderer extends Module<Koru>{
 	/**If resetID does not equal 0, it will only updated tiles whose ID is resetID*/
 	public void updateTiles(int resetID){
 
-		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
+		int camx = Math.round(player.getX() / World.tilesize), camy = Math.round(player.getY() / World.tilesize);
 
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
@@ -212,7 +213,9 @@ public class Renderer extends Module<Koru>{
 
 	public void resize(int width, int height){
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		camera.setToOrtho(false, width / scale, height / scale); //resize camera
+		camera.viewportWidth = width;
+		camera.viewportHeight = height;
+		camera.update();
 	}
 
 	public GlyphLayout getBounds(String text){
@@ -238,9 +241,6 @@ public class Renderer extends Module<Koru>{
 		return atlas.findRegion(name);
 	}
 
-	public OrthographicCamera camera(){
-		return camera;
-	}
 
 	public SpriteBatch batch(){
 		return batch;
