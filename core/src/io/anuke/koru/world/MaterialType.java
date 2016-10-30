@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.ucore.g3d.ModelList;
-import io.anuke.ucore.g3d.Models;
+import io.anuke.ucore.g3d.ModelTransform;
 import io.anuke.ucore.graphics.Hue;
 
 public enum MaterialType{
 	tile{
 		public void draw(ModelList list, Material material, Tile tile, int x, int y){
-			list.add(Models.geti("grass").position(x*12, 0, y*12));
+			list.add(new ModelTransform("grass").position(x*12, -5, y*12));
 		}
 	},
 	water{

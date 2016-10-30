@@ -102,7 +102,7 @@ public class Renderer extends Module<Koru>{
 	}
 	
 	void updateCamera(){
-		camera.position.set(player.getX(), 200f,  player.getY() - 70f);
+		camera.position.set(player.getX(), 300f,  player.getY() - 70f);
 		camera.lookAt(player.getX(), 0f,  player.getY());
 		camera.far = 1000f;
 		camera.update();

@@ -13,7 +13,7 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	@Override
 	public void initRender(){
-		ModelTransform t = Models.geti("char");
+		ModelTransform t = new ModelTransform(Models.geti("char"));
         
         render.models.add("player", t);
 	}
