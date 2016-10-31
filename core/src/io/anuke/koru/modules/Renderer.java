@@ -2,18 +2,13 @@ package io.anuke.koru.modules;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.GridPoint2;
 
 import io.anuke.koru.Koru;
@@ -24,11 +19,12 @@ import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
+import io.anuke.layer3d.LayerList;
+import io.anuke.layer3d.LayeredRenderer;
 import io.anuke.ucore.UCore;
-import io.anuke.ucore.g3d.ModelHandler;
-import io.anuke.ucore.g3d.ModelList;
 import io.anuke.ucore.g3d.Models;
 import io.anuke.ucore.graphics.FrameBufferMap;
+import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
 
 public class Renderer extends Module<Koru>{
@@ -39,43 +35,28 @@ public class Renderer extends Module<Koru>{
 	public final int scale = 4;
 	public World world;
 	public SpriteBatch batch;
-	public ModelBatch mbatch;
-	public Environment environment;
-	public Camera camera;
+	public OrthographicCamera camera;
 	public RepackableAtlas atlas;
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
 	public boolean debug = true;
 	public KoruEntity player;
-	public ModelList[][] renderables = new ModelList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
+	public LayerList[][] renderables = new LayerList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	public int lastcamx, lastcamy;
 
 	public Renderer(){
 		UCore.maximizeWindow();
 		i = this;
 		batch = new SpriteBatch();
-		mbatch = new ModelBatch();
-		camera = new PerspectiveCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera = new OrthographicCamera(Gdx.graphics.getWidth()/scale, Gdx.graphics.getHeight()/scale);
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
-		
-		environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-        ModelHandler.instance().setEnvironment(environment);
-        
-        /*
-        ObjLoader loader = new ObjLoader();
-        Model model = loader.loadModel(Gdx.files.internal("models/char.obj"));
-        ModelInstance instance = new ModelInstance(model);
-        instance.transform.rotate(new Vector3(1,0,0), 45);
-        */
-        //ModelHandler.instance().add(instance);
-        
+		LayeredRenderer.instance().camera = camera;
+		Textures.load("");
 	}
 
 	public void init(){
@@ -90,10 +71,12 @@ public class Renderer extends Module<Koru>{
 		updateMap();
 		
 		UCore.clearScreen(Color.SKY);
-		mbatch.begin(camera);
-		ModelHandler.instance().render(mbatch);
-		mbatch.end();
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		LayeredRenderer.instance().render(batch);
+		batch.end();
 		
+		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth()/GUIscale, Gdx.graphics.getHeight()/GUIscale);
 		batch.begin();
 		drawGUI();
 		batch.end();
@@ -102,9 +85,8 @@ public class Renderer extends Module<Koru>{
 	}
 	
 	void updateCamera(){
-		camera.position.set(player.getX(), 200f,  player.getY() - 70f);
-		camera.lookAt(player.getX(), 0f,  player.getY());
-		camera.far = 1000f;
+		LayeredRenderer.instance().baserotation = 45f;
+		camera.position.set(player.getX(), player.getY(), 0);
 		camera.update();
 	}
 
@@ -113,7 +95,7 @@ public class Renderer extends Module<Koru>{
 		int camx = Math.round(player.getX() / World.tilesize), camy = Math.round(player.getY() / World.tilesize);
 
 		if(lastcamx != camx || lastcamy != camy){
-			updateTiles();
+		//	updateTiles();
 		}
 
 		lastcamx = camx;
@@ -150,7 +132,7 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new ModelList();
+							renderables[rendx][rendy] = new LayerList();
 						}
 
 						if(!tile.tileEmpty()){
@@ -213,8 +195,7 @@ public class Renderer extends Module<Koru>{
 
 	public void resize(int width, int height){
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		camera.viewportWidth = width;
-		camera.viewportHeight = height;
+		camera.setToOrtho(false, width/scale, height/scale);
 		camera.update();
 	}
 

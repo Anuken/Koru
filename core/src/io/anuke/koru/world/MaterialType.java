@@ -4,13 +4,14 @@ package io.anuke.koru.world;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.anuke.ucore.g3d.ModelList;
+import io.anuke.layer3d.LayerList;
+import io.anuke.layer3d.LayeredObject;
 import io.anuke.ucore.graphics.Hue;
 
 public enum MaterialType{
 	tile{
-		public void draw(ModelList list, Material material, Tile tile, int x, int y){
-			
+		public void draw(LayerList list, Material material, Tile tile, int x, int y){
+			list.add(new LayeredObject("grass").setPosition(x*12, y*12, -1));
 		}
 	},
 	water{
@@ -99,7 +100,7 @@ public enum MaterialType{
 		this.color = color;
 	}
 	
-	public void draw(ModelList group, Material material, Tile tile, int x, int y){
+	public void draw(LayerList list, Material material, Tile tile, int x, int y){
 		
 	}
 	

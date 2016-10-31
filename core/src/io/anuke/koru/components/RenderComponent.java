@@ -3,11 +3,11 @@ package io.anuke.koru.components;
 import com.badlogic.ashley.core.Component;
 
 import io.anuke.koru.renderers.EntityRenderer;
-import io.anuke.ucore.g3d.ModelGroup;
+import io.anuke.layer3d.LayerList;
 
 public class RenderComponent implements Component{
 	public final EntityRenderer renderer;
-	public ModelGroup models = new ModelGroup();
+	public LayerList list = new LayerList();
 
 	
 	public RenderComponent(EntityRenderer renderer){

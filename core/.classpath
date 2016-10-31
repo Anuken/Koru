@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
 	<classpathentry kind="lib" path="lib/kryonet-2.21-all.jar" sourcepath="/home/cobalt/Documents/Other Documents/kryonet-2.20/java/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GDXLayered3D"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
