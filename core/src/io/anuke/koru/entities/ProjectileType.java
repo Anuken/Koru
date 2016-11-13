@@ -1,8 +1,7 @@
 package io.anuke.koru.entities;
 
-import io.anuke.koru.components.DamageComponent;
-import io.anuke.koru.components.FadeComponent;
-import io.anuke.koru.components.ProjectileComponent;
+import io.anuke.koru.components.*;
+import io.anuke.ucore.spritesystem.Renderable;
 
 public enum ProjectileType{
 	bolt;
@@ -13,6 +12,20 @@ public enum ProjectileType{
 	
 	public float lifetime(){
 		return 30f;
+	}
+	
+	public void draw(KoruEntity entity, RenderComponent render){
+		render.group.setPosition(entity.getX(), entity.getY());
+		//render.layers.update(entity.getX(), entity.getY());
+		float x = entity.getX(), y = entity.getY();
+		for(Renderable renderable : render.group.list()){
+			renderable.sprite().setPosition(x, y, true);
+			//layer.rotation = entity.mapComponent(ProjectileComponent.class).getRotation() - 45;
+		}
+	}
+	
+	public void initSprite(KoruEntity entity, RenderComponent render){
+		
 	}
 	
 	public int damage(){

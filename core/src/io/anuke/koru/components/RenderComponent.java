@@ -1,13 +1,13 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
-
 import io.anuke.koru.renderers.EntityRenderer;
-import io.anuke.ucore.g3d.ModelGroup;
+import io.anuke.ucore.spritesystem.RenderableGroup;
+
+import com.badlogic.ashley.core.Component;
 
 public class RenderComponent implements Component{
 	public final EntityRenderer renderer;
-	public ModelGroup models = new ModelGroup();
+	public RenderableGroup group = new RenderableGroup();
 
 	
 	public RenderComponent(EntityRenderer renderer){

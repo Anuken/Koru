@@ -2,22 +2,23 @@ package io.anuke.koru.modules;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.world.Chunk;
@@ -25,11 +26,12 @@ import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.UCore;
-import io.anuke.ucore.g3d.ModelHandler;
-import io.anuke.ucore.g3d.ModelList;
-import io.anuke.ucore.g3d.Models;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.spritesystem.LayerManager;
+import io.anuke.ucore.spritesystem.Renderable;
+import io.anuke.ucore.spritesystem.RenderableHandler;
+import io.anuke.ucore.spritesystem.RenderableList;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
@@ -39,43 +41,38 @@ public class Renderer extends Module<Koru>{
 	public final int scale = 4;
 	public World world;
 	public SpriteBatch batch;
-	public ModelBatch mbatch;
-	public Environment environment;
-	public Camera camera;
+	public OrthographicCamera camera;
 	public RepackableAtlas atlas;
+	public Matrix4 matrix;
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
 	public boolean debug = true;
+	public final boolean gbuffer = false;
 	public KoruEntity player;
-	public ModelList[][] renderables = new ModelList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
+	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	public int lastcamx, lastcamy;
 
 	public Renderer(){
 		UCore.maximizeWindow();
 		i = this;
 		batch = new SpriteBatch();
-		mbatch = new ModelBatch();
-		camera = new PerspectiveCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		matrix = new Matrix4();
+		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
-		
-		environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-        ModelHandler.instance().setEnvironment(environment);
-        
-        /*
-        ObjLoader loader = new ObjLoader();
-        Model model = loader.loadModel(Gdx.files.internal("models/char.obj"));
-        ModelInstance instance = new ModelInstance(model);
-        instance.transform.rotate(new Vector3(1,0,0), 45);
-        */
-        //ModelHandler.instance().add(instance);
-        
+		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
+			public void draw(Array<Renderable> renderables, Batch batch){
+				drawRenderables(renderables);
+			}
+		});
+
+		FrameBufferLayer.loadShaders();
+
+		if(gbuffer) buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 	}
 
 	public void init(){
@@ -87,30 +84,28 @@ public class Renderer extends Module<Koru>{
 	@Override
 	public void update(){
 		updateCamera();
-		updateMap();
-		
-		UCore.clearScreen(Color.SKY);
-		mbatch.begin(camera);
-		ModelHandler.instance().render(mbatch);
-		mbatch.end();
-		
+		batch.setProjectionMatrix(camera.combined);
+		clearScreen();
+		doRender();
+		updateCamera();
+
+	}
+
+	void doRender(){
+		batch.begin();
+		drawMap();
+		RenderableHandler.getInstance().renderAll(batch);
+		batch.end();
+		batch.setProjectionMatrix(matrix);
 		batch.begin();
 		drawGUI();
 		batch.end();
 		batch.setColor(Color.WHITE);
-		updateCamera();
-	}
-	
-	void updateCamera(){
-		camera.position.set(player.getX(), 200f,  player.getY() - 70f);
-		camera.lookAt(player.getX(), 0f,  player.getY());
-		camera.far = 1000f;
-		camera.update();
 	}
 
-	void updateMap(){
+	void drawMap(){
 		if(Gdx.graphics.getFrameId() == 5) updateTiles();
-		int camx = Math.round(player.getX() / World.tilesize), camy = Math.round(player.getY() / World.tilesize);
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		if(lastcamx != camx || lastcamy != camy){
 			updateTiles();
@@ -127,7 +122,7 @@ public class Renderer extends Module<Koru>{
 	/**If resetID does not equal 0, it will only updated tiles whose ID is resetID*/
 	public void updateTiles(int resetID){
 
-		int camx = Math.round(player.getX() / World.tilesize), camy = Math.round(player.getY() / World.tilesize);
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		for(int chunkx = 0;chunkx < World.loadrange * 2;chunkx ++){
 			for(int chunky = 0;chunky < World.loadrange * 2;chunky ++){
@@ -150,7 +145,7 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new ModelList();
+							renderables[rendx][rendy] = new RenderableList();
 						}
 
 						if(!tile.tileEmpty()){
@@ -172,6 +167,8 @@ public class Renderer extends Module<Koru>{
 		font.setColor(Color.WHITE);
 
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, uiheight());
+		
+		
 		
 		String launcher = "";
 		
@@ -211,11 +208,92 @@ public class Renderer extends Module<Koru>{
 
 	}
 
-	public void resize(int width, int height){
-		batch.getProjectionMatrix().setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		camera.viewportWidth = width;
-		camera.viewportHeight = height;
+	void drawRenderables(Array<Renderable> renderables){
+		batch.end();
+
+		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
+
+		FrameBufferLayer selected = null;
+
+		if(gbuffer) buffers.begin("global");
+
+		batch.begin();
+
+		for(Renderable layer : renderables){
+
+			boolean ended = false;
+
+			if(selected != null && ( !selected.layerEquals(layer))){
+				endBufferLayer(selected, blayers);
+				selected = null;
+				ended = true;
+			}
+
+			if(selected == null){
+
+				for(FrameBufferLayer fl : blayers){
+					if(fl.layerEquals(layer)){
+						if(ended) layer.draw(batch);
+						selected = fl;
+						beginBufferLayer(selected);
+						break;
+					}
+				}
+			}
+
+			layer.draw(batch);
+		}
+		if(selected != null){
+			endBufferLayer(selected, blayers);
+			selected = null;
+		}
+		batch.end();
+
+		if(gbuffer) buffers.end("global");
+		batch.begin();
+
+		batch.setColor(Color.WHITE);
+		if(gbuffer) batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom, camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom, -camera.viewportHeight * camera.zoom);
+
+	}
+
+	private void beginBufferLayer(FrameBufferLayer selected){
+		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
+
+		batch.end();
+		if(gbuffer) buffers.end("global");
+
+		buffers.begin(selected.name);
+		buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
+		for(Texture t : atlas.getTextures())
+			t.bind(0);
+
+		if(selected.shader != null) batch.setShader(selected.shader);
+		batch.begin();
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	}
+
+	private void endBufferLayer(FrameBufferLayer selected, Array<FrameBufferLayer> layers){
+		batch.end();
+		if(selected.shader != null) batch.setShader(null);
+		buffers.end(selected.name);
+		buffers.get(selected.name).getColorBufferTexture().bind(0);
+		if(gbuffer) buffers.begin("global");
+		batch.begin();
+		selected.end();
+		batch.setColor(Color.WHITE);
+		if(layers != null) layers.removeValue(selected, true);
+	}
+
+	void updateCamera(){
+		camera.position.set(player.getX(), (player.getY()), 0f);
 		camera.update();
+	}
+
+	public void resize(int width, int height){
+		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
+		camera.setToOrtho(false, width / scale, height / scale); //resize camera
 	}
 
 	public GlyphLayout getBounds(String text){
@@ -241,6 +319,9 @@ public class Renderer extends Module<Koru>{
 		return atlas.findRegion(name);
 	}
 
+	public OrthographicCamera camera(){
+		return camera;
+	}
 
 	public SpriteBatch batch(){
 		return batch;
@@ -248,9 +329,5 @@ public class Renderer extends Module<Koru>{
 
 	public BitmapFont font(){
 		return font;
-	}
-	
-	public void dispose(){
-		Models.dispose();
 	}
 }
