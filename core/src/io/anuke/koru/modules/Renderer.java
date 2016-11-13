@@ -291,12 +291,6 @@ public class Renderer extends Module<Koru>{
 		camera.update();
 	}
 
-	void clearScreen(){
-		Color clear = Color.SKY.cpy().sub(0.1f, 0.1f, 0.1f, 0f);
-		Gdx.gl.glClearColor(clear.r, clear.g, clear.b, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
-
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale); //resize camera

@@ -20,11 +20,13 @@ public class KryoClient extends IClient{
 
 	@Override
 	public void sendTCP(Object object){
+		if(client.isConnected())
 		client.sendTCP(object);
 	}
 
 	@Override
 	public void sendUDP(Object object){
+		if(client.isConnected())
 		client.sendUDP(object);
 	}
 

@@ -29,7 +29,7 @@ import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
 
 public class Network extends Module<Koru>{
-	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "107.11.43.167";
+	public static final String ip = System.getProperty("user.name").equals("anuke") ? "localhost" : "107.11.42.20";
 	public static final int port = 7575;
 	public static final int ping = 0;
 	public static final int packetFrequency = 3;
@@ -48,23 +48,25 @@ public class Network extends Module<Koru>{
 	}
 
 	public void connect(){
-		try{
-			connecting = true;
-			client.connect(ip, port);
-			Koru.log("Connecting to server..");
-			ConnectPacket packet = new ConnectPacket();
-			packet.name = getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name;
-			client.sendTCP(packet);
-			Koru.log("Sent packet.");
+		new Thread(() -> {
+			try{
+				connecting = true;
+				client.connect(ip, port);
+				Koru.log("Connecting to server..");
+				ConnectPacket packet = new ConnectPacket();
+				packet.name = getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name;
+				client.sendTCP(packet);
+				Koru.log("Sent packet.");
 
-			connected = true;
-		}catch(Exception e){
-			connecting = false;
-			connected = false;
-			e.printStackTrace();
-			lastError = "Failed to connect to server:\n" + e.getCause().getMessage();
-			Koru.log("Connection failed!");
-		}
+				connected = true;
+			}catch(Exception e){
+				connecting = false;
+				connected = false;
+				e.printStackTrace();
+				lastError = "Failed to connect to server:\n" + e.getCause().getMessage();
+				Koru.log("Connection failed!");
+			}
+		}).start();
 
 		connecting = false;
 		initialconnect = true;
