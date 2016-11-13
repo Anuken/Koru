@@ -2,23 +2,14 @@ package io.anuke.koru;
 
 import com.badlogic.gdx.utils.Pools;
 
-import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 import io.anuke.ucore.Noise;
 
-public class DefaultGenerator implements Generator{
-	World world;
-	KoruServer server;
+public class SimpleGenerator implements Generator{
 
-	public DefaultGenerator(World world){
-		this.world = world;
-		server = KoruServer.instance();
-	}
-
-	private Tile generate(int x, int y){
+	public Tile generate(int x, int y){
 		Tile tile = Pools.obtain(Tile.class);
 		int seed = 0;
 
@@ -45,14 +36,5 @@ public class DefaultGenerator implements Generator{
 
 		tile.changeEvent();
 		return tile;
-	}
-	
-
-	public void generateChunk(Chunk chunk){
-		for(int x = 0; x < World.chunksize; x ++){
-			for(int y = 0; y < World.chunksize; y ++){
-				chunk.tiles[x][y] = generate(chunk.worldX() + x,chunk.worldY() + y);
-			}
-		}
 	}
 }

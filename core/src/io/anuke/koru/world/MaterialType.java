@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.modules.Renderer;
+import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.Noise;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.spritesystem.RenderableList;
@@ -18,7 +19,7 @@ public enum MaterialType{
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
-			new SpriteRenderable(Renderer.i.getRegion(material.name()))
+			new SpriteRenderable(Resources.findRegion(material.name()))
 			.setPosition(x*World.tilesize, y*World.tilesize)
 			.setLayer(-material.id()*2).add(group);
 			
@@ -103,14 +104,13 @@ public enum MaterialType{
 	tree(Hue.rgb(80, 53, 30)){
 	
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			float offset = 4;
 			
 			SpriteRenderable sprite = (SpriteRenderable)new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)-offset).centerX()
-			.addShadow(group, Renderer.i.atlas, 5)
+			.setPosition(tile(x), tile(y)).centerX()
+			.addShadow(group, Renderer.i.atlas)
 			.setProvider(SortProviders.object);
 			
-			sprite.setLayer(sprite.sprite.getY() +offset);
+			sprite.setLayer(sprite.sprite.getY());
 			
 			sprite.add(group);
 

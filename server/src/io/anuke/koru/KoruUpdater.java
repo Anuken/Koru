@@ -61,7 +61,7 @@ public class KoruUpdater{
 
 	public KoruUpdater(KoruServer server){
 		this.server = server;
-		file = new WorldFile(Paths.get("world"), new DefaultGenerator(world));
+		file = new WorldFile(Paths.get("world"), new SimpleGenerator());
 		world = new World(file);
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());

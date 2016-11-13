@@ -79,12 +79,23 @@ public class KoruServer extends IServer{
 		thread.setDaemon(true);
 		thread.start();
 		
+		createMapGraphics();
+	}
+	
+	void createGraphics(){
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
 		config.setInitialVisible(false);
 		
 		new Lwjgl3Application((graphics=new GraphicsHandler()), config);
+	}
+	
+	void createMapGraphics(){
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.disableAudio(true);
+		config.setTitle("Map Preview");
 		
+		new Lwjgl3Application((new MapPreview()), config);
 	}
 
 	public void connectPacketRecieved(ConnectPacket packet, WebSocket socket, Connection connection){
