@@ -179,7 +179,7 @@ public class World extends Module<Koru>{
 		if( !inBounds(x, y)){
 			return true;
 		}
-		return tile(x, y).tile() == material;
+		return tile(x, y).block() == material || tile(x, y).tile() == material;
 	}
 
 	public GridPoint2 search(Material material, int x, int y, int range){

@@ -28,6 +28,9 @@ public class SimpleGenerator implements Generator{
 
 		tile.setTileMaterial(Materials.grass);
 		
+		if(Math.random() < 0.1) tile.setBlockMaterial(Materials.grassblock);
+		if(Math.random() < 0.1) tile.setBlockMaterial(Materials.shortgrassblock);
+		
 		if(Math.random() < 0.1) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
 		if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.fern1, 3));
 		if(Math.random() < 0.01) tile.setBlockMaterial(Materials.next(Materials.koru1, 3));

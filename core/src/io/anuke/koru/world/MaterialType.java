@@ -1,9 +1,11 @@
 package io.anuke.koru.world;
 
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.modules.Renderer;
@@ -18,41 +20,39 @@ public enum MaterialType{
 	tile{
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
+
 			new SpriteRenderable(Resources.findRegion(material.name()))
-			.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(-material.id()*2).add(group);
-			
-			if(Renderer.i.world.blends(x, y, material)) 
-			new SpriteRenderable(Renderer.i.getRegion(material.name()+ "edge"))
-			.setPosition(x*World.tilesize+World.tilesize/2, y*World.tilesize+World.tilesize/2)
-			.center()
-			.setLayer(-material.id()*2+1).add(group);
+					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
+
+			if(Renderer.i.world.blends(x, y, material))
+				new SpriteRenderable(Renderer.i.getRegion(material.name() + "edge"))
+						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.center().setLayer(-material.id() * 2 + 1).add(group);
 
 		}
 	},
 	water{
 		final float tscl = 10f;
 		final float s = 0.2f;
-		
-		public void draw(final RenderableList group, final Material material, final Tile tile, final int x, final int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion("riverrock"))
-			.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(2).add(group);
-			
+
+		public void draw(final RenderableList group, final Material material, final Tile tile, final int x,
+				final int y){
+
+			new SpriteRenderable(Renderer.i.getRegion("riverrock")).setPosition(x * World.tilesize, y * World.tilesize)
+					.setLayer(2).add(group);
+
 			new SpriteRenderable(Renderer.i.getRegion("water")){
 				public void draw(Batch batch){
-					float noise = (float)Noise.normalNoise((int)(x+Gdx.graphics.getFrameId()/tscl), (int)(y+Gdx.graphics.getFrameId()/tscl), 10f, s);
-					setColor(new Color(1f-s+noise,1f-s+noise,1f-s+noise,0.8f));
+					float noise = (float) Noise.normalNoise((int) (x + Gdx.graphics.getFrameId() / tscl),
+							(int) (y + Gdx.graphics.getFrameId() / tscl), 10f, s);
+					setColor(new Color(1f - s + noise, 1f - s + noise, 1f - s + noise, 0.8f));
 					super.draw(batch);
 				}
-			}.setPosition(x*World.tilesize, y*World.tilesize)
-			.setLayer(1)
-			.setColor(new Color(1,1,1,0.3f)).add(group);
-			
+			}.setPosition(x * World.tilesize, y * World.tilesize).setLayer(1).setColor(new Color(1, 1, 1, 0.3f))
+					.add(group);
+
 		}
-		
+
 		public boolean solid(){
 			return true;
 		}
@@ -65,7 +65,7 @@ public enum MaterialType{
 	},
 	block{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
+
 		}
 
 		public boolean tile(){
@@ -80,7 +80,8 @@ public enum MaterialType{
 
 		public Rectangle getRect(int x, int y, Rectangle rectangle){
 			int i = 1;
-			return rectangle.set(x * World.tilesize+1, y * World.tilesize+1, World.tilesize-i*2, World.tilesize-5);
+			return rectangle.set(x * World.tilesize + 1, y * World.tilesize + 1, World.tilesize - i * 2,
+					World.tilesize - 5);
 		}
 
 		public boolean tile(){
@@ -96,25 +97,25 @@ public enum MaterialType{
 		public boolean solid(){
 			return false;
 		}
-		
+
 		public boolean tile(){
 			return false;
 		}
 	},
 	tree(Hue.rgb(80, 53, 30)){
-	
+
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-			SpriteRenderable sprite = (SpriteRenderable)new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)).centerX()
-			.addShadow(group, Renderer.i.atlas)
-			.setProvider(SortProviders.object);
-			
+
+			SpriteRenderable sprite = (SpriteRenderable) new SpriteRenderable(Renderer.i.getRegion(material.name()))
+					.setPosition(tile(x), tile(y)).centerX().addShadow(group, Renderer.i.atlas)
+					.setProvider(SortProviders.object);
+
 			sprite.setLayer(sprite.sprite.getY());
-			
+
 			sprite.add(group);
 
 		}
+
 		public boolean tile(){
 			return false;
 		}
@@ -129,29 +130,109 @@ public enum MaterialType{
 			return rectangle.set(x * World.tilesize + width / 2, y * World.tilesize + 6 + height / 2, width, height);
 		}
 	},
-	grass(Hue.rgb(69, 109, 29,0.02f)){
+	grass(Hue.rgb(69, 109, 29, 0.02f)){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)).centerX()
-			.setColor(tile.tile().foilageColor())
-			.addShadow(group, Renderer.i.atlas)
-			.setProvider(SortProviders.object)
-			.add(group);
+
+			new SpriteRenderable(Renderer.i.getRegion(material.name())).setPosition(tile(x), tile(y)).centerX()
+					.setColor(tile.tile().foilageColor()).addShadow(group, Renderer.i.atlas)
+					.setProvider(SortProviders.object).add(group);
 		}
 
 		public boolean tile(){
 			return false;
 		}
 	},
+	tallgrassblock(){
+		static final float add2 = 0.01f;
+
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+
+			String name = material.name();
+			float yadd = 0;
+			int blend = blendStage(x, y);
+			String blendn = "";
+			if(blend == 0)
+				blendn = "edge";
+			if(blend == 1)
+				blendn = "left";
+			if(blend == 2)
+				blendn = "right";
+			if(!isGrass(x, y - 1)){
+				yadd = 2;
+			}
+			
+			MathUtils.random.setSeed(x + y * x);
+			
+			int rand = MathUtils.random.nextInt(3) + 1;
+
+			for(int i = 0; i < 2; i++){
+				SpriteRenderable a = new SpriteRenderable(Resources.findRegion(name + blendn));
+				a.setProvider(SortProviders.object);
+				if(i == 1)
+					a.setRegion(Resources.findRegion("grassblock" + (rand != 1 ? rand : "") + blendn));
+				
+				float add = i == 1 ? add2 : 0;
+				a.sprite.setColor(82 / 255f + add, 127 / 255f + add, 38 / 255f + add, 1f);
+
+				a.setPosition(x * 12, y * 12 + i * 6 + yadd);
+				group.add(a);
+			}
+
+			if(!isGrass(x, y - 1) || (!isGrass(x+1, y - 1) || !isGrass(x-1, y - 1))){
+				SpriteRenderable sh = new SpriteRenderable(Resources.findRegion(name + blendn)).setAsShadow()
+						.setPosition(x * 12, y * 12 - 19 + yadd);
+				sh.sprite.setFlip(false, true);
+				sh.add(group);
+			}
+		}
+		
+		public boolean tile(){
+			return false;
+		}
+	},
+	shortgrassblock{
+		static final float sgadd = 0.55f;
+		static final float add = 0.02f;
+
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			float xadd = 0;
+
+			if(!isGrass(x, y - 1)){
+				xadd = 2;
+			}
+			int rand = (Math.abs((int) (x % 10 + y % 20 + Math.sin(x) * 3 + Math.sin(y) + Math.tan(x) * 4)));
+			int iter = 6;
+
+			for(int i = 0; i < iter; i++){
+				SpriteRenderable a = new SpriteRenderable(
+						Resources.findRegion("grassf" + (new Random(i + rand).nextInt(40) % 4 + 1)));
+				a.setProvider(SortProviders.object);
+				a.setColor(new Color(82 / 255f, 127 / 255f, 38 / 255f, 1f).mul(sgadd)
+						.add((new Color(66 / 255f, 105 / 255f, 27 / 255f, 1f)).mul(1f - sgadd)));
+				if(i % 2 == 0)
+					a.setColor(a.sprite.getColor().add(add, add, add, 0f));
+				
+				a.setPosition(x * 12, y * 12 + i * (12 / iter) + xadd);
+				a.add(group);
+			}
+
+			if(!isGrass(x, y - 1)){
+				SpriteRenderable sh = new SpriteRenderable(Resources.findRegion("grassf1")).setAsShadow();
+				sh.setPosition(x * 12, y * 12 - 19 + xadd);
+				sh.sprite.setFlip(false, true);
+				sh.add(group);
+			}
+		}
+		
+		public boolean tile(){
+			return false;
+		}
+	},
 	object{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
-			new SpriteRenderable(Renderer.i.getRegion(material.name()))
-			.setPosition(tile(x), tile(y)).centerX()
-			.addShadow(group, Renderer.i.atlas)
-			.setProvider(SortProviders.object)
-			.add(group);
+
+			new SpriteRenderable(Renderer.i.getRegion(material.name())).setPosition(tile(x), tile(y)).centerX()
+					.addShadow(group, Renderer.i.atlas).setProvider(SortProviders.object).add(group);
 		}
 
 		public boolean tile(){
@@ -160,19 +241,19 @@ public enum MaterialType{
 	};
 	private Color color = null;
 	protected World world;
-	
-	private MaterialType(){
-		
+
+	private MaterialType() {
+
 	}
-	
-	private MaterialType(Color color){
+
+	private MaterialType(Color color) {
 		this.color = color;
 	}
-	
+
 	public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-		
+
 	}
-	
+
 	public boolean solid(){
 		return false;
 	}
@@ -184,12 +265,26 @@ public enum MaterialType{
 	public boolean tile(){
 		return true;
 	}
-	
+
 	public Color getColor(){
 		return color;
 	}
 
 	int tile(int i){
 		return i * World.tilesize + World.tilesize / 2;
+	}
+
+	int blendStage(int x, int y){
+		if(!isGrass(x + 1, y) && !isGrass(x - 1, y))
+			return 0;
+		if(!isGrass(x + 1, y) && isGrass(x - 1, y))
+			return 1;
+		if(isGrass(x + 1, y) && !isGrass(x - 1, y))
+			return 2;
+		return 3;
+	}
+
+	boolean isGrass(int x, int y){
+		return Renderer.i.world.isType(x, y, Materials.grassblock);
 	}
 }

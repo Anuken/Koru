@@ -52,7 +52,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
-		float speed = 4f;
+		float speed = 40f;
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;

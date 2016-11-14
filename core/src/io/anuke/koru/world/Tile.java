@@ -42,6 +42,10 @@ public class Tile implements Poolable{
 	}
 
 	public void setMaterial(Material m){
+		if(m == Materials.air){
+			blockid = 0;
+			return;
+		}
 		if(m.getType().tile()){
 			tileid = m.id();
 		}else{

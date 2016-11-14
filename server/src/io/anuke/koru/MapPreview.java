@@ -11,27 +11,28 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.IntIntMap;
 
-import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.Tile;
 import io.anuke.ucore.BlockMap;
-import io.anuke.ucore.Noise;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
-import io.anuke.ucore.graphics.Hue;
 
 public class MapPreview extends ApplicationAdapter{
-	Generator gen;
+	TerrainGenerator gen;
 	BlockMap<ChunkPix> blocks = new BlockMap<ChunkPix>();
 	IntIntMap colors = new IntIntMap();
 	SpriteBatch batch;
 	int viewrange = 32;
-	float scl = 0.5f;
+	float scl = 0.1f;
 	float vx, vy;
-	float speed = 4;
-	int pixsize = 16;
-	int percision = 1;
+	float speed = 32;
+	int pixsize = 128
+			;
+	int percision = 16;
+	static double maxe;
+	static double maxt;
 
 	public void create(){
 		UCore.maximizeWindow();
@@ -95,40 +96,14 @@ public class MapPreview extends ApplicationAdapter{
 	}
 	
 	int getPix(int x, int y){
-		double sum = 1f;
-		//float scl = 1f;
-		//float mag = 4f;
-		//for(int i = 1; i < 6; i ++){
-		//	sum += (Noise.normalNoise(x, y, scl*=5.5f, mag*2.5f));
-		////}
-		//sum += (Noise.normalNoise(x, y, 3f, 3f));
-		//sum += (Noise.normalNoise(x, y, 10f, 3f));
-		
-		//x += Integer.MAX_VALUE/8;
-		//y += Integer.MAX_VALUE/8;
-		sum += (Noise.normalNoise(x, y, 60f, 1f));
-		sum += (Noise.normalNoise(x, y, 500f, 3f));
-		sum += (Noise.normalNoise(x, y, 4000f, 6f));
-		sum += (Noise.normalNoise(x, y, 2000f, 8f));
-		sum += (Noise.normalNoise(x+9999, y+9999, 1000f, 4f));
-		
-		sum = (int)(sum/1.5)*1.5;
-		
-		x += 99999;
-		y += 99999;
-		double temp = 0f;
-		
-		temp += (Noise.normalNoise(x, y, 600f, 2f));
-		temp += (Noise.normalNoise(x, y, 3000f, 4f));
-		temp += (Noise.normalNoise(x, y, 5000f, 5f));
-		temp += (Noise.normalNoise(x, y, 2000f, 3f));
-		temp += (Noise.normalNoise(x, y, 1000f, 3f));
-		
-		temp = (int)(sum/1.5)*1.5;
 		
 		
-		return Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp/5f), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)sum/5f), 0.5f));//Color.rgba8888(Hue.blend2d(Color.FOREST, Color.GREEN, Color.TAN, Color.DARK_GRAY, (float)temp/5f, 
-				//(float)sum/5f));//Color.rgba8888(Hue.blend(Color.BLUE, Color.RED, (float)temp/5f));//colors.get(gen.generate(x, y).tileid, 0);
+		//return Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)elevation), 0.5f));
+		//return /*Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp/5f), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)sum/5f), 0.5f));*/Color.rgba8888(Hue.blend2d(Color.FOREST, Color.GREEN, Color.TAN, Color.DARK_GRAY, (float)temp/5f, 
+			//	(float)sum/5f));//Color.rgba8888(Hue.blend(Color.BLUE, Color.RED, (float)temp/5f));//colors.get(gen.generate(x, y).tileid, 0);
+		Tile tile = gen.generate(x, y);
+		if(!tile.blockEmpty()) return colors.get(tile.tileid+10000, 0);
+		return colors.get(tile.tileid, 0);
 	}
 
 	class ChunkPix{

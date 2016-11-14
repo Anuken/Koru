@@ -6,6 +6,7 @@ import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
+import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.World;
 
@@ -61,7 +62,7 @@ public class KoruUpdater{
 
 	public KoruUpdater(KoruServer server){
 		this.server = server;
-		file = new WorldFile(Paths.get("world"), new SimpleGenerator());
+		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
 		world = new World(file);
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
@@ -77,7 +78,10 @@ public class KoruUpdater{
 
 	void saveAll(){
 		Koru.log("Saving " + file.getLoadedChunks().size() + " chunks...");
+		int max = file.getLoadedChunks().size();
+		int i = 0;
 		for(Chunk chunk : file.getLoadedChunks()){
+			if(i++ % 10 == 0) Koru.log(Text.YELLOW + "Saving chunks: " + Text.CYAN + i +"/" + max);
 			file.writeChunk(chunk);
 		}
 		Koru.log("Saving materials...");

@@ -19,7 +19,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import io.anuke.koru.network.IServer;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Generator;
@@ -63,17 +62,6 @@ public class WorldFile extends WorldLoader{
 		}else{
 			Koru.log("Found empty world.");
 		}
-
-		Runtime.getRuntime().addShutdownHook(new Thread(){
-			@Override
-			public void run(){
-				if( !IServer.active()) return;
-				Koru.log("Saving " + loadedchunks.size() + " chunks...");
-				for(Chunk chunk : loadedchunks.values()){
-					writeChunk(chunk);
-				}
-			}
-		});
 
 		/*
 		if(totalChunks() != 0) return;
