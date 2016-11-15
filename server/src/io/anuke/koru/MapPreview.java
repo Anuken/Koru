@@ -102,7 +102,7 @@ public class MapPreview extends ApplicationAdapter{
 		//return /*Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp/5f), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)sum/5f), 0.5f));*/Color.rgba8888(Hue.blend2d(Color.FOREST, Color.GREEN, Color.TAN, Color.DARK_GRAY, (float)temp/5f, 
 			//	(float)sum/5f));//Color.rgba8888(Hue.blend(Color.BLUE, Color.RED, (float)temp/5f));//colors.get(gen.generate(x, y).tileid, 0);
 		Tile tile = gen.generate(x, y);
-		if(!tile.blockEmpty()) return colors.get(tile.tileid+10000, 0);
+		if(!tile.blockEmpty()) return colors.get(tile.tileid, 0)+1000;
 		return colors.get(tile.tileid, 0);
 	}
 

@@ -141,18 +141,23 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null) renderables[rendx][rendy].free();
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey) continue;
 						
+						if(Math.abs(lastcamx - camx) > viewrangex || Math.abs(lastcamy - camy) > viewrangey) continue;
 						
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
 							renderables[rendx][rendy] = new RenderableList();
 						}
-
-						if(!tile.tileEmpty()){
+						
+						if(!tile.tileEmpty() 
+								&& Math.abs(worldx*12 - camera.position.x + 6) < camera.viewportWidth/2*camera.zoom+24  
+								&& Math.abs(worldy*12 - camera.position.y + 6) < camera.viewportHeight/2*camera.zoom+24){
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 						}
 
-						if(!tile.blockEmpty()){
+						if(!tile.blockEmpty()
+								&& Math.abs(worldx*12 - camera.position.x + 6) < camera.viewportWidth/2*camera.zoom+12+tile.tile().getType().size()  
+								&& Math.abs(worldy*12 - camera.position.y + 6) < camera.viewportHeight/2*camera.zoom+12+tile.tile().getType().size()){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
 					}

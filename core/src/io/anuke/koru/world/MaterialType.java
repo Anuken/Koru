@@ -189,6 +189,10 @@ public enum MaterialType{
 		public boolean tile(){
 			return false;
 		}
+		
+		public int size(){
+			return 16;
+		}
 	},
 	shortgrassblock{
 		static final float sgadd = 0.55f;
@@ -222,6 +226,10 @@ public enum MaterialType{
 				sh.sprite.setFlip(false, true);
 				sh.add(group);
 			}
+		}
+		
+		public int size(){
+			return 16;
 		}
 		
 		public boolean tile(){
@@ -273,6 +281,10 @@ public enum MaterialType{
 	int tile(int i){
 		return i * World.tilesize + World.tilesize / 2;
 	}
+	
+	public int size(){
+		return 80;
+	}
 
 	int blendStage(int x, int y){
 		if(!isGrass(x + 1, y) && !isGrass(x - 1, y))
@@ -285,6 +297,6 @@ public enum MaterialType{
 	}
 
 	boolean isGrass(int x, int y){
-		return Renderer.i.world.isType(x, y, Materials.grassblock);
+		return Renderer.i.world.isType(x, y, Materials.grassblock) || Renderer.i.world.isType(x, y, Materials.shortgrassblock);
 	}
 }

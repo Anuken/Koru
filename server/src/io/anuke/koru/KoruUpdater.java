@@ -1,8 +1,10 @@
 package io.anuke.koru;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
@@ -36,7 +38,7 @@ public class KoruUpdater{
 	void stop(){
 		isRunning = false;
 	}
-	
+
 	public float delta(){
 		return delta;
 	}
@@ -46,11 +48,12 @@ public class KoruUpdater{
 		while(isRunning){
 			long start = System.currentTimeMillis();
 			Loop();
-			frameid ++;
+			frameid++;
 			long end = System.currentTimeMillis();
 
 			try{
-				if(end - start <= fpsmillis) Thread.sleep(fpsmillis - (end - start));
+				if(end - start <= fpsmillis)
+					Thread.sleep(fpsmillis - (end - start));
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -60,7 +63,7 @@ public class KoruUpdater{
 
 	}
 
-	public KoruUpdater(KoruServer server){
+	public KoruUpdater(KoruServer server) {
 		this.server = server;
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
 		world = new World(file);
@@ -76,15 +79,40 @@ public class KoruUpdater{
 		});
 	}
 
+	Object lock = new Object();
+
 	void saveAll(){
 		Koru.log("Saving " + file.getLoadedChunks().size() + " chunks...");
-		int max = file.getLoadedChunks().size();
-		int i = 0;
+
+		int pp = file.getLoadedChunks().size() / Runtime.getRuntime().availableProcessors();
+		Koru.log("Chunks per thread: " + pp);
+		int thread = 0;
+		List<Chunk> threadchunks = new ArrayList<Chunk>();
 		for(Chunk chunk : file.getLoadedChunks()){
-			if(i++ % 10 == 0) Koru.log(Text.YELLOW + "Saving chunks: " + Text.CYAN + i +"/" + max);
-			file.writeChunk(chunk);
+			
+			threadchunks.add(chunk);
+			if(threadchunks.size() >= pp){
+				Koru.log(Text.LIGHT_MAGENTA + "Spawning thread: " + Text.GREEN + thread);
+				
+				spawnChunkThread(threadchunks, thread++);
+				threadchunks = new ArrayList<Chunk>();
+			}
+
 		}
+
 		Koru.log("Saving materials...");
-		MaterialManager.instance().saveMaterials(Directories.materials);
+		// MaterialManager.instance().saveMaterials(Directories.materials);
+	}
+
+	void spawnChunkThread(Collection<Chunk> chunks, int thread){
+		new Thread(() -> {
+			//int i = 0;
+
+			for(Chunk chunk : chunks){
+				Koru.log(Text.YELLOW + "Saving chunks: " +Text.RED + chunks.size() + " left [Thread "+thread+"]");
+				
+				file.writeChunk(chunk);
+			}
+		}).start();
 	}
 }
