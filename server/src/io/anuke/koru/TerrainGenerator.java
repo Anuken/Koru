@@ -4,6 +4,7 @@ import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.Noise;
+import io.anuke.ucore.UCore;
 
 public class TerrainGenerator implements Generator{
 	@Override
@@ -18,6 +19,7 @@ public class TerrainGenerator implements Generator{
 		if(t < 0.7 && t > 0.4 && e < 0.15){
 			tile.setMaterial(Materials.burntgrass);
 			if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.drybush1, 3));
+			if(Math.random() < 0.003) tile.setBlockMaterial(Materials.next(Materials.deadtree1, 4));
 			
 			if(Math.random() < 0.01) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
 			if(Math.random() < 0.1) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
@@ -32,6 +34,9 @@ public class TerrainGenerator implements Generator{
 				}else{
 					tile.setMaterial(Materials.burntgrass2);
 					if(Math.random() < 0.04) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
+					if(Math.random() < 0.001) tile.setBlockMaterial(Materials.next(Materials.deadtree1, 4));
+					if(Math.random() < 0.001) tile.setBlockMaterial(Materials.next(Materials.burnedtree1, 4));
+					
 				}
 				if(Math.random() < 0.02) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
 			}
@@ -43,8 +48,14 @@ public class TerrainGenerator implements Generator{
 				tile.setMaterial(Materials.grass);
 			}else if(e < 0.5f){
 				tile.setMaterial(Materials.stone);
+				if(Math.random() < 0.05) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+				
 			}else if(e < 1f){
 				tile.setMaterial(Materials.ice);
+				
+				if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+				if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.blackrock1, 4));
+				
 			}
 
 			if(e < 0.35f || (e < 0.4f && Math.random() < (0.45f - e) * 200)){
@@ -53,7 +64,7 @@ public class TerrainGenerator implements Generator{
 				if(Math.random() < 0.03)
 					tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
 
-				if(Math.random() < 0.2 && e < 0.1f)
+				if(Math.random() < 0.13 && e < 0.1f)
 					tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
 				if(Math.random() < 0.04 && e < 0.15f)
 					tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
@@ -79,6 +90,8 @@ public class TerrainGenerator implements Generator{
 
 			if(e > 0.17f && e < 0.4f && Math.random() < e / 10){
 				tile.setMaterial(Materials.next(Materials.pinetree1, 4));
+				if(Math.random() < 0.02)tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+				
 				if(Math.random() < 0.002)
 					tile.setBlockMaterial(Materials.pinesapling);
 			}
@@ -100,13 +113,15 @@ public class TerrainGenerator implements Generator{
 		double elevation = 1f;
 
 		elevation += (Noise.normalNoise(x, y, 4f, 0.5f));
-		elevation += (Noise.normalNoise(x, y, 10f, 1f));
-		elevation += (Noise.normalNoise(x, y, 60f, 1f));
-		elevation += (Noise.normalNoise(x, y, 500f, 3f));
-		elevation += (Noise.normalNoise(x, y, 4000f, 6f));
+		elevation += (Noise.normalNoise(x, y, 10f, 2f));
+		elevation += (Noise.normalNoise(x, y, 60f, 2f));
+		elevation += (Noise.normalNoise(x, y, 250f, 4f));
 		elevation += (Noise.normalNoise(x, y, 2000f, 8f));
-		elevation += (Noise.normalNoise(x + 9999, y + 9999, 1000f, 4f));
-		elevation /= 17.0;
+		elevation += (Noise.normalNoise(x, y, 1000f, 10f));
+		elevation += (Noise.normalNoise(x + 9999, y + 9999,500f, 6f));
+		elevation /= 20.0;
+		
+		elevation = UCore.clamp(elevation);
 
 		return (float) elevation;
 
@@ -120,13 +135,15 @@ public class TerrainGenerator implements Generator{
 
 		temp += (Noise.normalNoise(x, y, 4f, 0.1f));
 		temp += (Noise.normalNoise(x, y, 10f, 0.17f));
-		temp += (Noise.normalNoise(x, y, 600f, 2f));
-		temp += (Noise.normalNoise(x, y, 3000f, 4f));
-		temp += (Noise.normalNoise(x, y, 5000f, 5f));
-		temp += (Noise.normalNoise(x, y, 2000f, 3f));
-		temp += (Noise.normalNoise(x, y, 1000f, 3f));
+		temp += (Noise.normalNoise(x, y, 600f, 3f));
+		temp += (Noise.normalNoise(x, y, 2000f, 5f));
+		temp += (Noise.normalNoise(x, y, 3000f, 7f));
+		temp += (Noise.normalNoise(x, y, 1000f, 4f));
+		temp += (Noise.normalNoise(x, y, 500f, 4f));
 
-		temp /= 6.0;
+		temp /= 7.0;
+		
+		temp = UCore.clamp(temp);
 
 		return (float) temp;
 	}
