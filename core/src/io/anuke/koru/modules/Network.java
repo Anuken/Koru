@@ -150,6 +150,7 @@ public class Network extends Module<Koru>{
 
 		if(connected && !client.isConnected()){
 			connected = false;
+			connecting = false;
 			lastError = "Connection error: Timed out.";
 		}
 

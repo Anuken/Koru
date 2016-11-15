@@ -15,12 +15,26 @@ public class TerrainGenerator implements Generator{
 		float e = getElevation(x, y);
 		float t = getTemperature(x, y);
 
-		if(t < 0.8 && t > 0.4 && e < 0.15){
+		if(t < 0.7 && t > 0.4 && e < 0.15){
 			tile.setMaterial(Materials.burntgrass);
-			if(Math.random() < 0.03)
-				tile.setBlockMaterial(Materials.next(Materials.drybush1, 3));
-		}else if(t > 0.8 && e < 0.1){
-			tile.setMaterial(Materials.sand);
+			if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.drybush1, 3));
+			
+			if(Math.random() < 0.01) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+			if(Math.random() < 0.1) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
+			
+		}else if(t > 0.7){
+			if(e > 0.2f){
+				tile.setMaterial(Materials.blackrock);
+				if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.blackrock1, 4));
+			}else{
+				if(t > 0.74){
+					tile.setMaterial(Materials.sand);
+				}else{
+					tile.setMaterial(Materials.burntgrass2);
+					if(Math.random() < 0.04) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
+				}
+				if(Math.random() < 0.02) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+			}
 		}else{
 
 			if(e < 0.25f){
@@ -69,10 +83,10 @@ public class TerrainGenerator implements Generator{
 					tile.setBlockMaterial(Materials.pinesapling);
 			}
 
-			if(e < 0.1f && Noise.normalNoise(x, y, 200, 20) + Noise.normalNoise(x, y, 5, 4) > 2.5 && t < 0.3)
+			if(e < 0.1f && Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4 && t < 0.3)
 				tile.setMaterial(Materials.shortgrassblock);
 
-			if(e < 0.1f && Noise.normalNoise(x, y, 200, 20) + Noise.normalNoise(x, y, 5, 4) > 3 && t < 0.3)
+			if(e < 0.1f && Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4.5 && t < 0.3)
 				tile.setMaterial(Materials.grassblock);
 		}
 
@@ -85,7 +99,7 @@ public class TerrainGenerator implements Generator{
 
 		double elevation = 1f;
 
-		elevation += (Noise.normalNoise(x, y, 5f, 1f));
+		elevation += (Noise.normalNoise(x, y, 4f, 0.5f));
 		elevation += (Noise.normalNoise(x, y, 10f, 1f));
 		elevation += (Noise.normalNoise(x, y, 60f, 1f));
 		elevation += (Noise.normalNoise(x, y, 500f, 3f));
@@ -104,8 +118,8 @@ public class TerrainGenerator implements Generator{
 
 		double temp = 0f;
 
-		temp += (Noise.normalNoise(x, y, 5f, 0.5f));
-		temp += (Noise.normalNoise(x, y, 10f, 0.5f));
+		temp += (Noise.normalNoise(x, y, 4f, 0.1f));
+		temp += (Noise.normalNoise(x, y, 10f, 0.17f));
 		temp += (Noise.normalNoise(x, y, 600f, 2f));
 		temp += (Noise.normalNoise(x, y, 3000f, 4f));
 		temp += (Noise.normalNoise(x, y, 5000f, 5f));
