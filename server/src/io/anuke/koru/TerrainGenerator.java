@@ -20,9 +20,9 @@ public class TerrainGenerator implements Generator{
 		float e = getElevation(x, y);
 		float se = (smoothEl(x,y)+0.4f) / 0.82f;
 		
-		//float t = getTemperature(x, y);
+		float t = getTemperature(x, y);
 		
-		if(e > 0.8){
+		if(e > 0.85){
 			tile.setMaterial(Materials.ice);
 
 			if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
@@ -34,63 +34,83 @@ public class TerrainGenerator implements Generator{
 			if(Math.random() < 0.05) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
 			
 		}else if (se > 0.075){
-			
-			
-			if(Math.random() < 1){
-				if(Math.random() < 0.1 && e > 0.25f)
-					tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
-				if(Math.random() < 0.03)
-					tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
-
-				if(Math.random() < 0.13 && e < 0.4f)
-					tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
-				if(Math.random() < 0.04 && e < 0.5f)
-					tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
-
-				if(Math.random() < 0.02 && e < 0.35f && e > 0.12f)
-					tile.setBlockMaterial(Materials.next(Materials.bush1, 3));
-
-				if(Math.random() < 0.03 * e)
-					tile.setBlockMaterial(Materials.next(Materials.fern1, 3));
-				if(Math.random() < 0.01 * e)
-					tile.setBlockMaterial(Materials.next(Materials.koru1, 3));
-			}
-			
-			if(e < 0.35 && e > 0.1){
-				if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4)
-					tile.setMaterial(Materials.shortgrassblock);
-
-				if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4.5)
-					tile.setMaterial(Materials.grassblock);
-			}
-
-			if(e > 0.36f && e < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3 ){
-				if(rand() < br(0.12f, e)){
-					if(rand() < 0.026)
-						tile.setMaterial(Materials.next(Materials.oaktree1, 6));
-					if(rand() < 0.02)
-						tile.setMaterial(Materials.next(Materials.mushy1, 8));
-					if(Math.random() < 0.05)
+			if(t < 0.6){
+				if(Math.random() < 1){
+					if(Math.random() < 0.1 && e > 0.25f)
 						tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
-				}
-			}
+					if(Math.random() < 0.03)
+						tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
 
-			if((e > 0.5f && Math.random() < clamp((e-0.5f)*3f)/15f)){
-				tile.setMaterial(Materials.next(Materials.pinetree1, 4));
-				if(Math.random() < 0.02)tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+					if(Math.random() < 0.13 && e < 0.4f)
+						tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
+					if(Math.random() < 0.04 && e < 0.5f)
+						tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
+
+					if(Math.random() < 0.02 && e < 0.35f && e > 0.12f)
+						tile.setBlockMaterial(Materials.next(Materials.bush1, 3));
+
+					if(Math.random() < 0.03 * e)
+						tile.setBlockMaterial(Materials.next(Materials.fern1, 3));
+					if(Math.random() < 0.01 * e)
+						tile.setBlockMaterial(Materials.next(Materials.koru1, 3));
+				}
+				if(e < 0.35 && e > 0.1 && t < 0.5){
+					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4)
+						tile.setMaterial(Materials.shortgrassblock);
+
+					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4.5)
+						tile.setMaterial(Materials.grassblock);
+				}
+				if(e > 0.36f && e < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3){
+					if(rand() < br(0.12f, e)){
+						if(rand() < 0.026)
+							tile.setMaterial(Materials.next(Materials.oaktree1, 6));
+						if(rand() < 0.02)
+							tile.setMaterial(Materials.next(Materials.mushy1, 8));
+						if(Math.random() < 0.05)
+							tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
+					}
+				}
+				if((e > 0.5f && Math.random() < clamp((e - 0.5f) * 3f) / 15f)){
+					tile.setMaterial(Materials.next(Materials.pinetree1, 4));
+					if(Math.random() < 0.02)
+						tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+
+					if(Math.random() < 0.002)
+						tile.setBlockMaterial(Materials.pinesapling);
+				}
+				if(se < 0.1 && se > 0.08 && Math.random() < 0.006){
+					tile.setMaterial(Materials.next(Materials.willowtree1, 4));
+				}
+				tile.setMaterial(Materials.grass);
+			
+			}else if(t < 0.8){
+				tile.setMaterial(Materials.burntgrass);
+				if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.drybush1, 3));
+				if(Math.random() < 0.003) tile.setBlockMaterial(Materials.next(Materials.deadtree1, 4));
 				
-				if(Math.random() < 0.002)
-					tile.setBlockMaterial(Materials.pinesapling);
+				if(Math.random() < 0.01) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+				if(Math.random() < 0.1) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
+			
+			}else if(t < 0.83){
+				tile.setMaterial(Materials.burntgrass2);
+				if(Math.random() < 0.04) tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
+				if(Math.random() < 0.001) tile.setBlockMaterial(Materials.next(Materials.deadtree1, 4));
+				if(Math.random() < 0.001) tile.setBlockMaterial(Materials.next(Materials.burnedtree1, 4));
+			}else{
+				tile.setMaterial(Materials.sand);
+				if(Math.random() < 0.02) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+				
 			}
 			
-			if(se <  0.1 && se > 0.08 && Math.random() < 0.006){
-				tile.setMaterial(Materials.next(Materials.willowtree1, 4));
-			}
-			
-			tile.setMaterial(Materials.grass);
 		}else{
-			tile.setMaterial(Materials.gravel);
-			if(se < 0.07f) tile.setMaterial(Materials.water);
+			tile.setMaterial(Materials.riveredge);
+			if(se < 0.066f){ tile.setMaterial(Materials.water);
+			
+			}else{
+				if(Math.random() < 0.01) tile.setMaterial(Materials.next(Materials.rock1, 4));
+				if(Math.random() < 0.003) tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+			}
 		}
 
 		/*
@@ -220,6 +240,7 @@ public class TerrainGenerator implements Generator{
 		elevation += (Noise.nnoise(x, y, octave/8, 0.125f));
 		elevation += (Noise.nnoise(x, y, octave/16, 0.125f/2));
 		elevation += (Noise.nnoise(x, y, octave/32, 0.125f/4));
+		elevation += (Noise.nnoise(x, y, octave/128, 0.125f/16));
 		
 
 		return (float) elevation;
@@ -235,6 +256,11 @@ public class TerrainGenerator implements Generator{
 		temp += (Noise.nnoise(x, y, octave, 1f));
 		temp += (Noise.nnoise(x, y, octave/2, 0.5f));
 		temp += (Noise.nnoise(x, y, octave/4, 0.25f));
+		temp += (Noise.nnoise(x, y, octave/8, 0.125f));
+		//temp += (Noise.nnoise(x, y, octave/16, 0.25f));
+		temp += (Noise.nnoise(x, y, octave/32, 0.125f));
+		temp += (Noise.nnoise(x, y, octave/64, 0.125f/2));
+		temp += (Noise.nnoise(x, y, octave/128, 0.125f/2));
 		
 		temp /= 1;
 		
