@@ -1167,70 +1167,70 @@ tiles/cobblestoneedge
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/blackfloor1edge
+tiles/graveledge
   rotate: false
   xy: 25, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/burntgrassedge
+tiles/blackfloor1edge
   rotate: false
   xy: 263, 408
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/iceedge
+tiles/burntgrassedge
   rotate: false
   xy: 287, 432
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/burntgrass2edge
+tiles/iceedge
   rotate: false
   xy: 1, 128
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/bluegrassedge
+tiles/burntgrass2edge
   rotate: false
   xy: 43, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/sandedge
+tiles/bluegrassedge
   rotate: false
   xy: 263, 390
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/blackrockedge
+tiles/sandedge
   rotate: false
   xy: 305, 432
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/darkgrassedge
+tiles/blackrockedge
   rotate: false
   xy: 1, 110
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/grassedge
+tiles/darkgrassedge
   rotate: false
   xy: 61, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/gravel2edge
+tiles/grassedge
   rotate: false
   xy: 263, 372
   size: 16, 16
