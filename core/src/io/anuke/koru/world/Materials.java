@@ -11,6 +11,7 @@ import io.anuke.ucore.graphics.Hue;
 public enum Materials implements Material{
 	air, 
 	grass(Hue.rgb(69, 109, 29,0.04f)),
+	darkgrass(new Color(0x40681aff)),
 	blackrock,
 	magmarock,
 	cobblestone,

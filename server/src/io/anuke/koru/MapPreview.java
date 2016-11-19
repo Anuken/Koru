@@ -17,6 +17,7 @@ import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.BlockMap;
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.VoroniNoise;
 import io.anuke.ucore.graphics.Atlas;
 
 public class MapPreview extends ApplicationAdapter{
@@ -95,12 +96,18 @@ public class MapPreview extends ApplicationAdapter{
 		blocks.put(x, y, new ChunkPix(x, y));
 	}
 	
+
+	VoroniNoise noise = new VoroniNoise(0,(short) 0){{
+		this.setUseDistance(true);
+	}};
+	
 	int getPix(int x, int y){
 		//float temp = gen.getElevation(x, y);
 		
-		//return Color.rgba8888((Hue.blend(Color.BLACK, Color.WHITE, (float)temp)));
+		//return Color.rgba8888((Hue.blend(Color.BLACK, Color.WHITE, 	(float)noise.noise(x, y, 1/1000.0)/10)));
 		//return /*Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp/5f), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)sum/5f), 0.5f));*/Color.rgba8888(Hue.blend2d(Color.FOREST, Color.GREEN, Color.TAN, Color.DARK_GRAY, (float)temp/5f, 
 			//	(float)sum/5f));//Color.rgba8888(Hue.blend(Color.BLUE, Color.RED, (float)temp/5f));//colors.get(gen.generate(x, y).tileid, 0);
+		
 		Tile tile = gen.generate(x, y);
 		if(!tile.blockEmpty()) return colors.get(tile.tileid, 0)+1000;
 		return colors.get(tile.tileid, 0);

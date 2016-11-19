@@ -7,10 +7,18 @@ import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.Noise;
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.VoroniNoise;
 
 public class TerrainGenerator implements Generator{
 	final float scale = 1f;
+	VoroniNoise tnoise = new VoroniNoise(0,(short) 0);
+	VoroniNoise enoise = new VoroniNoise(10,(short) 0);
 	
+	{
+		enoise.setUseDistance(true);
+		tnoise.setUseDistance(true);
+	}
+
 	@Override
 	public Tile generate(int x, int y){
 		x += 99999;
@@ -33,8 +41,8 @@ public class TerrainGenerator implements Generator{
 			
 			if(Math.random() < 0.05) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
 			
-		}else if (se > 0.075){
-			if(t < 0.6){
+		}else if (se > 0.078){
+			if(t < 0.62){
 				if(Math.random() < 1){
 					if(Math.random() < 0.1 && e > 0.25f)
 						tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
@@ -54,7 +62,7 @@ public class TerrainGenerator implements Generator{
 					if(Math.random() < 0.01 * e)
 						tile.setBlockMaterial(Materials.next(Materials.koru1, 3));
 				}
-				if(e < 0.35 && e > 0.1 && t < 0.5){
+				if(e < 0.4 && e > 0.1 && t < 0.6 && t > 0.41){
 					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4)
 						tile.setMaterial(Materials.shortgrassblock);
 
@@ -79,11 +87,13 @@ public class TerrainGenerator implements Generator{
 					if(Math.random() < 0.002)
 						tile.setBlockMaterial(Materials.pinesapling);
 				}
-				if(se < 0.1 && se > 0.08 && Math.random() < 0.006){
-					tile.setMaterial(Materials.next(Materials.willowtree1, 4));
+				
+				
+				if(t < 0.4){
+					tile.setMaterial(Materials.darkgrass);
+				}else{
+					tile.setMaterial(Materials.grass);
 				}
-				tile.setMaterial(Materials.grass);
-			
 			}else if(t < 0.8){
 				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.drybush1, 3));
@@ -104,12 +114,23 @@ public class TerrainGenerator implements Generator{
 			}
 			
 		}else{
-			tile.setMaterial(Materials.riveredge);
-			if(se < 0.066f){ tile.setMaterial(Materials.water);
-			
+			if(t < 0.3){
+				tile.setMaterial(Materials.darkgrass);
 			}else{
+				tile.setMaterial(Materials.grass);
+			}
+			if(se < 0.063f){ 
+				tile.setMaterial(Materials.water);
+			}else if(se < 0.066){
+				tile.setMaterial(Materials.riveredge);
 				if(Math.random() < 0.01) tile.setMaterial(Materials.next(Materials.rock1, 4));
 				if(Math.random() < 0.003) tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+			}else{
+				if(Math.random() < 0.1) tile.setMaterial(Materials.next(Materials.wheatgrass1, 3));
+				if(Math.random() < 0.1) tile.setMaterial(Materials.next(Materials.tallgrass1, 3));
+				if(Math.random() < 0.006 && se > 0.069) tile.setMaterial(Materials.next(Materials.willowtree1, 4));
+				
+				
 			}
 		}
 
@@ -221,8 +242,9 @@ public class TerrainGenerator implements Generator{
 		elevation += smoothEl(x,y);
 		elevation += (Noise.nnoise(x, y, octave/128, 0.125f));
 		elevation += (Noise.nnoise(x, y, octave/32, 0.125f/4));
+		elevation += enoise.noise(x, y, 1/1000.0)/3.4;
 		
-		elevation /= 0.82;
+		elevation /= 0.84;
 		
 		elevation = UCore.clamp(elevation);
 
@@ -261,8 +283,10 @@ public class TerrainGenerator implements Generator{
 		temp += (Noise.nnoise(x, y, octave/32, 0.125f));
 		temp += (Noise.nnoise(x, y, octave/64, 0.125f/2));
 		temp += (Noise.nnoise(x, y, octave/128, 0.125f/2));
+		temp += tnoise.noise(x, y, 1/1000.0)/3.4;
 		
-		temp /= 1;
+		
+		temp /= 1.05;
 		
 		
 		temp = UCore.clamp(temp);

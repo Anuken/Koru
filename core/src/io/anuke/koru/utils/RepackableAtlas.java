@@ -12,6 +12,7 @@ public class RepackableAtlas extends Atlas{
 	
 	public RepackableAtlas(FileHandle file){
 		super(file);
+		
 	}
 	
 	public void addTexture(String name, Texture texture){
