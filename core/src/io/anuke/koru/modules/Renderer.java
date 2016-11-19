@@ -5,15 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
@@ -26,18 +23,15 @@ import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.MaterialType;
-import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
-import io.anuke.ucore.Noise;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.LayerManager;
 import io.anuke.ucore.spritesystem.Renderable;
 import io.anuke.ucore.spritesystem.RenderableHandler;
 import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.util.UCore;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
@@ -81,59 +75,8 @@ public class Renderer extends Module<Koru>{
 
 		if(gbuffer)
 			buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
-
-		setupTransitions();
 	}
 
-	void setupTransitions(){
-		Pixmap pix = atlas.getPixmapOf(atlas.findRegion("grass"));
-		Color color = new Color();
-		for(Materials mat : Materials.values()){
-			if(mat.getType() == MaterialType.tile && mat != Materials.stone){
-				
-				TextureRegion region = atlas.findRegion(mat.name() + "edge");
-				TextureRegion orig = atlas.findRegion(mat.name());
-				Pixmap.setBlending(Blending.None);
-				
-				
-				for(int x = 0; x < region.getRegionWidth(); x++){
-					for(int y = 0; y < region.getRegionHeight(); y++){
-						pix.drawPixel(region.getRegionX() + x, region.getRegionY() + y, 0);
-					}
-				}
-				
-				Pixmap.setBlending(Blending.SourceOver);
-				
-				float alpha = 1f;
-				for(int i = 0; i < 3; i++){
-					int r = 6+i;
-					for(int x = -r; x < r; x++){
-						for(int y = -r; y < r; y++){
-							
-							color.set(pix.getPixel(orig.getRegionX() + (x+32) % 10, orig.getRegionY() + (y+32) % 10));
-							color.a = alpha + Noise.normalNoise(x, y, 4, 0.3f) - 0.1f;
-							color.clamp();
-							color.mul(1.1f, 1.1f, 1.1f, 1f);
-							if(i == 2 && Noise.normalNoise(x, y, 3, 1f) > 0.1f) color.a = 0.05f;
-							pix.setColor(color);
-							pix.drawPixel(region.getRegionX() + x + region.getRegionWidth()/2, region.getRegionY() + y + region.getRegionHeight()/2);
-						}
-					}
-					alpha -= 0.2f;
-				}
-				
-			}
-		}
-
-		Texture tex = new Texture(pix);
-
-		Texture old = atlas.findRegion("grass").getTexture();
-		for(AtlasRegion region : atlas.getRegions()){
-			if(region.getTexture().equals(old))
-				region.setTexture(tex);
-		}
-		old.dispose();
-	}
 
 	public void init(){
 		player = getModule(ClientData.class).player;

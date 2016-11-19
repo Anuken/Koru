@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Pools;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.Noise;
+import io.anuke.ucore.noise.Noise;
 
 public class SimpleGenerator implements Generator{
 

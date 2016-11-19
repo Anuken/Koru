@@ -23,6 +23,7 @@ public enum Materials implements Material{
 	bluegrass,
 	ice,
 	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
+	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
 	riveredge,
 	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){{addDrop(Item.stone, 1);}}, 
 	woodfloor{{addDrop(Item.wood, 2);}},

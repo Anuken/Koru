@@ -1286,63 +1286,70 @@ tiles/blackrock
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/woodfloor
+tiles/deepwater
   rotate: false
   xy: 97, 174
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/blackfloor1
+tiles/water
+  rotate: false
+  xy: 97, 174
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+tiles/woodfloor
   rotate: false
   xy: 1, 57
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/cobblestone
+tiles/blackfloor1
   rotate: false
   xy: 263, 319
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/sand
+tiles/cobblestone
   rotate: false
   xy: 355, 436
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/stonefloor
+tiles/sand
   rotate: false
   xy: 111, 174
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/ice
+tiles/stonefloor
   rotate: false
   xy: 1, 43
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/burntgrass2
+tiles/ice
   rotate: false
   xy: 263, 305
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/grass
+tiles/burntgrass2
   rotate: false
   xy: 369, 436
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/water
+tiles/grass
   rotate: false
   xy: 125, 174
   size: 12, 12

@@ -15,10 +15,11 @@ import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.BlockMap;
-import io.anuke.ucore.UCore;
-import io.anuke.ucore.VoroniNoise;
 import io.anuke.ucore.graphics.Atlas;
+import io.anuke.ucore.noise.RidgedPerlin;
+import io.anuke.ucore.noise.VoroniNoise;
+import io.anuke.ucore.util.BlockMap;
+import io.anuke.ucore.util.UCore;
 
 public class MapPreview extends ApplicationAdapter{
 	TerrainGenerator gen;
@@ -101,12 +102,16 @@ public class MapPreview extends ApplicationAdapter{
 		this.setUseDistance(true);
 	}};
 	
+	RidgedPerlin per = new RidgedPerlin(1, 1, 0.4f);
+	
 	int getPix(int x, int y){
 		//float temp = gen.getElevation(x, y);
 		
-		//return Color.rgba8888((Hue.blend(Color.BLACK, Color.WHITE, 	(float)noise.noise(x, y, 1/1000.0)/10)));
+		//float noise = per.getValue(x, y, 1, 0.0007f);
+		//return Color.rgba8888(noise > 0.2f ? Color.BLUE : Color.BLACK);//Color.rgba8888((Hue.blend(Color.BLACK, Color.BLUE, 	)));
 		//return /*Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp/5f), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)sum/5f), 0.5f));*/Color.rgba8888(Hue.blend2d(Color.FOREST, Color.GREEN, Color.TAN, Color.DARK_GRAY, (float)temp/5f, 
 			//	(float)sum/5f));//Color.rgba8888(Hue.blend(Color.BLUE, Color.RED, (float)temp/5f));//colors.get(gen.generate(x, y).tileid, 0);
+		
 		
 		Tile tile = gen.generate(x, y);
 		if(!tile.blockEmpty()) return colors.get(tile.tileid, 0)+1000;

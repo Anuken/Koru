@@ -1,18 +1,20 @@
 package io.anuke.koru;
 
-import static io.anuke.ucore.UCore.clamp;
+import static io.anuke.ucore.util.UCore.clamp;
 
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.Noise;
-import io.anuke.ucore.UCore;
-import io.anuke.ucore.VoroniNoise;
+import io.anuke.ucore.noise.Noise;
+import io.anuke.ucore.noise.RidgedPerlin;
+import io.anuke.ucore.noise.VoroniNoise;
+import io.anuke.ucore.util.UCore;
 
 public class TerrainGenerator implements Generator{
 	final float scale = 1f;
 	VoroniNoise tnoise = new VoroniNoise(0,(short) 0);
 	VoroniNoise enoise = new VoroniNoise(10,(short) 0);
+	RidgedPerlin per = new RidgedPerlin(2, 1, 0.4f);
 	
 	{
 		enoise.setUseDistance(true);
@@ -27,10 +29,16 @@ public class TerrainGenerator implements Generator{
 		Tile tile = new Tile();
 		float e = getElevation(x, y);
 		float se = (smoothEl(x,y)+0.4f) / 0.82f;
+		float riv = per.getValue(x, y, 0.0005f);
 		
 		float t = getTemperature(x, y);
 		
-		if(e > 0.85){
+		if(riv > 0.23f){
+			tile.setMaterial(Materials.riveredge);
+			if(riv > 0.236) tile.setMaterial(Materials.water);
+			if(riv > 0.244) tile.setMaterial(Materials.deepwater);
+			
+		}else if(e > 0.85){
 			tile.setMaterial(Materials.ice);
 
 			if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));

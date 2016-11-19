@@ -10,8 +10,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.Noise;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.spritesystem.RenderableList;
 import io.anuke.ucore.spritesystem.SortProviders;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
@@ -28,7 +28,6 @@ public enum MaterialType{
 				new SpriteRenderable(Renderer.i.getRegion(material.name() + "edge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
 						.center().setLayer(-material.id() * 2 + 1).add(group);
-
 		}
 	},
 	water{
@@ -45,10 +44,14 @@ public enum MaterialType{
 				public void draw(Batch batch){
 					float noise = (float) Noise.normalNoise((int) (x + Gdx.graphics.getFrameId() / tscl),
 							(int) (y + Gdx.graphics.getFrameId() / tscl), 10f, s);
-					setColor(new Color(1f - s + noise, 1f - s + noise, 1f - s + noise, 0.8f));
+					setColor(
+							material == Materials.deepwater ? 
+									new Color(0.92f - s + noise, 0.92f - s + noise, 0.92f - s + noise, 0.93f) :
+									new Color(1f - s + noise, 1f - s + noise, 1f - s + noise, 0.85f));
 					super.draw(batch);
 				}
-			}.setPosition(x * World.tilesize, y * World.tilesize).setLayer(1).setColor(new Color(1, 1, 1, 0.3f))
+			}.setPosition(x * World.tilesize, y * World.tilesize).setLayer(1).setColor(
+					new Color(1, 1, 1, 0.3f))
 					.add(group);
 
 		}
