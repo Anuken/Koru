@@ -25,6 +25,7 @@ import com.kotcrab.vis.ui.widget.VisTextField.TextFieldListener;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.ui.ChatTable;
+import io.anuke.koru.ui.InventoryWidget;
 import io.anuke.ucore.modules.Module;
 
 public class UI extends Module<Koru> {
@@ -32,6 +33,7 @@ public class UI extends Module<Koru> {
 	ChatTable chat;
 	VisTable menutable;
 	VisTable chattable;
+	VisTable uitable;
 	VisLabel connectlabel;
 	VisLabel connectfail;
 	Network network;
@@ -45,6 +47,7 @@ public class UI extends Module<Koru> {
 		stage = new Stage(new ScreenViewport());
 		setupMenu();
 		setupChat();
+		setupUI();
 	}
 	
 	public void loadSkin(){
@@ -108,6 +111,14 @@ public class UI extends Module<Koru> {
 		generator.dispose();
 		pgenerator.dispose();
 	}
+	
+	void setupUI(){
+		uitable = new VisTable();
+		uitable.setFillParent(true);
+		stage.addActor(uitable);
+		
+		uitable.bottom().right().add(new InventoryWidget()).align(Align.bottomRight);
+	}
 
 	void setupMenu() {
 		menutable = new VisTable();
@@ -115,7 +126,7 @@ public class UI extends Module<Koru> {
 		stage.addActor(menutable);
 		menutable.background("window");
 		menutable.center();
-
+		
 		connectfail = new VisLabel("Connection Failed!");
 		connectfail.setColor(Color.RED);
 		connectfail.setAlignment(Align.center, Align.center);
@@ -164,6 +175,7 @@ public class UI extends Module<Koru> {
 		connectfail.setVisible(network.initialconnect && !network.connected());
 		connectfail.setText(network.getError());
 		menutable.setVisible(!network.connected());
+		uitable.setVisible(network.connected());
 	}
 
 	@Override

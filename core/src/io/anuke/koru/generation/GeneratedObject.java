@@ -29,7 +29,7 @@ public abstract class GeneratedObject{
 	
 	/**Client-side only.*/
 	public void loadTexture(){
-		Resources.getAtlas().addTexture(name, new Texture(getImageFile()));
+		Resources.atlas().addTexture(name, new Texture(getImageFile()));
 	}
 	
 	public void loadPixmap(Pixmap pixmap){

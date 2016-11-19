@@ -48,7 +48,7 @@ public class ObjectHandler extends Module<Koru>{
 		PixmapIO.writePNG(mat.getImageFile(), pix); 
 		
 		Texture texture = new Texture(pix);
-		Resources.getAtlas().addTexture(mat.name(), texture);
+		Resources.atlas().addTexture(mat.name(), texture);
 		
 		getModule(Renderer.class).updateTiles(mat.id());
 	}

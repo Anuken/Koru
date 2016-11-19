@@ -790,6 +790,18 @@ koru3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+items/stoneitem
+  rotate: false
+  xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+
+koru4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 shadows/shadow78
   rotate: false
   xy: 1, 41
@@ -1057,7 +1069,7 @@ shadows/shadow6
   offset: 0, 0
   index: -1
 
-koru4.png
+koru5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -1083,7 +1095,7 @@ entities/genericmonster
   offset: 0, 0
   index: -1
 
-koru5.png
+koru6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -1095,7 +1107,7 @@ projectiles/bolt
   offset: 0, 0
   index: -1
 
-koru6.png
+koru7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -1135,7 +1147,7 @@ other/blank
   offset: 0, 0
   index: -1
 
-koru7.png
+koru8.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

@@ -15,11 +15,11 @@ import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoroniNoise;
 import io.anuke.ucore.util.BlockMap;
-import io.anuke.ucore.util.UCore;
 
 public class MapPreview extends ApplicationAdapter{
 	TerrainGenerator gen;

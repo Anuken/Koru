@@ -56,6 +56,10 @@ public class Koru extends ModuleController<Koru>{
 			Gdx.app.exit();
 		}
 	}
+	
+	public static <T> T module(Class<T> c){
+		return instance.getModule(c);
+	}
 
 	public static void log(Object o){
 		StackTraceElement e = Thread.currentThread().getStackTrace()[2];

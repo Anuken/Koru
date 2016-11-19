@@ -17,6 +17,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.network.packets.ChatPacket;
@@ -120,7 +121,7 @@ public class ChatTable extends VisTable{
 		
 		ChatPacket packet = new ChatPacket();
 		packet.message = message;
-		Renderer.i.getModule(Network.class).client.sendTCP(packet);
+		Koru.module(Renderer.class).getModule(Network.class).client.sendTCP(packet);
 	}
 	
 	public void enterPressed(){

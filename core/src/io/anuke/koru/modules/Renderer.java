@@ -25,18 +25,17 @@ import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.LayerManager;
 import io.anuke.ucore.spritesystem.Renderable;
 import io.anuke.ucore.spritesystem.RenderableHandler;
 import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.util.UCore;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 20;
-	public static Renderer i;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
 	public World world;
@@ -56,7 +55,6 @@ public class Renderer extends Module<Koru>{
 
 	public Renderer() {
 		UCore.maximizeWindow();
-		i = this;
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);

@@ -24,12 +24,12 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	@Override
 	public void initRender(){
-		new SpriteRenderable(Resources.findRegion("player"))
-		.addShadow(render.group, Resources.getAtlas())
+		new SpriteRenderable(Resources.region("player"))
+		.addShadow(render.group, Resources.atlas())
 		.setProvider(SortProviders.object)
 		.add("player", render.group);
 		
-		new TextRenderable(Resources.getFont(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
+		new TextRenderable(Resources.font(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
 		.center()
 		.setColor(Color.CORAL)
 		.setProvider(SortProviders.object)

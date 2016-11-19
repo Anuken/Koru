@@ -4,21 +4,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Json;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Renderer;
 
 public class Resources{
 	private static Json json;
 	
-	public static AtlasRegion findRegion(String name){
-		return Renderer.i.atlas.findRegion(name);
+	public static AtlasRegion region(String name){
+		return Koru.module(Renderer.class).atlas.findRegion(name);
 	}
 	
-	public static RepackableAtlas getAtlas(){
-		return Renderer.i.atlas;
+	public static RepackableAtlas atlas(){
+		return Koru.module(Renderer.class).atlas;
 	}
 	
-	public static BitmapFont getFont(){
-		return Renderer.i.font;
+	public static BitmapFont font(){
+		return Koru.module(Renderer.class).font;
 	}
 	
 	public static Json getJson(){

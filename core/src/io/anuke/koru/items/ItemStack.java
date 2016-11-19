@@ -9,6 +9,10 @@ public class ItemStack implements Cloneable{
 		this.amount = amount;
 	}
 	
+	public ItemStack(Item item){
+		this(item, 1);
+	}
+	
 	public ItemStack(ItemStack stack){
 		this(stack.item, stack.amount);
 	}

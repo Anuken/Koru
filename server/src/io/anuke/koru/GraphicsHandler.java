@@ -32,7 +32,7 @@ import io.anuke.koru.network.packets.BitmapDataPacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.MaterialType;
-import io.anuke.ucore.util.UCore;
+import io.anuke.ucore.UCore;
 
 public class GraphicsHandler extends ApplicationAdapter{
 	private static int nextBitmapID;
