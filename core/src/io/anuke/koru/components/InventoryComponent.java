@@ -1,14 +1,15 @@
 package io.anuke.koru.components;
 
-import io.anuke.koru.items.Item;
-import io.anuke.koru.items.ItemStack;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import io.anuke.koru.items.Item;
+import io.anuke.koru.items.ItemStack;
+
 public class InventoryComponent implements Component{
-	private static ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
+	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
 	public ItemStack[][] inventory;
+	public ItemStack selected;
 
 	public InventoryComponent(int width, int height){
 		inventory = new ItemStack[width][height];
@@ -17,6 +18,32 @@ public class InventoryComponent implements Component{
 	@SuppressWarnings("unused")
 	private InventoryComponent(){}
 	
+	public void clickSlot(int x, int y){
+		ItemStack stack = inventory[x][y];
+		if(selected == null){
+			if(stack != null){
+				inventory[x][y] = null;
+				selected = stack;
+			}
+		}else{
+			if(stack != null){
+				inventory[x][y] = selected;
+				selected = stack;
+			}else{
+				inventory[x][y] = selected;
+				selected = null;
+			}
+		}
+	}
+	
+	public void set(ItemStack[][] stacks, ItemStack selected){
+		this.selected = selected;
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				inventory[x][y] = stacks[x][y];
+			}
+		}
+	}
 
 	public void addItems(Iterable<ItemStack> items){
 		for(ItemStack item : items)

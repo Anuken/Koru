@@ -18,6 +18,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
+import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.generation.GeneratedMaterial;
@@ -32,6 +33,8 @@ import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.InventoryClickPacket;
+import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
@@ -162,6 +165,16 @@ public class KoruServer extends IServer{
 				BlockInputPacket packet = (BlockInputPacket)object;
 				updater.world.tile(packet.x, packet.y).setMaterial(packet.material);
 				updater.world.updateTile(packet.x, packet.y);
+			}else if(object instanceof InventoryClickPacket){
+				InventoryClickPacket packet = (InventoryClickPacket)object;
+				InventoryComponent inv = getPlayer(info).getComponent(InventoryComponent.class);
+				inv.clickSlot(packet.x, packet.y);
+				
+				Koru.log("recieved inventory click packet");
+				InventoryUpdatePacket update = new InventoryUpdatePacket();
+				update.selected = inv.selected;
+				update.stacks = inv.inventory;
+				send(info, update, false);
 			}else if(object instanceof MaterialRequestPacket){
 				MaterialRequestPacket packet = (MaterialRequestPacket)object;
 				Material mat = MaterialManager.instance().getMaterial(packet.id);

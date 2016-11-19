@@ -46,6 +46,8 @@ import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.InventoryClickPacket;
+import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
@@ -80,6 +82,8 @@ public class Registrator{
 		k.register(BitmapDataPacket.Header.class);
 		k.register(GeneratedMaterialPacket.class);
 		k.register(MaterialRequestPacket.class);
+		k.register(InventoryUpdatePacket.class);
+		k.register(InventoryClickPacket.class);
 
 
 		k.register(EntityType.class);

@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.SyncComponent;
 import io.anuke.koru.entities.KoruEntity;
@@ -21,6 +22,7 @@ import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
+import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
@@ -117,6 +119,9 @@ public class Network extends Module<Koru>{
 				}else if(object instanceof KoruEntity){
 					KoruEntity entity = (KoruEntity) object;
 					entityQueue.add(entity);
+				}else if(object instanceof InventoryUpdatePacket){
+					InventoryUpdatePacket packet = (InventoryUpdatePacket) object;
+					getModule(ClientData.class).player.getComponent(InventoryComponent.class).set(packet.stacks, packet.selected);
 				}else if(object instanceof BitmapDataPacket.Header){
 					BitmapDataPacket.Header packet = (BitmapDataPacket.Header) object;
 					Koru.log("Recieved bitmap header: " + packet.id + " [" + packet.width + "x" + packet.height + "]");
