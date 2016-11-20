@@ -17,6 +17,8 @@ public interface Material{
 	
 	public MaterialType getType();
 	
+	public default float offset(){return 0;}
+	
 	public default void harvestEvent(Tile tile){}
 	
 	public default void changeEvent(Tile tile){}

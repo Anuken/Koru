@@ -10,7 +10,7 @@ import io.anuke.ucore.graphics.Hue;
 
 public enum Materials implements Material{
 	air, 
-	grass(Hue.rgb(69, 109, 29,0.04f)),
+	grass(Hue.rgb(69, 109, 29,0.07f)),
 	darkgrass(new Color(0x40681aff)),
 	blackrock,
 	magmarock,
@@ -31,9 +31,9 @@ public enum Materials implements Material{
 	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
 	grassblock(MaterialType.tallgrassblock),
 	shortgrassblock(MaterialType.shortgrassblock),
-	tallgrass1(MaterialType.grass),
-	tallgrass2(MaterialType.grass),
-	tallgrass3(MaterialType.grass),
+	tallgrass1(MaterialType.grass, -10f),
+	tallgrass2(MaterialType.grass, -10f),
+	tallgrass3(MaterialType.grass, -10f),
 	wheatgrass1(MaterialType.grass),
 	wheatgrass2(MaterialType.grass),
 	wheatgrass3(MaterialType.grass),
@@ -71,12 +71,12 @@ public enum Materials implements Material{
 	deadtree2(MaterialType.tree),
 	deadtree3(MaterialType.tree),
 	deadtree4(MaterialType.tree),
-	oaktree1(MaterialType.tree),
-	oaktree2(MaterialType.tree),
-	oaktree3(MaterialType.tree),
-	oaktree4(MaterialType.tree),
-	oaktree5(MaterialType.tree),
-	oaktree6(MaterialType.tree),
+	oaktree1(MaterialType.tree, -10f),
+	oaktree2(MaterialType.tree, -10f),
+	oaktree3(MaterialType.tree, -10f),
+	oaktree4(MaterialType.tree, -4f),
+	oaktree5(MaterialType.tree, -4f),
+	oaktree6(MaterialType.tree, -4f),
 	willowtree1(MaterialType.tree),
 	willowtree2(MaterialType.tree),
 	willowtree3(MaterialType.tree),
@@ -85,10 +85,10 @@ public enum Materials implements Material{
 	burnedtree2(MaterialType.tree),
 	burnedtree3(MaterialType.tree),
 	burnedtree4(MaterialType.tree),
-	pinetree1(MaterialType.tree, 1){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
-	pinetree2(MaterialType.tree, 1){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree3(MaterialType.tree, 1){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree4(MaterialType.tree, 1){{addDrop(Item.wood, 5);}}, 
+	pinetree1(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
+	pinetree2(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
+	pinetree3(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
+	pinetree4(MaterialType.tree, -5f){{addDrop(Item.wood, 5);}}, 
 	pinesapling(MaterialType.tree, 1, false){
 		{addDrop(Item.pinecone, 1);}
 		
@@ -127,6 +127,7 @@ public enum Materials implements Material{
 	private boolean enablecollisions = true;
 	private Array<ItemStack> drops = new Array<ItemStack>();
 	private Color color = Color.CLEAR;
+	private float offset = 0;
 	
 	private Materials(){}
 	
@@ -153,6 +154,11 @@ public enum Materials implements Material{
 	private Materials(MaterialType type, Color foilageColor){
 		this.type = type;
 		this.foilageColor = foilageColor;
+	}
+	
+	private Materials(MaterialType type, float offset){
+		this.type = type;
+		this.offset = offset;
 	}
 	
 	private Materials(Color foilageColor){
@@ -238,6 +244,10 @@ public enum Materials implements Material{
 	
 	public boolean solid(){
 		return type.solid() && collisionsEnabled();
+	}
+	
+	public float offset(){
+		return offset;
 	}
 	
 	public static Material random(Material... materials){

@@ -110,10 +110,8 @@ public enum MaterialType{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 
 			SpriteRenderable sprite = (SpriteRenderable) new SpriteRenderable(Resources.region(material.name()))
-					.setPosition(tile(x), tile(y)).centerX().addShadow(group, Resources.atlas())
+					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())
 					.setProvider(SortProviders.object);
-
-			sprite.setLayer(sprite.sprite.getY());
 
 			sprite.add(group);
 
@@ -135,9 +133,9 @@ public enum MaterialType{
 	},
 	grass(Hue.rgb(69, 109, 29, 0.02f)){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
-			new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y)).centerX()
-					.setColor(tile.tile().foilageColor()).addShadow(group, Resources.atlas())
+			
+			new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
+					.setColor(tile.tile().foilageColor()).addShadow(group, Resources.atlas(), - material.offset())
 					.setProvider(SortProviders.object).add(group);
 		}
 
