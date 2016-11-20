@@ -30,8 +30,7 @@ public class MapPreview extends ApplicationAdapter{
 	float scl = 0.1f;
 	float vx, vy;
 	float speed = 32;
-	int pixsize = 128
-			;
+	int pixsize = 128;
 	int percision = 16;
 	static double maxe;
 	static double maxt;

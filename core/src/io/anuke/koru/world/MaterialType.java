@@ -1,5 +1,7 @@
 package io.anuke.koru.world;
 
+import static io.anuke.koru.world.World.tilesize;
+
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -40,14 +42,11 @@ public enum MaterialType{
 			new SpriteRenderable(Resources.region("riverrock")).setPosition(x * World.tilesize, y * World.tilesize)
 					.setLayer(2).add(group);
 
-			new SpriteRenderable(Resources.region("water")){
+			new SpriteRenderable(Resources.region(material.name())){
 				public void draw(Batch batch){
 					float noise = (float) Noise.normalNoise((int) (x + Gdx.graphics.getFrameId() / tscl),
 							(int) (y + Gdx.graphics.getFrameId() / tscl), 10f, s);
-					setColor(
-							material == Materials.deepwater ? 
-									new Color(0.92f - s + noise, 0.92f - s + noise, 0.92f - s + noise, 0.93f) :
-									new Color(1f - s + noise, 1f - s + noise, 1f - s + noise, 0.85f));
+					setColor(new Color(1f - s + noise, 1f - s + noise, 1f - s + noise, material == Materials.deepwater ? 0.93f : 0.85f));
 					super.draw(batch);
 				}
 			}.setPosition(x * World.tilesize, y * World.tilesize).setLayer(1).setColor(
@@ -175,13 +174,13 @@ public enum MaterialType{
 				float add = i == 1 ? add2 : 0;
 				a.sprite.setColor(82 / 255f + add, 127 / 255f + add, 38 / 255f + add, 1f);
 
-				a.setPosition(x * 12, y * 12 + i * 6 + yadd);
+				a.setPosition(itile(x), tile(y) + yadd);
 				group.add(a);
 			}
 
 			if(!isGrass(x, y - 1) || (!isGrass(x+1, y - 1) || !isGrass(x-1, y - 1))){
 				SpriteRenderable sh = new SpriteRenderable(Resources.region(name + blendn)).setAsShadow()
-						.setPosition(x * 12, y * 12 - 19 + yadd);
+						.setPosition(itile(x), tile(y) - 19 + yadd);
 				sh.sprite.setFlip(false, true);
 				sh.add(group);
 			}
@@ -205,7 +204,7 @@ public enum MaterialType{
 			if(!isGrass(x, y - 1)){
 				xadd = 2;
 			}
-			int rand = (Math.abs((int) (x % 10 + y % 20 + Math.sin(x) * 3 + Math.sin(y) + Math.tan(x) * 4)));
+			int rand = (Math.abs((int) (x % 10 + y % 20 + MathUtils.sin(x) * 3 + MathUtils.sin(y) + (MathUtils.sin(x)/ MathUtils.cos(x)) * 4)));
 			int iter = 6;
 
 			for(int i = 0; i < iter; i++){
@@ -217,13 +216,13 @@ public enum MaterialType{
 				if(i % 2 == 0)
 					a.setColor(a.sprite.getColor().add(add, add, add, 0f));
 				
-				a.setPosition(x * 12, y * 12 + i * (12 / iter) + xadd);
+				a.setPosition(itile(x), itile(y) + i * (tilesize / iter) + xadd);
 				a.add(group);
 			}
 
 			if(!isGrass(x, y - 1)){
 				SpriteRenderable sh = new SpriteRenderable(Resources.region("grassf1")).setAsShadow();
-				sh.setPosition(x * 12, y * 12 - 19 + xadd);
+				sh.setPosition(itile(x), itile(y) - 19 + xadd);
 				sh.sprite.setFlip(false, true);
 				sh.add(group);
 			}
@@ -268,7 +267,7 @@ public enum MaterialType{
 	}
 
 	public Rectangle getRect(int x, int y, Rectangle rectangle){
-		return rectangle.set(x * World.tilesize, y * World.tilesize, World.tilesize, World.tilesize);
+		return rectangle.set(x * tilesize, y * tilesize, tilesize, tilesize);
 	}
 
 	public boolean tile(){
@@ -280,7 +279,11 @@ public enum MaterialType{
 	}
 
 	int tile(int i){
-		return i * World.tilesize + World.tilesize / 2;
+		return i * tilesize + tilesize / 2;
+	}
+	
+	int itile(int i){
+		return i*tilesize;
 	}
 	
 	public int size(){

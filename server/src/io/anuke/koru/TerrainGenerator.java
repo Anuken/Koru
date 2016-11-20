@@ -34,7 +34,12 @@ public class TerrainGenerator implements Generator{
 		float t = getTemperature(x, y);
 		
 		if(riv > 0.23f){
-			tile.setMaterial(Materials.riveredge);
+			//no river edges in lakes
+			if(se > 0.063f){
+				tile.setMaterial(Materials.riveredge);
+			}else{
+				tile.setMaterial(Materials.water);
+			}
 			if(riv > 0.236) tile.setMaterial(Materials.water);
 			if(riv > 0.244) tile.setMaterial(Materials.deepwater);
 			
@@ -129,6 +134,7 @@ public class TerrainGenerator implements Generator{
 			}
 			if(se < 0.063f){ 
 				tile.setMaterial(Materials.water);
+				if(se < 0.054) tile.setMaterial(Materials.deepwater);
 			}else if(se < 0.066){
 				tile.setMaterial(Materials.riveredge);
 				if(Math.random() < 0.01) tile.setMaterial(Materials.next(Materials.rock1, 4));

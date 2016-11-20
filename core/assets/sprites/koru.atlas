@@ -1508,13 +1508,6 @@ tiles/deepwater
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/water
-  rotate: false
-  xy: 97, 176
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
 tiles/woodfloor
   rotate: false
   xy: 1, 57
@@ -1571,65 +1564,72 @@ tiles/grass
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/swampgrass
+tiles/water
   rotate: false
   xy: 1, 29
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/magmarock
+tiles/swampgrass
   rotate: false
   xy: 263, 293
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/riveredge
+tiles/magmarock
   rotate: false
   xy: 383, 438
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/darkgrass
+tiles/riveredge
   rotate: false
   xy: 139, 176
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/riverrock
+tiles/darkgrass
   rotate: false
   xy: 1, 15
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/burntgrass
+tiles/riverrock
   rotate: false
   xy: 263, 279
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/bluegrass
+tiles/burntgrass
   rotate: false
   xy: 397, 438
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/gravel
+tiles/bluegrass
   rotate: false
   xy: 153, 176
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-tiles/stone
+tiles/gravel
   rotate: false
   xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+tiles/stone
+  rotate: false
+  xy: 263, 265
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
