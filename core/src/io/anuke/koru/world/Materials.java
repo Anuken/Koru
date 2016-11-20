@@ -86,7 +86,7 @@ public enum Materials implements Material{
 	burnedtree3(MaterialType.tree),
 	burnedtree4(MaterialType.tree),
 	pinetree1(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
-	pinetree2(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
+	pinetree2(MaterialType.tree, -3f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
 	pinetree3(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
 	pinetree4(MaterialType.tree, -5f){{addDrop(Item.wood, 5);}}, 
 	pinesapling(MaterialType.tree, 1, false){

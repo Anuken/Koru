@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.utils.Resources;
@@ -23,9 +24,9 @@ public enum MaterialType{
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 
-			new SpriteRenderable(Resources.region(material.name()))
+			new SpriteRenderable(Resources.region(
+					material != Materials.grass ? material.name() : (material.name() + (Math.random() < 0.5 ?rand(x,y,8) : ""))))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
-
 			if(Koru.module(World.class).blends(x, y, material))
 				new SpriteRenderable(Resources.region(material.name() + "edge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
@@ -133,9 +134,9 @@ public enum MaterialType{
 	grass(Hue.rgb(69, 109, 29, 0.02f)){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
-			new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
-					.setColor(tile.tile().foilageColor()).addShadow(group, Resources.atlas(), - material.offset())
-					.setProvider(SortProviders.object).add(group);
+		//	new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
+		//			.setColor(tile.tile().foilageColor()).addShadow(group, Resources.atlas(), - material.offset())
+		//			.setProvider(SortProviders.object).add(group);
 		}
 
 		public boolean tile(){
@@ -288,6 +289,12 @@ public enum MaterialType{
 	
 	public int size(){
 		return 80;
+	}
+	
+	int rand(int x, int y, int scl){
+		int i =(int)((MathUtils.sin(Vector2.dot(x, y, 12.9898f,78.233f))%1f) * 43758.5453f);
+		MathUtils.random.setSeed(i);
+	    return MathUtils.random(1, scl);
 	}
 
 	int blendStage(int x, int y){
