@@ -10,17 +10,17 @@ import io.anuke.ucore.graphics.Hue;
 
 public enum Materials implements Material{
 	air, 
-	grass(Hue.rgb(69, 109, 29,0.07f)),
-	darkgrass(new Color(0x40681aff)),
+	grass(MaterialType.grass, Hue.lightness(1f)),
+	darkgrass(MaterialType.grass, color(0.8f,0.92f,0.86f)),
+	swampgrass(MaterialType.grass),
+	burntgrass(MaterialType.grass, color(1.3f,1.1f,0.98f)),
+	burntgrass2(MaterialType.grass, color(1.5f,1.3f,0.94f)),
+	bluegrass(MaterialType.grass),
 	blackrock,
 	magmarock,
 	cobblestone,
-	burntgrass(new Color(0x799126ff)),
-	burntgrass2(new Color(0x938725ff)),
-	swampgrass,
 	sand,
 	gravel,
-	bluegrass,
 	ice,
 	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
 	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
@@ -31,18 +31,18 @@ public enum Materials implements Material{
 	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
 	grassblock(MaterialType.tallgrassblock),
 	shortgrassblock(MaterialType.shortgrassblock),
-	tallgrass1(MaterialType.grass, -10f),
-	tallgrass2(MaterialType.grass, -10f),
-	tallgrass3(MaterialType.grass, -10f),
-	wheatgrass1(MaterialType.grass),
-	wheatgrass2(MaterialType.grass),
-	wheatgrass3(MaterialType.grass),
-	fern1(MaterialType.grass),
-	fern2(MaterialType.grass),
-	fern3(MaterialType.grass),
-	koru1(MaterialType.grass),
-	koru2(MaterialType.grass),
-	koru3(MaterialType.grass),
+	tallgrass1(MaterialType.foilage, -10f),
+	tallgrass2(MaterialType.foilage, -10f),
+	tallgrass3(MaterialType.foilage, -10f),
+	wheatgrass1(MaterialType.foilage),
+	wheatgrass2(MaterialType.foilage),
+	wheatgrass3(MaterialType.foilage),
+	fern1(MaterialType.foilage),
+	fern2(MaterialType.foilage),
+	fern3(MaterialType.foilage),
+	koru1(MaterialType.foilage),
+	koru2(MaterialType.foilage),
+	koru3(MaterialType.foilage),
 	bush1(MaterialType.object),
 	bush2(MaterialType.object),
 	bush3(MaterialType.object),
@@ -219,6 +219,15 @@ public enum Materials implements Material{
 	
 	public Color getColor(){
 		if(type.getColor() != null) return type.getColor();
+		return color;
+	}
+	
+	public static Color color(float r, float g, float b){
+		Color color = new Color();
+		color.r = r;
+		color.g = g;
+		color.b = b;
+		color.a = 1f;
 		return color;
 	}
 	

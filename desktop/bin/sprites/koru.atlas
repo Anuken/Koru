@@ -5,770 +5,770 @@ filter: Nearest,Nearest
 repeat: none
 objects/oaktree3
   rotate: false
-  xy: 1, 124
-  size: 102, 130
-  orig: 102, 130
-  offset: 0, 0
-  index: -1
-objects/oaktree2
-  rotate: false
-  xy: 1, 124
+  xy: 1, 120
   size: 102, 130
   orig: 102, 130
   offset: 0, 0
   index: -1
 objects/oaktree1
   rotate: false
-  xy: 105, 124
+  xy: 1, 120
   size: 102, 130
   orig: 102, 130
   offset: 0, 0
   index: -1
 objects/oaktree6
   rotate: false
-  xy: 1, 9
+  xy: 105, 137
   size: 113, 113
   orig: 113, 113
   offset: 0, 0
   index: -1
 objects/oaktree4
   rotate: false
-  xy: 1, 9
+  xy: 105, 137
   size: 113, 113
   orig: 113, 113
   offset: 0, 0
   index: -1
 objects/oaktree5
   rotate: false
-  xy: 1, 9
+  xy: 105, 137
   size: 113, 113
   orig: 113, 113
   offset: 0, 0
   index: -1
+objects/oaktree2
+  rotate: false
+  xy: 1, 27
+  size: 71, 91
+  orig: 71, 91
+  offset: 0, 0
+  index: -1
 objects/pinetree4
   rotate: false
-  xy: 209, 158
+  xy: 220, 154
   size: 65, 96
   orig: 65, 96
   offset: 0, 0
   index: -1
 objects/pinetree1
   rotate: false
-  xy: 209, 158
+  xy: 220, 154
   size: 65, 96
   orig: 65, 96
   offset: 0, 0
   index: -1
 objects/pinetree2
   rotate: false
-  xy: 116, 45
+  xy: 287, 173
   size: 52, 77
   orig: 52, 77
   offset: 0, 0
   index: -1
 objects/willowtree2
   rotate: false
-  xy: 276, 198
+  xy: 341, 194
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 objects/willowtree4
   rotate: false
-  xy: 334, 200
+  xy: 399, 196
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
-objects/pinetree3
-  rotate: false
-  xy: 170, 60
-  size: 42, 62
-  orig: 42, 62
-  offset: 0, 0
-  index: -1
 objects/burnedtree2
   rotate: false
-  xy: 390, 206
+  xy: 455, 202
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
+objects/pinetree3
+  rotate: false
+  xy: 74, 56
+  size: 42, 62
+  orig: 42, 62
+  offset: 0, 0
+  index: -1
 objects/oaktree1_old
   rotate: false
-  xy: 440, 206
+  xy: 118, 87
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 objects/icytree2
   rotate: false
-  xy: 276, 148
+  xy: 168, 87
   size: 48, 48
   orig: 48, 48
-  offset: 0, 0
-  index: -1
-objects/icytree3
-  rotate: false
-  xy: 209, 124
-  size: 32, 32
-  orig: 32, 32
   offset: 0, 0
   index: -1
 objects/icetree2
   rotate: false
-  xy: 214, 74
+  xy: 118, 37
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-objects/deadtree3
-  rotate: false
-  xy: 116, 11
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 objects/deadtree1
   rotate: false
-  xy: 214, 24
+  xy: 168, 37
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 objects/burnedtree1
   rotate: false
-  xy: 264, 98
+  xy: 341, 144
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 objects/willowtree3
   rotate: false
-  xy: 264, 48
+  xy: 287, 123
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 objects/deadtree2
   rotate: false
-  xy: 314, 98
+  xy: 337, 94
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 objects/willowtree1
   rotate: false
-  xy: 314, 48
+  xy: 220, 104
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 objects/icytree1
   rotate: false
-  xy: 326, 148
+  xy: 218, 54
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-objects/burnedtree4
+objects/icytree3
   rotate: false
-  xy: 264, 14
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-objects/deadtree4
-  rotate: false
-  xy: 298, 14
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-objects/icytree4
-  rotate: false
-  xy: 332, 14
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-objects/burnedtree3
-  rotate: false
-  xy: 150, 11
+  xy: 74, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 objects/pinetree2roots
   rotate: false
-  xy: 170, 50
+  xy: 218, 44
   size: 40, 8
   orig: 40, 8
   offset: 0, 0
   index: -1
-objects/tallgrass2
-  rotate: false
-  xy: 243, 138
-  size: 19, 18
-  orig: 19, 18
-  offset: 0, 0
-  index: -1
-objects/tallgrass1
-  rotate: false
-  xy: 243, 138
-  size: 19, 18
-  orig: 19, 18
-  offset: 0, 0
-  index: -1
-objects/tallgrass3
-  rotate: false
-  xy: 243, 138
-  size: 19, 18
-  orig: 19, 18
-  offset: 0, 0
-  index: -1
-objects/tallgrass
-  rotate: false
-  xy: 243, 138
-  size: 19, 18
-  orig: 19, 18
-  offset: 0, 0
-  index: -1
 objects/bush2
   rotate: false
-  xy: 490, 234
+  xy: 1, 5
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 objects/bush3
   rotate: false
-  xy: 490, 212
+  xy: 23, 5
   size: 20, 20
   orig: 20, 20
-  offset: 0, 0
-  index: -1
-objects/hatcher-0
-  rotate: false
-  xy: 243, 124
-  size: 12, 12
-  orig: 12, 12
   offset: 0, 0
   index: -1
 objects/drybush3
   rotate: false
-  xy: 184, 28
+  xy: 45, 5
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
+objects/deadtree3
+  rotate: false
+  xy: 391, 160
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+objects/burnedtree4
+  rotate: false
+  xy: 425, 162
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+objects/deadtree4
+  rotate: false
+  xy: 459, 168
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+objects/icytree4
+  rotate: false
+  xy: 391, 126
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+objects/burnedtree3
+  rotate: false
+  xy: 425, 128
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 objects/drybush2
   rotate: false
-  xy: 184, 6
+  xy: 459, 146
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 objects/bush1
   rotate: false
-  xy: 376, 178
+  xy: 387, 104
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 objects/drybush1
   rotate: false
-  xy: 376, 156
+  xy: 459, 124
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
+objects/tallgrass2
+  rotate: false
+  xy: 409, 106
+  size: 19, 18
+  orig: 19, 18
+  offset: 0, 0
+  index: -1
+objects/tallgrass1
+  rotate: false
+  xy: 409, 106
+  size: 19, 18
+  orig: 19, 18
+  offset: 0, 0
+  index: -1
+objects/tallgrass3
+  rotate: false
+  xy: 409, 106
+  size: 19, 18
+  orig: 19, 18
+  offset: 0, 0
+  index: -1
+objects/tallgrass
+  rotate: false
+  xy: 409, 106
+  size: 19, 18
+  orig: 19, 18
+  offset: 0, 0
+  index: -1
 objects/shortgrassblock1edge
   rotate: false
-  xy: 364, 127
+  xy: 270, 133
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/shortgrassblock2edge
   rotate: false
-  xy: 364, 106
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock2right
-  rotate: false
-  xy: 364, 85
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock3right
-  rotate: false
-  xy: 364, 64
+  xy: 270, 112
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/fern3
   rotate: false
-  xy: 398, 188
+  xy: 430, 110
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
+objects/grassblock2right
+  rotate: false
+  xy: 493, 181
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblock3right
+  rotate: false
+  xy: 481, 147
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock1
+  rotate: false
+  xy: 481, 126
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
 objects/koru1
   rotate: false
-  xy: 398, 170
+  xy: 495, 163
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/koru2
   rotate: false
-  xy: 416, 188
+  xy: 495, 145
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern1
   rotate: false
-  xy: 416, 170
+  xy: 495, 127
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern2
   rotate: false
-  xy: 434, 188
+  xy: 495, 109
   size: 16, 16
   orig: 16, 16
-  offset: 0, 0
-  index: -1
-objects/koru3
-  rotate: false
-  xy: 434, 170
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock1
-  rotate: false
-  xy: 452, 185
-  size: 12, 19
-  orig: 12, 19
   offset: 0, 0
   index: -1
 objects/shortgrassblockright
   rotate: false
-  xy: 466, 185
+  xy: 481, 105
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/shortgrassblock2right
   rotate: false
-  xy: 466, 185
+  xy: 481, 105
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
-objects/grassf3
+objects/koru3
   rotate: false
-  xy: 480, 185
-  size: 12, 19
-  orig: 12, 19
+  xy: 495, 91
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: -1
 objects/pinesapling
   rotate: false
-  xy: 264, 148
+  xy: 108, 46
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
+objects/wheatgrass2
+  rotate: false
+  xy: 387, 94
+  size: 14, 8
+  orig: 14, 8
+  offset: 0, 0
+  index: -1
+objects/grassf3
+  rotate: false
+  xy: 67, 1
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
 objects/boxopen
   rotate: false
-  xy: 452, 164
+  xy: 81, 1
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblock3edge
   rotate: false
-  xy: 466, 164
+  xy: 95, 1
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/shortgrassblock2left
   rotate: false
-  xy: 480, 164
+  xy: 268, 83
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblockright
   rotate: false
-  xy: 494, 191
+  xy: 268, 62
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblockedgeside
   rotate: false
-  xy: 494, 191
+  xy: 268, 62
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblockedgel
   rotate: false
-  xy: 494, 191
+  xy: 268, 62
   size: 12, 19
   orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock2left
-  rotate: false
-  xy: 494, 170
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/rock4
-  rotate: false
-  xy: 364, 50
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock3left
-  rotate: false
-  xy: 366, 29
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock3edge
-  rotate: false
-  xy: 366, 8
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/cattails2
-  rotate: false
-  xy: 398, 156
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/blackrock4
-  rotate: false
-  xy: 412, 156
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/pinecones
-  rotate: false
-  xy: 426, 156
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/grassblock
-  rotate: false
-  xy: 378, 135
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/box
-  rotate: false
-  xy: 378, 114
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock3right
-  rotate: false
-  xy: 392, 135
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock3
-  rotate: false
-  xy: 378, 93
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock3
-  rotate: false
-  xy: 392, 114
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock3left
-  rotate: false
-  xy: 406, 135
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblockedge
-  rotate: false
-  xy: 378, 72
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblockleft
-  rotate: false
-  xy: 392, 93
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock1left
-  rotate: false
-  xy: 406, 114
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassf2
-  rotate: false
-  xy: 420, 135
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock2
-  rotate: false
-  xy: 378, 51
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock2
-  rotate: false
-  xy: 392, 72
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/shortgrassblock1right
-  rotate: false
-  xy: 406, 93
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassblock2edge
-  rotate: false
-  xy: 420, 114
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grasswall
-  rotate: false
-  xy: 392, 51
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassf4
-  rotate: false
-  xy: 406, 72
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/grassf1
-  rotate: false
-  xy: 420, 93
-  size: 12, 19
-  orig: 12, 19
-  offset: 0, 0
-  index: -1
-objects/mossyrock1
-  rotate: false
-  xy: 406, 58
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-4
-  rotate: false
-  xy: 420, 79
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher
-  rotate: false
-  xy: 420, 79
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-2
-  rotate: false
-  xy: 420, 65
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-3
-  rotate: false
-  xy: 380, 37
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-1
-  rotate: false
-  xy: 380, 23
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/cattails1
-  rotate: false
-  xy: 380, 9
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/mossyrock2
-  rotate: false
-  xy: 394, 41
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/blackrock3
-  rotate: false
-  xy: 394, 31
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy6
-  rotate: false
-  xy: 394, 21
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/rock2
-  rotate: false
-  xy: 394, 11
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy1
-  rotate: false
-  xy: 420, 55
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/blackrock2
-  rotate: false
-  xy: 494, 160
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/wheatgrass2
-  rotate: false
-  xy: 116, 1
-  size: 14, 8
-  orig: 14, 8
   offset: 0, 0
   index: -1
 objects/wheatgrass1
   rotate: false
-  xy: 132, 1
+  xy: 218, 34
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
   index: -1
 objects/wheatgrass3
   rotate: false
-  xy: 148, 1
+  xy: 234, 34
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
   index: -1
+objects/mossyrock2
+  rotate: false
+  xy: 268, 52
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/hatcher-0
+  rotate: false
+  xy: 284, 109
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/rock4
+  rotate: false
+  xy: 298, 109
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/cattails2
+  rotate: false
+  xy: 312, 109
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/grassblock2left
+  rotate: false
+  xy: 282, 88
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock3left
+  rotate: false
+  xy: 282, 67
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock3edge
+  rotate: false
+  xy: 296, 88
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblock
+  rotate: false
+  xy: 296, 67
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/box
+  rotate: false
+  xy: 310, 88
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock3right
+  rotate: false
+  xy: 310, 67
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock3
+  rotate: false
+  xy: 282, 46
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblock3
+  rotate: false
+  xy: 296, 46
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblock3left
+  rotate: false
+  xy: 310, 46
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblockedge
+  rotate: false
+  xy: 324, 73
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblockleft
+  rotate: false
+  xy: 324, 52
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock1left
+  rotate: false
+  xy: 338, 73
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassf2
+  rotate: false
+  xy: 338, 52
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock2
+  rotate: false
+  xy: 352, 73
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblock2
+  rotate: false
+  xy: 352, 52
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/shortgrassblock1right
+  rotate: false
+  xy: 366, 73
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassblock2edge
+  rotate: false
+  xy: 366, 52
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grasswall
+  rotate: false
+  xy: 380, 73
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassf4
+  rotate: false
+  xy: 380, 52
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/grassf1
+  rotate: false
+  xy: 394, 73
+  size: 12, 19
+  orig: 12, 19
+  offset: 0, 0
+  index: -1
+objects/blackrock4
+  rotate: false
+  xy: 394, 59
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/blackrock3
+  rotate: false
+  xy: 403, 94
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/pinecones
+  rotate: false
+  xy: 417, 92
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/mossyrock1
+  rotate: false
+  xy: 431, 96
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/mushy6
+  rotate: false
+  xy: 394, 49
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/rock2
+  rotate: false
+  xy: 250, 34
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy1
+  rotate: false
+  xy: 324, 42
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/blackrock2
+  rotate: false
+  xy: 338, 42
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
 objects/mushy4
   rotate: false
-  xy: 164, 1
+  xy: 352, 42
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/rock3
   rotate: false
-  xy: 206, 14
+  xy: 366, 42
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy5
   rotate: false
-  xy: 220, 14
+  xy: 380, 42
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
+objects/hatcher-4
+  rotate: false
+  xy: 394, 35
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher
+  rotate: false
+  xy: 394, 35
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-2
+  rotate: false
+  xy: 408, 78
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-3
+  rotate: false
+  xy: 408, 64
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/hatcher-1
+  rotate: false
+  xy: 408, 50
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/cattails1
+  rotate: false
+  xy: 408, 36
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 objects/mushy2
   rotate: false
-  xy: 234, 14
+  xy: 422, 82
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/rock1
   rotate: false
-  xy: 248, 14
+  xy: 422, 72
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/blackrock1
   rotate: false
-  xy: 206, 4
+  xy: 422, 62
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy7
   rotate: false
-  xy: 220, 4
+  xy: 422, 52
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy3
   rotate: false
-  xy: 234, 4
+  xy: 422, 42
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy8
   rotate: false
-  xy: 248, 4
+  xy: 422, 32
   size: 12, 8
   orig: 12, 8
   offset: 0, 0

@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.utils.Resources;
@@ -30,6 +29,26 @@ public enum MaterialType{
 			if(Koru.module(World.class).blends(x, y, material))
 				new SpriteRenderable(Resources.region(material.name() + "edge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.center().setLayer(-material.id() * 2 + 1).add(group);
+		}
+	},
+	grass{
+		Color grasscolor = new Color(0x62962fff);
+		
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			int rand = rand(x,y,16);
+			new SpriteRenderable(Resources.region("grass" + (rand <= 8 ? rand : "")))
+					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
+					.setColor(grasscolor.r * material.foilageColor().r,
+							  grasscolor.g * material.foilageColor().g,
+							  grasscolor.b * material.foilageColor().b).add(group);
+			
+			if(Koru.module(World.class).blends(x, y, material))
+				new SpriteRenderable(Resources.region("grassedge"))
+						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.setColor(grasscolor.r * material.foilageColor().r,
+								grasscolor.g * material.foilageColor().g,
+								grasscolor.b * material.foilageColor().b)
 						.center().setLayer(-material.id() * 2 + 1).add(group);
 		}
 	},
@@ -131,7 +150,7 @@ public enum MaterialType{
 			return rectangle.set(x * World.tilesize + width / 2, y * World.tilesize + 6 + height / 2, width, height);
 		}
 	},
-	grass(Hue.rgb(69, 109, 29, 0.02f)){
+	foilage(Hue.rgb(69, 109, 29, 0.02f)){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
 		//	new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
@@ -292,7 +311,7 @@ public enum MaterialType{
 	}
 	
 	int rand(int x, int y, int scl){
-		int i =(int)((MathUtils.sin(Vector2.dot(x, y, 12.9898f,78.233f))%1f) * 43758.5453f);
+		int i = (x+y*x);
 		MathUtils.random.setSeed(i);
 	    return MathUtils.random(1, scl);
 	}

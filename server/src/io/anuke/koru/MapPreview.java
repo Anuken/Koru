@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.IntIntMap;
 
 import io.anuke.koru.world.Material;
-import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.UCore;
@@ -45,7 +44,7 @@ public class MapPreview extends ApplicationAdapter{
 		Pixmap pixmap = atlas.getPixmapOf(atlas.findRegion("grass"));
 
 		for(Material material : Materials.values()){
-			if(material.getType() != MaterialType.tile && material.getType() != MaterialType.water)
+			if(!material.getType().tile())
 				continue;
 			AtlasRegion region = atlas.findRegion(material.name());
 			colors.put(material.id(), pixmap.getPixel(region.getRegionX(), region.getRegionY()));
