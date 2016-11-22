@@ -16,16 +16,16 @@ public enum Materials implements Material{
 	burntgrass(MaterialType.grass, color(1.3f,1.1f,0.98f)),
 	burntgrass2(MaterialType.grass, color(1.5f,1.3f,0.94f)),
 	bluegrass(MaterialType.grass),
+	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
+	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
 	blackrock,
 	magmarock,
 	cobblestone,
 	sand,
 	gravel,
-	ice,
-	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
-	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
+	ice{{vary(7);}},
 	riveredge,
-	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){{addDrop(Item.stone, 1);}}, 
+	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){{addDrop(Item.stone, 1); vary(7);}}, 
 	woodfloor{{addDrop(Item.wood, 2);}},
 	stonefloor{{addDrop(Item.stone, 2);}},
 	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
@@ -43,15 +43,15 @@ public enum Materials implements Material{
 	koru1(MaterialType.foilage),
 	koru2(MaterialType.foilage),
 	koru3(MaterialType.foilage),
-	bush1(MaterialType.object),
-	bush2(MaterialType.object),
-	bush3(MaterialType.object),
+	bush1(MaterialType.object, -1f),
+	bush2(MaterialType.object, -1f),
+	bush3(MaterialType.object, -1f),
 	mossyrock1(MaterialType.object),
 	mossyrock2(MaterialType.object),
-	rock1(MaterialType.object),
-	rock2(MaterialType.object),
-	rock3(MaterialType.object),
-	rock4(MaterialType.object),
+	rock1(MaterialType.object, -1f),
+	rock2(MaterialType.object, -1f),
+	rock3(MaterialType.object, -1f),
+	rock4(MaterialType.object, -2f),
 	blackrock1(MaterialType.object),
 	blackrock2(MaterialType.object),
 	blackrock3(MaterialType.object),
@@ -64,12 +64,12 @@ public enum Materials implements Material{
 	mushy6(MaterialType.object),
 	mushy7(MaterialType.object),
 	mushy8(MaterialType.object),
-	drybush1(MaterialType.object),
-	drybush2(MaterialType.object),
-	drybush3(MaterialType.object),
-	deadtree1(MaterialType.tree),
-	deadtree2(MaterialType.tree),
-	deadtree3(MaterialType.tree),
+	drybush1(MaterialType.object, -1f),
+	drybush2(MaterialType.object, -1f),
+	drybush3(MaterialType.object, -1f),
+	deadtree1(MaterialType.tree, -3f),
+	deadtree2(MaterialType.tree, -2f),
+	deadtree3(MaterialType.tree, -3f),
 	deadtree4(MaterialType.tree),
 	oaktree1(MaterialType.tree, -10f),
 	oaktree2(MaterialType.tree, -10f),
@@ -128,6 +128,7 @@ public enum Materials implements Material{
 	private Array<ItemStack> drops = new Array<ItemStack>();
 	private Color color = Color.CLEAR;
 	private float offset = 0;
+	private int variants = 1;
 	
 	private Materials(){}
 	
@@ -159,6 +160,10 @@ public enum Materials implements Material{
 	private Materials(MaterialType type, float offset){
 		this.type = type;
 		this.offset = offset;
+	}
+	
+	void vary(int i){
+		this.variants = i;
 	}
 	
 	private Materials(Color foilageColor){
@@ -257,6 +262,10 @@ public enum Materials implements Material{
 	
 	public float offset(){
 		return offset;
+	}
+	
+	public int variants(){
+		return variants;
 	}
 	
 	public static Material random(Material... materials){

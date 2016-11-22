@@ -4,16 +4,13 @@ import static io.anuke.koru.world.World.tilesize;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.spritesystem.RenderableList;
 import io.anuke.ucore.spritesystem.SortProviders;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
@@ -22,9 +19,12 @@ public enum MaterialType{
 	tile{
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
-			new SpriteRenderable(Resources.region(
-					material != Materials.grass ? material.name() : (material.name() + (Math.random() < 0.5 ?rand(x,y,8) : ""))))
+			int type = 0;
+			if(material.variants() > 1){
+				type = rand(x,y, material.variants());
+			}
+			
+			new SpriteRenderable(Resources.region(type == 0 ? material.name() : material.name() + type))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
 				new SpriteRenderable(Resources.region(material.name() + "edge"))
@@ -37,7 +37,7 @@ public enum MaterialType{
 		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
-			new SpriteRenderable(Resources.region("grass" + (rand <= 8 ? rand : "")))
+			new SpriteRenderable(Resources.region("grass" + (rand <= 8 ? rand : "1")))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
 					.setColor(grasscolor.r * material.foilageColor().r,
 							  grasscolor.g * material.foilageColor().g,
@@ -53,26 +53,18 @@ public enum MaterialType{
 		}
 	},
 	water{
-		final float tscl = 10f;
-		final float s = 0.2f;
-
-		public void draw(final RenderableList group, final Material material, final Tile tile, final int x,
-				final int y){
-
-			new SpriteRenderable(Resources.region("riverrock")).setPosition(x * World.tilesize, y * World.tilesize)
-					.setLayer(2).add(group);
-
-			new SpriteRenderable(Resources.region(material.name())){
-				public void draw(Batch batch){
-					float noise = (float) Noise.normalNoise((int) (x + Gdx.graphics.getFrameId() / tscl),
-							(int) (y + Gdx.graphics.getFrameId() / tscl), 10f, s);
-					setColor(new Color(1f - s + noise, 1f - s + noise, 1f - s + noise, material == Materials.deepwater ? 0.93f : 0.85f));
-					super.draw(batch);
-				}
-			}.setPosition(x * World.tilesize, y * World.tilesize).setLayer(1).setColor(
-					new Color(1, 1, 1, 0.3f))
-					.add(group);
-
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			int type = 0;
+			if(material.variants() > 1){
+				type = rand(x,y, material.variants());
+			}
+			
+			new SpriteRenderable(Resources.region(type == 0 ? material.name() : material.name() + type))
+					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
+			if(Koru.module(World.class).blends(x, y, material))
+				new SpriteRenderable(Resources.region(material.name() + "edge"))
+						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.center().setLayer(-material.id() * 2 + 1).add(group);
 		}
 
 		public boolean solid(){
@@ -259,8 +251,9 @@ public enum MaterialType{
 	object{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 
-			new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y)).centerX()
-					.addShadow(group, Resources.atlas()).setProvider(SortProviders.object).add(group);
+			new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
+			.setLayer(tile(y)).centerX()
+					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
 		}
 
 		public boolean tile(){

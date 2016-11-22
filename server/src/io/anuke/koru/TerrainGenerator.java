@@ -36,7 +36,7 @@ public class TerrainGenerator implements Generator{
 		if(riv > 0.23f){
 			//no river edges in lakes
 			if(se > 0.063f){
-				tile.setMaterial(Materials.riveredge);
+				tile.setMaterial(Materials.stone);
 			}else{
 				tile.setMaterial(Materials.water);
 			}
@@ -94,8 +94,8 @@ public class TerrainGenerator implements Generator{
 				}
 				if((e > 0.5f && Math.random() < clamp((e - 0.5f) * 3f) / 15f)){
 					tile.setMaterial(Materials.next(Materials.pinetree1, 4));
-					if(Math.random() < 0.02)
-						tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+					if(Math.random() < 0.04)
+						tile.setMaterial(Materials.next(Materials.rock1, 4));
 
 					if(Math.random() < 0.002)
 						tile.setBlockMaterial(Materials.pinesapling);
@@ -136,9 +136,9 @@ public class TerrainGenerator implements Generator{
 				tile.setMaterial(Materials.water);
 				if(se < 0.054) tile.setMaterial(Materials.deepwater);
 			}else if(se < 0.066){
-				tile.setMaterial(Materials.riveredge);
+				tile.setMaterial(Materials.stone);
 				if(Math.random() < 0.01) tile.setMaterial(Materials.next(Materials.rock1, 4));
-				if(Math.random() < 0.003) tile.setMaterial(Materials.next(Materials.mossyrock1, 2));
+				if(Math.random() < 0.005) tile.setMaterial(Materials.next(Materials.rock1, 4));
 			}else{
 				if(Math.random() < 0.1) tile.setMaterial(Materials.next(Materials.wheatgrass1, 3));
 				if(Math.random() < 0.1) tile.setMaterial(Materials.next(Materials.tallgrass1, 3));
