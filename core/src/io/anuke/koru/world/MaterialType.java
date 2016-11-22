@@ -2,8 +2,6 @@ package io.anuke.koru.world;
 
 import static io.anuke.koru.world.World.tilesize;
 
-import java.util.Random;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -155,13 +153,12 @@ public enum MaterialType{
 		}
 	},
 	tallgrassblock(){
-		static final float add2 = 0.01f;
-
+		static final float add2 = 0.04f;
+	
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
-			String name = material.name();
 			float yadd = 0;
 			int blend = blendStage(x, y);
+			
 			String blendn = "";
 			if(blend == 0)
 				blendn = "edge";
@@ -172,28 +169,22 @@ public enum MaterialType{
 			if(!isGrass(x, y - 1)){
 				yadd = 2;
 			}
-			
-			MathUtils.random.setSeed(x + y * x);
-			
-			int rand = MathUtils.random.nextInt(3) + 1;
+
 
 			for(int i = 0; i < 2; i++){
-				SpriteRenderable a = new SpriteRenderable(Resources.region(name + blendn));
+				SpriteRenderable a = new SpriteRenderable(Resources.region("grassblock2" + blendn));
 				a.setProvider(SortProviders.object);
-				if(i == 1)
-					a.setRegion(Resources.region("grassblock" + (rand != 1 ? rand : "") + blendn));
 				
 				float add = i == 1 ? add2 : 0;
-				a.sprite.setColor(82 / 255f + add, 127 / 255f + add, 38 / 255f + add, 1f);
+				a.sprite.setColor(grasscolor.r + add, grasscolor.g + add, grasscolor.b + add, 1f);
 
-				a.setPosition(itile(x), tile(y) + yadd);
+				a.setPosition(itile(x), itile(y) + yadd + i * 6);
 				group.add(a);
 			}
 
-			if(!isGrass(x, y - 1) || (!isGrass(x+1, y - 1) || !isGrass(x-1, y - 1))){
-				SpriteRenderable sh = new SpriteRenderable(Resources.region(name + blendn)).setAsShadow()
-						.setPosition(itile(x), tile(y) - 19 + yadd);
-				sh.sprite.setFlip(false, true);
+			if(!isGrass(x, y + 1)){
+				SpriteRenderable sh = new SpriteRenderable(Resources.region("grassblock2" +blendn)).setAsShadow()
+						.setPosition(itile(x) + 1, tile(y) + 1 + yadd);
 				sh.add(group);
 			}
 		}
@@ -207,35 +198,32 @@ public enum MaterialType{
 		}
 	},
 	shortgrassblock{
-		static final float sgadd = 0.55f;
-		static final float add = 0.02f;
+		static final float add = 0.03f;
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float xadd = 0;
 
 			if(!isGrass(x, y - 1)){
-				xadd = 2;
+			//	xadd = 2;
 			}
-			int rand = (Math.abs((int) (x % 10 + y % 20 + MathUtils.sin(x) * 3 + MathUtils.sin(y) + (MathUtils.sin(x)/ MathUtils.cos(x)) * 4)));
-			int iter = 6;
+			
+			int iter = 4;
 
 			for(int i = 0; i < iter; i++){
-				SpriteRenderable a = new SpriteRenderable(
-						Resources.region("grassf" + (new Random(i + rand).nextInt(40) % 4 + 1)));
+				if(i == 0 && !isGrass(x, y - 1)) continue;
+				float gadd = (i %2== 0 ? add : 0f);
+				SpriteRenderable a = new SpriteRenderable(Resources.region("grassf1"));
+				
 				a.setProvider(SortProviders.object);
-				a.setColor(new Color(82 / 255f, 127 / 255f, 38 / 255f, 1f).mul(sgadd)
-						.add((new Color(66 / 255f, 105 / 255f, 27 / 255f, 1f)).mul(1f - sgadd)));
-				if(i % 2 == 0)
-					a.setColor(a.sprite.getColor().add(add, add, add, 0f));
+				a.setColor(grasscolor.r + gadd, grasscolor.g + gadd, grasscolor.b + gadd);
 				
 				a.setPosition(itile(x), itile(y) + i * (tilesize / iter) + xadd);
 				a.add(group);
 			}
 
-			if(!isGrass(x, y - 1)){
+			if(!isGrass(x, y + 1)){
 				SpriteRenderable sh = new SpriteRenderable(Resources.region("grassf1")).setAsShadow();
-				sh.setPosition(itile(x), itile(y) - 19 + xadd);
-				sh.sprite.setFlip(false, true);
+				sh.setPosition(itile(x)+1, tile(y)+2+ xadd);
 				sh.add(group);
 			}
 		}
@@ -260,6 +248,7 @@ public enum MaterialType{
 			return false;
 		}
 	};
+	protected final Color grasscolor = new Color(0x62962fff);
 	private Color color = null;
 	protected World world;
 
