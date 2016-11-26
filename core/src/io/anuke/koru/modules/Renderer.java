@@ -46,7 +46,7 @@ public class Renderer extends Module<Koru>{
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
-	public boolean debug = false;
+	public boolean debug = true;
 	public final boolean gbuffer = false;
 	public KoruEntity player;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize

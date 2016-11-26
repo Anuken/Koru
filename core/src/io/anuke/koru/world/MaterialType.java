@@ -77,7 +77,15 @@ public enum MaterialType{
 	},
 	block{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
+			new SpriteRenderable(Resources.region(material.name()))
+			.setPosition(itile(x), itile(y))
+			.setProvider(SortProviders.object).add(group);
+			
+			new SpriteRenderable(Resources.region("walldropshadow"))
+			.setAsShadow()
+			.setPosition(tile(x), tile(y))
+			.center()
+			.setProvider(SortProviders.tile).add(group);
 		}
 
 		public boolean tile(){

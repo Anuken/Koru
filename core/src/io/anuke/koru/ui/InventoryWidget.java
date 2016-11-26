@@ -49,6 +49,7 @@ public class InventoryWidget extends VisTable{
 	}
 
 	public void draw(Batch batch, float alpha){
+		
 		super.draw(batch, alpha);
 
 		if(inventory.selected != null)
