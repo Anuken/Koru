@@ -22,22 +22,29 @@ public class ChunkWriter{
 		kryo.register(Materials.class);
 	}
 
-	public void writeChunk(Chunk chunk, Path path){
+	public void writeChunk(Chunk chunk, Path path, boolean compress){
 		writing = true;
 		try{
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			Output output = new Output(stream);
-			kryo.writeObject(output, chunk);
-			output.close();
-
-			ByteArrayInputStream in = new ByteArrayInputStream(stream.toByteArray());
-			FileOutputStream file = new FileOutputStream(path.toString());
-
-			Lzma.compress(in, file);
-
-			stream.close();
-			in.close();
-			file.close();
+			if(compress){
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				Output output = new Output(stream);
+				kryo.writeObject(output, chunk);
+				output.close();
+				
+				ByteArrayInputStream in = new ByteArrayInputStream(stream.toByteArray());
+				FileOutputStream file = new FileOutputStream(path.toString());
+				
+				Lzma.compress(in, file);
+				
+				stream.close();
+				in.close();
+				file.close();
+			}else{
+				FileOutputStream file = new FileOutputStream(path.toString());
+				Output output = new Output(file);
+				kryo.writeObject(output, chunk);
+				output.close();
+			}
 
 		}catch(Exception e){
 			Koru.log("Error writing chunk!");
