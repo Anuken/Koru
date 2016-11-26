@@ -783,6 +783,13 @@ koru3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+items/slot
+  rotate: false
+  xy: 1, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 items/stoneitem
   rotate: false
   xy: 1, 1

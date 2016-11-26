@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
@@ -23,6 +24,10 @@ public class KoruUpdater{
 	float delta = 1f;
 	long lastFpsTime;
 	final int blockupdatetime = 60 * 6;
+	CountDownLatch latch = new CountDownLatch(1);
+	int threads = 0;
+	int totalchunks = 0;
+	boolean skipSave = true;
 
 	void Loop(){
 		try{
@@ -82,8 +87,14 @@ public class KoruUpdater{
 	Object lock = new Object();
 
 	void saveAll(){
+		if(skipSave){
+			Koru.log("Skipping save.");
+			return;
+		}
+		
 		Koru.log("Saving " + file.getLoadedChunks().size() + " chunks...");
-
+		
+		totalchunks = file.getLoadedChunks().size();
 		int pp = file.getLoadedChunks().size() / Runtime.getRuntime().availableProcessors();
 		Koru.log("Chunks per thread: " + pp);
 		int thread = 0;
@@ -99,20 +110,30 @@ public class KoruUpdater{
 			}
 
 		}
+		
+		if(threads == 0) latch.countDown();
+		
+		try{
+			latch.await();
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
 
 		Koru.log("Saving materials...");
 		// MaterialManager.instance().saveMaterials(Directories.materials);
 	}
 
 	void spawnChunkThread(Collection<Chunk> chunks, int thread){
+		threads ++;
 		new Thread(() -> {
-			//int i = 0;
-
 			for(Chunk chunk : chunks){
-				Koru.log(Text.YELLOW + "Saving chunks: " +Text.RED + chunks.size() + " left [Thread "+thread+"]");
+				Koru.log(Text.YELLOW + "Saving chunks: " +Text.RED + totalchunks + " left [Thread "+thread+"]");
 				
-				file.writeChunk(chunk);
+				file.writeChunk(chunk, thread);
+				totalchunks --;
 			}
+			
+			if(--threads == 0)latch.countDown();
 		}).start();
 	}
 }

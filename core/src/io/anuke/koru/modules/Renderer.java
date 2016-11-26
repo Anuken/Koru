@@ -52,6 +52,7 @@ public class Renderer extends Module<Koru>{
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
+	//GifRecorder recorder;
 
 	public Renderer() {
 		UCore.maximizeWindow();
@@ -73,6 +74,8 @@ public class Renderer extends Module<Koru>{
 
 		if(gbuffer)
 			buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
+		
+		//recorder =  new GifRecorder(batch,1f/GUIscale);
 	}
 
 
@@ -185,6 +188,8 @@ public class Renderer extends Module<Koru>{
 	}
 
 	public void drawGUI(){
+		//recorder.update();
+		
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
 

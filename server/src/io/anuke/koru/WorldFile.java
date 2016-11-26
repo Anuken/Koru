@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.compression.Lzma;
@@ -26,7 +25,7 @@ import io.anuke.koru.world.WorldLoader;
 public class WorldFile extends WorldLoader{
 	public final String filename = "chunk", extension = ".kw";
 	private Path file;
-	private ObjectMap<String, Path> files = new ObjectMap<String, Path>();
+	private ConcurrentHashMap<String, Path> files = new ConcurrentHashMap<String, Path>();
 	private Kryo kryo; // for reading only
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); // server-side
 																								// chunks
@@ -63,8 +62,8 @@ public class WorldFile extends WorldLoader{
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		if(files.size > 0){
-			Koru.log("Found " + files.size + " world chunk" + (files.size == 1 ? "" : "s") + ".");
+		if(files.size() > 0){
+			Koru.log("Found " + files.size() + " world chunk" + (files.size() == 1 ? "" : "s") + ".");
 		}else{
 			Koru.log("Found empty world.");
 		}
@@ -80,22 +79,15 @@ public class WorldFile extends WorldLoader{
 		return getPath(x, y) != null;
 	}
 
-	public void writeChunk(Chunk chunk){
+	public void writeChunk(Chunk chunk, int writer){
 		Path path = Paths.get(file.toString(), "/" + fileName(chunk.x, chunk.y));
-		while(true){
-			for(int i = 0; i < writers.length; i++){
-				if(!writers[i].writing()){
-					writers[i].writeChunk(chunk, path);
-					synchronized(lock){
-						files.put(path.getFileName().toString(), path);
-					}
-					return;
-				}
-			}
-			try{
-				Thread.sleep(10);
-			}catch (Exception e){}
+		
+		while(!writers[writer].writing()){ // to prevent screwups with multiple threads using writer 0
+			writers[writer].writeChunk(chunk, path);
+			files.put(path.getFileName().toString(), path);
+			return;
 		}
+		
 	}
 
 	/*
@@ -174,7 +166,7 @@ public class WorldFile extends WorldLoader{
 
 	@Override
 	public void unloadChunk(Chunk chunk){
-		writeChunk(chunk);
+		writeChunk(chunk, 0);
 		loadedchunks.remove(hashCoords(chunk.x, chunk.y));
 	}
 
@@ -202,7 +194,7 @@ public class WorldFile extends WorldLoader{
 	}
 
 	public int totalChunks(){
-		return files.size;
+		return files.size();
 	}
 
 	private Path getPath(int x, int y){

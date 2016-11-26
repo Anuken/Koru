@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
@@ -85,8 +84,8 @@ public class InventoryWidget extends VisTable{
 
 		public void draw(Batch batch, float alpha){
 			batch.setColor(getColor());
-			VisUI.getSkin().getPatch("button").draw(batch, getX(), getY(), getWidth(), getHeight());
-			VisUI.getSkin().getPatch("border").draw(batch, getX(), getY(), getWidth(), getHeight());
+			batch.draw(Resources.region("slot"), getX(), getY(), getWidth(), getHeight());
+			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
 				batch.draw(Resources.region(stacks[x][y].item.name() + "item"), getX(), getY(), getWidth(),
 						getHeight());

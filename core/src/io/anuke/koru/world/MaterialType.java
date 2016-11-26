@@ -153,7 +153,7 @@ public enum MaterialType{
 		}
 	},
 	tallgrassblock(){
-		static final float add2 = 0.04f;
+		static final float add = 0.94f;
 	
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float yadd = 0;
@@ -175,8 +175,8 @@ public enum MaterialType{
 				SpriteRenderable a = new SpriteRenderable(Resources.region("grassblock2" + blendn));
 				a.setProvider(SortProviders.object);
 				
-				float add = i == 1 ? add2 : 0;
-				a.sprite.setColor(grasscolor.r + add, grasscolor.g + add, grasscolor.b + add, 1f);
+				float gadd = i == 1 ? 1f : add;
+				a.sprite.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd, 1f);
 
 				a.setPosition(itile(x), itile(y) + yadd + i * 6);
 				group.add(a);
@@ -198,7 +198,7 @@ public enum MaterialType{
 		}
 	},
 	shortgrassblock{
-		static final float add = 0.03f;
+		static final float add = 0.96f;
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float xadd = 0;
@@ -211,11 +211,11 @@ public enum MaterialType{
 
 			for(int i = 0; i < iter; i++){
 				if(i == 0 && !isGrass(x, y - 1)) continue;
-				float gadd = (i %2== 0 ? add : 0f);
+				float gadd = (i %2== 0 ? 1f : add);
 				SpriteRenderable a = new SpriteRenderable(Resources.region("grassf1"));
 				
 				a.setProvider(SortProviders.object);
-				a.setColor(grasscolor.r + gadd, grasscolor.g + gadd, grasscolor.b + gadd);
+				a.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd);
 				
 				a.setPosition(itile(x), itile(y) + i * (tilesize / iter) + xadd);
 				a.add(group);
@@ -248,7 +248,7 @@ public enum MaterialType{
 			return false;
 		}
 	};
-	protected final Color grasscolor = new Color(0x62962fff);
+	protected final Color grasscolor = new Color(0x62962fff).mul(0.97f,0.97f,0.97f,1f);
 	private Color color = null;
 	protected World world;
 

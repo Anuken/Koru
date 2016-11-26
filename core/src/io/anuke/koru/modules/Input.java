@@ -52,7 +52,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
-		float speed = 40f * Gdx.graphics.getDeltaTime()*60f;
+		float speed = 30f * Gdx.graphics.getDeltaTime()*60f;
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;
@@ -118,7 +118,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		BlockInputPacket packet = new BlockInputPacket();
 		if (button == Buttons.LEFT) {
 			sendInput(InputType.leftclick_down);
-			packet.material = Materials.next(Materials.willowtree1, 4);
+			packet.material = Materials.grassblock;
 		} else if (button == Buttons.RIGHT) {
 			sendInput(InputType.rightclick_down);
 			packet.material = Materials.air;

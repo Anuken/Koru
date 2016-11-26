@@ -14,7 +14,7 @@ public enum Materials implements Material{
 	darkgrass(MaterialType.grass, color(0.8f,0.92f,0.86f)),
 	swampgrass(MaterialType.grass),
 	burntgrass(MaterialType.grass, color(1.3f,1.1f,0.98f)),
-	burntgrass2(MaterialType.grass, color(1.5f,1.3f,0.94f)),
+	burntgrass2(MaterialType.grass, color(1.6f,1.2f,0.94f)),
 	bluegrass(MaterialType.grass),
 	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
 	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},

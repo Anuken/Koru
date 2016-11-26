@@ -47,7 +47,7 @@ public class TerrainGenerator implements Generator{
 			tile.setMaterial(Materials.ice);
 
 			if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
-			if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.blackrock1, 4));
+		//	if(Math.random() < 0.03) tile.setBlockMaterial(Materials.next(Materials.blackrock1, 4));
 			
 		}else if(e > 0.76){
 			tile.setMaterial(Materials.stone);
