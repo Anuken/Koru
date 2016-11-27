@@ -35,5 +35,4 @@ public class PlayerRenderer extends EntityRenderer{
 		.add("name", render.group);
 		
 	}
-
 }

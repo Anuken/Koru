@@ -10,16 +10,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
+import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
@@ -94,6 +94,9 @@ public class Input extends Module<Koru> implements InputProcessor {
 
 	void sendInput(InputType type) {
 		InputPacket packet = new InputPacket();
+		Vector3 v = getModule(Renderer.class).camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1f));
+		packet.x = v.x;
+		packet.y = v.y;
 		packet.type = type;
 		getModule(Network.class).client.sendTCP(packet);
 	}
@@ -115,7 +118,23 @@ public class Input extends Module<Koru> implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		BlockInputPacket packet = new BlockInputPacket();
+		/*
+		
+		GridPoint2 mouse = cursorblock();
+		ItemStack stack = player.mapComponent(InventoryComponent.class).inventory[player.mapComponent(InventoryComponent.class).hotbar][0];
+		
+		if(stack == null) return false;
+		
+		stack.item.clickEvent(player.mapComponent(InventoryComponent.class), stack, mouse.x, mouse.y, getModule(World.class).getTile(mouse));
+		*/
+		if (button == Buttons.LEFT) {
+			sendInput(InputType.leftclick_down);
+		} else if (button == Buttons.RIGHT) {
+			sendInput(InputType.rightclick_down);
+		}
+		
+		/*
+		 BlockInputPacket packet = new BlockInputPacket();
 		if (button == Buttons.LEFT) {
 			sendInput(InputType.leftclick_down);
 			packet.material = Materials.woodblock;
@@ -123,11 +142,11 @@ public class Input extends Module<Koru> implements InputProcessor {
 			sendInput(InputType.rightclick_down);
 			packet.material = Materials.air;
 		}
-
 		GridPoint2 mouse = cursorblock();
 		packet.x = mouse.x;
 		packet.y = mouse.y;
 		getModule(Network.class).client.sendTCP(packet);
+		*/
 		return false;
 	}
 
@@ -153,7 +172,15 @@ public class Input extends Module<Koru> implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		getModule(Renderer.class).camera.zoom += amount / 10f;
+		//getModule(Renderer.class).camera.zoom += amount / 10f;
+		InventoryComponent inv = getModule(ClientData.class).player.getComponent(InventoryComponent.class);
+		int i = ((inv.hotbar-amount) % 4);
+		inv.hotbar = i < 0 ? i + 4 : i;
+		
+		SlotChangePacket packet = new SlotChangePacket();
+		packet.slot = inv.hotbar;
+		getModule(Network.class).client.sendTCP(packet);
+		
 		return false;
 	}
 

@@ -10,6 +10,7 @@ public class InventoryComponent implements Component{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
 	public ItemStack[][] inventory;
 	public ItemStack selected;
+	public transient int hotbar;
 
 	public InventoryComponent(int width, int height){
 		inventory = new ItemStack[width][height];

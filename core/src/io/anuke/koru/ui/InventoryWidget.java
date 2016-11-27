@@ -1,6 +1,7 @@
 package io.anuke.koru.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,6 +15,7 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.graphics.Hue;
 
 public class InventoryWidget extends VisTable{
 	final int slotsize = 50;
@@ -49,6 +51,11 @@ public class InventoryWidget extends VisTable{
 	}
 
 	public void draw(Batch batch, float alpha){
+		float pscale = slotsize/16;
+		
+		batch.setColor(Hue.lightness(95/255f));
+		batch.draw(Resources.region("blank"), getX()-pscale, getY()-pscale, getWidth()+pscale*2, getHeight()+pscale*2);
+		batch.setColor(Color.WHITE);
 		
 		super.draw(batch, alpha);
 
@@ -85,7 +92,7 @@ public class InventoryWidget extends VisTable{
 
 		public void draw(Batch batch, float alpha){
 			batch.setColor(getColor());
-			batch.draw(Resources.region("slot"), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Resources.region((y == 0 && x == inventory.hotbar ) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
 				batch.draw(Resources.region(stacks[x][y].item.name() + "item"), getX(), getY(), getWidth(),

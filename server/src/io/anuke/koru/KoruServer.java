@@ -37,12 +37,14 @@ import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.World;
+import io.anuke.ucore.UCore;
 
 public class KoruServer extends IServer{
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
@@ -156,7 +158,11 @@ public class KoruServer extends IServer{
 				sendTCP(info.id, updater.world.createChunkPacket(packet));
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket)object;
-				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type);
+				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type, packet.x, packet.y);
+			}else if(object instanceof SlotChangePacket){
+				SlotChangePacket packet = (SlotChangePacket)object;
+				packet.slot = UCore.clamp(packet.slot, 0, 3);
+				getPlayer(info).mapComponent(InventoryComponent.class).hotbar = packet.slot;
 			}else if(object instanceof StoreItemPacket){
 				StoreItemPacket packet = (StoreItemPacket)object;
 				updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
@@ -167,7 +173,7 @@ public class KoruServer extends IServer{
 				updater.world.updateTile(packet.x, packet.y);
 			}else if(object instanceof InventoryClickPacket){
 				InventoryClickPacket packet = (InventoryClickPacket)object;
-				InventoryComponent inv = getPlayer(info).getComponent(InventoryComponent.class);
+				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				inv.clickSlot(packet.x, packet.y);
 				
 				Koru.log("recieved inventory click packet");
