@@ -587,7 +587,7 @@ items/slotselect
   orig: 16, 16
   offset: 0, 0
   index: -1
-items/stoneitem
+items/woodaxe
   rotate: false
   xy: 1, 1
   size: 12, 12
@@ -599,6 +599,13 @@ items/slot
   xy: 19, 15
   size: 16, 16
   orig: 16, 16
+  offset: 0, 0
+  index: -1
+items/stoneitem
+  rotate: false
+  xy: 15, 1
+  size: 12, 12
+  orig: 12, 12
   offset: 0, 0
   index: -1
 

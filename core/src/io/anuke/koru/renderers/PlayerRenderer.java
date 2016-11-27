@@ -15,9 +15,7 @@ public class PlayerRenderer extends EntityRenderer{
 		
 		render.group.get("player").sprite().setPosition(entity.getX(), entity.getY()).centerX();
 		render.group.get("shadow").sprite().setPosition(entity.getX(), entity.getY()).center();
-		
 		render.group.get("name").setPosition(entity.getX(), entity.getY());
-		
 	}
 	
 	@Override

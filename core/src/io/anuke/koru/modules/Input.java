@@ -12,8 +12,8 @@ import com.badlogic.gdx.math.Vector3;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.Items;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
@@ -86,7 +86,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 				StoreItemPacket packet = new StoreItemPacket();
 				packet.x = point.x;
 				packet.y = point.y;
-				packet.stack = new ItemStack(Item.wood, 20);
+				packet.stack = new ItemStack(Items.wood, 20);
 				getModule(Network.class).client.sendTCP(packet);
 			}
 		}

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.Items;
 import io.anuke.ucore.graphics.Hue;
 
 public enum Materials implements Material{
@@ -16,8 +17,8 @@ public enum Materials implements Material{
 	burntgrass(MaterialType.grass, color(1.3f,1.1f,0.98f)),
 	burntgrass2(MaterialType.grass, color(1.6f,1.2f,0.94f)),
 	bluegrass(MaterialType.grass),
-	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
-	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Item.water, 1);}},
+	water(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Items.water, 1);}},
+	deepwater(MaterialType.water, 1, Hue.blend(41, 97, 155, 102, 102, 102, 0.3f)){{addDrop(Items.water, 1);}},
 	blackrock,
 	magmarock,
 	cobblestone,
@@ -25,10 +26,10 @@ public enum Materials implements Material{
 	gravel,
 	ice{{vary(7);}},
 	riveredge,
-	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){{addDrop(Item.stone, 1); vary(7);}}, 
-	woodfloor{{addDrop(Item.wood, 2);}},
-	stonefloor{{addDrop(Item.stone, 2);}},
-	pinecones(MaterialType.overlay){{addDrop(Item.pinecone, 1);}}, 
+	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){{addDrop(Items.stone, 1); vary(7);}}, 
+	woodfloor{{addDrop(Items.wood, 2);}},
+	stonefloor{{addDrop(Items.stone, 2);}},
+	pinecones(MaterialType.overlay){{addDrop(Items.pinecone, 1);}}, 
 	grassblock(MaterialType.tallgrassblock),
 	shortgrassblock(MaterialType.shortgrassblock),
 	tallgrass1(MaterialType.foilage, -10f),
@@ -85,12 +86,12 @@ public enum Materials implements Material{
 	burnedtree2(MaterialType.tree),
 	burnedtree3(MaterialType.tree),
 	burnedtree4(MaterialType.tree),
-	pinetree1(MaterialType.tree, -5f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 1);}}, 
-	pinetree2(MaterialType.tree, -3f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree3(MaterialType.tree, -3f){{addDrop(Item.wood, 5); addDrop(Item.pinecone, 2);}}, 
-	pinetree4(MaterialType.tree, -5f){{addDrop(Item.wood, 5);}}, 
+	pinetree1(MaterialType.tree, -5f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 1);}}, 
+	pinetree2(MaterialType.tree, -3f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 2);}}, 
+	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 2);}}, 
+	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 5);}}, 
 	pinesapling(MaterialType.tree, 1, false){
-		{addDrop(Item.pinecone, 1);}
+		{addDrop(Items.pinecone, 1);}
 		
 		public boolean growable(){
 			return true;
@@ -108,11 +109,11 @@ public enum Materials implements Material{
 			return PinetreeTileData.class;
 		}
 	}, 
-	stoneblock(MaterialType.block){{addDrop(Item.stone, 6);}},
-	woodblock(MaterialType.block){{addDrop(Item.wood, 5);}},
+	stoneblock(MaterialType.block){{addDrop(Items.stone, 6);}},
+	woodblock(MaterialType.block){{addDrop(Items.wood, 5);}},
 	hatcher(MaterialType.hatcher),
 	box(MaterialType.chest){
-		{addDrop(Item.wood, 10);}
+		{addDrop(Items.wood, 10);}
 		public TileData getDefaultData(){
 			return new InventoryTileData(5,5);
 		}

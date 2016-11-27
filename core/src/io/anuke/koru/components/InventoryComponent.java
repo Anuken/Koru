@@ -3,8 +3,11 @@ package io.anuke.koru.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.packets.InventoryUpdatePacket;
 
 public class InventoryComponent implements Component{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
@@ -35,6 +38,14 @@ public class InventoryComponent implements Component{
 				selected = null;
 			}
 		}
+	}
+	
+	/**Server-side only.*/
+	public void sendUpdate(KoruEntity entity){
+		InventoryUpdatePacket update = new InventoryUpdatePacket();
+		update.selected = selected;
+		update.stacks = inventory;
+		IServer.instance().sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, update);
 	}
 	
 	public void set(ItemStack[][] stacks, ItemStack selected){

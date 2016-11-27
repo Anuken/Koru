@@ -4,8 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.ObjectHandler;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.utils.Resources;
@@ -62,7 +62,7 @@ public class MaterialManager{
 	}
 
 	public GeneratedMaterial createMaterial(MaterialType type){
-		GeneratedMaterial mat = new GeneratedMaterial(type, lastMaterialID++, new ItemStack(Item.wood, 2));
+		GeneratedMaterial mat = new GeneratedMaterial(type, lastMaterialID++, new ItemStack(Items.wood, 2));
 		registerMaterial(mat);
 		return mat;
 	}

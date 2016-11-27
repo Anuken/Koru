@@ -23,6 +23,8 @@ import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.MaterialManager;
+import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
@@ -130,6 +132,8 @@ public class KoruServer extends IServer{
 			sendToAllExceptTCP(info.id, player);
 
 			player.addSelf();
+			
+			player.getComponent(InventoryComponent.class).addItem(new ItemStack(Items.woodaxe));
 			
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
