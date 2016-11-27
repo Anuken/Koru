@@ -39,7 +39,7 @@ public enum EntityType{
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 
-			hitbox.terrainRect().set(0, 0, 4, 2);
+			hitbox.terrainRect().set(0, 0, 6, 2);
 
 			hitbox.entityRect().set(0, 0, 4, 5);
 			hitbox.alignBottom();

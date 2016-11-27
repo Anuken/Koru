@@ -53,7 +53,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
-		float speed = 3f * delta();
+		float speed = 2.5f * delta();
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;
@@ -72,19 +72,24 @@ public class Input extends Module<Koru> implements InputProcessor {
 		//Koru.log(player.getComponent(RenderComponent.class).direction);
 		if(key(Keys.W) || key(Keys.A) || key(Keys.S) || key(Keys.D)){
 			render.direction = (key(Keys.D) ? 1 : (key(Keys.A) ? 3 : (key(Keys.S) ? 0 : 2)));
-			render.walkframe += delta();
-		}else{
-			render.walkframe = 0;
 		}
 
 		vector.limit(speed);
-
+		float lastx = player.getX();
+		float lasty = player.getY();
+		
 		if (!collisions.checkTerrainCollisions(getModule(World.class), player, vector.x, 0)) {
 			player.position().add(vector.x, 0);
 		}
 
 		if (!collisions.checkTerrainCollisions(getModule(World.class), player, 0, vector.y)) {
 			player.position().add(0, vector.y);
+		}
+		
+		if(Vector2.dst(lastx, lasty, player.getX(), player.getY()) > 0.05f){
+			render.walkframe += delta();
+		}else{
+			render.walkframe = 0;
 		}
 
 		vector.set(0, 0);

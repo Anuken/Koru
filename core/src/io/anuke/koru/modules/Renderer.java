@@ -37,7 +37,7 @@ public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 20;
 	public final float GUIscale = 5f;
-	public final int scale = 3;
+	public final int scale = 4;
 	public World world;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;

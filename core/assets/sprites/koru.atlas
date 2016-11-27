@@ -664,13 +664,6 @@ items/woodaxe
   orig: 12, 12
   offset: 0, 0
   index: -1
-items/woodaxeitem
-  rotate: false
-  xy: 1, 1
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
 items/slot
   rotate: false
   xy: 19, 15
@@ -678,9 +671,16 @@ items/slot
   orig: 16, 16
   offset: 0, 0
   index: -1
-items/stoneitem
+items/woodaxeitem
   rotate: false
   xy: 15, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+items/stoneitem
+  rotate: false
+  xy: 29, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
