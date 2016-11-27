@@ -20,5 +20,21 @@ public abstract class EntityRenderer{
 		}
 		this.render();
 	}
+	
+	public boolean flip(){
+		return flip(render.direction);
+	}
+	
+	public String dir(){
+		return dir(render.direction);
+	}
+	
+	public static boolean flip(int dir){
+		return dir == 3;
+	}
+	
+	public static String dir(int d){
+		return d== 0 ? "-f" : ((d == 1 || d == 3) ? "-s" : "-b");
+	}
 		
 }

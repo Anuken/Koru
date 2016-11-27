@@ -10,6 +10,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.components.SyncComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.BitmapData;
@@ -195,6 +196,7 @@ public class Network extends Module<Koru>{
 		pos.y = getModule(ClientData.class).player.mapComponent(PositionComponent.class).y;
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(),
 				getModule(ClientData.class).player.getY());
+		pos.direction = getModule(ClientData.class).player.getComponent(RenderComponent.class).direction;
 		client.sendUDP(pos);
 	}
 

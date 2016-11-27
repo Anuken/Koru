@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
@@ -52,7 +53,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
-		float speed = 3f * Gdx.graphics.getDeltaTime()*60f;
+		float speed = 3f * delta();
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;
@@ -65,6 +66,15 @@ public class Input extends Module<Koru> implements InputProcessor {
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			vector.x += speed;
+		}
+		
+		RenderComponent render = player.getComponent(RenderComponent.class);
+		//Koru.log(player.getComponent(RenderComponent.class).direction);
+		if(key(Keys.W) || key(Keys.A) || key(Keys.S) || key(Keys.D)){
+			render.direction = (key(Keys.D) ? 1 : (key(Keys.A) ? 3 : (key(Keys.S) ? 0 : 2)));
+			render.walkframe += delta();
+		}else{
+			render.walkframe = 0;
 		}
 
 		vector.limit(speed);
@@ -182,6 +192,10 @@ public class Input extends Module<Koru> implements InputProcessor {
 		getModule(Network.class).client.sendTCP(packet);
 		
 		return false;
+	}
+	
+	boolean key(int key){
+		return Gdx.input.isKeyPressed(key);
 	}
 
 	public GridPoint2 cursorblock() {

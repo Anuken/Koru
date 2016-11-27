@@ -24,6 +24,20 @@ public abstract class SyncBuffer{
 		public PositionSyncBuffer(){}
 	}
 	
+	public static class PlayerSyncBuffer extends SyncBuffer{
+		public float x,y;
+		public int direction;
+		
+		public PlayerSyncBuffer(long id, float x, float y, int o){
+			super(id);
+			this.x = x;
+			this.y = y;
+			this.direction = o;
+		}
+		
+		public PlayerSyncBuffer(){}
+	}
+	
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Synced{}
 	

@@ -568,9 +568,79 @@ koru2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-player/player
+player/crab
   rotate: false
   xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-b
+  rotate: false
+  xy: 15, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-f-2
+  rotate: false
+  xy: 29, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-f-1
+  rotate: false
+  xy: 43, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-f-0
+  rotate: false
+  xy: 57, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-s-1
+  rotate: false
+  xy: 71, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-s-0
+  rotate: false
+  xy: 85, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-f
+  rotate: false
+  xy: 99, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-s-2
+  rotate: false
+  xy: 113, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/crab-s
+  rotate: false
+  xy: 127, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+player/player
+  rotate: false
+  xy: 141, 5
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -588,6 +658,13 @@ items/slotselect
   offset: 0, 0
   index: -1
 items/woodaxe
+  rotate: false
+  xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+items/woodaxeitem
   rotate: false
   xy: 1, 1
   size: 12, 12
@@ -1087,23 +1164,51 @@ koru5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-entities/egg
+entities/crab-b-1
   rotate: false
   xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+entities/crab-b-0
+  rotate: false
+  xy: 15, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+entities/crab-b-2
+  rotate: false
+  xy: 29, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+entities/wazard
+  rotate: false
+  xy: 43, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+entities/egg
+  rotate: false
+  xy: 57, 5
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 entities/testmonster
   rotate: false
-  xy: 1, 1
+  xy: 57, 5
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 entities/genericmonster
   rotate: false
-  xy: 11, 1
+  xy: 67, 5
   size: 8, 8
   orig: 8, 8
   offset: 0, 0

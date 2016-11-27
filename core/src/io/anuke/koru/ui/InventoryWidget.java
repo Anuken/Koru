@@ -3,6 +3,7 @@ package io.anuke.koru.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,7 +19,7 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
 
 public class InventoryWidget extends VisTable{
-	final int slotsize = 50;
+	final int slotsize = 64;
 	private ItemStack[][] stacks;
 	private InventoryComponent inventory;
 
@@ -59,9 +60,12 @@ public class InventoryWidget extends VisTable{
 		
 		super.draw(batch, alpha);
 
-		if(inventory.selected != null)
-			batch.draw(Resources.region(inventory.selected.item.name() + "item"), Gdx.input.getX() - slotsize / 2,
-					(Gdx.graphics.getHeight() - Gdx.input.getY()) - slotsize / 2, slotsize, slotsize);
+		if(inventory.selected != null){
+			TextureRegion region = Resources.region(inventory.selected.item.name() + "item");
+			batch.draw(region, Gdx.input.getX() - region.getRegionWidth()*pscale / 2,
+					(Gdx.graphics.getHeight() - Gdx.input.getY()) - region.getRegionHeight()*pscale / 2, 
+					region.getRegionWidth()*pscale, region.getRegionHeight()*pscale);
+		}
 
 		Actor actor = getStage().hit(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY(), true);
 
@@ -95,8 +99,10 @@ public class InventoryWidget extends VisTable{
 			batch.draw(Resources.region((y == 0 && x == inventory.hotbar ) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
-				batch.draw(Resources.region(stacks[x][y].item.name() + "item"), getX(), getY(), getWidth(),
-						getHeight());
+				TextureRegion region = Resources.region(stacks[x][y].item.name() + "item");
+				batch.draw(region, getX() + getWidth()/2 - region.getRegionWidth()/2*slotsize/16, getY() + getHeight()/2 - region.getRegionHeight()/2*slotsize/16,
+						region.getRegionWidth()*slotsize/16,
+						region.getRegionHeight()*slotsize/16);
 
 			}
 		}

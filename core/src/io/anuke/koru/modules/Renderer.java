@@ -37,7 +37,7 @@ public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 20;
 	public final float GUIscale = 5f;
-	public final int scale = 4;
+	public final int scale = 3;
 	public World world;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
@@ -46,7 +46,7 @@ public class Renderer extends Module<Koru>{
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
-	public boolean debug = true;
+	public boolean debug = false;
 	public final boolean gbuffer = false;
 	public KoruEntity player;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize

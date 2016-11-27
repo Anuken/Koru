@@ -32,8 +32,9 @@ import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.MaterialManager;
-import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.Items;
+import io.anuke.koru.network.SyncBuffer.PlayerSyncBuffer;
 import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
 import io.anuke.koru.network.SyncBuffer.Synced;
 import io.anuke.koru.network.packets.BitmapDataPacket;
@@ -103,6 +104,7 @@ public class Registrator{
 		k.register(ProjectileType.class);
 		k.register(SyncBuffer.class);
 		k.register(PositionSyncBuffer.class);
+		k.register(PlayerSyncBuffer.class);
 		
 		k.register(Chunk.class);
 		k.register(TileData.class);
@@ -119,7 +121,7 @@ public class Registrator{
 		k.register(ItemStack.class);
 		k.register(ItemStack[].class);
 		k.register(ItemStack[][].class);
-		k.register(Item.class);
+		k.register(Items.class);
 		
 		k.register(InputType.class);
 		k.register(SyncType.class);

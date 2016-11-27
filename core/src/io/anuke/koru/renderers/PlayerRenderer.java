@@ -13,18 +13,22 @@ public class PlayerRenderer extends EntityRenderer{
 	@Override
 	public void render(){
 		
-		render.group.get("player").sprite().setPosition(entity.getX(), entity.getY()).centerX();
-		render.group.get("shadow").sprite().setPosition(entity.getX(), entity.getY()).center();
+		render.group.get("crab").sprite().setPosition(entity.getX(), entity.getY()).centerX();
+		
+		render.group.get("crab").sprite().sprite.setRegion(Resources.region("crab" + dir() + 
+				(render.walkframe > 0.001f ? ("-"+ ((int)(render.walkframe/7)%3)) : "")));
+		render.group.get("crab").sprite().sprite.setFlip(flip(), false);
+		render.group.get("shadow").sprite().setPosition(entity.getX(), entity.getY()+1).center();
 		render.group.get("name").setPosition(entity.getX(), entity.getY());
 	}
 	
 	@Override
 	public void initRender(){
 		
-		new SpriteRenderable(Resources.region("player"))
+		new SpriteRenderable(Resources.region("crab"))
 		.addShadow(render.group, Resources.atlas())
 		.setProvider(SortProviders.object)
-		.add("player", render.group);
+		.add("crab", render.group);
 		
 		new TextRenderable(Resources.font(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
 		.center()

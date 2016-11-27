@@ -19,6 +19,7 @@ import com.esotericsoftware.kryonet.Server;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.generation.GeneratedMaterial;
@@ -134,7 +135,7 @@ public class KoruServer extends IServer{
 			player.addSelf();
 			
 			player.getComponent(InventoryComponent.class).addItem(new ItemStack(Items.woodaxe));
-			
+			player.getComponent(InventoryComponent.class).sendUpdate(player);
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
@@ -152,6 +153,7 @@ public class KoruServer extends IServer{
 				if( !connections.containsKey(info.id)) return;
 
 				getPlayer(info).position().set(packet.x, packet.y);
+				getPlayer(info).mapComponent(RenderComponent.class).direction = packet.direction;
 				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof ChatPacket){
 				ChatPacket packet = (ChatPacket)object;
@@ -180,7 +182,6 @@ public class KoruServer extends IServer{
 				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				inv.clickSlot(packet.x, packet.y);
 				
-				Koru.log("recieved inventory click packet");
 				InventoryUpdatePacket update = new InventoryUpdatePacket();
 				update.selected = inv.selected;
 				update.stacks = inv.inventory;
