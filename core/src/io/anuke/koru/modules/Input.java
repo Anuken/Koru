@@ -110,8 +110,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 	void sendInput(InputType type) {
 		InputPacket packet = new InputPacket();
 		Vector3 v = getModule(Renderer.class).camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1f));
-		packet.x = v.x;
-		packet.y = v.y;
+		packet.data = new Object[]{v.x, v.y};
 		packet.type = type;
 		getModule(Network.class).client.sendTCP(packet);
 	}

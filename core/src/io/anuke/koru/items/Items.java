@@ -1,13 +1,18 @@
 package io.anuke.koru.items;
 
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.network.IServer;
+import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 
 public enum Items implements Item{
 	stick, wood, pinecone, water, stone,
 	woodaxe{
 		public void clickEvent(InventoryComponent inventory, ItemStack stack, int x, int y, Tile clicked){
-			
+			if(clicked.block().breakable()){
+				clicked.setBlockMaterial(Materials.air);
+				IServer.instance().getWorld().updateTile(x, y);
+			}
 		}
 	};
 	

@@ -21,8 +21,16 @@ public abstract class EntityRenderer{
 		this.render();
 	}
 	
+	float shift(float i){
+		return flip2() ? -i : i;
+	}
+	
 	public boolean flip(){
 		return flip(render.direction);
+	}
+	
+	public boolean flip2(){
+		return flip(render.direction) || render.direction == 0;
 	}
 	
 	public String dir(){

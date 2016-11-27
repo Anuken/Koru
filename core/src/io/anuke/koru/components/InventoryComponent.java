@@ -40,6 +40,10 @@ public class InventoryComponent implements Component{
 		}
 	}
 	
+	public ItemStack hotbarStack(){
+		return inventory[hotbar][0];
+	}
+	
 	/**Server-side only.*/
 	public void sendUpdate(KoruEntity entity){
 		InventoryUpdatePacket update = new InventoryUpdatePacket();

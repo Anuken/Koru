@@ -86,10 +86,10 @@ public enum Materials implements Material{
 	burnedtree2(MaterialType.tree),
 	burnedtree3(MaterialType.tree),
 	burnedtree4(MaterialType.tree),
-	pinetree1(MaterialType.tree, -5f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 1);}}, 
-	pinetree2(MaterialType.tree, -3f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 2);}}, 
-	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 2);}}, 
-	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 5);}}, 
+	pinetree1(MaterialType.tree, -5f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 1); breakt(20);}}, 
+	pinetree2(MaterialType.tree, -3f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 2); breakt(20);}}, 
+	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 5); addDrop(Items.pinecone, 2); breakt(20);}}, 
+	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 5); breakt(20);}}, 
 	pinesapling(MaterialType.tree, 1, false){
 		{addDrop(Items.pinecone, 1);}
 		
@@ -175,11 +175,11 @@ public enum Materials implements Material{
 		return foilageColor;
 	}
 	
-	public final boolean breakable(){ // if the block is breakable (controls whether or not it is searched)
-		return breaktime >= 0;
+	public void breakt(int t){
+		this.breaktime = t;
 	}
 	
-	public final int breakTime(){ // how much time it takes to break the block
+	public final int breaktime(){ // how much time it takes to break the block
 		return breaktime;
 	}
 	

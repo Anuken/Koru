@@ -27,25 +27,10 @@ public class InputHandler{
 		}else if(type.name().contains("down")){
 			keys.put(type, true);
 		}
-
-		/*
-		inputKey(type);
-		if(type == InputType.rightclick_down){
-			rightmousedown = true;
-		}else if(type == InputType.rightclick_up){
-			rightmousedown = false;
-		}
-		*/
 	}
 
 	private void inputKey(InputType type){
 		if(type == InputType.leftclick_down){
-		//	KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.bolt, mouseangle);
-		//	projectile.position().set(entity.getX(), entity.getY());
-		//	projectile.addSelf().sendSelf();
-			//	KoruEntity entity = new KoruEntity(EntityType.testmonster);
-			//	entity.position().set(this.entity.getX(), this.entity.getY());
-			//	entity.addSelf().sendSelf();
 			InventoryComponent inv = entity.mapComponent(InventoryComponent.class);
 			int slot = inv.hotbar;
 			ItemStack stack = inv.inventory[slot][0];

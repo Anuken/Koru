@@ -4,5 +4,5 @@ import io.anuke.koru.utils.InputType;
 
 public class InputPacket{
 	public InputType type;
-	public float x,y;
+	public Object[] data;
 }
