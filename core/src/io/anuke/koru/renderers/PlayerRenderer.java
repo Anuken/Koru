@@ -22,7 +22,7 @@ public class PlayerRenderer extends EntityRenderer{
 		
 		render.group.get("item").sprite()
 		.setRegion(Resources.region(entity.getComponent(InventoryComponent.class).hotbarStack() == null ? 
-				"clear" : entity.getComponent(InventoryComponent.class).hotbarStack().item.name()));
+				"clear" : entity.getComponent(InventoryComponent.class).hotbarStack().item.name() + "item"));
 		
 		render.group.get("item").sprite().setLayer(entity.getY() + 0.0001f)
 		.setPosition(entity.getX() + shift(1), entity.getY()+5).centerX().sprite().sprite.setFlip(flip2(), false);

@@ -4,9 +4,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import io.anuke.koru.systems.CollisionSystem;
+import io.anuke.koru.systems.InputSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Text;
@@ -19,6 +21,7 @@ public class KoruUpdater{
 	public World world;
 	public final WorldFile file;
 	private boolean isRunning = true;
+	private CopyOnWriteArrayList<SendRequest> sendQueue = new CopyOnWriteArrayList<SendRequest>();
 	final int maxfps = 60;
 	long frameid;
 	float delta = 1f;
@@ -33,11 +36,26 @@ public class KoruUpdater{
 		try{
 			engine.update(delta);
 			world.update();
+			checkQueue();
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Entity update loop error!");
 			System.exit(1);
 		}
+	}
+	
+	void checkQueue(){
+		for(SendRequest r : sendQueue){
+			r.life -= delta;
+			if(r.life <= 0){
+				server.sendToAll(r.object);
+				sendQueue.remove(r);
+			}
+		}
+	}
+	
+	public void addToSendQueue(Object object){
+		sendQueue.add(new SendRequest(object));
 	}
 
 	void stop(){
@@ -75,6 +93,7 @@ public class KoruUpdater{
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
 		engine.addSystem(new CollisionSystem());
+		engine.addSystem(new InputSystem());
 
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
@@ -135,5 +154,14 @@ public class KoruUpdater{
 			
 			if(--threads == 0)latch.countDown();
 		}).start();
+	}
+	
+	class SendRequest{
+		Object object;
+		float life = 2;
+		
+		public SendRequest(Object object){
+			this.object = object;
+		}
 	}
 }

@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Component;
 import io.anuke.koru.components.ChildComponent;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.DamageComponent;
+import io.anuke.koru.components.DataComponent;
 import io.anuke.koru.components.DestroyOnTerrainHitComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.HealthComponent;
@@ -22,6 +23,7 @@ import io.anuke.koru.components.VelocityComponent;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.network.Interpolator;
+import io.anuke.koru.renderers.BlockAnimationRenderer;
 import io.anuke.koru.renderers.IndicatorRenderer;
 import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.renderers.PlayerRenderer;
@@ -80,6 +82,11 @@ public enum EntityType{
 			return new Component[]{new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleComponent()};
 		}
 	},
+	blockanimation{
+		public Component[] defaultComponents(){
+			return new Component[]{new PositionComponent(), new RenderComponent(new BlockAnimationRenderer()), new DataComponent()};
+		}
+	},
 	tile{
 		public Component[] defaultComponents(){
 			return new Component[]{new TileComponent()};
@@ -92,8 +99,6 @@ public enum EntityType{
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox != null) initHitbox(entity, hitbox);
-		
-		
 	}
 
 	public boolean collide(KoruEntity entity, KoruEntity other){

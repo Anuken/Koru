@@ -685,6 +685,13 @@ items/stoneitem
   orig: 12, 12
   offset: 0, 0
   index: -1
+items/wooditem
+  rotate: false
+  xy: 37, 19
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 
 koru4.png
 format: RGBA8888

@@ -1,10 +1,14 @@
 package io.anuke.koru.entities;
 
-import io.anuke.koru.components.*;
+import com.badlogic.gdx.graphics.Color;
+
+import io.anuke.koru.components.ChildComponent;
+import io.anuke.koru.components.DataComponent;
+import io.anuke.koru.components.FadeComponent;
+import io.anuke.koru.components.ParticleComponent;
+import io.anuke.koru.components.TextComponent;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.World;
-
-import com.badlogic.gdx.graphics.Color;
 
 public class Effects{
 	
@@ -38,6 +42,13 @@ public class Effects{
 		KoruEntity entity = new KoruEntity(EntityType.particle);
 		entity.position().set(x, y);
 		entity.mapComponent(ParticleComponent.class).set(name, start, end).setSpeed(gravity, velocity);
+		entity.sendSelf();
+	}
+	
+	public static void block(Material material, int x, int y){
+		KoruEntity entity = new KoruEntity(EntityType.blockanimation);
+		entity.position().set(x, y);
+		entity.mapComponent(DataComponent.class).data = material;
 		entity.sendSelf();
 	}
 	

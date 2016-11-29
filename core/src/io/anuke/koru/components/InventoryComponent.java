@@ -22,6 +22,7 @@ public class InventoryComponent implements Component{
 	@SuppressWarnings("unused")
 	private InventoryComponent(){}
 	
+	//TODO respect max stack size
 	public void clickSlot(int x, int y){
 		ItemStack stack = inventory[x][y];
 		if(selected == null){
@@ -31,8 +32,13 @@ public class InventoryComponent implements Component{
 			}
 		}else{
 			if(stack != null){
-				inventory[x][y] = selected;
-				selected = stack;
+				if(stack.item != selected.item){
+					inventory[x][y] = selected;
+					selected = stack;
+				}else{
+					inventory[x][y].amount += selected.amount;
+					selected = null;
+				}
 			}else{
 				inventory[x][y] = selected;
 				selected = null;
@@ -62,6 +68,11 @@ public class InventoryComponent implements Component{
 	}
 
 	public void addItems(Iterable<ItemStack> items){
+		for(ItemStack item : items)
+			addItem(item);
+	}
+	
+	public void addItems(ItemStack[] items){
 		for(ItemStack item : items)
 			addItem(item);
 	}

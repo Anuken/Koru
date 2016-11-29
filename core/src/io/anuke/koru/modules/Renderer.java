@@ -20,8 +20,8 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
-import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.utils.RepackableAtlas;
+import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Tile;
@@ -66,6 +66,7 @@ public class Renderer extends Module<Koru>{
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
+		
 		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
 				drawRenderables(renderables);
@@ -84,7 +85,8 @@ public class Renderer extends Module<Koru>{
 	public void init(){
 		player = getModule(ClientData.class).player;
 		world = getModule(World.class);
-		ParticleRenderer.loadParticles(this);
+		
+		Resources.loadParticle("spark");
 	}
 
 	@Override

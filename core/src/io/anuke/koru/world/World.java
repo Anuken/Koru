@@ -232,11 +232,16 @@ public class World extends Module<Koru>{
 		IServer.instance().sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
 	}
 
-
+	public void updateLater(int x, int y){
+		updated = true;
+		tile(x, y).changeEvent();
+		IServer.instance().sendLater(new TileUpdatePacket(x, y, tile(x, y)));
+	}
 
 	public Tile tile(int x, int y){
 		if( !IServer.active()){
-			return getRelativeChunk(x, y).getWorldTile(x, y);
+			Chunk chunk = getRelativeChunk(x, y);
+			return chunk == null ? null : chunk.getWorldTile(x, y);
 		}
 		int cx = (x < -1 ? x + 1 : x) / chunksize, cy = (y < -1 ? y + 1 : y) / chunksize;
 		if(x < 0) cx --;

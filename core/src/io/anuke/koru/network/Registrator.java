@@ -19,6 +19,7 @@ import com.esotericsoftware.kryo.io.Output;
 
 import io.anuke.koru.components.ChildComponent;
 import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.DataComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.ParticleComponent;
@@ -100,6 +101,7 @@ public class Registrator{
 		k.register(TextComponent.class);
 		k.register(InventoryComponent.class);
 		k.register(ParticleComponent.class);
+		k.register(DataComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncBuffer.class);

@@ -282,6 +282,10 @@ public class KoruServer extends IServer{
 	public void sendEntity(KoruEntity entity){
 		sendToAll(entity);
 	}
+	
+	public void sendLater(Object object){
+		updater.addToSendQueue(object);
+	}
 
 	public void sendToAll(Object object){
 		for(ConnectionInfo info : connections.values()){

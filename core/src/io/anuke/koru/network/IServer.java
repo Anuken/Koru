@@ -21,6 +21,7 @@ public abstract class IServer{
 	abstract public void sendTCP(int id, Object object);
 	abstract public void sendUDP(int id, Object object);
 	abstract public void sendEntity(KoruEntity entity);
+	abstract public void sendLater(Object object);
 	abstract public void removeEntity(KoruEntity entity);
 	
 	abstract public long getFrameID();

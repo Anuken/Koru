@@ -65,6 +65,10 @@ public class InventoryWidget extends VisTable{
 			batch.draw(region, Gdx.input.getX() - region.getRegionWidth()*pscale / 2,
 					(Gdx.graphics.getHeight() - Gdx.input.getY()) - region.getRegionHeight()*pscale / 2, 
 					region.getRegionWidth()*pscale, region.getRegionHeight()*pscale);
+			
+			if(inventory.selected.amount > 1) Resources.font().draw(batch, inventory.selected.amount + "", 
+					Gdx.input.getX()+8 - 32, (Gdx.graphics.getHeight() - Gdx.input.getY()) + 25);
+			
 		}
 
 		Actor actor = getStage().hit(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY(), true);
@@ -103,7 +107,9 @@ public class InventoryWidget extends VisTable{
 				batch.draw(region, getX() + getWidth()/2 - region.getRegionWidth()/2*slotsize/16, getY() + getHeight()/2 - region.getRegionHeight()/2*slotsize/16,
 						region.getRegionWidth()*slotsize/16,
 						region.getRegionHeight()*slotsize/16);
-
+				Resources.font().getData().setScale(1f);
+				if(stacks[x][y].amount > 1) Resources.font().draw(batch, stacks[x][y].amount + "", getX()+8, getY() + 57);
+				
 			}
 		}
 	}

@@ -10,7 +10,6 @@ public class RenderComponent implements Component{
 	public RenderableGroup group = new RenderableGroup();
 	public int direction;
 	public float walkframe = 0;
-
 	
 	public RenderComponent(EntityRenderer renderer){
 		this.renderer = renderer;
