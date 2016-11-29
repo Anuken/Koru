@@ -164,7 +164,7 @@ public class KoruServer extends IServer{
 				sendTCP(info.id, updater.world.createChunkPacket(packet));
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket)object;
-				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type, (float)packet.data[0], (float)packet.data[1]);
+				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type, packet.data);
 			}else if(object instanceof SlotChangePacket){
 				SlotChangePacket packet = (SlotChangePacket)object;
 				packet.slot = UCore.clamp(packet.slot, 0, 3);

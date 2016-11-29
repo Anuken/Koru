@@ -1,11 +1,10 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.world.Tile;
+import io.anuke.koru.network.InputHandler.ClickEvent;
 
 public interface Item{
 	
-	public default void clickEvent(InventoryComponent inventory, ItemStack stack, int x, int y, Tile clicked){}
+	public default void clickEvent(ClickEvent event){}
 	
 	public default int getMaxStackSize(){
 		return 40;

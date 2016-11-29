@@ -29,6 +29,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 	private Vector2 vector = new Vector2();
 	public CollisionSystem collisions;
 	KoruEntity player;
+	int blockx, blocky;
 
 	public void init() {
 		InputMultiplexer plex = new InputMultiplexer();
@@ -49,7 +50,18 @@ public class Input extends Module<Koru> implements InputProcessor {
 			getModule(UI.class).chat.enterPressed();
 
 		if (!getModule(Network.class).connected() || getModule(UI.class).chat.chatOpen()) return;
-
+		
+		
+		Vector3 vec = getModule(Renderer.class).unproject();
+		int nx = World.tile(vec.x), ny = World.tile(vec.y);
+		
+		if(Gdx.input.isButtonPressed(Buttons.LEFT) && (nx != blockx || ny != blocky)){
+			sendInput(InputType.block_moved, nx, ny);
+		}
+		
+		blockx = nx;
+		blocky = ny;
+		
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
@@ -107,10 +119,9 @@ public class Input extends Module<Koru> implements InputProcessor {
 		}
 	}
 
-	void sendInput(InputType type) {
+	void sendInput(InputType type, Object... params) {
 		InputPacket packet = new InputPacket();
-		Vector3 v = getModule(Renderer.class).camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1f));
-		packet.data = new Object[]{v.x, v.y};
+		packet.data = params;
 		packet.type = type;
 		getModule(Network.class).client.sendTCP(packet);
 	}
@@ -142,7 +153,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		stack.item.clickEvent(player.mapComponent(InventoryComponent.class), stack, mouse.x, mouse.y, getModule(World.class).getTile(mouse));
 		*/
 		if (button == Buttons.LEFT) {
-			sendInput(InputType.leftclick_down);
+			sendInput(InputType.leftclick_down, blockx, blocky);
 		} else if (button == Buttons.RIGHT) {
 			sendInput(InputType.rightclick_down);
 		}

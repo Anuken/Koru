@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
@@ -46,6 +47,7 @@ public class Renderer extends Module<Koru>{
 	public GlyphLayout layout;
 	public BitmapFont font;
 	public FrameBufferMap buffers;
+	public Vector3 vector = new Vector3();
 	public boolean debug = false;
 	public final boolean gbuffer = false;
 	public KoruEntity player;
@@ -370,5 +372,9 @@ public class Renderer extends Module<Koru>{
 
 	public BitmapFont font(){
 		return font;
+	}
+	
+	public Vector3 unproject(){
+		return camera.unproject(vector.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 	}
 }

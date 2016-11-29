@@ -3,6 +3,7 @@ package io.anuke.koru.network;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.Effects;
@@ -10,18 +11,27 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 
 public class InputHandler{
 	public float mouseangle;
 	private HashMap<InputType, Boolean> keys = new HashMap<InputType, Boolean>();
-	private float x,y;
 	KoruEntity entity;
+	int blockx, blocky;
+	float blockhold;
+	
+	public InputHandler(KoruEntity entity){
+		this.entity = entity;
+	}
+	
+	public void update(float delta){
+		if(keys.get(InputType.leftclick_down))
+			blockhold += delta*60;
+		else
+			blockhold = 0;
+	}
 
-	public void inputEvent(InputType type, float x, float y){
-		this.x = x;
-		this.y = y;
-		inputKey(type);
+	public void inputEvent(InputType type, Object... data){
+		inputKey(type, data);
 		if(type.name().contains("up")){
 			keys.put(InputType.values()[type.ordinal() - 1], false);
 		}else if(type.name().contains("down")){
@@ -29,23 +39,61 @@ public class InputHandler{
 		}
 	}
 
-	private void inputKey(InputType type){
+	private void inputKey(InputType type, Object... data){
 		if(type == InputType.leftclick_down){
-			InventoryComponent inv = entity.mapComponent(InventoryComponent.class);
-			int slot = inv.hotbar;
-			ItemStack stack = inv.inventory[slot][0];
-			if(stack == null) return;
+			blockx = (int)data[0];
+			blocky = (int)data[1];
 			
-			Tile tile = IServer.instance().getWorld().getTile(x, y);
+			click(true);
+		}else if(type == InputType.block_moved){
+			click(false);
 			
-			stack.item.clickEvent(inv, stack, World.tile(x), World.tile(y), tile);
+			blockhold = 0;
+			blockx = (int)data[0];
+			blocky = (int)data[1];
+			
+			click(true);
+			
+			
 		}else if(type == InputType.r){
 			Effects.particle(entity, Color.BLUE);
 		}
 	}
-
-	public InputHandler(KoruEntity entity){
-		this.entity = entity;
+	
+	private void click(boolean down){
+		InventoryComponent inv = entity.mapComponent(InventoryComponent.class);
+		int slot = inv.hotbar;
+		ItemStack stack = inv.inventory[slot][0];
+		if(stack == null) return;
+		Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
+		
+		ClickEvent event = Pools.get(ClickEvent.class).obtain().set(down, blockx, blocky, tile, inv);
+		stack.item.clickEvent(event);
+		event.free();
 	}
-
+	
+	public static class ClickEvent{
+		public int x, y;
+		public Tile tile;
+		public InventoryComponent component;
+		public ItemStack stack;
+		public boolean down;
+		
+		public ClickEvent set(boolean click, int x, int y, Tile tile, InventoryComponent component){
+			this.down = click;
+			this.x = x;
+			this.y = y;
+			this.tile = tile;
+			this.component = component;
+			return this;
+		}
+		
+		public void free(){
+			Pools.free(this);
+		}
+	}
+	
+	public static enum ClickType{
+		up, down;
+	}
 }
