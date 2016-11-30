@@ -36,7 +36,15 @@ public class InventoryComponent implements Component{
 					inventory[x][y] = selected;
 					selected = stack;
 				}else{
-					inventory[x][y].amount += selected.amount;
+					int max = inventory[x][y].item.getMaxStackSize();
+					int addable = max - inventory[x][y].amount;
+					int added = Math.min(addable, selected.amount);
+					
+					inventory[x][y].amount += added;
+					
+					selected.amount -= added;
+					
+					if(selected.amount == 0)
 					selected = null;
 				}
 			}else{

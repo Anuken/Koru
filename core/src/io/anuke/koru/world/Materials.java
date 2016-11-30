@@ -110,7 +110,7 @@ public enum Materials implements Material{
 		}
 	}, 
 	stoneblock(MaterialType.block){{addDrop(Items.stone, 6);}},
-	woodblock(MaterialType.block){{addDrop(Items.wood, 5);}},
+	woodblock(MaterialType.block, 60){{addDrop(Items.wood, 5); color = new Color(0x744a28ff);}},
 	hatcher(MaterialType.hatcher),
 	box(MaterialType.chest){
 		{addDrop(Items.wood, 10);}
@@ -127,7 +127,7 @@ public enum Materials implements Material{
 	private int breaktime;
 	private boolean enablecollisions = true;
 	private Array<ItemStack> drops = new Array<ItemStack>();
-	private Color color = Color.CLEAR;
+	protected Color color = Color.CLEAR;
 	private float offset = 0;
 	private int variants = 1;
 	
@@ -161,7 +161,7 @@ public enum Materials implements Material{
 	private Materials(MaterialType type, float offset){
 		this.type = type;
 		this.offset = offset;
-		color = new Color(0x5a391e);
+		color = new Color(0x5a391eff);
 	}
 	
 	void vary(int i){

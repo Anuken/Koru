@@ -7,7 +7,7 @@ public enum Items implements Item{
 	stick, wood, pinecone, water, stone,
 	woodaxe(true, 1f){
 		public boolean breaks(Material mat){
-			return mat.getType() == MaterialType.tree;
+			return mat.getType() == MaterialType.tree || mat.name().contains("wood");
 		}
 	};
 	float power;

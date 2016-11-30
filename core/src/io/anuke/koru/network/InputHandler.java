@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
-import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
@@ -37,7 +36,7 @@ public class InputHandler{
 				Effects.blockParticle(World.world(blockx), World.world(blocky), tile.block());
 				
 				if(blockhold >= tile.block().breaktime()){
-					Effects.blockParticle(World.world(blockx), World.world(blocky), tile.block());
+					Effects.blockParticle(World.world(blockx), World.world(blocky)-1, tile.block());
 					
 					Effects.block(tile.block(), blockx, blocky);
 					entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
@@ -77,7 +76,6 @@ public class InputHandler{
 		if(type == InputType.leftclick_down){
 			blockx = (int) data[0];
 			blocky = (int) data[1];
-			Koru.log("Recieved leftclick down.");
 			click(true);
 		}else if(type == InputType.block_moved){
 			click(false);
@@ -87,7 +85,6 @@ public class InputHandler{
 			blocky = (int) data[1];
 
 			click(true);
-			Koru.log("Block moved.");
 		}else if(type == InputType.r){
 			Effects.particle(entity, Color.BLUE);
 		}

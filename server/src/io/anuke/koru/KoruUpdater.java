@@ -158,7 +158,7 @@ public class KoruUpdater{
 	
 	class SendRequest{
 		Object object;
-		float life = 2;
+		float life = 4;
 		
 		public SendRequest(Object object){
 			this.object = object;
