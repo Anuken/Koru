@@ -339,6 +339,11 @@ public class KoruServer extends IServer{
 	public long getFrameID(){
 		return updater.frameid;
 	}
+	
+	@Override
+	public float getDelta(){
+		return updater.delta;
+	}
 
 	@Override
 	public KoruEngine getEngine(){

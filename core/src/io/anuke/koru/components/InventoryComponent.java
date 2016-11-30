@@ -22,7 +22,6 @@ public class InventoryComponent implements Component{
 	@SuppressWarnings("unused")
 	private InventoryComponent(){}
 	
-	//TODO respect max stack size
 	public void clickSlot(int x, int y){
 		ItemStack stack = inventory[x][y];
 		if(selected == null){

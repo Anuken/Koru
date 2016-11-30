@@ -25,6 +25,7 @@ public abstract class IServer{
 	abstract public void removeEntity(KoruEntity entity);
 	
 	abstract public long getFrameID();
+	abstract public float getDelta();
 	abstract public KoruEngine getEngine();
 	abstract public World getWorld();
 }

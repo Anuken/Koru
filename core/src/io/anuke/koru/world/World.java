@@ -33,6 +33,7 @@ public class World extends Module<Koru>{
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
+	public float time; //world time
 	
 	public World(WorldLoader loader){
 		this();
@@ -50,6 +51,9 @@ public class World extends Module<Koru>{
 	@Override
 	public void update(){
 		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
+		
+		time += IServer.instance().getDelta();
+		
 		updated = false;
 		
 		if(IServer.active()) return;

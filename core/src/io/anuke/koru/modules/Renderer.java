@@ -16,10 +16,13 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.bitfire.postprocessing.PostProcessor;
+import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
+import io.anuke.koru.graphics.Light;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
@@ -48,8 +51,9 @@ public class Renderer extends Module<Koru>{
 	public BitmapFont font;
 	public FrameBufferMap buffers;
 	public Vector3 vector = new Vector3();
+	public PostProcessor processor;
+	public Light light;
 	public boolean debug = false;
-	public final boolean gbuffer = false;
 	public KoruEntity player;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
@@ -66,19 +70,23 @@ public class Renderer extends Module<Koru>{
 		font.setUseIntegerPositions(false);
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
+		processor = new PostProcessor(false, true, true);
+		ShaderLoader.BasePath = "default-shaders/";
 		
 		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
 				drawRenderables(renderables);
 			}
 		});
-
-		FrameBufferLayer.loadShaders();
-
-		if(gbuffer)
-			buffers.add("global", Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 		
-		//recorder =  new GifRecorder(batch,1f/GUIscale);
+		addEffects();
+	}
+	
+	void addEffects(){
+		light = new Light(gwidth(), gheight());
+		
+		light.SetColor(0.0f, 0.0f, 0.04f, 1f);
+		processor.addEffect(light);
 	}
 
 
@@ -93,17 +101,23 @@ public class Renderer extends Module<Koru>{
 	public void update(){
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
-		clearScreen();
+		
 		doRender();
 		updateCamera();
-
 	}
 
 	void doRender(){
+		
+		processor.capture();
+		
+		clearScreen();
 		batch.begin();
 		drawMap();
 		RenderableHandler.getInstance().renderAll(batch);
 		batch.end();
+
+		processor.render();
+		
 		batch.setProjectionMatrix(matrix);
 		batch.begin();
 		drawGUI();
@@ -248,9 +262,6 @@ public class Renderer extends Module<Koru>{
 
 		FrameBufferLayer selected = null;
 
-		if(gbuffer)
-			buffers.begin("global");
-
 		batch.begin();
 
 		for(Renderable layer : renderables){
@@ -283,16 +294,9 @@ public class Renderer extends Module<Koru>{
 			selected = null;
 		}
 		batch.end();
-
-		if(gbuffer)
-			buffers.end("global");
 		batch.begin();
 
 		batch.setColor(Color.WHITE);
-		if(gbuffer)
-			batch.draw(buffers.texture("global"), camera.position.x - camera.viewportWidth / 2 * camera.zoom,
-					camera.position.y + camera.viewportHeight / 2 * camera.zoom, camera.viewportWidth * camera.zoom,
-					-camera.viewportHeight * camera.zoom);
 
 	}
 
@@ -300,9 +304,9 @@ public class Renderer extends Module<Koru>{
 		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 
 		batch.end();
-		if(gbuffer)
-			buffers.end("global");
-
+		
+		processor.captureEnd();
+		
 		buffers.begin(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
 		for(Texture t : atlas.getTextures())
@@ -321,8 +325,9 @@ public class Renderer extends Module<Koru>{
 			batch.setShader(null);
 		buffers.end(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(0);
-		if(gbuffer)
-			buffers.begin("global");
+		
+		processor.captureNoClear();
+		
 		batch.begin();
 		selected.end();
 		batch.setColor(Color.WHITE);
@@ -337,8 +342,8 @@ public class Renderer extends Module<Koru>{
 
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		camera.setToOrtho(false, width / scale, height / scale); // resize
-																	// camera
+		camera.setToOrtho(false, width / scale, height / scale); 
+		light.SetSize(width, height);
 	}
 
 	public GlyphLayout getBounds(String text){

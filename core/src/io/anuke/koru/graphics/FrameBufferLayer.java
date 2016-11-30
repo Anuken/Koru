@@ -1,13 +1,14 @@
 package io.anuke.koru.graphics;
 
-import io.anuke.koru.modules.Renderer;
-import io.anuke.ucore.spritesystem.Renderable;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
+import com.bitfire.utils.ShaderLoader;
+
+import io.anuke.koru.modules.Renderer;
+import io.anuke.ucore.spritesystem.Renderable;
 
 public enum FrameBufferLayer{
 	shadow("shadow", -999999){
@@ -18,6 +19,20 @@ public enum FrameBufferLayer{
 
 		protected void begin(){
 
+		}
+	}, 
+	light("light", 999999){
+		{
+			bind = 6;
+		}
+		@Override
+		public void end(){
+			
+		}
+
+		@Override
+		protected void begin(){
+			
 		}
 	};
 
