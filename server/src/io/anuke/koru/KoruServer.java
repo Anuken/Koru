@@ -120,6 +120,7 @@ public class KoruServer extends IServer{
 
 			DataPacket data = new DataPacket();
 			data.playerid = player.getID();
+			data.time = getWorld().time;
 
 			ArrayList<Entity> entities = new ArrayList<Entity>();
 			for(Entity entity : updater.engine.getEntities()){

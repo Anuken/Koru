@@ -7,4 +7,5 @@ import com.badlogic.ashley.core.Entity;
 public class DataPacket{
 	public ArrayList<Entity> entities;
 	public long playerid;
+	public float time;
 }

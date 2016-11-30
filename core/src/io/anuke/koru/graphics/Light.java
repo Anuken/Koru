@@ -1,5 +1,6 @@
 package io.anuke.koru.graphics;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
@@ -15,12 +16,16 @@ public final class Light extends PostProcessorEffect{
 		light = new LightFilter(viewportWidth, viewportHeight);
 	}
 
-	public void SetSize(int width, int height){
+	public void setSize(int width, int height){
 		light.SetSize(width, height);
 	}
 
-	public void SetColor(float r, float g, float b, float a){
+	public void setColor(float r, float g, float b, float a){
 		light.SetColor(r, g, b, a);
+	}
+	
+	public void setColor(Color color){
+		light.SetColor(color.r, color.g, color.b, color.a);
 	}
 
 	@Override

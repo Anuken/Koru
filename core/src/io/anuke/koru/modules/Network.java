@@ -88,6 +88,7 @@ public class Network extends Module<Koru>{
 					for(Entity entity : data.entities){
 						entityQueue.add((KoruEntity) entity);
 					}
+					getModule(World.class).time = data.time;
 					getModule(ClientData.class).player.resetID(data.playerid);
 					entityQueue.add(getModule(ClientData.class).player);
 					Koru.log("Recieved data packet.");

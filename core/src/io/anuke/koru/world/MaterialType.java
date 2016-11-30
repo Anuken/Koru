@@ -132,7 +132,7 @@ public enum MaterialType{
 
 			sprite.add(group);
 			
-			new SpriteRenderable(Resources.region("light")).setPosition(tile(x), tile(y)).center().setLight().setColor(0.6f, 0.5f, 0.05f).add(group);
+			new SpriteRenderable(Resources.region("light")).setPosition(tile(x), tile(y)).center().setLight().setColor(0.6f, 0.5f, 0.3f).add(group);
 
 		}
 

@@ -84,8 +84,6 @@ public class Renderer extends Module<Koru>{
 	
 	void addEffects(){
 		light = new Light(gwidth(), gheight());
-		
-		light.SetColor(0.0f, 0.0f, 0.04f, 1f);
 		processor.addEffect(light);
 	}
 
@@ -99,6 +97,8 @@ public class Renderer extends Module<Koru>{
 
 	@Override
 	public void update(){
+		light.setColor(world.getAmbientColor());
+		
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
 		
@@ -343,7 +343,7 @@ public class Renderer extends Module<Koru>{
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale); 
-		light.SetSize(width, height);
+		light.setSize(width, height);
 	}
 
 	public GlyphLayout getBounds(String text){

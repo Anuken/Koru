@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +19,7 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
+import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
 public class World extends Module<Koru>{
@@ -33,7 +36,10 @@ public class World extends Module<Koru>{
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
-	public float time; //world time
+	public float time = 0f; //world time
+	public final static float timescale = 5000f;
+	private Color ambientColor = new Color();
+	private float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	
 	public World(WorldLoader loader){
 		this();
@@ -47,12 +53,22 @@ public class World extends Module<Koru>{
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
 		}
 	}
+	
+	public Color getAmbientColor(){
+		int index = (int)(time*colors.length);
+		float mod = time*colors.length-index;
+		float current = colors[index];
+		float next = colors[(index == colors.length-1 ?  0 : index+1)];
+		
+		return Hue.blend(Color.WHITE, Color.BLACK, current*(1f-mod) + next*mod, ambientColor);
+	}
 
 	@Override
 	public void update(){
 		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
 		
-		time += IServer.instance().getDelta();
+		time += !IServer.active() ? Gdx.graphics.getDeltaTime()*60f/timescale : IServer.instance().getDelta()/timescale;
+		if(time >= 1f) time = 0f;
 		
 		updated = false;
 		
