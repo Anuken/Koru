@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import io.anuke.koru.Koru;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.spritesystem.RenderPool;
 import io.anuke.ucore.spritesystem.RenderableList;
 import io.anuke.ucore.spritesystem.SortProviders;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
@@ -24,10 +25,10 @@ public enum MaterialType{
 				type = rand(x,y, material.variants());
 			}
 			
-			new SpriteRenderable(Resources.region(type == 0 ? material.name() : material.name() + type))
+			RenderPool.sprite(Resources.region(type == 0 ? material.name() : material.name() + type))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
-				new SpriteRenderable(Resources.region(material.name() + "edge"))
+				RenderPool.sprite(Resources.region(material.name() + "edge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
 						.center().setLayer(-material.id() * 2 + 1).add(group);
 		}
@@ -37,14 +38,14 @@ public enum MaterialType{
 		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
-			new SpriteRenderable(Resources.region("grass" + (rand <= 8 ? rand : "1")))
+			RenderPool.sprite(Resources.region("grass" + (rand <= 8 ? rand : "1")))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
 					.setColor(grasscolor.r * material.foilageColor().r,
 							  grasscolor.g * material.foilageColor().g,
 							  grasscolor.b * material.foilageColor().b).add(group);
 			
 			if(Koru.module(World.class).blends(x, y, material))
-				new SpriteRenderable(Resources.region("grassedge"))
+				RenderPool.sprite(Resources.region("grassedge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
 						.setColor(grasscolor.r * material.foilageColor().r,
 								grasscolor.g * material.foilageColor().g,
@@ -59,10 +60,10 @@ public enum MaterialType{
 				type = rand(x,y, material.variants());
 			}
 			
-			new SpriteRenderable(Resources.region(type == 0 ? material.name() : material.name() + type))
+			RenderPool.sprite(Resources.region(type == 0 ? material.name() : material.name() + type))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
-				new SpriteRenderable(Resources.region(material.name() + "edge"))
+				RenderPool.sprite(Resources.region(material.name() + "edge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
 						.center().setLayer(-material.id() * 2 + 1).add(group);
 		}
@@ -79,11 +80,11 @@ public enum MaterialType{
 	},
 	block{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			new SpriteRenderable(Resources.region(material.name()))
+			RenderPool.sprite(Resources.region(material.name()))
 			.setPosition(itile(x), itile(y))
 			.setProvider(SortProviders.object).add(group);
 			
-			new SpriteRenderable(Resources.region("walldropshadow"))
+			RenderPool.sprite(Resources.region("walldropshadow"))
 			.setAsShadow()
 			.setPosition(tile(x), tile(y))
 			.center()
@@ -168,9 +169,9 @@ public enum MaterialType{
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 
-			SpriteRenderable sprite = (SpriteRenderable) new SpriteRenderable(Resources.region(material.name()))
+			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name()))
 					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())
-					.setProvider(SortProviders.object);
+					.setProvider(SortProviders.object).sprite();
 
 			sprite.add(group);
 		}
@@ -192,7 +193,7 @@ public enum MaterialType{
 	foilage(Hue.rgb(69, 109, 29, 0.02f)){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
-		//	new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
+		//	RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
 		//			.setColor(tile.tile().foilageColor()).addShadow(group, Resources.atlas(), - material.offset())
 		//			.setProvider(SortProviders.object).add(group);
 		}
@@ -221,7 +222,7 @@ public enum MaterialType{
 
 
 			for(int i = 0; i < 2; i++){
-				SpriteRenderable a = new SpriteRenderable(Resources.region("grassblock2" + blendn));
+				SpriteRenderable a = RenderPool.sprite(Resources.region("grassblock2" + blendn));
 				a.setProvider(SortProviders.object);
 				
 				float gadd = i == 1 ? 1f : add;
@@ -232,7 +233,7 @@ public enum MaterialType{
 			}
 
 			if(!isGrass(x, y + 1)){
-				SpriteRenderable sh = new SpriteRenderable(Resources.region("grassblock2" +blendn)).setAsShadow()
+				SpriteRenderable sh = RenderPool.sprite(Resources.region("grassblock2" +blendn)).setAsShadow()
 						.setPosition(itile(x) + 1, tile(y) + 1 + yadd);
 				sh.add(group);
 			}
@@ -261,7 +262,7 @@ public enum MaterialType{
 			for(int i = 0; i < iter; i++){
 				if(i == 0 && !isGrass(x, y - 1)) continue;
 				float gadd = (i %2== 0 ? 1f : add);
-				SpriteRenderable a = new SpriteRenderable(Resources.region("grassf1"));
+				SpriteRenderable a = RenderPool.sprite(Resources.region("grassf1"));
 				
 				a.setProvider(SortProviders.object);
 				a.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd);
@@ -271,7 +272,7 @@ public enum MaterialType{
 			}
 
 			if(!isGrass(x, y + 1)){
-				SpriteRenderable sh = new SpriteRenderable(Resources.region("grassf1")).setAsShadow();
+				SpriteRenderable sh = RenderPool.sprite(Resources.region("grassf1")).setAsShadow();
 				sh.setPosition(itile(x)+1, tile(y)+2+ xadd);
 				sh.add(group);
 			}
@@ -288,7 +289,7 @@ public enum MaterialType{
 	object{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 
-			new SpriteRenderable(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
+			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
 					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
 		}

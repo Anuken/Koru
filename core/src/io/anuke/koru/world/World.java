@@ -66,7 +66,7 @@ public class World extends Module<Koru>{
 	@Override
 	public void update(){
 		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
-		
+	
 		time += !IServer.active() ? Gdx.graphics.getDeltaTime()*60f/timescale : IServer.instance().getDelta()/timescale;
 		if(time >= 1f) time = 0f;
 		
