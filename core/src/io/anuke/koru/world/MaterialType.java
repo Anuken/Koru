@@ -137,7 +137,7 @@ public enum MaterialType{
 			new SpriteRenderable(Resources.region("light")){
 				public void draw(Batch batch){
 					sprite.setOriginCenter();
-					sprite.setScale(1f + (float)Math.sin(Gdx.graphics.getFrameId()/7.4f+rand(x,y,100)/30f)/21f + (float)Math.random()/20f);
+					sprite.setScale(1f + (float)Math.sin(Gdx.graphics.getFrameId()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
 					
 					super.draw(batch);
 				}
