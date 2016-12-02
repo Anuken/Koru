@@ -15,12 +15,14 @@ import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
+import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.InventoryTileData;
+import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
@@ -158,20 +160,17 @@ public class Input extends Module<Koru> implements InputProcessor {
 			sendInput(InputType.rightclick_down);
 		}
 		
-		/*
-		 BlockInputPacket packet = new BlockInputPacket();
+		
+		BlockInputPacket packet = new BlockInputPacket();
 		if (button == Buttons.LEFT) {
-			sendInput(InputType.leftclick_down);
-			packet.material = Materials.woodblock;
-		} else if (button == Buttons.RIGHT) {
-			sendInput(InputType.rightclick_down);
-			packet.material = Materials.air;
+			packet.material = Materials.torch;
+			GridPoint2 mouse = cursorblock();
+			packet.x = mouse.x;
+			packet.y = mouse.y;
+			getModule(Network.class).client.sendTCP(packet);
 		}
-		GridPoint2 mouse = cursorblock();
-		packet.x = mouse.x;
-		packet.y = mouse.y;
-		getModule(Network.class).client.sendTCP(packet);
-		*/
+		
+		
 		return false;
 	}
 

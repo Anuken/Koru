@@ -2,7 +2,9 @@ package io.anuke.koru.world;
 
 import static io.anuke.koru.world.World.tilesize;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -122,6 +124,46 @@ public enum MaterialType{
 			return false;
 		}
 	},
+	torch(){
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			
+			new SpriteRenderable(Resources.region("torchflame1")){
+				public void draw(Batch batch){
+					sprite.setRegion(Resources.region("torchflame" + frame(x,y)));
+					super.draw(batch);
+				}
+			}.setPosition(tile(x), tile(y)).centerX().setLight().add(group);
+			
+			new SpriteRenderable(Resources.region("light")){
+				public void draw(Batch batch){
+					sprite.setOriginCenter();
+					sprite.setScale(1f + (float)Math.sin(Gdx.graphics.getFrameId()/7.4f+rand(x,y,100)/30f)/21f + (float)Math.random()/20f);
+					
+					super.draw(batch);
+				}
+			}.setPosition(tile(x), tile(y)+6).center().setLight().setColor(0.5f, 0.4f, 0.2f).add(group);
+			
+			
+			
+			SpriteRenderable sprite = new SpriteRenderable(Resources.region(material.name())){
+				public void draw(Batch batch){
+					sprite.draw(batch);
+					batch.draw(Resources.region("torchflame" + frame(x,y)), sprite.getX(), sprite.getY());
+				}
+			}.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())
+					.setProvider(SortProviders.object).sprite();
+
+			sprite.add(group);
+		}
+		
+		int frame(int x, int y){
+			return (int)(1+(rand(x,y,50)+Gdx.graphics.getFrameId()/4)%4);
+		}
+		
+		public boolean tile(){
+			return false;
+		}
+	},
 	tree(Hue.rgb(80, 53, 30)){
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
@@ -131,9 +173,6 @@ public enum MaterialType{
 					.setProvider(SortProviders.object);
 
 			sprite.add(group);
-			
-			new SpriteRenderable(Resources.region("light")).setPosition(tile(x), tile(y)).center().setLight().setColor(0.6f, 0.5f, 0.3f).add(group);
-
 		}
 
 		public boolean tile(){

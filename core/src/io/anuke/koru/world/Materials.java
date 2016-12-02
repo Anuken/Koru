@@ -112,6 +112,7 @@ public enum Materials implements Material{
 	stoneblock(MaterialType.block){{addDrop(Items.stone, 6);}},
 	woodblock(MaterialType.block, 60){{addDrop(Items.wood, 5); color = new Color(0x744a28ff);}},
 	hatcher(MaterialType.hatcher),
+	torch(MaterialType.torch),
 	box(MaterialType.chest){
 		{addDrop(Items.wood, 10);}
 		public TileData getDefaultData(){

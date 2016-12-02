@@ -402,11 +402,11 @@ objects/cattails2
   orig: 12, 12
   offset: 0, 0
   index: -1
-objects/pinesapling
+objects/torchflame1
   rotate: false
-  xy: 349, 145
-  size: 8, 8
-  orig: 8, 8
+  xy: 349, 141
+  size: 8, 12
+  orig: 8, 12
   offset: 0, 0
   index: -1
 objects/pinecones
@@ -535,6 +535,20 @@ objects/mushy5
   orig: 12, 8
   offset: 0, 0
   index: -1
+objects/torchflame4
+  rotate: false
+  xy: 493, 146
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/torchflame2
+  rotate: false
+  xy: 493, 132
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
 objects/mushy2
   rotate: false
   xy: 809, 164
@@ -561,6 +575,27 @@ objects/mushy8
   xy: 851, 164
   size: 12, 8
   orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/torch
+  rotate: false
+  xy: 503, 141
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/torchflame3
+  rotate: false
+  xy: 513, 141
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/pinesapling
+  rotate: false
+  xy: 219, 33
+  size: 8, 8
+  orig: 8, 8
   offset: 0, 0
   index: -1
 
