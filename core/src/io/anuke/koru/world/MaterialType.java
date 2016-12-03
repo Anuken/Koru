@@ -125,7 +125,7 @@ public enum MaterialType{
 			return false;
 		}
 	},
-	torch(){
+	torch(new Color(0x744a28ff)){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
 			new SpriteRenderable(Resources.region("torchflame1")){
@@ -149,6 +149,7 @@ public enum MaterialType{
 			SpriteRenderable sprite = new SpriteRenderable(Resources.region(material.name())){
 				public void draw(Batch batch){
 					sprite.draw(batch);
+					batch.setColor(1,1,1,sprite.getColor().a);
 					batch.draw(Resources.region("torchflame" + frame(x,y)), sprite.getX(), sprite.getY());
 				}
 			}.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())

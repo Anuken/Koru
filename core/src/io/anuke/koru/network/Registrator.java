@@ -89,7 +89,6 @@ public class Registrator{
 		k.register(InventoryClickPacket.class);
 		k.register(SlotChangePacket.class);
 
-
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);
 		k.register(PositionComponent.class);

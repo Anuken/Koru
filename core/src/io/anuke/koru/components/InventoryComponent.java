@@ -8,6 +8,7 @@ import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
+import io.anuke.koru.network.packets.SlotChangePacket;
 
 public class InventoryComponent implements Component{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
@@ -56,13 +57,27 @@ public class InventoryComponent implements Component{
 	public ItemStack hotbarStack(){
 		return inventory[hotbar][0];
 	}
-	
+
 	/**Server-side only.*/
 	public void sendUpdate(KoruEntity entity){
 		InventoryUpdatePacket update = new InventoryUpdatePacket();
 		update.selected = selected;
 		update.stacks = inventory;
 		IServer.instance().sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, update);
+	}
+	
+	/**Server-side only.*/
+	public void sendHotbarUpdate(KoruEntity entity){
+		SlotChangePacket update = new SlotChangePacket();
+		update.stack = hotbarStack();
+		IServer.instance().sendToAllExcept(entity.mapComponent(ConnectionComponent.class).connectionID, update);
+	}
+	
+	/**Server-side only.*/
+	public void sendHotbarUpdate(KoruEntity entity, int to){
+		SlotChangePacket update = new SlotChangePacket();
+		update.stack = hotbarStack();
+		IServer.instance().sendTCP(to, update);
 	}
 	
 	public void set(ItemStack[][] stacks, ItemStack selected){

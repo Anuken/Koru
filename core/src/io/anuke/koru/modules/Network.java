@@ -25,6 +25,7 @@ import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.utils.Angles;
@@ -112,6 +113,10 @@ public class Network extends Module<Koru>{
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket packet = (EntityRemovePacket) object;
 					entitiesToRemove.add(packet.id);
+				}else if(object instanceof SlotChangePacket){
+					SlotChangePacket packet = (SlotChangePacket) object;
+					if(t.engine.getEntity(packet.id) == null) return;
+					t.engine.getEntity(packet.id).getComponent(InventoryComponent.class).inventory[0][0] = packet.stack;
 				}else if(object instanceof ChatPacket){
 					ChatPacket packet = (ChatPacket) object;
 

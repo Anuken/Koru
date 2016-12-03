@@ -15,14 +15,12 @@ import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
-import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
@@ -83,7 +81,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		}
 		
 		RenderComponent render = player.getComponent(RenderComponent.class);
-		//Koru.log(player.getComponent(RenderComponent.class).direction);
+		
 		if(key(Keys.W) || key(Keys.A) || key(Keys.S) || key(Keys.D)){
 			render.direction = (key(Keys.D) ? 1 : (key(Keys.A) ? 3 : (key(Keys.S) ? 0 : 2)));
 		}
@@ -145,22 +143,13 @@ public class Input extends Module<Koru> implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		/*
-		
-		GridPoint2 mouse = cursorblock();
-		ItemStack stack = player.mapComponent(InventoryComponent.class).inventory[player.mapComponent(InventoryComponent.class).hotbar][0];
-		
-		if(stack == null) return false;
-		
-		stack.item.clickEvent(player.mapComponent(InventoryComponent.class), stack, mouse.x, mouse.y, getModule(World.class).getTile(mouse));
-		*/
 		if (button == Buttons.LEFT) {
 			sendInput(InputType.leftclick_down, blockx, blocky);
 		} else if (button == Buttons.RIGHT) {
 			sendInput(InputType.rightclick_down);
 		}
 		
-		
+		/*
 		BlockInputPacket packet = new BlockInputPacket();
 		if (button == Buttons.LEFT) {
 			packet.material = Materials.torch;
@@ -169,7 +158,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 			packet.y = mouse.y;
 			getModule(Network.class).client.sendTCP(packet);
 		}
-		
+		*/
 		
 		return false;
 	}

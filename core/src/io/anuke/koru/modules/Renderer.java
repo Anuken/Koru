@@ -228,6 +228,8 @@ public class Renderer extends Module<Koru>{
 		font.draw(batch, launcher, gwidth() / 2 - layout.width / 2, gheight());
 
 		font.setColor(Color.WHITE);
+		
+		//font.draw(batch, world.time + "", 20, 20);
 
 		if(debug){
 			GridPoint2 cursor = getModule(Input.class).cursorblock();

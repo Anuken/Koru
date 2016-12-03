@@ -37,7 +37,6 @@ import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.InventoryClickPacket;
-import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
@@ -135,8 +134,17 @@ public class KoruServer extends IServer{
 
 			player.addSelf();
 			
-			player.getComponent(InventoryComponent.class).addItem(new ItemStack(Items.woodaxe));
+			player.getComponent(InventoryComponent.class).inventory[1][0] = new ItemStack(Items.woodaxe);
 			player.getComponent(InventoryComponent.class).sendUpdate(player);
+			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player); //screw this, it isn't working properly
+			
+			
+			//why even try?
+			//for(ConnectionInfo i : connections.values())
+			//	player.getComponent(InventoryComponent.class).sendHotbarUpdate(updater.engine.getEntity(i.playerid), info.id);
+			
+				
+			
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
@@ -168,8 +176,12 @@ public class KoruServer extends IServer{
 				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type, packet.data);
 			}else if(object instanceof SlotChangePacket){
 				SlotChangePacket packet = (SlotChangePacket)object;
+				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				packet.slot = UCore.clamp(packet.slot, 0, 3);
-				getPlayer(info).mapComponent(InventoryComponent.class).hotbar = packet.slot;
+				inv.hotbar = packet.slot;
+				packet.id = info.playerid;
+				packet.stack = inv.inventory[inv.hotbar][0];
+				sendToAllExceptTCP(info.id, packet);
 			}else if(object instanceof StoreItemPacket){
 				StoreItemPacket packet = (StoreItemPacket)object;
 				updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
@@ -184,10 +196,7 @@ public class KoruServer extends IServer{
 				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				inv.clickSlot(packet.x, packet.y);
 				
-				InventoryUpdatePacket update = new InventoryUpdatePacket();
-				update.selected = inv.selected;
-				update.stacks = inv.inventory;
-				send(info, update, false);
+				inv.sendUpdate(updater.engine.getEntity(info.playerid));
 			}else if(object instanceof MaterialRequestPacket){
 				MaterialRequestPacket packet = (MaterialRequestPacket)object;
 				Material mat = MaterialManager.instance().getMaterial(packet.id);
@@ -317,6 +326,10 @@ public class KoruServer extends IServer{
 			if(info.id != id)
 			send(info, object, false);
 		}
+	}
+	
+	public void sendToAllExcept(int id, Object object){
+		sendToAllExceptTCP(id,object);
 	}
 
 	public void sendToAllExceptUDP(int id, Object object){

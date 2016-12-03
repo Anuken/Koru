@@ -32,7 +32,7 @@ public class InputHandler{
 			if(stack != null && stack.item.tool() && stack.item.breaks(tile.block()) && tile.block().breakable()){
 				blockhold += delta * stack.item.power();
 				
-				if((int)(blockhold) % 20 == 5)
+				if((int)(blockhold) % 20 == 1)
 				Effects.blockParticle(World.world(blockx), World.world(blocky), tile.block());
 				
 				if(blockhold >= tile.block().breaktime()){

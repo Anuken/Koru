@@ -37,7 +37,7 @@ public class World extends Module<Koru>{
 	public Chunk[][] tempchunks; //temporary operation chunks
 	boolean[][] chunkloaded;
 	public float time = 0f; //world time
-	public final static float timescale = 5000f;
+	public final static float timescale = 40000f;
 	private Color ambientColor = new Color();
 	private float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	
@@ -60,7 +60,7 @@ public class World extends Module<Koru>{
 		float current = colors[index];
 		float next = colors[(index == colors.length-1 ?  0 : index+1)];
 		
-		return Hue.blend(Color.WHITE, Color.BLACK, current*(1f-mod) + next*mod, ambientColor);
+		return Hue.blend(Color.WHITE, Color.BLACK, 1f-(current*(1f-mod) + next*mod), ambientColor);
 	}
 
 	@Override
