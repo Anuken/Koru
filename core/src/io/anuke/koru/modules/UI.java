@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -26,6 +27,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.ui.ChatTable;
 import io.anuke.koru.ui.InventoryWidget;
+import io.anuke.koru.ui.RecipeMenu;
 import io.anuke.ucore.modules.Module;
 
 public class UI extends Module<Koru> {
@@ -117,7 +119,25 @@ public class UI extends Module<Koru> {
 		uitable.setFillParent(true);
 		stage.addActor(uitable);
 		
-		uitable.bottom().right().add(new InventoryWidget()).align(Align.bottomRight);
+		Stack stack = new Stack();
+		
+		uitable.add(stack).grow();
+		
+		VisTable invTable = new VisTable();
+		stack.add(invTable);
+		
+		invTable.bottom().right().add(new InventoryWidget()).align(Align.bottomRight);
+		
+		
+		VisTable rtable = new VisTable();
+		rtable.center().add(new RecipeMenu()).padBottom(300f);
+		stack.add(rtable);
+		//RecipeMenu menu = new RecipeMenu();
+		//uitable.addActor(new RecipeMenu());
+		
+		//uitable.bottom().right().add(new InventoryWidget()).align(Align.bottomRight);
+		
+		
 	}
 
 	void setupMenu() {

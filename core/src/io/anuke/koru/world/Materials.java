@@ -86,11 +86,11 @@ public enum Materials implements Material{
 	burnedtree2(MaterialType.tree),
 	burnedtree3(MaterialType.tree),
 	burnedtree4(MaterialType.tree),
-	pinetree1(MaterialType.tree, -5f){{addDrop(Items.wood, 5);breakt(90);}}, 
-	pinetree2(MaterialType.tree, -3f){{addDrop(Items.wood, 5);breakt(90);}}, 
-	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 5); breakt(90);}}, 
-	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 5); breakt(90);}}, 
-	pinesapling(MaterialType.tree, 1, false){
+	pinetree1(MaterialType.tree, -5f){{addDrop(Items.wood, 50);breakt(90);}}, 
+	pinetree2(MaterialType.tree, -3f){{addDrop(Items.wood, 50);breakt(90);}}, 
+	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 50); breakt(90);}}, 
+	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 50); breakt(90);}}, 
+	pinesapling(MaterialType.object, 1, false){
 		{addDrop(Items.pinecone, 1);}
 		
 		public boolean growable(){

@@ -720,9 +720,23 @@ items/stoneitem
   orig: 12, 12
   offset: 0, 0
   index: -1
+items/slotset
+  rotate: false
+  xy: 37, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 items/wooditem
   rotate: false
-  xy: 37, 19
+  xy: 43, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+items/woodhammeritem
+  rotate: false
+  xy: 55, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -1466,11 +1480,11 @@ tiles/magmarockedge
   orig: 16, 16
   offset: 0, 0
   index: -1
-tiles/stoneblock
+tiles/block
   rotate: false
-  xy: 375, 12
-  size: 12, 19
-  orig: 12, 19
+  xy: 375, 11
+  size: 12, 20
+  orig: 12, 20
   offset: 0, 0
   index: -1
 tiles/woodblock
@@ -1478,6 +1492,13 @@ tiles/woodblock
   xy: 389, 11
   size: 12, 20
   orig: 12, 20
+  offset: 0, 0
+  index: -1
+tiles/stoneblock
+  rotate: false
+  xy: 403, 12
+  size: 12, 19
+  orig: 12, 19
   offset: 0, 0
   index: -1
 tiles/ice2
@@ -1650,175 +1671,175 @@ tiles/sand6
   index: -1
 tiles/water
   rotate: false
-  xy: 403, 19
+  xy: 417, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/swampgrass
   rotate: false
-  xy: 417, 19
+  xy: 431, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass2
   rotate: false
-  xy: 431, 19
+  xy: 445, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass8
   rotate: false
-  xy: 445, 19
+  xy: 459, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand7
   rotate: false
-  xy: 459, 19
+  xy: 473, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/magmarock
   rotate: false
-  xy: 473, 19
+  xy: 487, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand5
   rotate: false
-  xy: 487, 19
+  xy: 501, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/riveredge
   rotate: false
-  xy: 501, 19
+  xy: 515, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/darkgrass
   rotate: false
-  xy: 515, 19
+  xy: 529, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone2
   rotate: false
-  xy: 529, 19
+  xy: 543, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/riverrock
   rotate: false
-  xy: 543, 19
+  xy: 557, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/burntgrass
   rotate: false
-  xy: 557, 19
+  xy: 571, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone4
   rotate: false
-  xy: 571, 19
+  xy: 585, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/bluegrass
   rotate: false
-  xy: 585, 19
+  xy: 599, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass3
   rotate: false
-  xy: 599, 19
+  xy: 613, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/gravel
   rotate: false
-  xy: 613, 19
+  xy: 627, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice6
   rotate: false
-  xy: 627, 19
+  xy: 641, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone3
   rotate: false
-  xy: 641, 19
+  xy: 655, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand1
   rotate: false
-  xy: 655, 19
+  xy: 669, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone
   rotate: false
-  xy: 669, 19
+  xy: 683, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand4
   rotate: false
-  xy: 683, 19
+  xy: 697, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass5
   rotate: false
-  xy: 697, 19
+  xy: 711, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice3
   rotate: false
-  xy: 711, 19
+  xy: 725, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass7
   rotate: false
-  xy: 725, 19
+  xy: 739, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass4
   rotate: false
-  xy: 739, 19
+  xy: 753, 19
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

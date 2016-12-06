@@ -15,6 +15,7 @@ public class InventoryComponent implements Component{
 	public ItemStack[][] inventory;
 	public ItemStack selected;
 	public transient int hotbar;
+	public int recipe = -1;
 
 	public InventoryComponent(int width, int height){
 		inventory = new ItemStack[width][height];
@@ -213,7 +214,22 @@ public class InventoryComponent implements Component{
 		return removed;
 	}
 	
+	public boolean removeAll(ItemStack[] items){
+		boolean removed = true;
+		for(ItemStack stack : items){
+			removed = removed && removeItem(stack);
+		}
+		return removed;
+	}
+	
 	public boolean hasAll(Iterable<ItemStack> items){
+		for(ItemStack stack : items){
+			if(!hasItem(stack)) return false;
+		}
+		return true;
+	}
+	
+	public boolean hasAll(ItemStack[] items){
 		for(ItemStack stack : items){
 			if(!hasItem(stack)) return false;
 		}

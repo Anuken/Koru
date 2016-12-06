@@ -5,19 +5,22 @@ import io.anuke.koru.world.MaterialType;
 
 public enum Items implements Item{
 	stick, wood, pinecone, water, stone,
-	woodaxe(true, 1f){
+	woodaxe(ItemType.tool, 1f){
 		public boolean breaks(Material mat){
 			return mat.getType() == MaterialType.tree || mat.name().contains("wood") || mat.name().contains("torch");
 		}
+	},
+	woodhammer(ItemType.hammer, 1f){
+		
 	};
 	float power;
-	boolean tool;
+	ItemType type = ItemType.material;
 	
 	private Items(){}
 	
-	private Items(boolean tool, float power){
-		this.tool = tool;
+	private Items(ItemType type, float power){
 		this.power = power;
+		this.type = type;
 	}
 	
 	private Items(int stacksize){
@@ -25,10 +28,6 @@ public enum Items implements Item{
 	}
 	
 	private int stacksize = 40;
-	
-	public boolean tool(){
-		return tool;
-	}
 	
 	public float power(){
 		return power;
@@ -40,5 +39,9 @@ public enum Items implements Item{
 	
 	public int getMaxStackSize(){
 		return stacksize;
+	}
+	
+	public ItemType type(){
+		return type;
 	}
 }

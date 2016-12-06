@@ -8,7 +8,10 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.ItemType;
+import io.anuke.koru.items.Recipes;
 import io.anuke.koru.utils.InputType;
+import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
@@ -29,7 +32,7 @@ public class InputHandler{
 			ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
 			
-			if(stack != null && stack.item.tool() && stack.item.breaks(tile.block()) && tile.block().breakable()){
+			if(stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block()) && tile.block().breakable()){
 				blockhold += delta * stack.item.power();
 				
 				if((int)(blockhold) % 20 == 1)
@@ -52,6 +55,18 @@ public class InputHandler{
 				
 			}else{
 				blockhold = 0;
+			}
+			
+			if(stack != null && stack.item.type() == ItemType.hammer && (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage)){
+				InventoryComponent inv = entity.getComponent(InventoryComponent.class);
+				
+				if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())){
+					tile.setBlockMaterial(Recipes.values()[inv.recipe].result());
+					IServer.instance().getWorld().updateTile(blockx, blocky);
+					
+					inv.removeAll(Recipes.values()[inv.recipe].requirements());
+					inv.sendUpdate(entity);
+				}
 			}
 			
 		}else{

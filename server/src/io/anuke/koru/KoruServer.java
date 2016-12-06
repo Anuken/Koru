@@ -39,6 +39,7 @@ import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.KoruEngine;
@@ -135,6 +136,7 @@ public class KoruServer extends IServer{
 			player.addSelf();
 			
 			player.getComponent(InventoryComponent.class).inventory[1][0] = new ItemStack(Items.woodaxe);
+			player.getComponent(InventoryComponent.class).inventory[0][0] = new ItemStack(Items.woodhammer);
 			player.getComponent(InventoryComponent.class).sendUpdate(player);
 			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player); //screw this, it isn't working properly
 			
@@ -186,6 +188,10 @@ public class KoruServer extends IServer{
 				StoreItemPacket packet = (StoreItemPacket)object;
 				updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
 				updater.world.updateTile(packet.x, packet.y);
+			}else if(object instanceof RecipeSelectPacket){
+				RecipeSelectPacket packet = (RecipeSelectPacket)object;
+				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
+				inv.recipe = packet.recipe;
 			}else if(object instanceof BlockInputPacket){
 				BlockInputPacket packet = (BlockInputPacket)object;
 				updater.world.tile(packet.x, packet.y).setMaterial(packet.material);

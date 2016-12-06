@@ -52,6 +52,7 @@ import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
 import io.anuke.koru.network.packets.PositionPacket;
+import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
@@ -88,6 +89,7 @@ public class Registrator{
 		k.register(InventoryUpdatePacket.class);
 		k.register(InventoryClickPacket.class);
 		k.register(SlotChangePacket.class);
+		k.register(RecipeSelectPacket.class);
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);

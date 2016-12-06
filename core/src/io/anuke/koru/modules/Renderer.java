@@ -20,9 +20,12 @@ import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.graphics.Light;
+import io.anuke.koru.items.ItemType;
+import io.anuke.koru.items.Recipes;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
@@ -36,6 +39,8 @@ import io.anuke.ucore.spritesystem.LayerManager;
 import io.anuke.ucore.spritesystem.Renderable;
 import io.anuke.ucore.spritesystem.RenderableHandler;
 import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
@@ -55,6 +60,7 @@ public class Renderer extends Module<Koru>{
 	public Light light;
 	public boolean debug = false;
 	public KoruEntity player;
+	public SpriteRenderable block;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
@@ -93,6 +99,7 @@ public class Renderer extends Module<Koru>{
 		world = getModule(World.class);
 		
 		Resources.loadParticle("spark");
+		(block = new SpriteRenderable(Resources.region("block")).setProvider(SortProviders.object).sprite()).add();
 	}
 
 	@Override
@@ -114,8 +121,9 @@ public class Renderer extends Module<Koru>{
 		batch.begin();
 		drawMap();
 		RenderableHandler.getInstance().renderAll(batch);
+		drawOverlay();
 		batch.end();
-
+		
 		processor.render();
 		
 		batch.setProjectionMatrix(matrix);
@@ -123,6 +131,24 @@ public class Renderer extends Module<Koru>{
 		drawGUI();
 		batch.end();
 		batch.setColor(Color.WHITE);
+	}
+	
+	void drawOverlay(){
+		
+		unproject();
+		
+		
+		if(vector.x < 0) vector.x -= 12;
+		if(vector.y < 0) vector.y -= 12;
+		InventoryComponent inv = player.getComponent(InventoryComponent.class);
+		
+		block.setPosition((int)(vector.x/12)*12, (int)(vector.y/12)*12);
+		
+		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer && inv.hasAll(Recipes.values()[inv.recipe].requirements())){
+			block.sprite.setColor(0.5f,1f,0.5f,0.3f);
+		}else{
+			block.setColor(Color.CLEAR);
+		}
 	}
 
 	void drawMap(){
