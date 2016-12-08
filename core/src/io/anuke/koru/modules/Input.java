@@ -46,6 +46,8 @@ public class Input extends Module<Koru> implements InputProcessor {
 			Gdx.app.exit();
 		}
 		
+		//getModule(Renderer.class).camera.zoom = 5f;
+		
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && getModule(Network.class).connected())
 			getModule(UI.class).chat.enterPressed();
 
@@ -65,7 +67,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
-		float speed = 2.5f * delta();
+		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 10.5f : 2.5f) * delta();
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;
@@ -187,7 +189,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 	public boolean scrolled(int amount) {
 		//getModule(Renderer.class).camera.zoom += amount / 10f;
 		InventoryComponent inv = getModule(ClientData.class).player.getComponent(InventoryComponent.class);
-		int i = ((inv.hotbar-amount) % 4);
+		int i = ((inv.hotbar+amount) % 4);
 		inv.hotbar = i < 0 ? i + 4 : i;
 		
 		SlotChangePacket packet = new SlotChangePacket();

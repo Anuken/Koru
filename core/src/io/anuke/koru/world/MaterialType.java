@@ -179,6 +179,11 @@ public enum MaterialType{
 
 			sprite.add(group);
 		}
+		
+		@Override
+		public int size(){
+			return 180;
+		}
 
 		public boolean tile(){
 			return false;
@@ -343,7 +348,7 @@ public enum MaterialType{
 	}
 	
 	public int size(){
-		return 80;
+		return 40;
 	}
 	
 	int rand(int x, int y, int scl){

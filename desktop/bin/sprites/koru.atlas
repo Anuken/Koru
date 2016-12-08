@@ -741,6 +741,13 @@ items/woodhammeritem
   orig: 12, 12
   offset: 0, 0
   index: -1
+items/woodpickaxeitem
+  rotate: false
+  xy: 69, 19
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 
 koru4.png
 format: RGBA8888

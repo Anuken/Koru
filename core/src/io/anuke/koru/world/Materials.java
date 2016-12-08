@@ -26,7 +26,7 @@ public enum Materials implements Material{
 	gravel,
 	ice{{vary(7);}},
 	riveredge,
-	stone(MaterialType.tile, 120, Hue.rgb(115, 115, 115, 0.09f)){{addDrop(Items.stone, 1); vary(7);}}, 
+	stone(MaterialType.tile){{vary(7);}}, 
 	woodfloor{{addDrop(Items.wood, 2);}},
 	stonefloor{{addDrop(Items.stone, 2);}},
 	pinecones(MaterialType.overlay){{addDrop(Items.pinecone, 1);}}, 
@@ -49,10 +49,10 @@ public enum Materials implements Material{
 	bush3(MaterialType.object, -1f),
 	mossyrock1(MaterialType.object),
 	mossyrock2(MaterialType.object),
-	rock1(MaterialType.object, -1f),
-	rock2(MaterialType.object, -1f),
-	rock3(MaterialType.object, -1f),
-	rock4(MaterialType.object, -2f),
+	rock1(MaterialType.object, -1f){{breakt(50);addDrop(Items.stone, 2);}},
+	rock2(MaterialType.object, -1f){{breakt(50);addDrop(Items.stone, 2);}},
+	rock3(MaterialType.object, -1f){{breakt(50);addDrop(Items.stone, 2);}},
+	rock4(MaterialType.object, -2f){{breakt(50);addDrop(Items.stone, 2);}},
 	blackrock1(MaterialType.object),
 	blackrock2(MaterialType.object),
 	blackrock3(MaterialType.object),
@@ -90,39 +90,12 @@ public enum Materials implements Material{
 	pinetree2(MaterialType.tree, -3f){{addDrop(Items.wood, 50);breakt(90);}}, 
 	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 50); breakt(90);}}, 
 	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 50); breakt(90);}}, 
-	pinesapling(MaterialType.object, 1, false){
-		{addDrop(Items.pinecone, 1);}
-		
-		public boolean growable(){
-			return true;
-		}
-		
-		public Material growMaterial(){
-			return random(Materials.pinetree1, Materials.pinetree2, Materials.pinetree3, Materials.pinetree4);
-		}
-		
-		public TileData getDefaultData(){
-			return new PinetreeTileData();
-		}
-		
-		public Class<? extends TileData> getDataClass(){
-			return PinetreeTileData.class;
-		}
-	}, 
-	stoneblock(MaterialType.block){{addDrop(Items.stone, 6);}},
+	pinesapling(MaterialType.object, 1, false){{addDrop(Items.pinecone, 1);}}, 
+	stoneblock(MaterialType.block, 100){{addDrop(Items.stone, 6); color = new Color(0x744a28ff);}},
 	woodblock(MaterialType.block, 60){{addDrop(Items.wood, 5); color = new Color(0x744a28ff);}},
 	hatcher(MaterialType.hatcher),
 	torch(MaterialType.torch, 20){{addDrop(Items.wood, 1);}},
-	box(MaterialType.chest){
-		{addDrop(Items.wood, 10);}
-		public TileData getDefaultData(){
-			return new InventoryTileData(5,5);
-		}
-		
-		public Class<? extends TileData> getDataClass(){
-			return InventoryTileData.class;
-		}
-	};
+	box(MaterialType.chest){{addDrop(Items.wood, 10);}};
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
 	private int breaktime;

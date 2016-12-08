@@ -45,6 +45,13 @@ public class Effects{
 		entity.sendSelf();
 	}
 	
+	public static void particle(Material material, float x, float y){
+		KoruEntity entity = new KoruEntity(EntityType.particle);
+		entity.position().set(x, y);
+		entity.mapComponent(ParticleComponent.class).set(material);
+		entity.sendSelf();
+	}
+	
 	public static void block(Material material, int x, int y){
 		KoruEntity entity = new KoruEntity(EntityType.blockanimation);
 		entity.position().set(x, y);

@@ -135,6 +135,7 @@ public class KoruServer extends IServer{
 
 			player.addSelf();
 			
+			player.getComponent(InventoryComponent.class).inventory[2][0] = new ItemStack(Items.woodpickaxe);
 			player.getComponent(InventoryComponent.class).inventory[1][0] = new ItemStack(Items.woodaxe);
 			player.getComponent(InventoryComponent.class).inventory[0][0] = new ItemStack(Items.woodhammer);
 			player.getComponent(InventoryComponent.class).sendUpdate(player);

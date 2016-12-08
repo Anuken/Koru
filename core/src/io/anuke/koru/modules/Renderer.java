@@ -46,7 +46,7 @@ import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
-	public static final int viewrangey = 20;
+	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
 	public World world;
@@ -66,7 +66,8 @@ public class Renderer extends Module<Koru>{
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
-	//GifRecorder recorder;
+	private boolean init;
+	// GifRecorder recorder;
 
 	public Renderer() {
 		UCore.maximizeWindow();
@@ -81,85 +82,89 @@ public class Renderer extends Module<Koru>{
 		processor = new PostProcessor(false, true, true);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
-		
+
 		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
 				drawRenderables(renderables);
 			}
 		});
-		
+
 		addEffects();
 	}
-	
+
 	void addEffects(){
-		if(light != null) light.dispose();
+		if(light != null)
+			light.dispose();
 		light = new Light(gwidth(), gheight());
 		processor.addEffect(light);
 	}
 
-
 	public void init(){
 		player = getModule(ClientData.class).player;
 		world = getModule(World.class);
-		
+
 		Resources.loadParticle("spark");
 		(block = new SpriteRenderable(Resources.region("block")).setProvider(SortProviders.object).sprite()).add();
 	}
 
 	@Override
 	public void update(){
-		light.setColor(world.getAmbientColor());
+		if(!init && processor.getCombinedBuffer().height > Gdx.graphics.getHeight()){resetProcessor(); init = true;}
 		
+		light.setColor(world.getAmbientColor());
+
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
-		
+
 		doRender();
 		updateCamera();
 	}
 
 	void doRender(){
-		
+
 		processor.capture();
-		
+
 		clearScreen();
 		batch.begin();
 		drawMap();
 		RenderableHandler.getInstance().renderAll(batch);
 		drawOverlay();
 		batch.end();
-		
+
 		processor.render();
-		
+
 		batch.setProjectionMatrix(matrix);
 		batch.begin();
 		drawGUI();
 		batch.end();
 		batch.setColor(Color.WHITE);
 	}
-	
+
 	void drawOverlay(){
-		
+
 		unproject();
-		
-		
-		if(vector.x < 0) vector.x -= 12;
-		if(vector.y < 0) vector.y -= 12;
+
+		if(vector.x < 0)
+			vector.x -= 12;
+		if(vector.y < 0)
+			vector.y -= 12;
 		InventoryComponent inv = player.getComponent(InventoryComponent.class);
-		
-		block.setPosition((int)(vector.x/12)*12, (int)(vector.y/12)*12);
-		
-		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer && inv.hasAll(Recipes.values()[inv.recipe].requirements())){
-			block.sprite.setColor(0.5f,1f,0.5f,0.3f);
-			
+
+		block.setPosition((int) (vector.x / 12) * 12, (int) (vector.y / 12) * 12);
+
+		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
+				&& inv.hasAll(Recipes.values()[inv.recipe].requirements())){
+			block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
+
 			Material result = Recipes.values()[inv.recipe].result();
-			
+
 			if(result.getType() == MaterialType.tile){
 				block.setRegion(Resources.region("blank"));
 				block.sprite.setSize(12, 12);
 			}else{
 				block.setRegion(Resources.region("block"));
 				block.sprite.setSize(12, 20);
-				
+
 				block.setProvider(SortProviders.object);
 			}
 		}else{
@@ -235,10 +240,10 @@ public class Renderer extends Module<Koru>{
 						if(!tile.blockEmpty()
 								&& Math.abs(
 										worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom
-												+ 12 + tile.tile().getType().size()
+												+ 12 + tile.block().getType().size()
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 12 + tile.tile().getType().size()){
+												+ 12 + tile.block().getType().size()){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
 					}
@@ -248,8 +253,8 @@ public class Renderer extends Module<Koru>{
 	}
 
 	public void drawGUI(){
-		//recorder.update();
-		
+		// recorder.update();
+
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
 
@@ -270,8 +275,8 @@ public class Renderer extends Module<Koru>{
 		font.draw(batch, launcher, gwidth() / 2 - layout.width / 2, gheight());
 
 		font.setColor(Color.WHITE);
-		
-		//font.draw(batch, world.time + "", 20, 20);
+
+		// font.draw(batch, world.time + "", 20, 20);
 
 		if(debug){
 			GridPoint2 cursor = getModule(Input.class).cursorblock();
@@ -348,9 +353,9 @@ public class Renderer extends Module<Koru>{
 		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
 
 		batch.end();
-		
+
 		processor.captureEnd();
-		
+
 		buffers.begin(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
 		for(Texture t : atlas.getTextures())
@@ -369,9 +374,9 @@ public class Renderer extends Module<Koru>{
 			batch.setShader(null);
 		buffers.end(selected.name);
 		buffers.get(selected.name).getColorBufferTexture().bind(0);
-		
+
 		processor.captureNoClear();
-		
+
 		batch.begin();
 		selected.end();
 		batch.setColor(Color.WHITE);
@@ -386,9 +391,11 @@ public class Renderer extends Module<Koru>{
 
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		camera.setToOrtho(false, width / scale, height / scale); 
+		camera.setToOrtho(false, width / scale, height / scale);
 		light.setSize(width, height);
-		
+	}
+	
+	void resetProcessor(){
 		processor.dispose();
 		processor = new PostProcessor(false, true, true);
 		addEffects();
@@ -428,7 +435,7 @@ public class Renderer extends Module<Koru>{
 	public BitmapFont font(){
 		return font;
 	}
-	
+
 	public Vector3 unproject(){
 		return camera.unproject(vector.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 	}
