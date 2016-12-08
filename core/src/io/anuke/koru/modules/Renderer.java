@@ -30,6 +30,8 @@ import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
+import io.anuke.koru.world.Material;
+import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
 import io.anuke.ucore.UCore;
@@ -146,6 +148,18 @@ public class Renderer extends Module<Koru>{
 		
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer && inv.hasAll(Recipes.values()[inv.recipe].requirements())){
 			block.sprite.setColor(0.5f,1f,0.5f,0.3f);
+			
+			Material result = Recipes.values()[inv.recipe].result();
+			
+			if(result.getType() == MaterialType.tile){
+				block.setRegion(Resources.region("blank"));
+				block.sprite.setSize(12, 12);
+			}else{
+				block.setRegion(Resources.region("block"));
+				block.sprite.setSize(12, 20);
+				
+				block.setProvider(SortProviders.object);
+			}
 		}else{
 			block.setColor(Color.CLEAR);
 		}

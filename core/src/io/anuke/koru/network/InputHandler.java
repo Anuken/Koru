@@ -57,11 +57,16 @@ public class InputHandler{
 				blockhold = 0;
 			}
 			
-			if(stack != null && stack.item.type() == ItemType.hammer && (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage)){
+			if(stack != null && stack.item.type() == ItemType.hammer){
 				InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 				
-				if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())){
-					tile.setBlockMaterial(Recipes.values()[inv.recipe].result());
+				if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
+						 && ((!Recipes.values()[inv.recipe].result().getType().tile() && 
+								 (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage)) ||
+						 (Recipes.values()[inv.recipe].result().getType().tile() && 
+								 (tile.tile() != Recipes.values()[inv.recipe].result())))){
+					
+					tile.setMaterial(Recipes.values()[inv.recipe].result());
 					IServer.instance().getWorld().updateTile(blockx, blocky);
 					
 					inv.removeAll(Recipes.values()[inv.recipe].requirements());

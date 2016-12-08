@@ -21,6 +21,7 @@ import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Material;
+import io.anuke.koru.world.MaterialType;
 import io.anuke.ucore.graphics.Hue;
 
 public class RecipeMenu extends VisTable{
@@ -108,7 +109,13 @@ public class RecipeMenu extends VisTable{
 			Material result = recipe.result();
 			TextureRegion region = Resources.region(result.name());
 			
-			batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, 4*pscale+ getY() + getHeight()/2-region.getRegionHeight()*pscale/2, region.getRegionWidth()*pscale, region.getRegionHeight()*pscale);
+			float w = region.getRegionWidth()*pscale,h = region.getRegionHeight()*pscale;
+			
+			if(result.getType() == MaterialType.tile){
+				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);
+			}else{
+				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, 4*pscale+ getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);
+			}
 		}
 	}
 }

@@ -20,6 +20,9 @@ public enum MaterialType{
 	tile{
 
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			
+			if(tile.block().getType() == MaterialType.block) return;
+			
 			int type = 0;
 			if(material.variants() > 1){
 				type = rand(x,y, material.variants());
