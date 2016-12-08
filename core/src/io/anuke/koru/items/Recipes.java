@@ -5,7 +5,7 @@ import io.anuke.koru.world.Materials;
 
 public enum Recipes implements Recipe{
 	woodblock(Materials.woodblock, new ItemStack(Items.wood, 2)),
-	woodblock1(Materials.stoneblock, new ItemStack(Items.stone, 2)),
+	woodblock1(Materials.stonepillar, new ItemStack(Items.stone, 2)),
 	woodblock2(Materials.torch, new ItemStack(Items.wood, 1)),
 	woodblock3(Materials.woodfloor, new ItemStack(Items.wood, 1)),
 	woodblock4(Materials.woodblock, new ItemStack(Items.wood, 1)),

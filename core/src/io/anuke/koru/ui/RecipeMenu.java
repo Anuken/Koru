@@ -104,7 +104,7 @@ public class RecipeMenu extends VisTable{
 
 		public void draw(Batch batch, float alpha){
 			batch.setColor(getColor());
-			batch.draw(Resources.region(selected == this ? "slotset" : (click.isOver() ? "slotselect" : "slot")), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Resources.region(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2")), getX(), getY(), getWidth(), getHeight());
 			
 			Material result = recipe.result();
 			TextureRegion region = Resources.region(result.name());

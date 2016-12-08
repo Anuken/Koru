@@ -143,8 +143,6 @@ public class TerrainGenerator implements Generator{
 				if(Math.random() < 0.1) tile.setMaterial(Materials.next(Materials.wheatgrass1, 3));
 				if(Math.random() < 0.1) tile.setMaterial(Materials.next(Materials.tallgrass1, 3));
 				if(Math.random() < 0.006 && se > 0.069) tile.setMaterial(Materials.next(Materials.willowtree1, 4));
-				
-				
 			}
 		}
 
