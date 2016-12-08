@@ -80,6 +80,7 @@ public class Renderer extends Module<Koru>{
 		buffers = new FrameBufferMap();
 		processor = new PostProcessor(false, true, true);
 		ShaderLoader.BasePath = "default-shaders/";
+		ShaderLoader.Pedantic = false;
 		
 		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
@@ -91,6 +92,7 @@ public class Renderer extends Module<Koru>{
 	}
 	
 	void addEffects(){
+		if(light != null) light.dispose();
 		light = new Light(gwidth(), gheight());
 		processor.addEffect(light);
 	}
@@ -386,6 +388,10 @@ public class Renderer extends Module<Koru>{
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale); 
 		light.setSize(width, height);
+		
+		processor.dispose();
+		processor = new PostProcessor(false, true, true);
+		addEffects();
 	}
 
 	public GlyphLayout getBounds(String text){
