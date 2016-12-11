@@ -236,7 +236,6 @@ public class Renderer extends Module<Koru>{
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
-								Koru.log("lightshadow");
 								RenderPool.sprite(Resources.region("lightshadow"))
 								.setDark()
 								.setPosition(worldx*12 + 6, worldy*12+12)
