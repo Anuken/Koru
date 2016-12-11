@@ -67,7 +67,7 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyJustPressed(Keys.R))
 			sendInput(InputType.r);
 
-		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 15f : 2.5f) * delta();
+		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 2f) * delta();
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;
@@ -92,13 +92,13 @@ public class Input extends Module<Koru> implements InputProcessor {
 		float lastx = player.getX();
 		float lasty = player.getY();
 		
-		if (!collisions.checkTerrainCollisions(getModule(World.class), player, vector.x, 0)) {
+		//if (!collisions.checkTerrainCollisions(getModule(World.class), player, vector.x, 0)) {
 			player.position().add(vector.x, 0);
-		}
+		//}
 
-		if (!collisions.checkTerrainCollisions(getModule(World.class), player, 0, vector.y)) {
+		//if (!collisions.checkTerrainCollisions(getModule(World.class), player, 0, vector.y)) {
 			player.position().add(0, vector.y);
-		}
+		//}
 		
 		if(Vector2.dst(lastx, lasty, player.getX(), player.getY()) > 0.05f){
 			render.walkframe += delta();

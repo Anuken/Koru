@@ -84,6 +84,7 @@ public enum MaterialType{
 	block{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			RenderPool.sprite(Resources.region(material.name()))
+			.scaleBy(0, 0.001f)
 			.setPosition(itile(x), itile(y))
 			.setProvider(SortProviders.object).add(group);
 			

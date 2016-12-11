@@ -34,7 +34,6 @@ import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.LayerManager;
@@ -70,7 +69,6 @@ public class Renderer extends Module<Koru>{
 	// GifRecorder recorder;
 
 	public Renderer() {
-		UCore.maximizeWindow();
 		batch = new SpriteBatch();
 		matrix = new Matrix4();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
@@ -109,7 +107,7 @@ public class Renderer extends Module<Koru>{
 
 	@Override
 	public void update(){
-		if(!init && processor.getCombinedBuffer().height > Gdx.graphics.getHeight()){resetProcessor(); init = true;}
+		if(!init && processor.getCombinedBuffer().height < Gdx.graphics.getHeight()){resetProcessor(); init = true;}
 		
 		light.setColor(world.getAmbientColor());
 

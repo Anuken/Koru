@@ -26,12 +26,12 @@ public class MapPreview extends ApplicationAdapter{
 	BlockMap<ChunkPix> blocks = new BlockMap<ChunkPix>();
 	IntIntMap colors = new IntIntMap();
 	SpriteBatch batch;
-	int viewrange = 32;
-	float scl = 0.1f;
+	int viewrange = 4;
+	float scl = 4f;
 	float vx, vy;
 	float speed = 32;
-	int pixsize = 128;
-	int percision = 16;
+	int pixsize = 64;
+	int percision = 2;
 	static double maxe;
 	static double maxt;
 
