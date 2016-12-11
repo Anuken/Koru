@@ -22,7 +22,6 @@ import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
 
 public class Input extends Module<Koru> implements InputProcessor {

@@ -65,7 +65,7 @@ public class RecipeMenu extends VisTable{
 				
 				batch.draw(region, x, y, w, h);
 				
-				Resources.font().draw(batch, stacks[i].amount + "x", x, y + 20, 0, Align.bottomLeft, false);
+				Resources.font2().draw(batch, stacks[i].amount + "x", x, y + 20, 0, Align.bottomLeft, false);
 			}
 		}
 		

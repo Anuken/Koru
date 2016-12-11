@@ -7,8 +7,8 @@ import io.anuke.koru.components.DataComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.ParticleComponent;
 import io.anuke.koru.components.TextComponent;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Material;
-import io.anuke.koru.world.World;
 
 public class Effects{
 	

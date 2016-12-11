@@ -1,6 +1,9 @@
 package io.anuke.koru.world;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
+
+import io.anuke.koru.modules.World;
+
 import com.badlogic.gdx.utils.Pools;
 
 public class Chunk implements Poolable{

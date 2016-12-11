@@ -29,7 +29,6 @@ import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.utils.Angles;
-import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.Module;
 
 public class Network extends Module<Koru>{

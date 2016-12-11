@@ -8,13 +8,13 @@ import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.ObjectHandler;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.modules.UI;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.InterpolationSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.RendererSystem;
 import io.anuke.koru.utils.Text;
-import io.anuke.koru.world.World;
 import io.anuke.ucore.modules.ModuleController;
 
 public class Koru extends ModuleController<Koru>{

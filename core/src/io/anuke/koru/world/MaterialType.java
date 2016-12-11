@@ -1,6 +1,6 @@
 package io.anuke.koru.world;
 
-import static io.anuke.koru.world.World.tilesize;
+import static io.anuke.koru.modules.World.tilesize;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.spritesystem.RenderPool;

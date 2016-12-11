@@ -33,7 +33,6 @@ import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.LayerManager;

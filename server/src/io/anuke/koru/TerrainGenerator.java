@@ -64,23 +64,8 @@ public class TerrainGenerator implements Generator{
 		}else if(se > 0.078){
 			if(t < 0.62){
 				if(Math.random() < 1){
-					if(Math.random() < 0.1 && e > 0.25f)
-						tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
-					if(Math.random() < 0.03)
-						tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
-
-					if(Math.random() < 0.13 && e < 0.4f)
-						tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
-					if(Math.random() < 0.04 && e < 0.5f)
-						tile.setBlockMaterial(Materials.next(Materials.wheatgrass1, 3));
-
 					if(Math.random() < 0.02 && e < 0.35f && e > 0.12f)
 						tile.setBlockMaterial(Materials.next(Materials.bush1, 3));
-
-					if(Math.random() < 0.03 * e)
-						tile.setBlockMaterial(Materials.next(Materials.fern1, 3));
-					if(Math.random() < 0.01 * e)
-						tile.setBlockMaterial(Materials.next(Materials.koru1, 3));
 				}
 				if(e < 0.4 && e > 0.1 && t < 0.6 && t > 0.41){
 					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4)
@@ -89,6 +74,7 @@ public class TerrainGenerator implements Generator{
 					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4.5)
 						tile.setMaterial(Materials.grassblock);
 				}
+				
 				if(e > 0.36f && e < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3){
 					if(rand() < br(0.12f, e)){
 						if(rand() < 0.026)
@@ -157,10 +143,6 @@ public class TerrainGenerator implements Generator{
 				if(Math.random() < 0.005)
 					tile.setMaterial(Materials.next(Materials.rock1, 4));
 			}else{
-				if(Math.random() < 0.1)
-					tile.setMaterial(Materials.next(Materials.wheatgrass1, 3));
-				if(Math.random() < 0.1)
-					tile.setMaterial(Materials.next(Materials.tallgrass1, 3));
 				if(Math.random() < 0.006 && se > 0.069)
 					tile.setMaterial(Materials.next(Materials.willowtree1, 4));
 			}

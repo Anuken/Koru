@@ -1,10 +1,10 @@
 package io.anuke.koru.ai;
 
-import io.anuke.koru.world.World;
-
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.utils.Array;
+
+import io.anuke.koru.modules.World;
 
 public class Node{
 	final int index;

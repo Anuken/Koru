@@ -2,6 +2,8 @@ package io.anuke.koru.world;
 
 import com.badlogic.gdx.math.Vector2;
 
+import io.anuke.koru.modules.World;
+
 public class Physics{
 	
 	public static boolean cast(float x0f, float y0f, float x1f, float y1f){

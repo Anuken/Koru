@@ -1,8 +1,8 @@
 package io.anuke.koru.network;
 
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.systems.KoruEngine;
-import io.anuke.koru.world.World;
 
 public abstract class IServer{
 	private static IServer instance;

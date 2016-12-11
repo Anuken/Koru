@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import io.anuke.koru.modules.World;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.InputSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.World;
 
 public class KoruUpdater{
 	KoruServer server;

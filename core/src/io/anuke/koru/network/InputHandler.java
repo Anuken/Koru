@@ -10,11 +10,11 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 
 public class InputHandler{
 	public float mouseangle;

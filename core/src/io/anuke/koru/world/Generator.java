@@ -1,5 +1,7 @@
 package io.anuke.koru.world;
 
+import io.anuke.koru.modules.World;
+
 public interface Generator{
 	public default void generateChunk(Chunk chunk){
 		for(int x = 0; x < World.chunksize; x ++){

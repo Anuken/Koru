@@ -27,6 +27,7 @@ import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.Network;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.BlockInputPacket;
@@ -46,7 +47,6 @@ import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Material;
-import io.anuke.koru.world.World;
 import io.anuke.ucore.UCore;
 
 public class KoruServer extends IServer{

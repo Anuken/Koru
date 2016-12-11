@@ -6,9 +6,9 @@ import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.listeners.CollisionHandler;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;

@@ -1,17 +1,19 @@
 package io.anuke.koru.entities;
 
-import io.anuke.koru.Koru;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.network.IServer;
-import io.anuke.koru.systems.KoruEngine;
-
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Rectangle;
 
-public class KoruEntity extends Entity{
+import io.anuke.koru.Koru;
+import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.network.IServer;
+import io.anuke.koru.systems.KoruEngine;
+import io.anuke.ucore.util.QuadTree.QuadTreeObject;
+
+public class KoruEntity extends Entity implements QuadTreeObject{
 	private static KoruEngine engine;
 	private EntityType type;
 	private static long nextID;
@@ -126,4 +128,8 @@ public class KoruEntity extends Entity{
 		return "Entity: " + this.type + " #" + id;
 	}
 
+	@Override
+	public void getBoundingBox(Rectangle out){
+		
+	}
 }

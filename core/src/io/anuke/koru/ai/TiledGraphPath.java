@@ -1,10 +1,10 @@
 package io.anuke.koru.ai;
 
-import io.anuke.koru.world.World;
-
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.SmoothableGraphPath;
 import com.badlogic.gdx.math.Vector2;
+
+import io.anuke.koru.modules.World;
 
 public class TiledGraphPath<N extends Node> extends DefaultGraphPath<N> implements SmoothableGraphPath<N, Vector2>{
 

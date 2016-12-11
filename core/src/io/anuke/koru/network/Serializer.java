@@ -3,11 +3,11 @@ package io.anuke.koru.network;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
+import io.anuke.koru.modules.World;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.World;
 
 public class Serializer{
 	static Json json = new Json();
