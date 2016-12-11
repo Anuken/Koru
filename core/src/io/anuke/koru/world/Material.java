@@ -32,4 +32,17 @@ public interface Material{
 	public default int variants(){return 1;}
 	
 	public default boolean breakable(){return breaktime() > 0;}
+	
+	
+	public static boolean isPlaceable(Material material, Tile tile){
+		
+		if(!material.getType().tile()){
+			return (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage);
+		}else{
+			return tile.tile() != material && 
+					(tile.blockEmpty() 
+					|| tile.block().getType() == MaterialType.torch 
+					);
+		}		
+	}
 }

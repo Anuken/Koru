@@ -26,7 +26,7 @@ import com.kotcrab.vis.ui.widget.VisTextField.TextFieldListener;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.ui.ChatTable;
-import io.anuke.koru.ui.InventoryWidget;
+import io.anuke.koru.ui.InventoryMenu;
 import io.anuke.koru.ui.RecipeMenu;
 import io.anuke.ucore.modules.Module;
 
@@ -94,6 +94,7 @@ public class UI extends Module<Koru> {
 		skin.add("border-font", borderfont);
 		
 		FreeTypeFontGenerator pgenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/prose.ttf"));
+		
 		FreeTypeFontParameter pixelparameter = new FreeTypeFontParameter();
 		pixelparameter.borderStraight = true;
 		pixelparameter.mono = true;
@@ -102,9 +103,19 @@ public class UI extends Module<Koru> {
 		pixelparameter.borderColor = new Color(0,0,0,1);
 		pixelparameter.spaceX = -1;
 		
+		
+		FreeTypeFontParameter pixelparameter2 = new FreeTypeFontParameter();
+		pixelparameter2.borderStraight = true;
+		pixelparameter2.mono = true;
+		pixelparameter2.size = 16;
+		
 		BitmapFont pixelfont = pgenerator.generateFont(pixelparameter);
 		pixelfont.getData().setScale(2f);
 		skin.add("pixel-font", pixelfont);
+		
+		BitmapFont pixelfont2 = pgenerator.generateFont(pixelparameter2);
+		pixelfont2.getData().setScale(2f);
+		skin.add("pixel-font-noborder", pixelfont2);
 
 		skin.load(skinFile);
 
@@ -126,7 +137,7 @@ public class UI extends Module<Koru> {
 		VisTable invTable = new VisTable();
 		stack.add(invTable);
 		
-		invTable.bottom().right().add(new InventoryWidget()).align(Align.bottomRight);
+		invTable.bottom().right().add(new InventoryMenu()).align(Align.bottomRight);
 		
 		
 		VisTable rtable = new VisTable();

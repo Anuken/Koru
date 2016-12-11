@@ -16,4 +16,8 @@ public interface Item{
 	public default float power(){return 0;}
 	
 	public String name();
+	
+	public default String formalName(){
+		return name();
+	}
 }

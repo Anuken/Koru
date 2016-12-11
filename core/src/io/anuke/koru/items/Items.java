@@ -32,7 +32,7 @@ public enum Items implements Item{
 		this.stacksize = stacksize;
 	}
 	
-	private int stacksize = 40;
+	private int stacksize = 100;
 	
 	public float power(){
 		return power;

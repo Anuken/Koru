@@ -11,7 +11,7 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
 import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.MaterialType;
+import io.anuke.koru.world.Material;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.World;
@@ -84,11 +84,7 @@ public class InputHandler{
 		if(stack != null && stack.item.type() == ItemType.hammer){
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 			
-			if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
-					 && ((!Recipes.values()[inv.recipe].result().getType().tile() && 
-							 (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage)) ||
-					 (Recipes.values()[inv.recipe].result().getType().tile() && 
-							 (tile.tile() != Recipes.values()[inv.recipe].result())))){
+			if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements()) && Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 				
 				tile.setMaterial(Recipes.values()[inv.recipe].result());
 				IServer.instance().getWorld().updateTile(blockx, blocky);
@@ -105,7 +101,6 @@ public class InputHandler{
 			blocky = (int) data[1];
 			click(true);
 			
-			mouseDownEvent();
 		}else if(type == InputType.block_moved){
 			click(false);
 
@@ -120,6 +115,11 @@ public class InputHandler{
 	}
 
 	private void click(boolean down){
+		
+		if(down)
+			mouseDownEvent();
+		
+		//fire block click event
 		InventoryComponent inv = entity.mapComponent(InventoryComponent.class);
 		int slot = inv.hotbar;
 		ItemStack stack = inv.inventory[slot][0];

@@ -150,11 +150,17 @@ public class Renderer extends Module<Koru>{
 		InventoryComponent inv = player.getComponent(InventoryComponent.class);
 
 		block.setPosition((int) (vector.x / 12) * 12, (int) (vector.y / 12) * 12);
+		Tile tile = world.getTile(getModule(Input.class).cursorblock());
 
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
 				&& inv.hasAll(Recipes.values()[inv.recipe].requirements())){
-			block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
-
+			
+			if(Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
+			}else{
+				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);
+			}
+			
 			Material result = Recipes.values()[inv.recipe].result();
 
 			if(result.getType() == MaterialType.tile){
@@ -163,7 +169,6 @@ public class Renderer extends Module<Koru>{
 			}else{
 				block.setRegion(Resources.region("block"));
 				block.sprite.setSize(12, 20);
-
 				block.setProvider(SortProviders.object);
 			}
 		}else{

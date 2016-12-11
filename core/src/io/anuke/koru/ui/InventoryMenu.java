@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
@@ -18,12 +19,12 @@ import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
 
-public class InventoryWidget extends VisTable{
+public class InventoryMenu extends VisTable{
 	final int slotsize = 64;
 	private ItemStack[][] stacks;
 	private InventoryComponent inventory;
 
-	public InventoryWidget() {
+	public InventoryMenu() {
 		inventory = Koru.module(ClientData.class).player.getComponent(InventoryComponent.class);
 		stacks = inventory.inventory;
 		setup();
@@ -66,8 +67,10 @@ public class InventoryWidget extends VisTable{
 					(Gdx.graphics.getHeight() - Gdx.input.getY()) - region.getRegionHeight()*pscale / 2, 
 					region.getRegionWidth()*pscale, region.getRegionHeight()*pscale);
 			
-			if(inventory.selected.amount > 1) Resources.font().draw(batch, inventory.selected.amount + "", 
-					Gdx.input.getX()+8 - 32, (Gdx.graphics.getHeight() - Gdx.input.getY()) + 25);
+			Resources.font2().getData().setScale(2f);
+			
+			if(inventory.selected.amount > 1) Resources.font2().draw(batch, inventory.selected.amount + "", 
+					Gdx.input.getX()+8 - 32, (Gdx.graphics.getHeight() - Gdx.input.getY()) + 21);
 			
 		}
 
@@ -77,10 +80,9 @@ public class InventoryWidget extends VisTable{
 			Slot slot = (Slot) actor;
 
 			if(stacks[slot.x][slot.y] != null){
-				Resources.font().getData().setScale(1f);
-				Resources.font().draw(batch, stacks[slot.x][slot.y].item.name(), Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY());
+				Resources.font3().getData().setScale(2f);
+				Resources.font3().draw(batch, stacks[slot.x][slot.y].item.formalName(), Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY()+17, 0, Align.bottomRight, false);
 			}
-
 		}
 	}
 
@@ -107,8 +109,8 @@ public class InventoryWidget extends VisTable{
 				batch.draw(region, getX() + getWidth()/2 - region.getRegionWidth()/2*slotsize/16, getY() + getHeight()/2 - region.getRegionHeight()/2*slotsize/16,
 						region.getRegionWidth()*slotsize/16,
 						region.getRegionHeight()*slotsize/16);
-				Resources.font().getData().setScale(1f);
-				if(stacks[x][y].amount > 1) Resources.font().draw(batch, stacks[x][y].amount + "", getX()+8, getY() + 57);
+				Resources.font2().getData().setScale(2f);
+				if(stacks[x][y].amount > 1) Resources.font2().draw(batch, stacks[x][y].amount + "", getX()+8, getY() + 54);
 				
 			}
 		}
