@@ -170,6 +170,7 @@ public class TerrainGenerator implements Generator{
 			if(c > 0.7){
 				tile.setMaterial(Materials.stoneblock);
 				tile.setMaterial(Materials.stone);
+				tile.setLight(clamp(1f-(c-0.7f)*60f));
 				
 				if(Noise.nnoise(x, y, 100, 0.5f) + Noise.nnoise(x, y, 15, 1) + Noise.nnoise(x, y, 50, 1) + cper.getValue(x, y, 0.005f) > 0.19){
 					tile.setMaterial(Materials.air);

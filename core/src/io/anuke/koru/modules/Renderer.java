@@ -37,6 +37,7 @@ import io.anuke.koru.world.World;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.LayerManager;
+import io.anuke.ucore.spritesystem.RenderPool;
 import io.anuke.ucore.spritesystem.Renderable;
 import io.anuke.ucore.spritesystem.RenderableHandler;
 import io.anuke.ucore.spritesystem.RenderableList;
@@ -231,8 +232,19 @@ public class Renderer extends Module<Koru>{
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 24){
+												+ 36){
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
+							
+							if(tile.light < 127){
+								Koru.log("lightshadow");
+								RenderPool.sprite(Resources.region("lightshadow"))
+								.setDark()
+								.setPosition(worldx*12 + 6, worldy*12+12)
+								.setSize(52, 52)
+								.center()
+								.setAlpha(1f-tile.light())
+								.add(renderables[rendx][rendy]);
+							}
 						}
 
 						if(!tile.blockEmpty()

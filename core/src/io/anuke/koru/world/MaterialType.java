@@ -86,6 +86,7 @@ public enum MaterialType{
 			RenderPool.sprite(Resources.region(material.name()))
 			.scaleBy(0, 0.001f)
 			.setPosition(itile(x), itile(y))
+			//.setColor(Hue.lightness(tile.light()))
 			.setProvider(SortProviders.object).add(group);
 			
 			RenderPool.sprite(Resources.region("walldropshadow"))

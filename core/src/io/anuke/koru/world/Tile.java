@@ -6,6 +6,7 @@ import io.anuke.koru.generation.MaterialManager;
 
 public class Tile implements Poolable{
 	public int tileid, blockid;
+	public byte light = (byte)127;
 	public transient TileData tiledata, blockdata;
 	
 	public Tile(){}
@@ -13,6 +14,14 @@ public class Tile implements Poolable{
 	public Tile(Material tile, Material block){
 		tileid = tile.id();
 		blockid = block.id();
+	}
+	
+	public float light(){
+		return light/127f;
+	}
+	
+	public void setLight(float f){
+		light = (byte)(f*127);
 	}
 	
 	public Material tile(){

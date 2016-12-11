@@ -34,6 +34,20 @@ public enum FrameBufferLayer{
 		protected void begin(){
 			
 		}
+	},
+	darkness("darkness", 999999+1){
+		{
+			bind = 7;
+		}
+		@Override
+		public void end(){
+			
+		}
+
+		@Override
+		protected void begin(){
+			
+		}
 	};
 
 	public final String name;

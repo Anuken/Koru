@@ -1,5 +1,7 @@
 package io.anuke.koru.desktop;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
@@ -15,8 +17,10 @@ import io.anuke.koru.network.KryoClient;
 public class DesktopLauncher {
 	public static void main (String[] arg) throws Exception{
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		config.setMaximized(true);
 		config.setDecorated(true);
+		config.setWindowedMode(d.width, d.height-100);
 		config.setTitle("Koru");
 		config.useVsync(true);
 		

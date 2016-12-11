@@ -7,9 +7,12 @@ precision mediump float;
 
 varying vec2 v_texCoords;
 
+//!!!!!DO NOT USE!!!!! - WRONG SHADER
+
 //texture samplers
 uniform sampler2D u_texture0; //diffuse map
 uniform sampler2D u_lightmap;   //light map
+uniform sampler2D u_darkmap;   //dark map
 
 //additional parameters for the shader
 uniform vec2 resolution; //resolution of screen
@@ -19,8 +22,9 @@ void main() {
 	vec4 diffuseColor = texture2D(u_texture0, v_texCoords);
 	vec2 lighCoord = (gl_FragCoord.xy / resolution.xy);
 	vec4 light = texture2D(u_lightmap, lighCoord);
+	vec4 dark = texture2D(u_darkmap, lighCoord);
 	
-	vec3 ambient = ambientColor.rgb * ambientColor.a;
+	vec3 ambient = ambientColor.rgb * ambientColor.a * (1.0-dark.a);
 	vec3 intensity = ambient + light.rgb;
  	vec3 finalColor = diffuseColor.rgb * intensity;
 	

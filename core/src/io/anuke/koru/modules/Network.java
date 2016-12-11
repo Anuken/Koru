@@ -164,6 +164,18 @@ public class Network extends Module<Koru>{
 			connected = false;
 			connecting = false;
 			lastError = "Connection error: Timed out.";
+			
+			//reset everything.
+			
+			World world = getModule(World.class);
+			
+			for(int x = 0; x < world.chunks.length; x ++){
+				for(int y = 0; y < world.chunks[x].length; y ++){
+					world.chunks[x][y] = null;
+				}
+			}
+			
+			t.engine.removeAllEntities();
 		}
 
 		while(entityQueue.size != 0){

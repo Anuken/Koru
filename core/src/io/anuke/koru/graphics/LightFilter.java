@@ -10,7 +10,7 @@ public final class LightFilter extends Filter<LightFilter>{
 	private float width, height;
 
 	public enum Param implements Parameter{
-		Texture("u_texture0", 0), Lightmap("u_lightmap", 0), Resolution("resolution", 0), Color("ambientColor", 0);
+		Texture("u_texture0", 0), Lightmap("u_lightmap", 0), Darkmap("u_darkmap", 0), Resolution("resolution", 0), Color("ambientColor", 0);
 
 		private String mnemonic;
 		private int elementSize;
@@ -53,6 +53,7 @@ public final class LightFilter extends Filter<LightFilter>{
 		// reimplement super to batch every parameter
 		setParams(Param.Texture, u_texture0);
 		setParams(Param.Lightmap, 6);
+		setParams(Param.Darkmap, 7);
 		setParams(Param.Resolution, new Vector2(width, height));
 	}
 

@@ -35,6 +35,7 @@ public class InputHandler{
 			if(stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block()) && tile.block().breakable()){
 				blockhold += delta * stack.item.power();
 				
+				
 				if((int)(blockhold) % 20 == 1)
 				Effects.blockParticle(World.world(blockx), World.world(blocky), tile.block());
 				
@@ -57,23 +58,6 @@ public class InputHandler{
 				blockhold = 0;
 			}
 			
-			if(stack != null && stack.item.type() == ItemType.hammer){
-				InventoryComponent inv = entity.getComponent(InventoryComponent.class);
-				
-				if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
-						 && ((!Recipes.values()[inv.recipe].result().getType().tile() && 
-								 (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage)) ||
-						 (Recipes.values()[inv.recipe].result().getType().tile() && 
-								 (tile.tile() != Recipes.values()[inv.recipe].result())))){
-					
-					tile.setMaterial(Recipes.values()[inv.recipe].result());
-					IServer.instance().getWorld().updateTile(blockx, blocky);
-					
-					inv.removeAll(Recipes.values()[inv.recipe].requirements());
-					inv.sendUpdate(entity);
-				}
-			}
-			
 		}else{
 			blockhold = 0;
 		}
@@ -91,12 +75,37 @@ public class InputHandler{
 	private boolean key(InputType type){
 		return keys.get(type, false);
 	}
+	
+	private void mouseDownEvent(){
+		//block place check
+		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
+		Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
+		
+		if(stack != null && stack.item.type() == ItemType.hammer){
+			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
+			
+			if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
+					 && ((!Recipes.values()[inv.recipe].result().getType().tile() && 
+							 (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage)) ||
+					 (Recipes.values()[inv.recipe].result().getType().tile() && 
+							 (tile.tile() != Recipes.values()[inv.recipe].result())))){
+				
+				tile.setMaterial(Recipes.values()[inv.recipe].result());
+				IServer.instance().getWorld().updateTile(blockx, blocky);
+				
+				inv.removeAll(Recipes.values()[inv.recipe].requirements());
+				inv.sendUpdate(entity);
+			}
+		}
+	}
 
 	private void inputKey(InputType type, Object... data){
 		if(type == InputType.leftclick_down){
 			blockx = (int) data[0];
 			blocky = (int) data[1];
 			click(true);
+			
+			mouseDownEvent();
 		}else if(type == InputType.block_moved){
 			click(false);
 
