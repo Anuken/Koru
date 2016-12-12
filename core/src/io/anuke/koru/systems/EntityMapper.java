@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.Predicate;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.PositionComponent;
@@ -22,12 +23,20 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	private GridMap<ObjectSet<KoruEntity>> map = new GridMap<ObjectSet<KoruEntity>>();
 	private Array<KoruEntity> tmp = new Array<KoruEntity>();
 	
+	public static Predicate<KoruEntity> connectionPredicate = (entity) ->{
+		return entity.hasComponent(ConnectionComponent.class);
+	};
+	
+	public static Predicate<KoruEntity> allPredicate = (entity) ->{
+		return true;
+	};
+	
 	public EntityMapper(){
 		super(Family.all(PositionComponent.class).get());
 	}
 	
 	/**Returns all the entities near a specific location (within range). May return entities outside the range.**/
-	public Array<KoruEntity> getNearbyEntities(float cx, float cy, float rangex, float rangey){
+	public Array<KoruEntity> getNearbyEntities(float cx, float cy, float rangex, float rangey, Predicate<KoruEntity> pred){
 		if(rangex < 1 || rangey < 1) throw new IllegalArgumentException("rangex and rangey cannot be negative, are you insane?!");
 		
 		tmp.clear();
@@ -40,12 +49,23 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 				ObjectSet<KoruEntity> set = map.get(x, y);
 				if(set != null){
 					for(KoruEntity e : set)
-						tmp.add(e);
+						if(pred.evaluate(e))
+							tmp.add(e);
 				}
 			}
 		}
 		
 		return tmp;
+	}
+	
+	/**Gets nearby entities with a connection*/
+	public Array<KoruEntity> getNearbyConnections(float cx, float cy, float rangex, float rangey){
+		return this.getNearbyEntities(cx, cy, rangex, rangey, connectionPredicate);
+	}
+	
+	/**Just gets all nearby entities.*/
+	public Array<KoruEntity> getNearbyEntities(float cx, float cy, float rangex, float rangey){
+		return this.getNearbyEntities(cx, cy, rangex, rangey, allPredicate);
 	}
 	
 	public ObjectSet<KoruEntity> getEntitiesIn(float cx, float cy){

@@ -46,6 +46,7 @@ import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.EntityRequestPacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.InventoryClickPacket;
@@ -90,6 +91,7 @@ public class Registrator{
 		k.register(InventoryClickPacket.class);
 		k.register(SlotChangePacket.class);
 		k.register(RecipeSelectPacket.class);
+		k.register(EntityRequestPacket.class);
 
 		k.register(EntityType.class);
 		k.register(EntityWrapper.class);

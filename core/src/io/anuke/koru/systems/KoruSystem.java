@@ -1,10 +1,10 @@
 package io.anuke.koru.systems;
 
-import io.anuke.koru.entities.KoruEntity;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+
+import io.anuke.koru.entities.KoruEntity;
 
 public abstract class KoruSystem extends IteratingSystem{
 
@@ -22,5 +22,9 @@ public abstract class KoruSystem extends IteratingSystem{
 	}
 	
 	abstract void processEntity(KoruEntity entity, float delta);
-
+	
+	@Override
+	public KoruEngine getEngine () {
+		return (KoruEngine)super.getEngine();
+	}
 }

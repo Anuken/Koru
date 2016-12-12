@@ -31,6 +31,14 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 			}
 			return (Component)(map.get(c).get(entity));
 		}
+		
+		@SuppressWarnings("unchecked")
+		public static <T> boolean has(Class<T> c, KoruEntity entity){
+			if( !map.containsKey(c)){
+				map.put(c, ComponentMapper.getFor((Class<? extends Component>)c));
+			}
+			return (map.get(c).has(entity));
+		}
 	}
 
 	@SuppressWarnings("unused")
@@ -74,6 +82,10 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	public <T>T mapComponent(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}
+	
+	public <T> boolean hasComponent(Class<T> c){
+		return (Mappers.has(c, this));
+	}
 
 	public void log(Object object){
 		Koru.log("[" + id + "]: " + object);
@@ -103,6 +115,7 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	}
 
 	public void removeSelf(){
+		//wat
 		if( !server()){
 			engine.removeEntity(this);
 		}else{
@@ -111,12 +124,13 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	}
 
 	//ONLY CALL THIS ON RECONNECT
+	//seriously
 	public void resetID(long id){
 		this.id = id;
 		nextID ++;
 	}
 
-	public static boolean server(){
+	boolean server(){
 		return IServer.active();
 	}
 
@@ -130,6 +144,7 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 
 	@Override
 	public void getBoundingBox(Rectangle out){
-		
+		//not implemented yet
+		//should it be?
 	}
 }

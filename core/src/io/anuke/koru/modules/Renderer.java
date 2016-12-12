@@ -59,7 +59,7 @@ public class Renderer extends Module<Koru>{
 	public Vector3 vector = new Vector3();
 	public PostProcessor processor;
 	public Light light;
-	public boolean debug = false;
+	public boolean debug = true;
 	public KoruEntity player;
 	public SpriteRenderable block;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
@@ -75,6 +75,7 @@ public class Renderer extends Module<Koru>{
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
+		font.getData().markupEnabled = true;
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
 		processor = new PostProcessor(false, true, true);
@@ -296,7 +297,7 @@ public class Renderer extends Module<Koru>{
 			float cx = Gdx.input.getX() / GUIscale,
 					cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
 			if(!world.inBounds(cursor.x, cursor.y)){
-				font.draw(batch, "Out of bounds.", cx, cy);
+				font.draw(batch, "[RED]Out of bounds.", cx, cy);
 
 				return;
 			}
@@ -304,9 +305,10 @@ public class Renderer extends Module<Koru>{
 
 			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
 			font.draw(batch,
-					cursor.x + ", " + cursor.y + " " + tile + " chunk: " + chunk.x + "," + chunk.y
-							+ "\nchunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY())
-							+ "\n" + "chunk pos: " + chunk.x + ", " + chunk.y,
+							"[GREEN]" +cursor.x + ", " + cursor.y + " " + tile
+							+ "\n[CORAL]chunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY())
+							+ "\n[YELLOW]" + "chunk pos: " + chunk.x + ", " + chunk.y
+							+ "\n[ORANGE]pos: " + vector.x + ", " + vector.y,
 					cx, cy);
 
 			if(tile.blockdata instanceof InventoryTileData){

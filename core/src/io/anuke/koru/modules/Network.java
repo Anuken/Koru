@@ -1,6 +1,7 @@
 package io.anuke.koru.modules;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -22,6 +23,7 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.EntityRequestPacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.PositionPacket;
@@ -36,6 +38,7 @@ public class Network extends Module<Koru>{
 	public static final int port = 7575;
 	public static final int ping = 0;
 	public static final int packetFrequency = 3;
+	public static final float entityUnloadRange = 800;
 	public boolean initialconnect = false;
 	public boolean connecting;
 	private boolean connected;
@@ -43,6 +46,7 @@ public class Network extends Module<Koru>{
 	private boolean chunksAdded = false;
 	private Array<KoruEntity> entityQueue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
+	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
 	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
 	public IClient client;
 
@@ -96,8 +100,10 @@ public class Network extends Module<Koru>{
 					WorldUpdatePacket packet = (WorldUpdatePacket) object;
 					for(Long key : packet.updates.keys()){
 						KoruEntity entity = t.engine.getEntity(key);
-						if(entity == null)
+						if(entity == null){
+							requestEntity(key);
 							continue;
+						}
 						entity.mapComponent(SyncComponent.class).type.read(packet.updates.get(key), entity);
 					}
 				}else if(object instanceof ChunkPacket){
@@ -155,6 +161,16 @@ public class Network extends Module<Koru>{
 			}
 		}
 	}
+	
+	void requestEntity(long id){
+		if(!requestedEntities.contains(id)){
+			requestedEntities.add(id);
+			
+			EntityRequestPacket request = new EntityRequestPacket();
+			request.id = id;
+			client.sendTCP(request);
+		}
+	}
 
 	@Override
 	public void update(){
@@ -182,13 +198,26 @@ public class Network extends Module<Koru>{
 			KoruEntity entity = entityQueue.pop();
 			if(entity == null)
 				continue;
-
+			
+			requestedEntities.remove(entity.getID());
+			
 			if(entitiesToRemove.contains(entity.getID())){
 				entitiesToRemove.remove(entity.getID());
 				continue;
 			}
 
 			entity.addSelf();
+		}
+		
+		KoruEntity player = getModule(ClientData.class).player;
+		ImmutableArray<Entity> entities = t.engine.getEntities();
+		
+		//unloads entities that are very far away
+		for(Entity e : entities){
+			KoruEntity entity = (KoruEntity)e;
+			if(entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
+				t.engine.removeEntity(e);
+			}
 		}
 
 		for(Long id : entitiesToRemove){

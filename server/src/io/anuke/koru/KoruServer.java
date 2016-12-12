@@ -11,6 +11,7 @@ import org.java_websocket.WebSocket;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -36,6 +37,7 @@ import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.DataPacket;
 import io.anuke.koru.network.packets.EntityRemovePacket;
+import io.anuke.koru.network.packets.EntityRequestPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.network.packets.MaterialRequestPacket;
@@ -44,6 +46,7 @@ import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.KoruEngine;
+import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Material;
@@ -123,9 +126,13 @@ public class KoruServer extends IServer{
 			data.time = getWorld().time;
 
 			ArrayList<Entity> entities = new ArrayList<Entity>();
-			for(Entity entity : updater.engine.getEntities()){
-				entities.add(entity);
-			}
+			
+			Array<KoruEntity> result = updater.engine.map().getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrangex, SyncSystem.syncrangey);
+			
+			entities.ensureCapacity(result.size);
+			
+			for(KoruEntity e : result)
+				entities.add(e);
 
 			data.entities = entities;
 
@@ -167,6 +174,12 @@ public class KoruServer extends IServer{
 				getPlayer(info).position().set(packet.x, packet.y);
 				getPlayer(info).mapComponent(RenderComponent.class).direction = packet.direction;
 				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
+			}else if(object instanceof EntityRequestPacket){
+				EntityRequestPacket packet = (EntityRequestPacket)object;
+				KoruEntity entity = updater.engine.getEntity(packet.id);
+				if(entity != null){
+					send(info, entity, false);
+				}
 			}else if(object instanceof ChatPacket){
 				ChatPacket packet = (ChatPacket)object;
 				packet.sender = updater.engine.getEntity(info.playerid).getComponent(ConnectionComponent.class).name;
@@ -295,9 +308,19 @@ public class KoruServer extends IServer{
 		server.sendToAllTCP(remove);
 		updater.engine.removeEntity(entity);
 	}
-
+	
+	//TODO rewrite this
 	public void sendEntity(KoruEntity entity){
-		sendToAll(entity);
+		//sendToAll(entity);
+		sendToAllIn(entity, entity.getX(), entity.getY(), SyncSystem.syncrangex);
+	}
+	
+	public void sendToAllIn(Object object, float x, float y, float range){
+		Array<KoruEntity> entities = updater.engine.map().getNearbyConnections(x, y, range, range);
+		
+		for(KoruEntity entity : entities){
+			sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, object);
+		}
 	}
 	
 	public void sendLater(Object object){

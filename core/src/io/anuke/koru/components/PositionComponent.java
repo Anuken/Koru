@@ -1,10 +1,10 @@
 package io.anuke.koru.components;
 
-import io.anuke.koru.modules.World;
-import io.anuke.koru.network.SyncBuffer.Synced;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
+
+import io.anuke.koru.modules.World;
+import io.anuke.koru.network.SyncBuffer.Synced;
 
 @Synced
 public class PositionComponent implements Component{
@@ -22,6 +22,10 @@ public class PositionComponent implements Component{
 	public void add(float x, float y){
 		this.x += x;
 		this.y += y;
+	}
+	
+	public float sqdist(float x, float y){
+		return Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
 	}
 	
 	public float dist(PositionComponent other){
