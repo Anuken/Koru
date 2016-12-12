@@ -1,0 +1,10 @@
+RuntimeException: ermagherd an error!
+io.anuke.koru.modules.Renderer.drawGUI(Renderer.java:279)
+io.anuke.koru.modules.Renderer.doRender(Renderer.java:141)
+io.anuke.koru.modules.Renderer.update(Renderer.java:122)
+io.anuke.ucore.modules.ModuleController.render(ModuleController.java:50)
+io.anuke.koru.Koru.render(Koru.java:60)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:389)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:136)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:110)
+io.anuke.koru.desktop.DesktopLauncher.main(DesktopLauncher.java:28)
