@@ -6,8 +6,6 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import io.anuke.koru.Koru;
-
 public class KryoClient extends IClient{
 	private Client client;
 	private boolean started;
@@ -33,7 +31,6 @@ public class KryoClient extends IClient{
 	@Override
 	public void connect(String ip, int port) throws IOException{
 		if(!started){
-			Koru.log("starting");
 			client.start();
 			started = true;
 		}
@@ -53,6 +50,16 @@ public class KryoClient extends IClient{
 	@Override
 	public boolean isConnected() {
 		return client.isConnected();
+	}
+
+	@Override
+	public int getPing(){
+		return client.getReturnTripTime();
+	}
+
+	@Override
+	public void updatePing(){
+		client.updateReturnTripTime();
 	}
 
 }

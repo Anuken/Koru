@@ -8,4 +8,6 @@ public abstract class IClient{
 	public abstract void connect(String ip, int port) throws IOException;
 	public abstract void addListener(NetworkListener listener);
 	public abstract boolean isConnected();
+	public abstract int getPing();
+	public abstract void updatePing();
 }

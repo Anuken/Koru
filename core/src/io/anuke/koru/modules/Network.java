@@ -37,6 +37,7 @@ public class Network extends Module<Koru>{
 	public static final String ip = System.getProperty("user.name").equals("anuke") ? "localhost" : "107.11.42.20";
 	public static final int port = 7575;
 	public static final int ping = 0;
+	public static final int pingInterval = 60;
 	public static final int packetFrequency = 3;
 	public static final float entityUnloadRange = 800;
 	public boolean initialconnect = false;
@@ -124,7 +125,6 @@ public class Network extends Module<Koru>{
 					t.engine.getEntity(packet.id).getComponent(InventoryComponent.class).inventory[0][0] = packet.stack;
 				}else if(object instanceof ChatPacket){
 					ChatPacket packet = (ChatPacket) object;
-
 					Gdx.app.postRunnable(() -> {
 						getModule(UI.class).chat.addMessage(packet.message, packet.sender);
 					});
@@ -174,7 +174,7 @@ public class Network extends Module<Koru>{
 
 	@Override
 	public void update(){
-
+		
 		if(connected && !client.isConnected()){
 			connected = false;
 			connecting = false;
@@ -207,6 +207,10 @@ public class Network extends Module<Koru>{
 			}
 
 			entity.addSelf();
+		}
+		
+		if(connected && Gdx.graphics.getFrameId()%pingInterval==0){
+			client.updatePing();
 		}
 		
 		KoruEntity player = getModule(ClientData.class).player;

@@ -2,6 +2,7 @@ package io.anuke.koru.modules;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pools;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 
@@ -48,6 +50,7 @@ public class Renderer extends Module<Koru>{
 	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
+	public boolean debug = false, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
@@ -59,7 +62,6 @@ public class Renderer extends Module<Koru>{
 	public Vector3 vector = new Vector3();
 	public PostProcessor processor;
 	public Light light;
-	public boolean debug = true;
 	public KoruEntity player;
 	public SpriteRenderable block;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
@@ -89,6 +91,8 @@ public class Renderer extends Module<Koru>{
 		});
 
 		addEffects();
+		
+		Koru.log("Loaded resources.");
 	}
 
 	void addEffects(){
@@ -268,11 +272,29 @@ public class Renderer extends Module<Koru>{
 
 	public void drawGUI(){
 		// recorder.update();
-
+		
+		if(Gdx.input.isKeyJustPressed(Keys.GRAVE)) consoleOpen = !consoleOpen;
+		if(Gdx.input.isKeyJustPressed(Keys.F3)) debug = !debug;
+		
 		font.getData().setScale(1 / GUIscale);
 		font.setColor(Color.WHITE);
-
-		font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, uiheight());
+		
+		font.draw(batch, Gdx.graphics.getFramesPerSecond() + "[WHITE] FPS", 0, uiheight());
+		if(debug){
+			font.draw(batch, 
+			"[CORAL]entities: " +t.engine.getEntities().size() +
+			"\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak +
+			"\n[YELLOW]renderables: " + RenderableHandler.getInstance().getSize() + 
+			"\n[RED]ping: " + getModule(Network.class).client.getPing()
+			, 0, uiheight() - 5);
+		}
+		
+		if(consoleOpen){
+			font.getData().setScale(font.getData().scaleX*0.75f);
+			font.draw(batch, "[CORAL]" + Koru.getLog(), 0, uiheight() - 35);
+		}
+		
+		font.getData().setScale(1 / GUIscale);
 
 		String launcher = "";
 
