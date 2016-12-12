@@ -19,11 +19,11 @@ import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoroniNoise;
-import io.anuke.ucore.util.BlockMap;
+import io.anuke.ucore.util.GridMap;
 
 public class MapPreview extends ApplicationAdapter{
 	TerrainGenerator gen;
-	BlockMap<ChunkPix> blocks = new BlockMap<ChunkPix>();
+	GridMap<ChunkPix> blocks = new GridMap<ChunkPix>();
 	IntIntMap colors = new IntIntMap();
 	SpriteBatch batch;
 	int viewrange = 4;

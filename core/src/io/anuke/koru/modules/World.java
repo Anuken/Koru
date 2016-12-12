@@ -23,7 +23,6 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
-import io.anuke.ucore.util.QuadTree;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
@@ -43,7 +42,6 @@ public class World extends Module<Koru>{
 	boolean[][] chunkloaded;
 	public float time = 0f; //world time
 	private Color ambientColor = new Color();
-	public QuadTree<KoruEntity> quadtree;
 	
 	public World(WorldLoader loader){
 		this();

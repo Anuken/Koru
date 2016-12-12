@@ -32,7 +32,7 @@ public class KoruUpdater{
 	int totalchunks = 0;
 	boolean skipSave = true;
 
-	void Loop(){
+	void loop(){
 		try{
 			engine.update(delta);
 			world.update();
@@ -70,7 +70,7 @@ public class KoruUpdater{
 		int fpsmillis = 1000 / maxfps;
 		while(isRunning){
 			long start = System.currentTimeMillis();
-			Loop();
+			loop();
 			frameid++;
 			long end = System.currentTimeMillis();
 

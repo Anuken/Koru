@@ -1,20 +1,29 @@
 package io.anuke.koru.systems;
 
-import io.anuke.koru.entities.KoruEntity;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 
+import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.network.IServer;
+
 public class KoruEngine extends Engine{
-	private MapListener map;
+	private EntityMapper map;
+	//public QuadTree<KoruEntity> quadtree = new QuadTree<KoruEntity>(5, new Rectangle());
 	
 	public KoruEngine(){
 		super();
+		
 		KoruEntity.setEngine(this);
-		map = new MapListener();
-		this.addEntityListener(map);
-		this.addSystem(new VelocitySystem());
-		this.addSystem(new FadeSystem());
+		map = new EntityMapper();
+		
+		addEntityListener(map);
+		addSystem(new VelocitySystem());
+		addSystem(new FadeSystem());
+		if(IServer.active()) addSystem(map);
+	}
+	
+	public EntityMapper map(){
+		return map;
 	}
 	
 	public KoruEntity getEntity(long id){
@@ -29,7 +38,7 @@ public class KoruEngine extends Engine{
 	
 	@Override
 	public void addEntity(Entity entity){
-		if(entity == null) throw new RuntimeException("KoruEntity cannot be null!");
+		if(entity == null) throw new RuntimeException("The entity cannot be null!");
 		if(!(entity instanceof KoruEntity)) throw new RuntimeException("Only KoruEntities can be added to the engine!");
 		super.addEntity(entity);
 	}
