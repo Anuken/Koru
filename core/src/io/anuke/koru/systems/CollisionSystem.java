@@ -1,6 +1,13 @@
 package io.anuke.koru.systems;
 
 
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
+
 import io.anuke.koru.components.DestroyOnTerrainHitComponent;
 import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.PositionComponent;
@@ -9,14 +16,6 @@ import io.anuke.koru.listeners.CollisionHandler;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.ObjectSet;
 
 public class CollisionSystem extends KoruSystem{
 	private CollisionHandler handler;
@@ -56,9 +55,10 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	void checkCollisions(KoruEntity entity, HitboxComponent hitbox){
-		ImmutableArray<Entity> otherEntities = getEngine().getEntitiesFor(this.getFamily());
-		for(Entity otherentity : otherEntities){
-			KoruEntity other = (KoruEntity)otherentity;
+		Array<KoruEntity> entities = getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), 100, 100, 
+				(aentity)->{return aentity.hasComponent(HitboxComponent.class);});
+		
+		for(KoruEntity other :entities){
 			if(other == entity || iterated.contains(other.getID())) continue;
 			HitboxComponent otherhitbox = other.mapComponent(HitboxComponent.class);
 			otherhitbox.entityhitbox.update(other);

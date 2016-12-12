@@ -49,7 +49,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 				ObjectSet<KoruEntity> set = map.get(x, y);
 				if(set != null){
 					for(KoruEntity e : set)
-						if(pred.evaluate(e))
+						if(pred.evaluate(e) && e.position().sqdist(cx, cx) < Math.max(rangex, rangey))
 							tmp.add(e);
 				}
 			}
