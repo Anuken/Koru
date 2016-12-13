@@ -61,8 +61,12 @@ public class KoruServer extends IServer{
 	WebServer webserver;
 	KoruUpdater updater;
 	GraphicsHandler graphics;
+	CommandHandler commands;
 
 	void setup(){
+		
+		commands = new CommandHandler(this);
+		
 		try{
 			server = new Server(16384 * 256, 16384 * 256);
 			Registrator.register(server.getKryo());
