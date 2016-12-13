@@ -311,7 +311,6 @@ public class KoruServer extends IServer{
 	
 	//TODO rewrite this
 	public void sendEntity(KoruEntity entity){
-		//sendToAll(entity);
 		sendToAllIn(entity, entity.getX(), entity.getY(), SyncSystem.syncrangex);
 	}
 	

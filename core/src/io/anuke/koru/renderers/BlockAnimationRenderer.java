@@ -43,7 +43,10 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		}
 		Material material = (Material)entity.mapComponent(DataComponent.class).data;
 		
-		material.getType().draw(list, material, Koru.module(World.class).getTile((int)entity.getX(), (int)entity.getY()), (int)entity.getX(), (int)entity.getY());
+		int x = (int)(entity.getX()/World.tilesize);
+		int y = (int)(entity.getY()/World.tilesize);
+		
+		material.getType().draw(list, material, Koru.module(World.class).getTile(x, y), x, y);
 		
 		if(material.getType() == MaterialType.tree){
 			
@@ -67,7 +70,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 			top.sprite.setOrigin(top.sprite.getWidth()/2, 0);
 			top.add(list);
 			
-			if(Koru.module(ClientData.class).player.getX() < World.world((int)entity.getX())) rspeed *= -1f;
+			if(Koru.module(ClientData.class).player.getX() <entity.getX()) rspeed *= -1f;
 		}
 	}
 }

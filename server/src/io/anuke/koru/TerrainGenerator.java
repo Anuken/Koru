@@ -74,7 +74,7 @@ public class TerrainGenerator implements Generator{
 					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4.5)
 						tile.setMaterial(Materials.grassblock);
 				}
-				
+
 				if(e > 0.36f && e < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3){
 					if(rand() < br(0.12f, e)){
 						if(rand() < 0.026)
@@ -148,20 +148,24 @@ public class TerrainGenerator implements Generator{
 			}
 		}
 
-		if(riv < 0.23f){
-			if(c > 0.7){
+		if(c > 0.7){
+			if(riv < 0.23f){
 				tile.setMaterial(Materials.stoneblock);
 				tile.setMaterial(Materials.stone);
-				tile.setLight(clamp(1f-(c-0.7f)*60f));
-				
-				if(Noise.nnoise(x, y, 100, 0.5f) + Noise.nnoise(x, y, 15, 1) + Noise.nnoise(x, y, 50, 1) + cper.getValue(x, y, 0.005f) > 0.19){
+
+				if(Noise.nnoise(x, y, 100, 0.5f) + Noise.nnoise(x, y, 15, 1) + Noise.nnoise(x, y, 50, 1)
+						+ cper.getValue(x, y, 0.005f) > 0.19){
 					tile.setMaterial(Materials.air);
 				}
-			}else if(c > 0.69){
+			}
+			tile.setLight(clamp(1f - (c - 0.7f) * 60f));
+		}else if(c > 0.69){
+			if(riv < 0.23f){
 				tile.setMaterial(Materials.stone);
 				tile.setMaterial(Materials.air);
-				
-				if(Math.random() < 0.05) tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
+
+				if(Math.random() < 0.05)
+					tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
 			}
 		}
 
