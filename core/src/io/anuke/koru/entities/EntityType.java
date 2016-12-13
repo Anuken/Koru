@@ -25,6 +25,7 @@ import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.network.Interpolator;
 import io.anuke.koru.renderers.BlockAnimationRenderer;
 import io.anuke.koru.renderers.IndicatorRenderer;
+import io.anuke.koru.renderers.MonsterRenderer;
 import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.renderers.PlayerRenderer;
 import io.anuke.koru.renderers.ProjectileRenderer;
@@ -37,6 +38,27 @@ public enum EntityType{
 			new RenderComponent(new PlayerRenderer()), new HitboxComponent(),
 			new SyncComponent(SyncType.player, new Interpolator()), new InputComponent(), 
 			new HealthComponent(), new InventoryComponent(4,6)};
+		}
+
+		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
+
+			hitbox.terrainRect().set(0, 0, 6, 2);
+
+			hitbox.entityRect().set(0, 0, 4, 5);
+			hitbox.alignBottom();
+			hitbox.height = 8;
+		}
+		
+		public void deathEvent(KoruEntity entity, KoruEntity killer){
+		
+		}
+	},
+	testmob{
+		public Component[] defaultComponents(){
+			return new Component[]{new PositionComponent(),
+			new RenderComponent(new MonsterRenderer()), new HitboxComponent(),
+			new SyncComponent(SyncType.position, new Interpolator()),
+			new HealthComponent()};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){

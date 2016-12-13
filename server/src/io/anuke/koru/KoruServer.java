@@ -11,7 +11,6 @@ import org.java_websocket.WebSocket;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -64,7 +63,6 @@ public class KoruServer extends IServer{
 	CommandHandler commands;
 
 	void setup(){
-		
 		commands = new CommandHandler(this);
 		
 		try{
@@ -131,12 +129,10 @@ public class KoruServer extends IServer{
 
 			ArrayList<Entity> entities = new ArrayList<Entity>();
 			
-			Array<KoruEntity> result = updater.engine.map().getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrangex, SyncSystem.syncrangey);
-			
-			entities.ensureCapacity(result.size);
-			
-			for(KoruEntity e : result)
-				entities.add(e);
+			updater.engine.map()
+			.getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrange, (entity)->{
+				entities.add(entity);
+			});
 
 			data.entities = entities;
 
@@ -313,17 +309,14 @@ public class KoruServer extends IServer{
 		updater.engine.removeEntity(entity);
 	}
 	
-	//TODO rewrite this
 	public void sendEntity(KoruEntity entity){
-		sendToAllIn(entity, entity.getX(), entity.getY(), SyncSystem.syncrangex);
+		sendToAllIn(entity, entity.getX(), entity.getY(), SyncSystem.syncrange);
 	}
 	
 	public void sendToAllIn(Object object, float x, float y, float range){
-		Array<KoruEntity> entities = updater.engine.map().getNearbyConnections(x, y, range, range);
-		
-		for(KoruEntity entity : entities){
+		updater.engine.map().getNearbyConnections(x, y, range, (entity)->{
 			sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, object);
-		}
+		});
 	}
 	
 	public void sendLater(Object object){

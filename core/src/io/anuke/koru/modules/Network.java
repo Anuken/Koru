@@ -39,7 +39,7 @@ public class Network extends Module<Koru>{
 	public static final int ping = 0;
 	public static final int pingInterval = 60;
 	public static final int packetFrequency = 3;
-	public static final float entityUnloadRange = 800;
+	public static final float entityUnloadRange = 600;
 	public boolean initialconnect = false;
 	public boolean connecting;
 	private boolean connected;

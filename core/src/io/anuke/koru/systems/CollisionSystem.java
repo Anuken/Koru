@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.components.DestroyOnTerrainHitComponent;
@@ -55,20 +54,20 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	void checkCollisions(KoruEntity entity, HitboxComponent hitbox){
-		Array<KoruEntity> entities = getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), 100, 100, 
-				(aentity)->{return aentity.hasComponent(HitboxComponent.class);});
-		
-		for(KoruEntity other :entities){
-			if(other == entity || iterated.contains(other.getID())) continue;
+		getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), 100, 
+		(aentity)->{ return aentity.hasComponent(HitboxComponent.class); }, 
+		(other) ->{
+			if(other == entity || iterated.contains(other.getID())) return;
+			
 			HitboxComponent otherhitbox = other.mapComponent(HitboxComponent.class);
 			otherhitbox.entityhitbox.update(other);
+			
 			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
 					&& entity.getType().collide(entity, other) && other.getType().collide(other, entity)){
 				collisionEvent(entity,other);
-			//	iterated.add(other.getID());
-			}
+			}	
+		});
 		
-		}
 		iterated.add(entity.getID());
 	}
 	

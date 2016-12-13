@@ -1,16 +1,23 @@
 package io.anuke.koru.renderers;
 
+import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
+
 public class MonsterRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){
-		//render.layers.update(entity.getX(), entity.getY());
-		
+		render.group.get("monster").sprite().setPosition(entity.getX(), entity.getY()).centerX();
+		render.group.get("shadow").sprite().setPosition(entity.getX(), entity.getY()).center();
 	}
 
 	@Override
 	protected void initRender(){
-	//	render.layer(entity.getType().toString());
+		new SpriteRenderable(Resources.region("genericmonster"))
+		.addShadow(render.group, Resources.atlas())
+		.setProvider(SortProviders.object)
+		.add("monster", render.group);
 	}
 
 }

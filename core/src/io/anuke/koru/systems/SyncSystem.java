@@ -3,7 +3,6 @@ package io.anuke.koru.systems;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.PositionComponent;
@@ -18,7 +17,7 @@ import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 
 public class SyncSystem extends KoruSystem{
-	static public float syncrangex = 150, syncrangey = 150;
+	static public float syncrange = 150;
 	
 	public SyncSystem(){
 		super(Family.all(PositionComponent.class, ConnectionComponent.class).get());
@@ -28,14 +27,14 @@ public class SyncSystem extends KoruSystem{
 	protected void processEntity(KoruEntity player, float delta){
 		if(IServer.instance().getFrameID() % Network.packetFrequency != 0) return;
 
-		Array<KoruEntity> entities = getEngine().map().getNearbyConnections(player.getX(), player.getY(), 150, 150);
-
 		WorldUpdatePacket packet = new WorldUpdatePacket();
-		for(KoruEntity entity : entities){
-			if(entity == player) continue;
+		
+		getEngine().map().getNearbySyncables(player.getX(), player.getY(), syncrange, (entity)->{
+			if(entity == player) return;
 			packet.updates.put(entity.getID(), entity.mapComponent(SyncComponent.class).type.write(entity));
-		}
+		});
 
+		
 		if(packet.updates.size != 0) IServer.instance().sendTCP(player.mapComponent(ConnectionComponent.class).connectionID, packet);
 	}
 
