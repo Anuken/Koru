@@ -40,7 +40,7 @@ public class CommandHandler{
 		if(c.isEmpty()) c = s;
 		
 		if(c.equals("spawn")){
-			print("spawning");
+			print("spawning 30 mobs...");
 
 			for(int i = 0; i < 30; i++){
 				KoruEntity entity = new KoruEntity(EntityType.testmob);

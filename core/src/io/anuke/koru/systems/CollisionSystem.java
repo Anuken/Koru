@@ -55,8 +55,8 @@ public class CollisionSystem extends KoruSystem{
 
 	void checkCollisions(KoruEntity entity, HitboxComponent hitbox){
 		getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), 100, 
-		(aentity)->{ return aentity.hasComponent(HitboxComponent.class); }, 
-		(other) ->{
+		(aentity)-> { return aentity.hasComponent(HitboxComponent.class); }, 
+		(other) -> {
 			if(other == entity || iterated.contains(other.getID())) return;
 			
 			HitboxComponent otherhitbox = other.mapComponent(HitboxComponent.class);

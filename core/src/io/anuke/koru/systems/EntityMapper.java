@@ -30,7 +30,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	public static Predicate<KoruEntity> connectionPredicate = (entity) -> {
 		return entity.hasComponent(ConnectionComponent.class);
 	};
-	
+
 	public static Predicate<KoruEntity> syncedPredicate = (entity) -> {
 		return entity.hasComponent(SyncComponent.class);
 	};
@@ -47,7 +47,8 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	 * Returns all the entities near a specific location (within range). May
 	 * return entities outside the range.
 	 **/
-	public void getNearbyEntities(float cx, float cy, float range,Predicate<KoruEntity> pred, Consumer<KoruEntity> con){
+	public void getNearbyEntities(float cx, float cy, float range, Predicate<KoruEntity> pred,
+			Consumer<KoruEntity> con){
 
 		synchronized(lock){
 			if(range < 1 || range < 1)
@@ -66,9 +67,13 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 				for(int y = miny; y < maxy + 1; y++){
 					ObjectSet<KoruEntity> set = map.get(x, y);
 					if(set != null){
-						for(KoruEntity e : set)
-							if(pred.evaluate(e) && Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range)
+						for(KoruEntity e : set){
+							if(e == null)
+								Koru.log("wow, a null entity");
+							if(pred.evaluate(e) && Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range){
 								con.accept(e);
+							}
+						}
 					}
 				}
 			}
@@ -76,14 +81,12 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	}
 
 	/** Gets nearby entities with a connection */
-	public void getNearbyConnections(float cx, float cy, float range,
-			Consumer<KoruEntity> con){
-		getNearbyEntities(cx, cy, range,connectionPredicate, con);
+	public void getNearbyConnections(float cx, float cy, float range, Consumer<KoruEntity> con){
+		getNearbyEntities(cx, cy, range, connectionPredicate, con);
 	}
-	
-	/**Gets nearby syncables.*/
-	public void getNearbySyncables(float cx, float cy, float range,
-			Consumer<KoruEntity> con){
+
+	/** Gets nearby syncables. */
+	public void getNearbySyncables(float cx, float cy, float range, Consumer<KoruEntity> con){
 		getNearbyEntities(cx, cy, range, syncedPredicate, con);
 	}
 
@@ -101,24 +104,25 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	void processEntity(KoruEntity entity, float delta){
 		int x = (int) (entity.getX() / gridsize), y = (int) (entity.getY() / gridsize);
 
-		synchronized(lock){
+		ObjectSet<KoruEntity> set = map.get(x, y);
 
-			ObjectSet<KoruEntity> set = map.get(x, y);
-
-			if(set == null){
-				map.put(x, y, (set = new ObjectSet<KoruEntity>()));
-			}
-
-			set.add(entity);
+		if(set == null){
+			map.put(x, y, (set = new ObjectSet<KoruEntity>()));
 		}
+
+		set.add(entity);
+
 	}
 
 	@Override
 	public void update(float deltaTime){
-		for(ObjectSet<KoruEntity> set : map.values()){
-			set.clear();
+		synchronized(lock){
+			for(ObjectSet<KoruEntity> set : map.values()){
+				set.clear();
+			}
+
+			super.update(deltaTime);
 		}
-		super.update(deltaTime);
 	}
 
 	@Override
