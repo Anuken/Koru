@@ -40,13 +40,13 @@ public class CommandHandler{
 		if(c.isEmpty()) c = s;
 		
 		if(c.equals("spawn")){
-			print("spawning 30 mobs...");
-
 			for(int i = 0; i < 30; i++){
 				KoruEntity entity = new KoruEntity(EntityType.testmob);
 				entity.position().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
 				entity.addSelf().sendSelf();
 			}
+			
+			print("spawning 30 entities. (now "+PURPLE+server.updater.engine.getEntities().size()+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(server.updater.delta/60f)+LIGHT_CYAN +" FPS.)");
 		}else if(c.equals("systems")){
 			for(EntitySystem system : server.updater.engine.getSystems()){
 				print(YELLOW + "- " + system.getClass().getSimpleName()  + (system.checkProcessing() ? GREEN + " [Enabled]" : RED  +" [Disabled]"));

@@ -44,8 +44,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	}
 
 	/**
-	 * Returns all the entities near a specific location (within range). May
-	 * return entities outside the range.
+	 * Returns all the entities near a specific location (within range).
 	 **/
 	public void getNearbyEntities(float cx, float cy, float range, Predicate<KoruEntity> pred,
 			Consumer<KoruEntity> con){

@@ -9,8 +9,6 @@ import io.anuke.koru.network.IServer;
 public class KoruEngine extends Engine{
 	private EntityMapper map;
 	private Object lock = new Object();
-	// public QuadTree<KoruEntity> quadtree = new QuadTree<KoruEntity>(5, new
-	// Rectangle());
 
 	public KoruEngine() {
 		super();
