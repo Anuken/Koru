@@ -7,8 +7,8 @@ import java.util.function.Consumer;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Predicate;
 
 import io.anuke.koru.Koru;
@@ -22,8 +22,8 @@ import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{
 	public static final float gridsize = World.tilesize * World.chunksize * 2;
-	public ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
-	private GridMap<ObjectSet<KoruEntity>> map = new GridMap<ObjectSet<KoruEntity>>();
+	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
+	private GridMap<Array<KoruEntity>> map = new GridMap<Array<KoruEntity>>();
 	private boolean debug = false;
 	private Object lock = new Object();
 
@@ -51,7 +51,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 		synchronized(lock){
 			if(range < 1 || range < 1)
-				throw new IllegalArgumentException("rangex and rangey cannot be negative, are you insane?!");
+				throw new IllegalArgumentException("rangex and rangey cannot be negative.");
 
 			int maxx = scl(cx + range, gridsize), maxy = scl(cy + range, gridsize), minx = scl(cx - range, gridsize),
 					miny = scl(cy - range, gridsize);
@@ -64,7 +64,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 			for(int x = minx; x < maxx + 1; x++){
 				for(int y = miny; y < maxy + 1; y++){
-					ObjectSet<KoruEntity> set = map.get(x, y);
+					Array<KoruEntity> set = map.get(x, y);
 					if(set != null){
 						for(KoruEntity e : set){
 							if(e == null)
@@ -94,7 +94,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 		getNearbyEntities(cx, cy, range, allPredicate, con);
 	}
 
-	public ObjectSet<KoruEntity> getEntitiesIn(float cx, float cy){
+	public Array<KoruEntity> getEntitiesIn(float cx, float cy){
 		int x = (int) (cx / gridsize), y = (int) (cy / gridsize);
 		return map.get(x, y);
 	}
@@ -103,20 +103,19 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	void processEntity(KoruEntity entity, float delta){
 		int x = (int) (entity.getX() / gridsize), y = (int) (entity.getY() / gridsize);
 
-		ObjectSet<KoruEntity> set = map.get(x, y);
+		Array<KoruEntity> set = map.get(x, y);
 
 		if(set == null){
-			map.put(x, y, (set = new ObjectSet<KoruEntity>()));
+			map.put(x, y, (set = new Array<KoruEntity>()));
 		}
 
 		set.add(entity);
-
 	}
 
 	@Override
 	public void update(float deltaTime){
 		synchronized(lock){
-			for(ObjectSet<KoruEntity> set : map.values()){
+			for(Array<KoruEntity> set : map.values()){
 				set.clear();
 			}
 
