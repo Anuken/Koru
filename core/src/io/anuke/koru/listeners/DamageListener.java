@@ -12,7 +12,7 @@ public class DamageListener extends CollisionListener{
 	}
 
 	@Override
-	void collision(KoruEntity entity, KoruEntity other){
+	void contact(KoruEntity entity, KoruEntity other){
 		HealthComponent health = entity.mapComponent(HealthComponent.class);
 		int amount = other.mapComponent(DamageComponent.class).damage;
 		health.health -= amount;

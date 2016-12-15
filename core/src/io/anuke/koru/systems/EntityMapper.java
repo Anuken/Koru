@@ -21,7 +21,7 @@ import io.anuke.koru.modules.World;
 import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{
-	public static final float gridsize = World.tilesize * World.chunksize * 2;
+	public static final float cellsize = World.tilesize * World.chunksize;
 	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
 	private GridMap<Array<KoruEntity>> map = new GridMap<Array<KoruEntity>>();
 	private boolean debug = false;
@@ -53,12 +53,12 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 			if(range < 1 || range < 1)
 				throw new IllegalArgumentException("rangex and rangey cannot be negative.");
 
-			int maxx = scl(cx + range, gridsize), maxy = scl(cy + range, gridsize), minx = scl(cx - range, gridsize),
-					miny = scl(cy - range, gridsize);
+			int maxx = scl(cx + range, cellsize), maxy = scl(cy + range, cellsize), minx = scl(cx - range, cellsize),
+					miny = scl(cy - range, cellsize);
 
 			if(debug){
 				Koru.log("scan position: " + cx + ", " + cy);
-				Koru.log("placed quadrant: " + scl(cx, EntityMapper.gridsize) + ", " + scl(cy, EntityMapper.gridsize));
+				Koru.log("placed quadrant: " + scl(cx, EntityMapper.cellsize) + ", " + scl(cy, EntityMapper.cellsize));
 				Koru.log("bounds: " + minx + ", " + miny + "  " + maxx + ", " + maxy);
 			}
 
@@ -95,13 +95,13 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	}
 
 	public Array<KoruEntity> getEntitiesIn(float cx, float cy){
-		int x = (int) (cx / gridsize), y = (int) (cy / gridsize);
+		int x = (int) (cx / cellsize), y = (int) (cy / cellsize);
 		return map.get(x, y);
 	}
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
-		int x = (int) (entity.getX() / gridsize), y = (int) (entity.getY() / gridsize);
+		int x = (int) (entity.getX() / cellsize), y = (int) (entity.getY() / cellsize);
 
 		Array<KoruEntity> set = map.get(x, y);
 

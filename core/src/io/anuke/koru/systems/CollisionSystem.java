@@ -17,9 +17,10 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
 
 public class CollisionSystem extends KoruSystem{
+	private final static float maxHitboxSize = 40;
 	private CollisionHandler handler;
-	ObjectSet<Long> iterated = new ObjectSet<Long>();
-	long lastFrameID;
+	private ObjectSet<Long> iterated = new ObjectSet<Long>();
+	private long lastFrameID;
 	private Rectangle rect = new Rectangle();
 	private GridPoint2 point = new GridPoint2();
 	private Vector2 vector = new Vector2();
@@ -55,23 +56,25 @@ public class CollisionSystem extends KoruSystem{
 
 	void checkCollisions(KoruEntity entity, HitboxComponent hitbox){
 		
-		getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), 100, 
+		if(hitbox.sleeping) return;
+		
+		getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), maxHitboxSize, 
 		(aentity)-> { return aentity.hasComponent(HitboxComponent.class); }, 
 		(other) -> {
 			if(other == entity || iterated.contains(other.getID())) return;
 			
 			HitboxComponent otherhitbox = other.mapComponent(HitboxComponent.class);
 			otherhitbox.entityhitbox.update(other);
-			
 			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
 					&& entity.getType().collide(entity, other) && other.getType().collide(other, entity)){
 				collisionEvent(entity,other);
+				otherhitbox.sleeptime = HitboxComponent.sleepduration;
 			}	
 		});
 		
 		iterated.add(entity.getID());
 	}
-	
+
 	void collisionEvent(KoruEntity entitya, KoruEntity entityb){
 		handler.dispatchEvent(entitya, entityb);
 	}

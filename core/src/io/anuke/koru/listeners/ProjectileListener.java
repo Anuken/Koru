@@ -7,11 +7,11 @@ public class ProjectileListener extends CollisionListener{
 
 	@Override
 	boolean accept(KoruEntity entity, KoruEntity other){
-		return entity.mapComponent(ProjectileComponent.class) != null;
+		return entity.hasComponent(ProjectileComponent.class);
 	}
 
 	@Override
-	void collision(KoruEntity entity, KoruEntity other){
+	void contact(KoruEntity entity, KoruEntity other){
 		entity.removeSelfServer();
 	}
 
