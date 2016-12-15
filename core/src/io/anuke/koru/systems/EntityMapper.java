@@ -123,8 +123,9 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 			
 			//clear cells just in case
 			if(map.size() > maxCells){
-				Koru.log("Too many mapper cells ("+map.size()+"). Clearing and executing System#gc().");
+				Koru.log("Too many mapper cells ("+map.size()+"). Clearing and calling System#gc().");
 				map.clear();
+				//might as well try to clean up
 				System.gc();
 			}
 			

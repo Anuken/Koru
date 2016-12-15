@@ -1,0 +1,12 @@
+java.lang.NullPointerException: null
+io.anuke.koru.modules.World.instance(World.java:168)
+io.anuke.koru.systems.CollisionSystem.vectorTerrainCollisions(CollisionSystem.java:128)
+io.anuke.koru.systems.CollisionSystem.checkTerrainCollisions(CollisionSystem.java:152)
+io.anuke.koru.systems.CollisionSystem.moveEntity(CollisionSystem.java:115)
+io.anuke.koru.modules.Input.update(Input.java:95)
+io.anuke.ucore.modules.ModuleController.render(ModuleController.java:50)
+io.anuke.koru.Koru.render(Koru.java:58)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:389)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:136)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:110)
+io.anuke.koru.desktop.DesktopLauncher.main(DesktopLauncher.java:28)

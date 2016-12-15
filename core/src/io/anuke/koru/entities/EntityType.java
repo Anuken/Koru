@@ -36,15 +36,16 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new ConnectionComponent(),
 			new RenderComponent(new PlayerRenderer()), new HitboxComponent(),
+			new VelocityComponent(),
 			new SyncComponent(SyncType.player, new Interpolator()), new InputComponent(), 
 			new HealthComponent(), new InventoryComponent(4,6)};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 
-			hitbox.terrainRect().set(0, 0, 6, 2);
+			hitbox.terrainRect().set(0, 0, 8, 2);
 
-			hitbox.entityRect().set(0, 0, 4, 5);
+			hitbox.entityRect().set(0, 0, 8, 6);
 			hitbox.alignBottom();
 			hitbox.height = 8;
 		}
@@ -66,7 +67,7 @@ public enum EntityType{
 
 			hitbox.terrainRect().set(0, 0, 6, 2);
 
-			hitbox.entityRect().set(0, 0, 4, 5);
+			hitbox.entityRect().set(0, 0, 6, 6);
 			hitbox.alignBottom();
 			hitbox.height = 8;
 		}

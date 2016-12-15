@@ -17,6 +17,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.RenderComponent;
@@ -173,6 +174,7 @@ public class KoruServer extends IServer{
 
 				getPlayer(info).position().set(packet.x, packet.y);
 				getPlayer(info).mapComponent(RenderComponent.class).direction = packet.direction;
+				getPlayer(info).mapComponent(HitboxComponent.class).sleeptime = HitboxComponent.sleepduration;
 				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof EntityRequestPacket){
 				EntityRequestPacket packet = (EntityRequestPacket)object;

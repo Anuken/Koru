@@ -6,7 +6,6 @@ import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.VelocityComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 
 public class VelocitySystem extends KoruSystem{
@@ -42,7 +41,7 @@ public class VelocitySystem extends KoruSystem{
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 
 		if(hitbox != null && IServer.active() && hitbox.collideterrain){
-			collisions.moveWithCollisions(World.instance(), entity, addx, addy);
+			collisions.moveWithCollisions(entity, addx, addy);
 		}else{
 			entity.position().x += addx;
 			entity.position().y += addy;

@@ -18,6 +18,7 @@ import io.anuke.koru.world.Tile;
 
 public class CollisionSystem extends KoruSystem{
 	private final static float maxHitboxSize = 40;
+	private final static float stepsize = 0.1f;
 	private CollisionHandler handler;
 	private ObjectSet<Long> iterated = new ObjectSet<Long>();
 	private long lastFrameID;
@@ -39,7 +40,7 @@ public class CollisionSystem extends KoruSystem{
 
 		checkCollisions(entity, hitbox);
 		
-		GridPoint2 point = vectorTerrainCollisions(World.instance(), entity, 0, 0);
+		GridPoint2 point = vectorTerrainCollisions(entity, 0, 0);
 		if(point != null){ //AHH ENTITY STUCK IN BLOCK!!
 			float blockx = World.world(point.x), blocky = World.world(point.y);
 			vector.set(entity.getX() - blockx, entity.getY() - blocky).setLength(1f);
@@ -80,23 +81,62 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 
-	public void moveWithCollisions(World world, KoruEntity entity, float mx, float my){
+	public void moveWithCollisions(KoruEntity entity, float mx, float my){
 		boolean wallcollision = false;
-		if( !checkTerrainCollisions(world, entity, mx, 0)){
+		if( !checkTerrainCollisions(entity, mx, 0)){
 			entity.position().add(mx, 0);
 		}else{
 			blockCollisionEvent(entity);
 			wallcollision = true;
 		}
 
-		if( !checkTerrainCollisions(world, entity, 0, my)){
+		if( !checkTerrainCollisions(entity, 0, my)){
 			entity.position().add(0, my);
 		}else{
 			if( !wallcollision) blockCollisionEvent(entity);
 		}
 	}
+	
+	public void moveEntity(KoruEntity entity, float mx, float my){
+		float stepx, stepy;
+		int steps;
+		
+		if(Math.abs(mx) > Math.abs(my)){
+			steps = (int)(Math.abs(mx)/stepsize);
+			stepx = stepsize * (mx < 0 ? -1 : 1);
+			stepy = my/steps;
+		}else{
+			steps = (int)(Math.abs(my)/stepsize);
+			stepy = stepsize * (my < 0 ? -1 : 1);
+			stepx = mx/steps;
+		}
+		
+		float ax = 0;
+		for(int i = 0; i < steps; i ++){
+			ax += stepx;
+			
+			if(checkTerrainCollisions(entity, ax, 0) || i == steps-1){
+				ax -= stepx;
+				break;
+			}
+		}
+		
+		float ay = 0;
+		for(int i = 0; i < steps; i ++){
+			ay += stepy;
+			
+			if(checkTerrainCollisions(entity, 0, ay) || i == steps-1){
+				ay -= stepy;
+				break;
+			}
+		}
+		
+		entity.position().add(ax, ay);
+	}
 
-	public GridPoint2 vectorTerrainCollisions(World world, KoruEntity entity, float mx, float my){
+	public GridPoint2 vectorTerrainCollisions(KoruEntity entity, float mx, float my){
+		
+		World world = World.instance();
 		
 		HitboxComponent component = entity.mapComponent(HitboxComponent.class);
 		float newx = entity.getX() + mx;
@@ -119,8 +159,8 @@ public class CollisionSystem extends KoruSystem{
 		return null;
 	}
 	
-	public boolean checkTerrainCollisions(World world, KoruEntity entity, float mx, float my){
-		return vectorTerrainCollisions(world, entity, mx, my) != null;
+	public boolean checkTerrainCollisions(KoruEntity entity, float mx, float my){
+		return vectorTerrainCollisions(entity, mx, my) != null;
 	}
 
 	private void checkFrame(){

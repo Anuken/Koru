@@ -165,7 +165,7 @@ public class World extends Module<Koru>{
 	}
 
 	public static World instance(){
-		return IServer.instance().getWorld();
+		return IServer.active() ? IServer.instance().getWorld() : Koru.module(World.class);
 	}
 
 	public Tile getTile(GridPoint2 point){
