@@ -79,6 +79,8 @@ public class CommandHandler{
 			print(YELLOW + server.updater.engine.getEntities().size());
 		}else if(c.equals("fps")){
 			print(YELLOW + 1f/(server.updater.delta/60f));
+		}else if(c.equals("cells")){
+			print(YELLOW + server.updater.engine.map().getCellAmount());
 		}else{
 			print(PURPLE + "Invalid command.");
 		}

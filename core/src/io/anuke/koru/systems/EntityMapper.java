@@ -21,7 +21,8 @@ import io.anuke.koru.modules.World;
 import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{
-	public static final float cellsize = World.tilesize * World.chunksize;
+	public static final float cellsize = World.tilesize * World.chunksize/2;
+	public static final int maxCells = 1500;
 	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
 	private GridMap<Array<KoruEntity>> map = new GridMap<Array<KoruEntity>>();
 	private boolean debug = false;
@@ -41,6 +42,10 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 	public EntityMapper() {
 		super(Family.all(PositionComponent.class).get());
+	}
+	
+	public int getCellAmount(){
+		return map.size();
 	}
 
 	/**
@@ -115,6 +120,14 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	@Override
 	public void update(float deltaTime){
 		synchronized(lock){
+			
+			//clear cells just in case
+			if(map.size() > maxCells){
+				Koru.log("Too many mapper cells ("+map.size()+"). Clearing and executing System#gc().");
+				map.clear();
+				System.gc();
+			}
+			
 			for(Array<KoruEntity> set : map.values()){
 				set.clear();
 			}
