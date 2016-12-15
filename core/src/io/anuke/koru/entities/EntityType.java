@@ -35,45 +35,20 @@ public enum EntityType{
 	player{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new ConnectionComponent(),
-			new RenderComponent(new PlayerRenderer()), new HitboxComponent(),
+			new RenderComponent(new PlayerRenderer()), new HitboxComponent()
+			.init(8, 8, 6, 8, 3),
 			new VelocityComponent(),
 			new SyncComponent(SyncType.player, new Interpolator()), new InputComponent(), 
 			new HealthComponent(), new InventoryComponent(4,6)};
-		}
-
-		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
-
-			hitbox.terrainRect().set(0, 0, 8, 2);
-
-			hitbox.entityRect().set(0, 0, 8, 6);
-			hitbox.alignBottom();
-			hitbox.height = 8;
-		}
-		
-		public void deathEvent(KoruEntity entity, KoruEntity killer){
-		
 		}
 	},
 	testmob{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(),
 			new RenderComponent(new MonsterRenderer()), 
-			new HitboxComponent(), new VelocityComponent(),
+			new HitboxComponent().init(8, 8, 6, 8, 3), new VelocityComponent(),
 			new SyncComponent(SyncType.position, new Interpolator()),
 			new HealthComponent()};
-		}
-
-		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
-
-			hitbox.terrainRect().set(0, 0, 6, 2);
-
-			hitbox.entityRect().set(0, 0, 6, 6);
-			hitbox.alignBottom();
-			hitbox.height = 8;
-		}
-		
-		public void deathEvent(KoruEntity entity, KoruEntity killer){
-		
 		}
 	},
 	projectile{

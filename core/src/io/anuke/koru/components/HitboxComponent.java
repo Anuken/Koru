@@ -14,6 +14,15 @@ public class HitboxComponent implements Component{
 	public boolean sleeping;
 	public float sleeptime = sleepduration;
 	
+	/**[name]h/w corresponds to hitbox or terrain hitbox width/height.*/
+	public HitboxComponent init(float height, float hitw, float hith, float terrainw, float terrainh){
+		this.height = height;
+		terrainRect().set(0,0,terrainw,terrainh);
+		entityRect().set(0,0,hitw,hith);
+		alignBottom();
+		return this;
+	}
+	
 	public Rectangle terrainRect(){
 		return terrainhitbox.rect;
 	}
@@ -22,8 +31,9 @@ public class HitboxComponent implements Component{
 		return entityhitbox.rect;
 	}
 	
-	public void alignBottom(){
+	public HitboxComponent alignBottom(){
 		terrainhitbox.alignBottom();
 		entityhitbox.alignBottom();
+		return this;
 	}
 }
