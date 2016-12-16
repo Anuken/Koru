@@ -45,6 +45,7 @@ public class Network extends Module<Koru>{
 	private boolean connected;
 	private String lastError;
 	private boolean chunksAdded = false;
+	private Array<Long> tempids = new Array<Long>();
 	private Array<KoruEntity> entityQueue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
@@ -223,18 +224,22 @@ public class Network extends Module<Koru>{
 				t.engine.removeEntity(e);
 			}
 		}
-
+		
+		tempids.clear();
+		
 		for(Long id : entitiesToRemove){
-			t.engine.removeEntity(id);
+			if(t.engine.removeEntity(id)){
+				tempids.add(id);
+			}
 		}
+		
+		for(Long l : tempids)
+			entitiesToRemove.remove(l);
 
 		if(chunksAdded){
 			getModule(Renderer.class).updateTiles();
 			chunksAdded = false;
 		}
-
-		if(entitiesToRemove.size > 10)
-			entitiesToRemove.clear();
 
 		if(Gdx.graphics.getFrameId() % packetFrequency == 0)
 			sendUpdate();
