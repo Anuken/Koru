@@ -10,7 +10,7 @@ public enum Items implements Item{
 			return mat.getType() == MaterialType.tree || mat.name().contains("wood") || mat.name().contains("torch");
 		}
 	},
-	woodpickaxe(ItemType.tool, 100f){
+	woodpickaxe(ItemType.tool, 1f){
 		public boolean breaks(Material mat){
 			return mat.name().contains("stone") || mat.name().contains("rock");
 		}

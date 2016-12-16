@@ -144,7 +144,7 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	}
 
 	public String toString(){
-		return "Entity: " + this.type + " #" + id;
+		return this.type + " #" + id;
 	}
 
 	@Override

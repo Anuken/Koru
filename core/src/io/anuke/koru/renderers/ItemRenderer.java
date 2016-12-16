@@ -9,7 +9,7 @@ public class ItemRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){
-		render.group.get("item").sprite().setPosition(entity.getX(), entity.getY()).setLayer(entity.getY()+4).center();
+		render.group.get("item").sprite().setPosition(entity.getX(), entity.getY()).setLayer(entity.getY()+2).center();
 		render.group.get("shadow").sprite().setPosition(entity.getX(), entity.getY()-2).center();
 	}
 

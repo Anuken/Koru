@@ -57,11 +57,13 @@ public class KoruEngine extends Engine{
 	@Override
 	public void addEntity(Entity entity){
 		synchronized(lock){
-
 			if(entity == null)
 				throw new RuntimeException("The entity cannot be null!");
 			if(!(entity instanceof KoruEntity))
 				throw new RuntimeException("Only KoruEntities can be added to the engine!");
+			//we have an entity conflict. ignore.
+			if(map().entities.containsKey(((KoruEntity)entity).getID())) throw new RuntimeException("Entity conflict! An entity with that ID already exists!");
+			
 			super.addEntity(entity);
 		}
 	}

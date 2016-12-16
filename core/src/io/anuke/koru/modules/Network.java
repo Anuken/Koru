@@ -164,7 +164,7 @@ public class Network extends Module<Koru>{
 	}
 	
 	void requestEntity(long id){
-		if(!requestedEntities.contains(id)){
+		if(!requestedEntities.contains(id) && !entitiesToRemove.contains(id)){
 			requestedEntities.add(id);
 			
 			EntityRequestPacket request = new EntityRequestPacket();
@@ -206,7 +206,8 @@ public class Network extends Module<Koru>{
 				entitiesToRemove.remove(entity.getID());
 				continue;
 			}
-
+			
+			if(t.engine.getEntity(entity.getID()) == null)
 			entity.addSelf();
 		}
 		

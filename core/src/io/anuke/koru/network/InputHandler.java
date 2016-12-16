@@ -39,7 +39,7 @@ public class InputHandler{
 				
 				
 				if((int)(blockhold) % 20 == 1)
-				Effects.blockParticle(World.world(blockx), World.world(blocky), tile.block());
+				Effects.blockParticle(World.world(blockx), tile.block().getType() == MaterialType.block ? World.world(blocky)-6 : World.world(blocky), tile.block());
 				
 				if(blockhold >= tile.block().breaktime()){
 					Effects.blockBreakParticle(World.world(blockx), World.world(blocky)-1, tile.block());

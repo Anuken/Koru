@@ -89,6 +89,10 @@ public class Koru extends ModuleController<Koru>{
 
 			String message = "[" + name + "::" + e.getMethodName() + "]" + "" + o;
 			log.append(message + "\n");
+			int l = 500;
+			
+			
+			log = new StringBuffer(log.substring(Math.max(0, log.length()-l), log.length()));
 		}
 
 		if(o instanceof Exception){

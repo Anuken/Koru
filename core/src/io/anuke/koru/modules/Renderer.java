@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
 import com.bitfire.postprocessing.PostProcessor;
@@ -305,6 +306,10 @@ public class Renderer extends Module<Koru>{
 			"\n[YELLOW]renderables: " + RenderableHandler.getInstance().getSize() + 
 			"\n[RED]ping: " + getModule(Network.class).client.getPing()
 			, 0, uiheight() - 5);
+			
+			font.draw(batch, 
+					"[SKY]" +t.engine.getEntities().toString().replace(",", "\n"),
+					 uiwidth(), uiheight(), 0, Align.topRight, false);
 		}
 		
 		if(consoleOpen){
