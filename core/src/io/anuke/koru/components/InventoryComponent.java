@@ -156,6 +156,18 @@ public class InventoryComponent implements Component{
 		}
 	}
 	
+	public int getAmountOf(Item item){
+		int amount = 0;
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				if(inventory[x][y] != null && inventory[x][y].item == item){
+					amount += inventory[x][y].amount;
+				}
+			}
+		}
+		return amount;
+	}
+	
 	public ObjectMap<Item, Integer> merge(InventoryComponent component){
 		return merge(component.inventory);
 	}

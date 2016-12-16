@@ -46,8 +46,11 @@ public class RecipeMenu extends VisTable{
 	
 	public void draw(Batch batch, float alpha){
 		batch.setColor(Hue.lightness(95/255f));
-		batch.draw(Resources.region("blank"), getX()-pscale, getY()-pscale, getWidth()+pscale*2, getHeight()+pscale*2);
+		batch.draw(Resources.region("blank"), getX()-pscale, getY()-pscale + getHeight()/2, getWidth()+pscale*2, getHeight()/2+pscale*2);
+		batch.draw(Resources.region("blank"), getX() + getWidth()/2-slotsize/2 - pscale, getY() - pscale, slotsize + pscale*2, slotsize + pscale*2);
+		
 		batch.setColor(Color.WHITE);
+		batch.draw(Resources.region("slot2"), getX() + getWidth()/2-slotsize/2, getY(), slotsize, slotsize);
 		
 		super.draw(batch, alpha);
 	}
@@ -57,6 +60,7 @@ public class RecipeMenu extends VisTable{
 		
 		public void draw(Batch batch, float alpha){
 			if(stacks == null) return;
+			InventoryComponent inv = Koru.module(ClientData.class).player.get(InventoryComponent.class);
 			for(int i = 0; i < stacks.length; i ++){
 				TextureRegion region = Resources.region(stacks[i].item.name() + "item");
 				float w = region.getRegionWidth()*pscale, h = region.getRegionHeight()*pscale;
@@ -65,7 +69,12 @@ public class RecipeMenu extends VisTable{
 				
 				batch.draw(region, x, y, w, h);
 				
-				Resources.font2().draw(batch, stacks[i].amount + "x", x, y + 20, 0, Align.bottomLeft, false);
+				int amount = inv.getAmountOf(stacks[i].item);
+				Resources.font2().setColor(amount <= stacks[i].amount ? new Color(1f,0.4f,0.4f,1f) : Color.WHITE);
+				
+				Resources.font2().draw(batch, amount + "/" + stacks[i].amount, x, y + 20, 0, Align.bottomLeft, false);
+				
+				Resources.font2().setColor(Color.WHITE);
 			}
 		}
 		

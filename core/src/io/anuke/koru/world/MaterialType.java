@@ -309,7 +309,19 @@ public enum MaterialType{
 		public boolean tile(){
 			return false;
 		}
-	};
+	},
+	workbench{
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+
+			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
+			.setLayer(tile(y)).centerX()
+					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
+		}
+
+		public boolean tile(){
+			return false;
+		}
+	};;
 	protected final Color grasscolor = new Color(0x62962fff).mul(0.97f,0.97f,0.97f,1f);
 	private Color color = null;
 	protected World world;
