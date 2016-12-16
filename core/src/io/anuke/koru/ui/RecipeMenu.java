@@ -69,10 +69,10 @@ public class RecipeMenu extends VisTable{
 				
 				batch.draw(region, x, y, w, h);
 				
-				int amount = inv.getAmountOf(stacks[i].item);
-				Resources.font2().setColor(amount <= stacks[i].amount ? new Color(1f,0.4f,0.4f,1f) : Color.WHITE);
+				int amount = Math.min(inv.getAmountOf(stacks[i].item), stacks[i].amount);
+				Resources.font2().setColor(amount < stacks[i].amount ? new Color(1f,0.4f,0.4f,1f) : Color.WHITE);
 				
-				Resources.font2().draw(batch, amount + "/" + stacks[i].amount, x, y + 20, 0, Align.bottomLeft, false);
+				Resources.font2().draw(batch, amount + "/" + stacks[i].amount, x-2, y + 20, 0, Align.bottomLeft, false);
 				
 				Resources.font2().setColor(Color.WHITE);
 			}

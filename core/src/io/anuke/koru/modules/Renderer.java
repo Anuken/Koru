@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -30,6 +31,7 @@ import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.graphics.Light;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
+import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
@@ -178,7 +180,7 @@ public class Renderer extends Module<Koru>{
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
 				&& inv.hasAll(Recipes.values()[inv.recipe].requirements())){
 			
-			if(Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach && Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
 			}else{
 				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);

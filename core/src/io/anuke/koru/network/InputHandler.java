@@ -1,6 +1,7 @@
 package io.anuke.koru.network;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
@@ -18,6 +19,7 @@ import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 
 public class InputHandler{
+	public final static float reach = 85;
 	public float mouseangle;
 	private ObjectMap<InputType, Boolean> keys = new ObjectMap<InputType, Boolean>();
 	KoruEntity entity;
@@ -34,7 +36,7 @@ public class InputHandler{
 			ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
 			
-			if(stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block()) && tile.block().breakable()){
+			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach && stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block()) && tile.block().breakable()){
 				blockhold += delta * stack.item.power();
 				
 				
@@ -90,7 +92,7 @@ public class InputHandler{
 		if(stack != null && stack.item.type() == ItemType.hammer){
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 			
-			if(inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements()) && Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach && inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements()) && Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 				
 				tile.setMaterial(Recipes.values()[inv.recipe].result());
 				IServer.instance().getWorld().updateTile(blockx, blocky);
