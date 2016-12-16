@@ -22,6 +22,7 @@ import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.DataComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.ItemComponent;
 import io.anuke.koru.components.ParticleComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.ProjectileComponent;
@@ -105,6 +106,7 @@ public class Registrator{
 		k.register(InventoryComponent.class);
 		k.register(ParticleComponent.class);
 		k.register(DataComponent.class);
+		k.register(ItemComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncBuffer.class);

@@ -20,6 +20,8 @@ public class VelocitySystem extends KoruSystem{
 		if(collisions == null) collisions = this.getEngine().getSystem(CollisionSystem.class);
 		VelocityComponent velocity = entity.mapComponent(VelocityComponent.class);
 		
+		velocity.velocity.limit(velocity.limit);
+		
 		if(entity.hasComponent(HitboxComponent.class)){
 			boolean zero = velocity.velocity.isZero(0.0001f);
 			
@@ -48,12 +50,9 @@ public class VelocitySystem extends KoruSystem{
 		}
 
 		velocity.velocity.scl((float)Math.pow(1f - velocity.drag, delta));
-		
-		velocity.velocity.limit(velocity.limit);
 	}
 
 	public void updateVelocity(PositionComponent position, VelocityComponent velocity){
 
 	}
-
 }

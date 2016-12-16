@@ -13,6 +13,7 @@ import io.anuke.koru.items.Recipes;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Material;
+import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 
@@ -28,6 +29,7 @@ public class InputHandler{
 	}
 
 	public void update(float delta){
+		//block breaking
 		if(key(InputType.leftclick_down)){
 			ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
@@ -40,11 +42,15 @@ public class InputHandler{
 				Effects.blockParticle(World.world(blockx), World.world(blocky), tile.block());
 				
 				if(blockhold >= tile.block().breaktime()){
-					Effects.blockParticle(World.world(blockx), World.world(blocky)-1, tile.block());
+					Effects.blockBreakParticle(World.world(blockx), World.world(blocky)-1, tile.block());
 					
+					if(tile.block().getType() == MaterialType.tree)
 					Effects.block(tile.block(), blockx, blocky);
-					entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
-					entity.getComponent(InventoryComponent.class).sendUpdate(entity);
+					
+					//entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
+					//entity.getComponent(InventoryComponent.class).sendUpdate(entity);
+					
+					Effects.drops(World.world(blockx), World.world(blocky), tile.block().getDrops());
 					
 					tile.setBlockMaterial(Materials.air);
 					

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -34,6 +35,7 @@ import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
+import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
@@ -91,8 +93,23 @@ public class Renderer extends Module<Koru>{
 		});
 
 		addEffects();
+		loadMaterialColors();
 		
 		Koru.log("Loaded resources.");
+	}
+	
+	void loadMaterialColors(){
+		
+		for(Materials material : Materials.values()){
+			if(material.getType().tile()) continue;
+			
+			TextureRegion region = atlas.findRegion(material.name());
+			if(region == null) continue;
+			
+			Pixmap pixmap = atlas.getPixmapOf(region);
+			
+			material.color = new Color(pixmap.getPixel(region.getRegionX(), region.getRegionY()));
+		}
 	}
 
 	void addEffects(){
@@ -107,6 +124,7 @@ public class Renderer extends Module<Koru>{
 		world = getModule(World.class);
 
 		Resources.loadParticle("spark");
+		Resources.loadParticle("break");
 		(block = new SpriteRenderable(Resources.region("block")).setProvider(SortProviders.object).sprite()).add();
 	}
 

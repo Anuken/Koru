@@ -209,7 +209,7 @@ public class Network extends Module<Koru>{
 			entity.addSelf();
 		}
 		
-		if(connected && Gdx.graphics.getFrameId()%pingInterval==0){
+		if(connected && Gdx.graphics.getFrameId() % pingInterval == 0){
 			client.updatePing();
 		}
 		
@@ -219,7 +219,7 @@ public class Network extends Module<Koru>{
 		//unloads entities that are very far away
 		for(Entity e : entities){
 			KoruEntity entity = (KoruEntity)e;
-			if(entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
+			if(entity.getType().unload() && entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
 				t.engine.removeEntity(e);
 			}
 		}

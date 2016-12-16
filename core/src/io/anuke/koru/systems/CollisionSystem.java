@@ -125,7 +125,7 @@ public class CollisionSystem extends KoruSystem{
 		for(int i = 0; i < steps; i ++){
 			ay += stepy;
 			
-			if(checkTerrainCollisions(entity, 0, ay) || i == steps-1){
+			if(checkTerrainCollisions(entity, ax, ay) || i == steps-1){
 				ay -= stepy;
 				break;
 			}

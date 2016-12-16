@@ -1,27 +1,20 @@
 package io.anuke.koru;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.fluxe.generation.ColorPalette;
-import io.anuke.fluxe.generation.Filters;
-import io.anuke.fluxe.generation.Filters.ColorModFilter;
-import io.anuke.fluxe.generation.Filters.DitherColorFilter;
-import io.anuke.fluxe.generation.Filters.LimitColorFilter;
-import io.anuke.fluxe.generation.Filters.NoiseColorFilter;
-import io.anuke.fluxe.generation.Filters.OutlineFilter;
 import io.anuke.fluxe.generation.FluxeFilter;
 import io.anuke.fluxe.generation.FluxeGenerator;
 import io.anuke.fluxe.generation.FluxeRenderer;
 import io.anuke.fluxe.generation.Fluxor;
-import io.anuke.fluxe.generation.Generators;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.GeneratedObject;
@@ -32,7 +25,8 @@ import io.anuke.koru.network.packets.BitmapDataPacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
 import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.MaterialType;
-import io.anuke.ucore.UCore;
+import io.anuke.koru.world.Materials;
+import io.anuke.ucore.graphics.Atlas;
 
 public class GraphicsHandler extends ApplicationAdapter{
 	private static int nextBitmapID;
@@ -140,6 +134,24 @@ public class GraphicsHandler extends ApplicationAdapter{
 	}
 
 	public void create(){
+		Atlas atlas = new Atlas(Gdx.files.absolute("/home/anuke/Projects/Koru/core/assets/sprites/koru.atlas"));
+			
+		for(Materials material : Materials.values()){
+			if(material.getType().tile()) continue;
+				
+			TextureRegion region = atlas.findRegion(material.name());
+			if(region == null) continue;
+				
+			Pixmap pixmap = atlas.getPixmapOf(region);
+			
+			int color = pixmap.getPixel(region.getRegionX(), region.getRegionY());
+			if(color == 0) color = pixmap.getPixel(region.getRegionX() + region.getRegionWidth()/2, region.getRegionY() + region.getRegionHeight());
+				
+			
+			material.color = new Color(color);
+		}
+		
+		/*
 		GLFW.glfwHideWindow(UCore.getWindowHandle());
 		Gdx.graphics.setContinuousRendering(false);
 

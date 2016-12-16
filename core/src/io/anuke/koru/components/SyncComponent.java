@@ -1,9 +1,9 @@
 package io.anuke.koru.components;
 
+import com.badlogic.ashley.core.Component;
+
 import io.anuke.koru.network.Interpolator;
 import io.anuke.koru.systems.SyncSystem.SyncType;
-
-import com.badlogic.ashley.core.Component;
 
 public class SyncComponent implements Component{
 	public final SyncType type;
@@ -16,7 +16,7 @@ public class SyncComponent implements Component{
 	
 	public SyncComponent(SyncType type){
 		this.type = type;
-		this.interpolator = null;
+		this.interpolator = new Interpolator();
 	}
 	
 	@SuppressWarnings("unused")

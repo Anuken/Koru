@@ -93,15 +93,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 		
 		collisions.moveEntity(player, vector.x, vector.y);
 		
-		/*
-		if (!collisions.checkTerrainCollisions(getModule(World.class), player, vector.x, 0)) {
-			player.position().add(vector.x, 0);
-		}
-
-		if (!collisions.checkTerrainCollisions(getModule(World.class), player, 0, vector.y)) {
-			player.position().add(0, vector.y);
-		}
-		*/
 		if(Vector2.dst(lastx, lasty, player.getX(), player.getY()) > 0.05f){
 			render.walkframe += delta();
 		}else{

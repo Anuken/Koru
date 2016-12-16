@@ -102,7 +102,7 @@ public enum Materials implements Material{
 	private int breaktime;
 	private boolean enablecollisions = true;
 	private Array<ItemStack> drops = new Array<ItemStack>();
-	protected Color color = Color.CLEAR;
+	public Color color = Color.CLEAR;
 	private float offset = 0;
 	private int variants = 1;
 	

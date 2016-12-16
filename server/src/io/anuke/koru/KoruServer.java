@@ -93,6 +93,8 @@ public class KoruServer extends IServer{
 		thread.setDaemon(true);
 		thread.start();
 		
+		createGraphics();
+		
 		//createMapGraphics();
 	}
 	
@@ -130,8 +132,7 @@ public class KoruServer extends IServer{
 
 			ArrayList<Entity> entities = new ArrayList<Entity>();
 			
-			updater.engine.map()
-			.getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrange, (entity)->{
+			updater.engine.map().getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrange, (entity)->{
 				entities.add(entity);
 			});
 

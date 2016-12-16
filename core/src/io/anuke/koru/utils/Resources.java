@@ -31,6 +31,10 @@ public class Resources{
 		return Koru.module(Renderer.class).atlas.findRegion(name);
 	}
 	
+	public static boolean hasRegion(String name){
+		return Koru.module(Renderer.class).atlas.hasRegion(name);
+	}
+	
 	public static RepackableAtlas atlas(){
 		return Koru.module(Renderer.class).atlas;
 	}

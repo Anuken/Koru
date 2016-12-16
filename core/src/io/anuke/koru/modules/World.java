@@ -251,7 +251,7 @@ public class World extends Module<Koru>{
 	public void updateTile(int x, int y){
 		updated = true;
 		tile(x, y).changeEvent();
-		IServer.instance().sendToAll(new TileUpdatePacket(x, y, tile(x, y)));
+		IServer.instance().sendToAllIn(new TileUpdatePacket(x, y, tile(x, y)), world(x), world(y), tilesize*chunksize*(1+loadrange));
 	}
 
 	public void updateLater(int x, int y){

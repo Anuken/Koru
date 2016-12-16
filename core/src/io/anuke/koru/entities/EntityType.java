@@ -12,6 +12,7 @@ import io.anuke.koru.components.HealthComponent;
 import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.ItemComponent;
 import io.anuke.koru.components.ParticleComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.ProjectileComponent;
@@ -25,6 +26,7 @@ import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.network.Interpolator;
 import io.anuke.koru.renderers.BlockAnimationRenderer;
 import io.anuke.koru.renderers.IndicatorRenderer;
+import io.anuke.koru.renderers.ItemRenderer;
 import io.anuke.koru.renderers.MonsterRenderer;
 import io.anuke.koru.renderers.ParticleRenderer;
 import io.anuke.koru.renderers.PlayerRenderer;
@@ -40,6 +42,10 @@ public enum EntityType{
 			new VelocityComponent(),
 			new SyncComponent(SyncType.player, new Interpolator()), new InputComponent(), 
 			new HealthComponent(), new InventoryComponent(4,6)};
+		}
+		
+		public boolean unload(){
+			return false;
 		}
 	},
 	testmob{
@@ -76,6 +82,14 @@ public enum EntityType{
 					new ChildComponent(), new TextComponent(), new FadeComponent(20).enableRender()};
 		}
 	},
+	item{
+		public Component[] defaultComponents(){
+			return new Component[]{new PositionComponent(), 
+					new RenderComponent(new ItemRenderer()),
+					new SyncComponent(SyncType.position),
+					new ItemComponent(), new VelocityComponent()};
+		}
+	},
 	particle{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleComponent()};
@@ -98,6 +112,11 @@ public enum EntityType{
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox != null) initHitbox(entity, hitbox);
+	}
+	
+	/**whether to unload this entity when it gets too far away*/
+	public boolean unload(){
+		return true;
 	}
 
 	public boolean collide(KoruEntity entity, KoruEntity other){

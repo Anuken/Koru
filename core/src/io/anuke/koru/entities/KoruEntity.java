@@ -62,7 +62,6 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 
 	public PositionComponent position(){
 		if(pos == null) pos = this.mapComponent(PositionComponent.class);
-
 		return pos;
 	}
 
@@ -80,6 +79,12 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 
 	@SuppressWarnings("unchecked")
 	public <T>T mapComponent(Class<T> c){
+		return (T)(Mappers.get(c, this));
+	}
+	
+	/**Equivalent to mapComponent.*/
+	@SuppressWarnings("unchecked")
+	public <T>T get(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}
 	

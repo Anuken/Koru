@@ -19,6 +19,8 @@ public class KoruEngine extends Engine{
 		addEntityListener(map);
 		addSystem(new VelocitySystem());
 		addSystem(new FadeSystem());
+		addSystem(new ItemSystem());
+		
 		if(IServer.active())
 			addSystem(map);
 	}
