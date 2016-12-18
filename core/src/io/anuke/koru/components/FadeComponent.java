@@ -1,8 +1,8 @@
 package io.anuke.koru.components;
 
-import io.anuke.koru.network.SyncBuffer.Synced;
-
 import com.badlogic.ashley.core.Component;
+
+import io.anuke.koru.network.SyncBuffer.Synced;
 
 @Synced
 public class FadeComponent implements Component{
@@ -11,6 +11,10 @@ public class FadeComponent implements Component{
 	
 	public FadeComponent(float lifetime){
 		this.lifetime = lifetime;
+	}
+	
+	public float scaled(){
+		return 1f-life/lifetime;
 	}
 	
 	public FadeComponent enableRender(){

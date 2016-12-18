@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.KoruEngine;
@@ -63,6 +64,10 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	public PositionComponent position(){
 		if(pos == null) pos = this.mapComponent(PositionComponent.class);
 		return pos;
+	}
+	
+	public InventoryComponent inventory(){
+		return get(InventoryComponent.class);
 	}
 
 	public float getX(){

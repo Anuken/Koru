@@ -21,7 +21,6 @@ import io.anuke.koru.components.SyncComponent;
 import io.anuke.koru.components.TextComponent;
 import io.anuke.koru.components.TileComponent;
 import io.anuke.koru.components.VelocityComponent;
-import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.network.Interpolator;
 import io.anuke.koru.renderers.BlockAnimationRenderer;
@@ -68,7 +67,7 @@ public enum EntityType{
 			hitbox.terrainRect().set(0, 0, 4, 2);
 			hitbox.entityRect().set(0, 0, 3, 3);
 			hitbox.entityhitbox.setCenter(0, -2);
-			hitbox.terrainhitbox.setCenter(0, 1);
+			hitbox.terrainhitbox.setCenter(0, -1);
 			hitbox.collideterrain = true;
 		}
 		
@@ -108,7 +107,7 @@ public enum EntityType{
 
 	final void init(KoruEntity entity){
 		InputComponent input = entity.mapComponent(InputComponent.class);
-		if(input != null && IServer.active()) input.input = new InputHandler(entity);
+		if(input != null/* && IServer.active*/) input.input = new InputHandler(entity);
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox != null) initHitbox(entity, hitbox);

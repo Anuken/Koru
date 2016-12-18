@@ -25,10 +25,11 @@ public class DamageListener extends CollisionListener{
 		damage.mapComponent(ChildComponent.class).parent = entity.getID();
 		damage.getComponent(TextComponent.class).text = amount + "";
 		damage.position().set(other.getX(), other.getY() + other.get(HitboxComponent.class).height);
-		damage.sendSelf();
 		
 		if(health.health <= 0){
 			entity.getType().deathEvent(entity, other);
+		}else{
+			damage.sendSelf();
 		}
 	}
 

@@ -8,7 +8,21 @@ import io.anuke.koru.components.VelocityComponent;
 import io.anuke.ucore.spritesystem.Renderable;
 
 public enum ProjectileType{
-	bolt, slash;
+	bolt, 
+	slash{
+		public float lifetime(){
+			return 6f;
+		}
+		
+		public float speed(){
+			return 0.75f;
+		}
+		
+		public void draw(KoruEntity entity, RenderComponent render){
+			super.draw(entity, render);
+			render.group.get("bolt").sprite().setAlpha(entity.mapComponent(FadeComponent.class).scaled());
+		}
+	};
 	
 	public float speed(){
 		return 3f;
@@ -20,12 +34,10 @@ public enum ProjectileType{
 	
 	public void draw(KoruEntity entity, RenderComponent render){
 		render.group.setPosition(entity.getX(), entity.getY());
-		//render.layers.update(entity.getX(), entity.getY());
 		float x = entity.getX(), y = entity.getY();
 		for(Renderable renderable : render.group.list()){
 			renderable.sprite().setPosition(x, y, true);
 			renderable.sprite().sprite.setRotation(entity.mapComponent(ProjectileComponent.class).getRotation() - 45);
-			//layer.rotation = entity.mapComponent(ProjectileComponent.class).getRotation() - 45;
 		}
 	}
 	

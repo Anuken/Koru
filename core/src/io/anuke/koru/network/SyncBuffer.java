@@ -25,13 +25,14 @@ public abstract class SyncBuffer{
 	}
 	
 	public static class PlayerSyncBuffer extends SyncBuffer{
-		public float x,y;
+		public float x,y, mouse;
 		public int direction;
 		
-		public PlayerSyncBuffer(long id, float x, float y, int o){
+		public PlayerSyncBuffer(long id, float x, float y, float mouse, int o){
 			super(id);
 			this.x = x;
 			this.y = y;
+			this.mouse = mouse;
 			this.direction = o;
 		}
 		

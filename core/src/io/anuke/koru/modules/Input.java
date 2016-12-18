@@ -14,11 +14,13 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
+import io.anuke.koru.utils.Angles;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.InventoryTileData;
 import io.anuke.koru.world.Tile;
@@ -83,7 +85,15 @@ public class Input extends Module<Koru> implements InputProcessor {
 		
 		RenderComponent render = player.getComponent(RenderComponent.class);
 		
-		if(key(Keys.W) || key(Keys.A) || key(Keys.S) || key(Keys.D)){
+		ItemStack stack = player.inventory().hotbarStack();
+		
+		if(stack != null && stack.item.type() == ItemType.weapon){
+			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
+			//angle = 360-angle;
+			render.direction = 2-(int)((angle-45)/90f);
+			if(render.direction == 1) render.direction = 3;
+			if(angle > 315 || angle < 45) render.direction = 1;
+		}else if(key(Keys.W) || key(Keys.A) || key(Keys.S) || key(Keys.D)){
 			render.direction = (key(Keys.D) ? 1 : (key(Keys.A) ? 3 : (key(Keys.S) ? 0 : 2)));
 		}
 

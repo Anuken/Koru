@@ -87,7 +87,7 @@ public class InputHandler{
 		return keys.get(type, false);
 	}
 
-	private void mouseDownEvent(){
+	private void tileDownEvent(){
 		// block place check
 		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 
@@ -113,10 +113,21 @@ public class InputHandler{
 				inv.sendUpdate(entity);
 			}
 
-		}else if(type == ItemType.weapon){
-			KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.bolt, mouseangle);
+		}
+	}
+
+	private void rawClick(){
+		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
+
+		if(stack == null)
+			return;
+
+		ItemType type = stack.item.type();
+
+		if(type == ItemType.weapon){
+			KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.slash, mouseangle);
 			projectile.position().set(entity.position());
-			
+
 			projectile.addSelf().sendSelf();
 		}
 	}
@@ -126,7 +137,7 @@ public class InputHandler{
 			blockx = (int) data[0];
 			blocky = (int) data[1];
 			click(true);
-
+			rawClick();
 		}else if(type == InputType.block_moved){
 			click(false);
 
@@ -143,7 +154,7 @@ public class InputHandler{
 	private void click(boolean down){
 
 		if(down)
-			mouseDownEvent();
+			tileDownEvent();
 
 		// fire block click event
 		InventoryComponent inv = entity.mapComponent(InventoryComponent.class);

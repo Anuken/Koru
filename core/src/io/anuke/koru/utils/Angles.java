@@ -59,11 +59,8 @@ public class Angles{
 	}
 
 	static public float mouseAngle(OrthographicCamera camera,float cx, float cy){
-		float x = 0,y = 0;
-		Vector3 vector = camera.project(new Vector3(cx, cy, 0));
-		x = vector.x;
-		y = vector.y;
-		Vector2 v = new Vector2(Gdx.input.getX() - x, Gdx.graphics.getHeight() - Gdx.input.getY() - y);
-		return v.angle();
+		Vector3 avector = camera.project(new Vector3(cx, cy, 0));
+		vector.set(Gdx.input.getX() - avector.x, Gdx.graphics.getHeight() - Gdx.input.getY() - avector.y);
+		return vector.angle();
 	}
 }

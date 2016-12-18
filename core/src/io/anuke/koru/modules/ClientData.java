@@ -18,7 +18,7 @@ public class ClientData extends Module<Koru>{
 
 	@Override
 	public void update(){
-
+		
 	}
 
 }

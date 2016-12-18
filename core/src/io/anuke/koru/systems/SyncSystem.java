@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.components.SyncComponent;
@@ -56,7 +57,7 @@ public class SyncSystem extends KoruSystem{
 		},
 		player{
 			public SyncBuffer write(KoruEntity entity){
-				return new PlayerSyncBuffer(entity.getID(), entity.getX(), entity.getY(), entity.mapComponent(RenderComponent.class).direction);
+				return new PlayerSyncBuffer(entity.getID(), entity.getX(), entity.getY(), entity.get(InputComponent.class).input.mouseangle, entity.mapComponent(RenderComponent.class).direction);
 			}
 
 			public void read(SyncBuffer buffer, KoruEntity entity){
@@ -68,6 +69,8 @@ public class SyncSystem extends KoruSystem{
 				}else{
 					entity.mapComponent(RenderComponent.class).walkframe = 0;
 				}
+				
+				entity.get(InputComponent.class).input.mouseangle = position.mouse;
 				
 				SyncComponent sync = entity.mapComponent(SyncComponent.class);
 				

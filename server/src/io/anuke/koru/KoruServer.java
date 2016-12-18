@@ -118,7 +118,7 @@ public class KoruServer extends IServer{
 		try{
 
 			KoruEntity player = new KoruEntity(EntityType.player);
-
+			Koru.log(player.get(InputComponent.class).input);
 			ConnectionInfo info = socket == null ? new ConnectionInfo(player.getID(), connection) : new ConnectionInfo(player.getID(), socket);
 
 			registerConnection(info);
@@ -160,7 +160,6 @@ public class KoruServer extends IServer{
 			//	player.getComponent(InventoryComponent.class).sendHotbarUpdate(updater.engine.getEntity(i.playerid), info.id);
 			
 				
-			
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");

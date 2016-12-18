@@ -2,6 +2,7 @@ package io.anuke.koru.listeners;
 
 import com.badlogic.gdx.math.Vector2;
 
+import io.anuke.koru.components.ProjectileComponent;
 import io.anuke.koru.components.VelocityComponent;
 import io.anuke.koru.entities.KoruEntity;
 
@@ -10,7 +11,7 @@ public class PhysicsListener extends CollisionListener{
 
 	@Override
 	boolean accept(KoruEntity entity, KoruEntity other){
-		return entity.hasComponent(VelocityComponent.class) && other.hasComponent(VelocityComponent.class);
+		return entity.hasComponent(VelocityComponent.class) && other.hasComponent(VelocityComponent.class) && !entity.hasComponent(ProjectileComponent.class);
 	}
 
 	@Override
