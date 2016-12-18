@@ -1347,8 +1347,8 @@ repeat: none
 projectiles/slash
   rotate: false
   xy: 1, 11
-  size: 16, 16
-  orig: 16, 16
+  size: 20, 20
+  orig: 20, 20
   offset: 0, 0
   index: -1
 projectiles/bolt

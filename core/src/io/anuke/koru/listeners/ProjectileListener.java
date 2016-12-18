@@ -12,7 +12,11 @@ public class ProjectileListener extends CollisionListener{
 
 	@Override
 	void contact(KoruEntity entity, KoruEntity other){
-		entity.removeSelfServer();
+		if(!entity.get(ProjectileComponent.class).type.pierce()){
+			entity.removeSelfServer();
+		}else{
+			entity.get(ProjectileComponent.class).hit.add(other.getID());
+		}
 	}
 
 }

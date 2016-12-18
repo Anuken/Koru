@@ -19,7 +19,9 @@ public enum Items implements Item{
 		
 	},
 	woodsword(ItemType.weapon){
-		
+		public WeaponType weaponType(){
+			return WeaponType.sword;
+		}
 	};
 	float power;
 	ItemType type = ItemType.material;

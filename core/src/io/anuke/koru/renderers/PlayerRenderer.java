@@ -1,5 +1,6 @@
 package io.anuke.koru.renderers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 
@@ -12,6 +13,8 @@ import io.anuke.ucore.spritesystem.SpriteRenderable;
 import io.anuke.ucore.spritesystem.TextRenderable;
 
 public class PlayerRenderer extends EntityRenderer{
+	AnimationType animation;
+	float duration;
 	
 	@Override
 	public void render(){
@@ -35,9 +38,22 @@ public class PlayerRenderer extends EntityRenderer{
 		
 		item.sprite.setOrigin(!this.flip2() ? 1.5f : 12-1.5f, 1.5f);
 		item.sprite.setRotation((flip2() ? angle-180 : angle));
+		if(render.direction == 0) item.sprite.setRotation(item.sprite.getRotation()-180);
 		
 		render.group.get("shadow").sprite().setPosition(entity.getX(), entity.getY()+1).center();
 		render.group.get("name").setPosition(entity.getX(), entity.getY());
+		
+		if(duration > 0){
+			duration -= Gdx.graphics.getDeltaTime()*60;
+			animate();
+		}
+	}
+	
+	private void animate(){
+		if(animation == AnimationType.attack){
+			SpriteRenderable item = render.group.get("item").sprite();
+			item.sprite.rotate(fscl()*(duration*8));
+		}
 	}
 	
 	@Override
@@ -59,5 +75,13 @@ public class PlayerRenderer extends EntityRenderer{
 		.setProvider(SortProviders.object)
 		.add("name", render.group);
 		
+	}
+	
+	@Override
+	public void onAnimation(AnimationType type){
+		if(type == AnimationType.attack){
+			animation = type;
+			duration = 10;
+		}
 	}
 }

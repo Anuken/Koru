@@ -37,6 +37,10 @@ public abstract class EntityRenderer{
 		return dir(render.direction);
 	}
 	
+	public int fscl(){
+		return flip2() ? 1 : -1;
+	}
+	
 	public static boolean flip(int dir){
 		return dir == 3;
 	}
@@ -44,5 +48,8 @@ public abstract class EntityRenderer{
 	public static String dir(int d){
 		return d== 0 ? "-f" : ((d == 1 || d == 3) ? "-s" : "-b");
 	}
+	
+	public void onAnimation(AnimationType type){
 		
+	}
 }

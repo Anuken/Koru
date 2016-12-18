@@ -1,14 +1,17 @@
 package io.anuke.koru.components;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.ObjectSet;
+
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
+import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.SyncBuffer.Synced;
-
-import com.badlogic.ashley.core.Component;
 
 @Synced
 public class ProjectileComponent implements Component{
 	public ProjectileType type = ProjectileType.bolt;
+	public transient ObjectSet<Long> hit = IServer.active() ? new ObjectSet<Long>() : null;
 	private float rotation;
 	
 	public void setRotation(KoruEntity entity, float rotation){

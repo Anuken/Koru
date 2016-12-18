@@ -2,34 +2,10 @@ package io.anuke.koru.entities;
 
 import com.badlogic.ashley.core.Component;
 
-import io.anuke.koru.components.ChildComponent;
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.DamageComponent;
-import io.anuke.koru.components.DataComponent;
-import io.anuke.koru.components.DestroyOnTerrainHitComponent;
-import io.anuke.koru.components.FadeComponent;
-import io.anuke.koru.components.HealthComponent;
-import io.anuke.koru.components.HitboxComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.components.ItemComponent;
-import io.anuke.koru.components.ParticleComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.ProjectileComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.SyncComponent;
-import io.anuke.koru.components.TextComponent;
-import io.anuke.koru.components.TileComponent;
-import io.anuke.koru.components.VelocityComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.network.Interpolator;
-import io.anuke.koru.renderers.BlockAnimationRenderer;
-import io.anuke.koru.renderers.IndicatorRenderer;
-import io.anuke.koru.renderers.ItemRenderer;
-import io.anuke.koru.renderers.MonsterRenderer;
-import io.anuke.koru.renderers.ParticleRenderer;
-import io.anuke.koru.renderers.PlayerRenderer;
-import io.anuke.koru.renderers.ProjectileRenderer;
+import io.anuke.koru.renderers.*;
 import io.anuke.koru.systems.SyncSystem.SyncType;
 
 public enum EntityType{
@@ -38,7 +14,7 @@ public enum EntityType{
 			return new Component[]{new PositionComponent(), new ConnectionComponent(),
 			new RenderComponent(new PlayerRenderer()), new HitboxComponent()
 			.init(8, 8, 6, 8, 3),
-			new VelocityComponent(),
+			new VelocityComponent(), new WeaponComponent(),
 			new SyncComponent(SyncType.player, new Interpolator()), new InputComponent(), 
 			new HealthComponent(), new InventoryComponent(4,6)};
 		}
@@ -51,7 +27,7 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(),
 			new RenderComponent(new MonsterRenderer()), 
-			new HitboxComponent().init(10, 6, 4, 8, 3), new VelocityComponent(),
+			new HitboxComponent().init(12, 6, 4, 8, 3), new VelocityComponent(),
 			new SyncComponent(SyncType.position, new Interpolator()),
 			new HealthComponent()};
 		}
@@ -72,7 +48,7 @@ public enum EntityType{
 		}
 		
 		public boolean collide(KoruEntity entity, KoruEntity other){
-			return entity.mapComponent(DamageComponent.class).source != other.getID();
+			return entity.mapComponent(DamageComponent.class).source != other.getID() && !entity.mapComponent(ProjectileComponent.class).hit.contains(other.getID());
 		}
 	},
 	damageindicator{

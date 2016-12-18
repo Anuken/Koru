@@ -14,6 +14,7 @@ public interface Item{
 	public ItemType type();
 	public default boolean breaks(Material mat){return false;}
 	public default float power(){return 0;}
+	public default WeaponType weaponType(){return WeaponType.sword;}
 	
 	public String name();
 	

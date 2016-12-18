@@ -6,35 +6,41 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.MaterialType;
-import io.anuke.koru.world.Materials;
-import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.*;
 
 public class InputHandler{
-	public final static float reach = 85;
+	public final static float reach = 75;
 	public float mouseangle;
 	private ObjectMap<InputType, Boolean> keys = new ObjectMap<InputType, Boolean>();
 	KoruEntity entity;
 	int blockx, blocky;
 	float blockhold;
+	float cooldown = 0;
 
 	public InputHandler(KoruEntity entity) {
 		this.entity = entity;
 	}
 
 	public void update(float delta){
+		
+		//weapon updating
+		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
+
+		if(stack != null && stack.item.type()== ItemType.weapon){
+			stack.item.weaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
+			stack.item.weaponType().update(delta);
+		}
+		
 		// block breaking
 		if(key(InputType.leftclick_down)){
-			ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
 
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
@@ -116,7 +122,7 @@ public class InputHandler{
 		}
 	}
 
-	private void rawClick(){
+	private void rawClick(boolean left){
 		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 
 		if(stack == null)
@@ -125,10 +131,8 @@ public class InputHandler{
 		ItemType type = stack.item.type();
 
 		if(type == ItemType.weapon){
-			KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.slash, mouseangle);
-			projectile.position().set(entity.position());
-
-			projectile.addSelf().sendSelf();
+			stack.item.weaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
+			stack.item.weaponType().clicked(left);
 		}
 	}
 
@@ -137,7 +141,9 @@ public class InputHandler{
 			blockx = (int) data[0];
 			blocky = (int) data[1];
 			click(true);
-			rawClick();
+			rawClick(true);
+		}else if(type == InputType.rightclick_down){
+			rawClick(false);
 		}else if(type == InputType.block_moved){
 			click(false);
 
@@ -150,6 +156,8 @@ public class InputHandler{
 			Effects.particle(entity, Color.BLUE);
 		}
 	}
+	
+
 
 	private void click(boolean down){
 

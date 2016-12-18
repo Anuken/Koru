@@ -8,29 +8,12 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.SyncComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.NetworkListener;
-import io.anuke.koru.network.packets.BitmapDataPacket;
-import io.anuke.koru.network.packets.ChatPacket;
-import io.anuke.koru.network.packets.ChunkPacket;
-import io.anuke.koru.network.packets.ConnectPacket;
-import io.anuke.koru.network.packets.DataPacket;
-import io.anuke.koru.network.packets.EntityRemovePacket;
-import io.anuke.koru.network.packets.EntityRequestPacket;
-import io.anuke.koru.network.packets.GeneratedMaterialPacket;
-import io.anuke.koru.network.packets.InventoryUpdatePacket;
-import io.anuke.koru.network.packets.PositionPacket;
-import io.anuke.koru.network.packets.SlotChangePacket;
-import io.anuke.koru.network.packets.TileUpdatePacket;
-import io.anuke.koru.network.packets.WorldUpdatePacket;
+import io.anuke.koru.network.packets.*;
 import io.anuke.koru.utils.Angles;
 import io.anuke.ucore.modules.Module;
 
@@ -121,6 +104,9 @@ public class Network extends Module<Koru>{
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket packet = (EntityRemovePacket) object;
 					entitiesToRemove.add(packet.id);
+				}else if(object instanceof AnimationPacket){
+					AnimationPacket packet = (AnimationPacket) object;
+					t.engine.getEntity(packet.player).getComponent(RenderComponent.class).renderer.onAnimation(packet.type);
 				}else if(object instanceof SlotChangePacket){
 					SlotChangePacket packet = (SlotChangePacket) object;
 					if(t.engine.getEntity(packet.id) == null) return;

@@ -84,10 +84,8 @@ public class KoruServer extends IServer{
 	private void createUpdater(){
 		updater = new KoruUpdater(this);
 
-		Thread thread = (new Thread(new Runnable(){
-			public void run(){
-				updater.run();
-			}
+		Thread thread = (new Thread(()->{
+			updater.run();
 		}));
 
 		thread.setDaemon(true);
@@ -118,7 +116,6 @@ public class KoruServer extends IServer{
 		try{
 
 			KoruEntity player = new KoruEntity(EntityType.player);
-			Koru.log(player.get(InputComponent.class).input);
 			ConnectionInfo info = socket == null ? new ConnectionInfo(player.getID(), connection) : new ConnectionInfo(player.getID(), socket);
 
 			registerConnection(info);
@@ -161,7 +158,7 @@ public class KoruServer extends IServer{
 			
 				
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
-			Koru.log("entity id: " + player.getID() + " connection id: " + player.mapComponent(ConnectionComponent.class).connectionID);
+			Koru.log("Entity ID is " + player.getID() + ", connection ID is " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
 		}catch(Exception e){
 			e.printStackTrace();
