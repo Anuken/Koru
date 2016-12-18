@@ -52,7 +52,7 @@ public enum EntityType{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(),
 			new RenderComponent(new MonsterRenderer()), 
-			new HitboxComponent().init(8, 8, 6, 8, 3), new VelocityComponent(),
+			new HitboxComponent().init(10, 6, 4, 8, 3), new VelocityComponent(),
 			new SyncComponent(SyncType.position, new Interpolator()),
 			new HealthComponent()};
 		}
@@ -60,14 +60,14 @@ public enum EntityType{
 	projectile{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new RenderComponent(new ProjectileRenderer()),
-					new VelocityComponent().setDrag(0f), new HitboxComponent(), new ProjectileComponent(),
+					new VelocityComponent().set(0f, 999f), new HitboxComponent(), new ProjectileComponent(),
 					new FadeComponent(), new DestroyOnTerrainHitComponent(), new DamageComponent()};
 		}
 
 		void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 			hitbox.terrainRect().set(0, 0, 4, 2);
 			hitbox.entityRect().set(0, 0, 3, 3);
-			hitbox.entityhitbox.setCenter(0, 4);
+			hitbox.entityhitbox.setCenter(0, -2);
 			hitbox.terrainhitbox.setCenter(0, 1);
 			hitbox.collideterrain = true;
 		}

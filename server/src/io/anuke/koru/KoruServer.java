@@ -144,10 +144,14 @@ public class KoruServer extends IServer{
 
 			player.addSelf();
 			
-			player.getComponent(InventoryComponent.class).inventory[2][0] = new ItemStack(Items.woodpickaxe);
-			player.getComponent(InventoryComponent.class).inventory[1][0] = new ItemStack(Items.woodaxe);
-			player.getComponent(InventoryComponent.class).inventory[0][0] = new ItemStack(Items.woodhammer);
-			player.getComponent(InventoryComponent.class).sendUpdate(player);
+			InventoryComponent inv = player.get(InventoryComponent.class);
+			
+			inv.inventory[3][0] = new ItemStack(Items.woodhammer);
+			inv.inventory[2][0] = new ItemStack(Items.woodaxe);
+			inv.inventory[1][0] = new ItemStack(Items.woodpickaxe);
+			inv.inventory[0][0] = new ItemStack(Items.woodsword);
+			inv.sendUpdate(player);
+			
 			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player); //screw this, it isn't working properly
 			
 			

@@ -17,7 +17,9 @@ public class CollisionHandler{
 
 		for(CollisionListener listener : listeners){
 			if(listener.accept(entity, other)){
+				
 				listener.contact(entity, other);
+				
 				listener.collision(entity, other);
 			}
 

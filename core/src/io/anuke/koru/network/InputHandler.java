@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Pools;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
@@ -31,41 +32,43 @@ public class InputHandler{
 	}
 
 	public void update(float delta){
-		//block breaking
+		// block breaking
 		if(key(InputType.leftclick_down)){
 			ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
 			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
-			
-			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach && stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block()) && tile.block().breakable()){
+
+			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
+					&& stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block())
+					&& tile.block().breakable()){
 				blockhold += delta * stack.item.power();
-				
-				
-				if((int)(blockhold) % 20 == 1)
-				Effects.blockParticle(World.world(blockx), tile.block().getType() == MaterialType.block ? World.world(blocky)-6 : World.world(blocky), tile.block());
-				
+
+				if((int) (blockhold) % 20 == 1)
+					Effects.blockParticle(World.world(blockx), tile.block().getType() == MaterialType.block
+							? World.world(blocky) - 6 : World.world(blocky), tile.block());
+
 				if(blockhold >= tile.block().breaktime()){
-					Effects.blockBreakParticle(World.world(blockx), World.world(blocky)-1, tile.block());
-					
+					Effects.blockBreakParticle(World.world(blockx), World.world(blocky) - 1, tile.block());
+
 					if(tile.block().getType() == MaterialType.tree)
-					Effects.block(tile.block(), blockx, blocky);
-					
-					//entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
-					//entity.getComponent(InventoryComponent.class).sendUpdate(entity);
-					
+						Effects.block(tile.block(), blockx, blocky);
+
+					// entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
+					// entity.getComponent(InventoryComponent.class).sendUpdate(entity);
+
 					Effects.drops(World.world(blockx), World.world(blocky), tile.block().getDrops());
-					
+
 					tile.setBlockMaterial(Materials.air);
-					
-					//schedule this later.
-					
+
+					// schedule this later.
+
 					IServer.instance().getWorld().updateLater(blockx, blocky);
-					
+
 				}
-				
+
 			}else{
 				blockhold = 0;
 			}
-			
+
 		}else{
 			blockhold = 0;
 		}
@@ -83,23 +86,38 @@ public class InputHandler{
 	private boolean key(InputType type){
 		return keys.get(type, false);
 	}
-	
+
 	private void mouseDownEvent(){
-		//block place check
+		// block place check
 		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
-		Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
-		
-		if(stack != null && stack.item.type() == ItemType.hammer){
+
+		if(stack == null)
+			return;
+
+		ItemType type = stack.item.type();
+
+		if(type == ItemType.hammer){
+
+			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
+
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
-			
-			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach && inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements()) && Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
-				
+
+			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
+					&& inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
+					&& Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+
 				tile.setMaterial(Recipes.values()[inv.recipe].result());
 				IServer.instance().getWorld().updateTile(blockx, blocky);
-				
+
 				inv.removeAll(Recipes.values()[inv.recipe].requirements());
 				inv.sendUpdate(entity);
 			}
+
+		}else if(type == ItemType.weapon){
+			KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.bolt, mouseangle);
+			projectile.position().set(entity.position());
+			
+			projectile.addSelf().sendSelf();
 		}
 	}
 
@@ -108,7 +126,7 @@ public class InputHandler{
 			blockx = (int) data[0];
 			blocky = (int) data[1];
 			click(true);
-			
+
 		}else if(type == InputType.block_moved){
 			click(false);
 
@@ -123,11 +141,11 @@ public class InputHandler{
 	}
 
 	private void click(boolean down){
-		
+
 		if(down)
 			mouseDownEvent();
-		
-		//fire block click event
+
+		// fire block click event
 		InventoryComponent inv = entity.mapComponent(InventoryComponent.class);
 		int slot = inv.hotbar;
 		ItemStack stack = inv.inventory[slot][0];

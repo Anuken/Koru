@@ -769,9 +769,16 @@ items/slotset
   orig: 16, 16
   offset: 0, 0
   index: -1
-items/woodpickaxeitem
+items/woodsworditem
   rotate: false
   xy: 71, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+items/woodpickaxeitem
+  rotate: false
+  xy: 85, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

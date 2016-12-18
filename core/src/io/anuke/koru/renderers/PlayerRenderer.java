@@ -1,6 +1,7 @@
 package io.anuke.koru.renderers;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InventoryComponent;
@@ -44,7 +45,7 @@ public class PlayerRenderer extends EntityRenderer{
 		.add("item", render.group);
 		
 		new TextRenderable(Resources.font(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
-		.center()
+		.align(Align.center)
 		.setColor(Color.CORAL)
 		.setProvider(SortProviders.object)
 		.add("name", render.group);

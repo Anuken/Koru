@@ -54,7 +54,7 @@ public class Koru extends ModuleController<Koru>{
 	public void render(){
 
 		try{
-			engine.update(Gdx.graphics.getDeltaTime());
+			engine.update(Gdx.graphics.getDeltaTime()*60f);
 			super.render();
 		}catch(Exception e){
 			e.printStackTrace();

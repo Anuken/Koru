@@ -1,6 +1,9 @@
 package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.ProjectileComponent;
+import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class ProjectileRenderer extends EntityRenderer{
 
@@ -12,6 +15,10 @@ public class ProjectileRenderer extends EntityRenderer{
 	@Override
 	protected void initRender(){
 		//render.layer("bolt");
+		SpriteRenderable sprite = new SpriteRenderable(Resources.region("bolt"));//.add("bolt", render.group);
+		sprite.sprite.setOriginCenter();
+		sprite.setProvider(SortProviders.object);
+		sprite.add("bolt", render.group);
 	}
 
 }

@@ -17,6 +17,9 @@ public enum Items implements Item{
 	},
 	woodhammer(ItemType.hammer, 1f){
 		
+	},
+	woodsword(ItemType.weapon){
+		
 	};
 	float power;
 	ItemType type = ItemType.material;
@@ -25,6 +28,10 @@ public enum Items implements Item{
 	
 	private Items(ItemType type, float power){
 		this.power = power;
+		this.type = type;
+	}
+	
+	private Items(ItemType type){
 		this.type = type;
 	}
 	

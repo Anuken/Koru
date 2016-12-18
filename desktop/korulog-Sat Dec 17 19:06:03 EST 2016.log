@@ -1,0 +1,13 @@
+java.lang.NullPointerException: null
+io.anuke.ucore.spritesystem.TextRenderable.draw(TextRenderable.java:43)
+io.anuke.koru.modules.Renderer.drawRenderables(Renderer.java:401)
+io.anuke.koru.modules.Renderer$1.draw(Renderer.java:94)
+io.anuke.ucore.spritesystem.RenderableHandler.renderAll(RenderableHandler.java:26)
+io.anuke.koru.modules.Renderer.doRender(Renderer.java:154)
+io.anuke.koru.modules.Renderer.update(Renderer.java:143)
+io.anuke.ucore.modules.ModuleController.render(ModuleController.java:50)
+io.anuke.koru.Koru.render(Koru.java:58)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:389)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:136)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:110)
+io.anuke.koru.desktop.DesktopLauncher.main(DesktopLauncher.java:28)
