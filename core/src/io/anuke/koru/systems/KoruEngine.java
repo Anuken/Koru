@@ -8,7 +8,6 @@ import io.anuke.koru.network.IServer;
 
 public class KoruEngine extends Engine{
 	private EntityMapper map;
-	private Object lock = new Object();
 
 	public KoruEngine() {
 		super();
@@ -20,7 +19,7 @@ public class KoruEngine extends Engine{
 		addSystem(new VelocitySystem());
 		addSystem(new FadeSystem());
 		addSystem(new ItemSystem());
-		
+
 		if(IServer.active())
 			addSystem(map);
 	}
@@ -41,31 +40,27 @@ public class KoruEngine extends Engine{
 	}
 
 	@Override
-	public void update(float deltaTime){
-		synchronized(lock){
-			super.update(deltaTime);
-		}
-	}
-	
-	@Override
-	public void removeEntity(Entity entity){
-		synchronized(lock){
-			super.removeEntity(entity);
-		}
+	public synchronized void update(float deltaTime){
+		super.update(deltaTime);
 	}
 
 	@Override
-	public void addEntity(Entity entity){
-		synchronized(lock){
-			if(entity == null)
-				throw new RuntimeException("The entity cannot be null!");
-			if(!(entity instanceof KoruEntity))
-				throw new RuntimeException("Only KoruEntities can be added to the engine!");
-			//we have an entity conflict. ignore.
-			if(map().entities.containsKey(((KoruEntity)entity).getID())) throw new RuntimeException("Entity conflict! An entity with that ID already exists!");
-			
-			super.addEntity(entity);
-		}
+	public synchronized void removeEntity(Entity entity){
+		super.removeEntity(entity);
+	}
+
+	@Override
+	public synchronized void addEntity(Entity entity){
+		if(entity == null)
+			throw new RuntimeException("The entity cannot be null!");
+		if(!(entity instanceof KoruEntity))
+			throw new RuntimeException("Only KoruEntities can be added to the engine!");
+		// we have an entity conflict. ignore.
+		if(map().entities.containsKey(((KoruEntity) entity).getID()))
+			throw new RuntimeException("Entity conflict! An entity with that ID already exists!");
+
+		super.addEntity(entity);
+
 	}
 
 }

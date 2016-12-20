@@ -89,7 +89,7 @@ public class Renderer extends Module<Koru>{
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 
-		RenderableHandler.getInstance().setLayerManager(new LayerManager(){
+		RenderableHandler.instance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
 				drawRenderables(renderables);
 			}
@@ -151,7 +151,7 @@ public class Renderer extends Module<Koru>{
 		clearScreen();
 		batch.begin();
 		drawMap();
-		RenderableHandler.getInstance().renderAll(batch);
+		RenderableHandler.instance().renderAll(batch);
 		drawOverlay();
 		batch.end();
 
@@ -305,7 +305,7 @@ public class Renderer extends Module<Koru>{
 			font.draw(batch, 
 			"[CORAL]entities: " +t.engine.getEntities().size() +
 			"\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak +
-			"\n[YELLOW]renderables: " + RenderableHandler.getInstance().getSize() + 
+			"\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + 
 			"\n[RED]ping: " + getModule(Network.class).client.getPing()
 			, 0, uiheight() - 5);
 			

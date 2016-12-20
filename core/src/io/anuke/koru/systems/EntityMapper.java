@@ -12,21 +12,17 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Predicate;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.SyncComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.World;
 import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{
-	public static final float cellsize = World.tilesize * World.chunksize/2;
+	public static final float cellsize = World.tilesize * World.chunksize / 2;
 	public static final int maxCells = 1500;
 	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
 	private GridMap<ArrayList<KoruEntity>> map = new GridMap<ArrayList<KoruEntity>>();
 	private boolean debug = false;
-	private Object lock = new Object();
 
 	public static Predicate<KoruEntity> connectionPredicate = (entity) -> {
 		return entity.hasComponent(ConnectionComponent.class);
@@ -43,7 +39,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	public EntityMapper() {
 		super(Family.all(PositionComponent.class).get());
 	}
-	
+
 	public int getCellAmount(){
 		return map.size();
 	}
@@ -53,30 +49,28 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	 **/
 	public synchronized void getNearbyEntities(float cx, float cy, float range, Predicate<KoruEntity> pred,
 			Consumer<KoruEntity> con){
-		synchronized(lock){
-				
-			if(range < 1 || range < 1)
-				throw new IllegalArgumentException("rangex and rangey cannot be negative.");
 
-			int maxx = scl(cx + range, cellsize), maxy = scl(cy + range, cellsize), minx = scl(cx - range, cellsize),
-					miny = scl(cy - range, cellsize);
+		if(range < 1 || range < 1)
+			throw new IllegalArgumentException("rangex and rangey cannot be negative.");
 
-			if(debug){
-				Koru.log("scan position: " + cx + ", " + cy);
-				Koru.log("placed quadrant: " + scl(cx, EntityMapper.cellsize) + ", " + scl(cy, EntityMapper.cellsize));
-				Koru.log("bounds: " + minx + ", " + miny + "  " + maxx + ", " + maxy);
-			}
+		int maxx = scl(cx + range, cellsize), maxy = scl(cy + range, cellsize), minx = scl(cx - range, cellsize),
+				miny = scl(cy - range, cellsize);
 
-			for(int x = minx; x < maxx + 1; x++){
-				for(int y = miny; y < maxy + 1; y++){
-					ArrayList<KoruEntity> set = map.get(x, y);
-					if(set != null){
-						for(KoruEntity e : set){
-							if(e == null)
-								Koru.log("wow, a null entity");
-							if(pred.evaluate(e) && Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range){
-								con.accept(e);
-							}
+		if(debug){
+			Koru.log("scan position: " + cx + ", " + cy);
+			Koru.log("placed quadrant: " + scl(cx, EntityMapper.cellsize) + ", " + scl(cy, EntityMapper.cellsize));
+			Koru.log("bounds: " + minx + ", " + miny + "  " + maxx + ", " + maxy);
+		}
+
+		for(int x = minx; x < maxx + 1; x++){
+			for(int y = miny; y < maxy + 1; y++){
+				ArrayList<KoruEntity> set = map.get(x, y);
+				if(set != null){
+					for(KoruEntity e : set){
+						if(e == null)
+							Koru.log("wow, a null entity");
+						if(pred.evaluate(e) && Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range){
+							con.accept(e);
 						}
 					}
 				}
@@ -118,23 +112,21 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	}
 
 	@Override
-	public void update(float deltaTime){
-		synchronized(lock){
-			
-			//clear cells just in case
-			if(map.size() > maxCells){
-				Koru.log("Too many mapper cells ("+map.size()+"). Clearing and calling System#gc().");
-				map.clear();
-				//might as well try to clean up
-				System.gc();
-			}
-			
-			for(ArrayList<KoruEntity> set : map.values()){
-				set.clear();
-			}
+	public synchronized void update(float deltaTime){
 
-			super.update(deltaTime);
+		// clear cells just in case
+		if(map.size() > maxCells){
+			Koru.log("Too many mapper cells (" + map.size() + "). Clearing and calling System#gc().");
+			map.clear();
+			// might as well try to clean up
+			System.gc();
 		}
+
+		for(ArrayList<KoruEntity> set : map.values()){
+			set.clear();
+		}
+
+		super.update(deltaTime);
 	}
 
 	@Override
