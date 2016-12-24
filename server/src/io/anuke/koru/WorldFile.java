@@ -17,10 +17,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
 import io.anuke.koru.utils.Text;
-import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.Generator;
-import io.anuke.koru.world.Materials;
-import io.anuke.koru.world.WorldLoader;
+import io.anuke.koru.world.*;
 
 public class WorldFile extends WorldLoader{
 	public final String filename = "chunk", extension = ".kw";
@@ -68,11 +65,6 @@ public class WorldFile extends WorldLoader{
 		}else{
 			Koru.log("Found empty world.");
 		}
-
-		/*
-		 * if(totalChunks() != 0) return; generateChunk(0, 0); generateChunk(
-		 * -1, 0); generateChunk(0, -1); generateChunk( -1, -1);
-		 */
 
 	}
 

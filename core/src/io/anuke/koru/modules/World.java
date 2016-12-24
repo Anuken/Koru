@@ -17,10 +17,7 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
-import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.WorldLoader;
+import io.anuke.koru.world.*;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
@@ -171,6 +168,12 @@ public class World extends Module<Koru>{
 	public Tile getTile(GridPoint2 point){
 		return tile(point.x, point.y);
 	}
+	
+	public Tile getTile(long c){
+		int x = (int)(c >> 32);
+		int y = (int)c;
+		return tile(x,y);
+	}
 
 	public Tile getTile(float fx, float fy){
 		int x = tile(fx);
@@ -305,7 +308,19 @@ public class World extends Module<Koru>{
 		return tilesize * i + tilesize / 2;
 	}
 	
-	public static <T>boolean inBounds(int x, int y, T[][] array){
+	public static long getLong(int x, int y){
+		return (long)x << 32 | y & 0xFFFFFFFFL;
+	}
+	
+	public static int getX(long l){
+		return(int)(l >> 32);
+	}
+	
+	public static int getY(long l){
+		return (int)l;
+	}
+	
+	static <T> boolean inBounds(int x, int y, T[][] array){
 		return x >= 0 && y >= 0 && x < array.length && y < array[0].length;
 	}
 

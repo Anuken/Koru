@@ -1,6 +1,7 @@
 package io.anuke.koru.ai;
 
 
+/**Kept around for references. None of this actually works. Should be deleted once proper pathfinding is implemented*/
 public class AIData{
 	/*
 	static final boolean debug = false;

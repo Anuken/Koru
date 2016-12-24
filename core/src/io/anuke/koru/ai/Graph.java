@@ -4,18 +4,24 @@ package io.anuke.koru.ai;
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.LongArray;
 
-public class Graph implements IndexedGraph<Node>{
-	Array<Node> nodes = new Array<Node>();
+//TODO switch to an actual Node class with an index instead of Longs
+//TODO pooling
+public class Graph implements IndexedGraph<Long>{
+	LongArray nodes = new LongArray();
+	private Array<Connection<Long>> tempConnections = new Array<Connection<Long>>();
 	
 	@Override
-	public Array<Connection<Node>> getConnections(Node fromNode){
-		return fromNode.getConnections();
+	public Array<Connection<Long>> getConnections(Long fromNode){
+		//TODO return the connections
+		return tempConnections;
 	}
 
 	@Override
-	public int getIndex(Node node){
-		return node.getIndex();
+	public int getIndex(Long node){
+		//TODO return the actual index
+		return 0;
 	}
 
 	@Override
@@ -23,7 +29,7 @@ public class Graph implements IndexedGraph<Node>{
 		return nodes.size;
 	}
 	
-	public void addNode(Node node){
+	public void addNode(Long node){
 		nodes.add(node);
 	}
 

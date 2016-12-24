@@ -2,21 +2,14 @@ package io.anuke.koru.ai;
 
 import com.badlogic.gdx.ai.pfa.Heuristic;
 
-public class ManhattanDistanceHueristic implements Heuristic<Node>{
-	public Node start, end;
+import io.anuke.koru.modules.World;
 
-	public void set(Node s, Node e){
-		start = s;
-		end = e;
-	}
+public class ManhattanDistanceHueristic implements Heuristic<Long>{
 
 	@Override
-	public float estimate(Node node, Node other){
-		//if(node == start || node == end || other == start || other == end) return 0;
-		if(node.solid() || other.solid()){
-		//	Koru.log("Solid node " + node + " detected.");
-		//	return 99999999;
-		}
-		return Math.abs(other.x - node.x) + Math.abs(other.y - node.y);
+	public float estimate(Long node, Long other){
+		float x = World.world(World.getX(node)), y = World.world(World.getY(node));
+		float x2 = World.world(World.getX(other)), y2 = World.world(World.getY(other));
+		return Math.abs(x2 - x) + Math.abs(y2 - y);
 	}
 }
