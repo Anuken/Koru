@@ -3,21 +3,9 @@ package io.anuke.koru.modules;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
@@ -28,27 +16,16 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
-import io.anuke.koru.graphics.Light;
+import io.anuke.koru.graphics.LightEffect;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.MaterialType;
-import io.anuke.koru.world.Materials;
-import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.*;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
-import io.anuke.ucore.spritesystem.LayerManager;
-import io.anuke.ucore.spritesystem.RenderPool;
-import io.anuke.ucore.spritesystem.Renderable;
-import io.anuke.ucore.spritesystem.RenderableHandler;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.SortProviders;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.ucore.spritesystem.*;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
@@ -66,7 +43,7 @@ public class Renderer extends Module<Koru>{
 	public FrameBufferMap buffers;
 	public Vector3 vector = new Vector3();
 	public PostProcessor processor;
-	public Light light;
+	public LightEffect light;
 	public KoruEntity player;
 	public SpriteRenderable block;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
@@ -118,7 +95,7 @@ public class Renderer extends Module<Koru>{
 	void addEffects(){
 		if(light != null)
 			light.dispose();
-		light = new Light(gwidth(), gheight());
+		light = new LightEffect(gwidth(), gheight());
 		processor.addEffect(light);
 	}
 
@@ -337,8 +314,6 @@ public class Renderer extends Module<Koru>{
 
 		font.setColor(Color.WHITE);
 
-		// font.draw(batch, world.time + "", 20, 20);
-
 		if(debug){
 			GridPoint2 cursor = getModule(Input.class).cursorblock();
 			float cx = Gdx.input.getX() / GUIscale,
@@ -355,13 +330,9 @@ public class Renderer extends Module<Koru>{
 							"[GREEN]" +cursor.x + ", " + cursor.y + " " + tile
 							+ "\n[CORAL]chunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY())
 							+ "\n[YELLOW]" + "chunk pos: " + chunk.x + ", " + chunk.y
-							+ "\n[ORANGE]pos: " + vector.x + ", " + vector.y,
+							+ "\n[ORANGE]pos: " + vector.x + ", " + vector.y
+							+ "\n[GREEN]time: " + world.time,
 					cx, cy);
-
-			if(tile.blockdata instanceof InventoryTileData){
-				InventoryTileData data = tile.getBlockData(InventoryTileData.class);
-				font.draw(batch, data.inventory.toString(), cx, cy);
-			}
 		}
 
 	}

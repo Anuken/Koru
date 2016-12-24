@@ -22,8 +22,6 @@ public class VelocitySystem extends KoruSystem{
 		
 		velocity.velocity.limit(velocity.limit);
 		
-		
-		
 		if(entity.hasComponent(HitboxComponent.class)){
 			boolean zero = velocity.velocity.isZero(0.0001f);
 			

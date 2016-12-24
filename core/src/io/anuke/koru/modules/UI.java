@@ -17,10 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.VisTextField.TextFieldListener;
 
 import io.anuke.koru.Koru;
@@ -139,16 +136,9 @@ public class UI extends Module<Koru> {
 		
 		invTable.bottom().right().add(new InventoryMenu()).align(Align.bottomRight);
 		
-		
 		VisTable rtable = new VisTable();
 		rtable.center().add(new RecipeMenu()).padBottom(300f);
 		stack.add(rtable);
-		//RecipeMenu menu = new RecipeMenu();
-		//uitable.addActor(new RecipeMenu());
-		
-		//uitable.bottom().right().add(new InventoryWidget()).align(Align.bottomRight);
-		
-		
 	}
 
 	void setupMenu() {
@@ -165,7 +155,7 @@ public class UI extends Module<Koru> {
 
 		VisTextButton button = new VisTextButton("Connect");
 		VisTextField name = new VisTextField(System.getProperty("user.name"));
-		// enter handling
+		// enter key handling
 		name.setTextFieldListener(new TextFieldListener() {
 			@Override
 			public void keyTyped(VisTextField textField, char c) {

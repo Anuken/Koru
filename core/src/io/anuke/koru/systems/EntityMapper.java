@@ -19,11 +19,12 @@ import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{
 	public static final float cellsize = World.tilesize * World.chunksize / 2;
-	public static final int maxCells = 1500;
+	public static final int maxCells = 1600;
 	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
 	private GridMap<ArrayList<KoruEntity>> map = new GridMap<ArrayList<KoruEntity>>();
 	private boolean debug = false;
-
+	
+	//TODO remove these nasty predicates and try something cleaner
 	public static Predicate<KoruEntity> connectionPredicate = (entity) -> {
 		return entity.hasComponent(ConnectionComponent.class);
 	};

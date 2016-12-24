@@ -1,6 +1,6 @@
 package io.anuke.koru;
 
-import static io.anuke.koru.utils.Text.*;
+import static io.anuke.koru.utils.Codes.*;
 
 import java.util.Scanner;
 

@@ -67,5 +67,4 @@ public class ObjectHandler extends Module<Koru>{
 	public static ObjectHandler instance(){
 		return instance;
 	}
-
 }

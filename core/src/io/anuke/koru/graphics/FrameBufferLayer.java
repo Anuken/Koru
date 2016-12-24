@@ -13,40 +13,18 @@ import io.anuke.ucore.spritesystem.Renderable;
 public enum FrameBufferLayer{
 	shadow("shadow", -999999){
 		public void end(){
-			batch.setColor(Layers.shadowcolor);
+			batch.setColor(0,0,0,0.1f);
 			drawFull();
-		}
-
-		protected void begin(){
-
 		}
 	}, 
 	light("light", 999999){
 		{
 			bind = 6;
 		}
-		@Override
-		public void end(){
-			
-		}
-
-		@Override
-		protected void begin(){
-			
-		}
 	},
 	darkness("darkness", 999999+1){
 		{
 			bind = 7;
-		}
-		@Override
-		public void end(){
-			
-		}
-
-		@Override
-		protected void begin(){
-			
 		}
 	};
 
@@ -64,9 +42,9 @@ public enum FrameBufferLayer{
 		this.layer = layer;
 	}
 
-	abstract public void end();
+	public void end(){}
 
-	abstract protected void begin();
+	protected void begin(){}
 
 	public boolean layerEquals(Renderable l){
 		return MathUtils.isEqual(l.layer(), layer, 0.01f);

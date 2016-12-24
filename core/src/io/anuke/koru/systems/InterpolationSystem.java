@@ -1,11 +1,11 @@
 package io.anuke.koru.systems;
 
+import com.badlogic.ashley.core.Family;
+
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.SyncComponent;
 import io.anuke.koru.entities.KoruEntity;
-
-import com.badlogic.ashley.core.Family;
 
 public class InterpolationSystem extends KoruSystem{
 

@@ -1,6 +1,6 @@
 package io.anuke.koru.utils;
 
-public class Text{
+public class Codes{
 	public static final String FLUSH = "\033[H\033[2J";
 	public static final String RESET = "\u001B[0m";
 	public static final String BOLD = "\u001B[1m";

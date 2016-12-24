@@ -21,7 +21,6 @@ public class InventoryComponent implements Component{
 		inventory = new ItemStack[width][height];
 	}
 	
-	@SuppressWarnings("unused")
 	private InventoryComponent(){}
 	
 	public void clickSlot(int x, int y){

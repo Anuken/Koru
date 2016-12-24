@@ -1,9 +1,10 @@
 package io.anuke.koru.utils;
 
-import io.anuke.koru.entities.KoruEntity;
-
 import com.badlogic.gdx.math.Rectangle;
 
+import io.anuke.koru.entities.KoruEntity;
+
+//TODO rewrite this to not use rectangles
 public class Hitbox{
 	public Rectangle rect = new Rectangle();
 	public float centerx, centery;

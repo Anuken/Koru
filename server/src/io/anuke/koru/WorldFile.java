@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.compression.Lzma;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
-import io.anuke.koru.utils.Text;
+import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.*;
 
 public class WorldFile extends WorldLoader{
@@ -112,7 +112,7 @@ public class WorldFile extends WorldLoader{
 	public Chunk readChunk(int x, int y){
 		synchronized(lock){
 			if(debug)
-				Koru.log(Text.RED + "BEGIN" + Text.YELLOW + " read chunk" + Text.RESET);
+				Koru.log(Codes.RED + "BEGIN" + Codes.YELLOW + " read chunk" + Codes.RESET);
 			Path path = getPath(x, y);
 
 			long time = TimeUtils.millis();
@@ -143,7 +143,7 @@ public class WorldFile extends WorldLoader{
 					Koru.log("Chunk read time elapsed: " + TimeUtils.timeSinceMillis(time));
 
 				if(debug)
-					Koru.log(Text.GREEN + "END" + Text.YELLOW + " read chunk" + Text.RESET);
+					Koru.log(Codes.GREEN + "END" + Codes.YELLOW + " read chunk" + Codes.RESET);
 				return chunk;
 			}catch(Exception e){
 				Koru.log("Error writing chunk!");

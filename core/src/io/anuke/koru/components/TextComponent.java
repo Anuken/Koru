@@ -1,6 +1,6 @@
 package io.anuke.koru.components;
 
-import io.anuke.koru.network.SyncBuffer.Synced;
+import io.anuke.koru.network.SyncData.Synced;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;

@@ -16,11 +16,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.HitboxComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.components.RenderComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.generation.GeneratedMaterial;
@@ -31,24 +27,10 @@ import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
-import io.anuke.koru.network.packets.BlockInputPacket;
-import io.anuke.koru.network.packets.ChatPacket;
-import io.anuke.koru.network.packets.ChunkRequestPacket;
-import io.anuke.koru.network.packets.ConnectPacket;
-import io.anuke.koru.network.packets.DataPacket;
-import io.anuke.koru.network.packets.EntityRemovePacket;
-import io.anuke.koru.network.packets.EntityRequestPacket;
-import io.anuke.koru.network.packets.InputPacket;
-import io.anuke.koru.network.packets.InventoryClickPacket;
-import io.anuke.koru.network.packets.MaterialRequestPacket;
-import io.anuke.koru.network.packets.PositionPacket;
-import io.anuke.koru.network.packets.RecipeSelectPacket;
-import io.anuke.koru.network.packets.SlotChangePacket;
-import io.anuke.koru.network.packets.StoreItemPacket;
+import io.anuke.koru.network.packets.*;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
-import io.anuke.koru.utils.Text;
-import io.anuke.koru.world.InventoryTileData;
+import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.Material;
 import io.anuke.ucore.UCore;
 
@@ -201,10 +183,6 @@ public class KoruServer extends IServer{
 				packet.id = info.playerid;
 				packet.stack = inv.inventory[inv.hotbar][0];
 				sendToAllExceptTCP(info.id, packet);
-			}else if(object instanceof StoreItemPacket){
-				StoreItemPacket packet = (StoreItemPacket)object;
-				updater.world.tile(packet.x, packet.y).getBlockData(InventoryTileData.class).inventory.addItem(packet.stack);
-				updater.world.updateTile(packet.x, packet.y);
 			}else if(object instanceof RecipeSelectPacket){
 				RecipeSelectPacket packet = (RecipeSelectPacket)object;
 				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
@@ -399,7 +377,7 @@ public class KoruServer extends IServer{
 	}
 
 	public static void main(String[] args){
-		System.out.println(Text.FLUSH);
+		System.out.println(Codes.FLUSH);
 		System.out.flush();
 		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
 			Koru.log("Clearing world.");

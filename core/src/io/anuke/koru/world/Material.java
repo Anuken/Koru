@@ -19,10 +19,6 @@ public interface Material{
 	
 	public default float offset(){return 0;}
 	
-	public default TileData getDefaultData(){return null;}
-	
-	public default Class<? extends TileData> getDataClass(){return null;}
-	
 	public default Color getColor(){return Color.WHITE;}
 	
 	public default ItemStack[] getDrops(){return null;}
@@ -40,9 +36,7 @@ public interface Material{
 			return (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage);
 		}else{
 			return tile.tile() != material && 
-					(tile.blockEmpty() 
-					|| tile.block().getType() == MaterialType.torch 
-					);
+				(tile.blockEmpty() || tile.block().getType() == MaterialType.torch);
 		}		
 	}
 }

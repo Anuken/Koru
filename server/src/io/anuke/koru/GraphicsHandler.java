@@ -23,7 +23,7 @@ import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.BitmapDataPacket;
 import io.anuke.koru.network.packets.GeneratedMaterialPacket;
-import io.anuke.koru.utils.Text;
+import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 import io.anuke.ucore.graphics.Atlas;
@@ -43,7 +43,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		packet.bitmapID = header.id;
 		packet.wrapper = new GeneratedMaterialWrapper(mat);
 
-		Koru.log("Sending " + Text.LIGHT_MAGENTA + packets.size + Text.LIGHT_GREEN + " split bitmap packets to " + id
+		Koru.log("Sending " + Codes.LIGHT_MAGENTA + packets.size + Codes.LIGHT_GREEN + " split bitmap packets to " + id
 				+ ".");
 		for(Object o : packets)
 			IServer.instance().sendTCP(id, o);
@@ -80,7 +80,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 	public void sendPixmap(Pixmap pix, GeneratedObject object, int id){
 		Gdx.app.postRunnable(() -> {
 			Array<Object> packets = generateBitmapPacketList(pix);
-			Koru.log("Sending " + Text.LIGHT_MAGENTA + packets.size + Text.LIGHT_GREEN + " split bitmap packets to "
+			Koru.log("Sending " + Codes.LIGHT_MAGENTA + packets.size + Codes.LIGHT_GREEN + " split bitmap packets to "
 					+ id + ".");
 			for(Object o : packets)
 				IServer.instance().sendTCP(id, o);

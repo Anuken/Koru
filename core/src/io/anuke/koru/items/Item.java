@@ -8,7 +8,7 @@ public interface Item{
 	public default void clickEvent(ClickEvent event){}
 	
 	public default int getMaxStackSize(){
-		return 40;
+		return 100;
 	}
 	
 	public ItemType type();

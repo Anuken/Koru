@@ -4,7 +4,7 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.spritesystem.SortProviders;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
-public class MonsterRenderer extends EntityRenderer{
+public class EnemyRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){

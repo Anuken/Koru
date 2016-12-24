@@ -38,12 +38,12 @@ public final class LightFilter extends Filter<LightFilter>{
 		rebind();
 	}
 
-	public void SetSize(int width, int height){
+	public void setSize(int width, int height){
 		setParams(Param.Resolution, new Vector2(width, height));
 		endParams();
 	}
 
-	public void SetColor(float r, float g, float b, float a){
+	public void setColor(float r, float g, float b, float a){
 		setParam(Param.Color, new Vector4(r, g, b, a));
 		endParams();
 	}

@@ -73,22 +73,13 @@ public class ChatTable extends VisTable{
 		
 		chatfield.setVisible(chatOpen);
 		fieldlabel.setVisible(chatOpen);
-		//if(chatOpen){
-		//	font.draw(batch, "> enter some text or something", offsetx, offsety + spacing);
-		//}
 		
 		batch.setColor(shadowColor);
-		//batch.draw(VisUI.getSkin().getRegion("white"), offsetx, offsety + spacing, textWidth, bheight);
-		
-		
 		
 		float theight = offsety + spacing;
 		for(int i = 0; i < messagesShown && i < messages.size && i < fadetime; i ++){
 			
 			layout.setText(font, messages.get(i).formattedMessage, Color.WHITE, textWidth, Align.bottomLeft, true);
-			//if(layout.height > -font.getData().down){
-			//	layout.height -= -font.getData().down;
-			//}
 			theight += layout.height+textspacing;
 			if(i == 0)theight -= textspacing+1;
 			
@@ -154,7 +145,6 @@ public class ChatTable extends VisTable{
 		
 	};
 	
-	@SuppressWarnings("unused")
 	private static class ChatMessage{
 		public final String sender;
 		public final String message;

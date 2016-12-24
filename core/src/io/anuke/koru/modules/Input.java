@@ -15,15 +15,11 @@ import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
-import io.anuke.koru.items.Items;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
-import io.anuke.koru.network.packets.StoreItemPacket;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.Angles;
 import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.InventoryTileData;
-import io.anuke.koru.world.Tile;
 import io.anuke.ucore.modules.Module;
 
 public class Input extends Module<Koru> implements InputProcessor {
@@ -46,8 +42,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
-		
-		//getModule(Renderer.class).camera.zoom = 5f;
 		
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && getModule(Network.class).connected())
 			getModule(UI.class).chat.enterPressed();
@@ -89,7 +83,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 		
 		if(stack != null && stack.item.type() == ItemType.weapon){
 			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
-			//angle = 360-angle;
 			render.direction = 2-(int)((angle-45)/90f);
 			if(render.direction == 1) render.direction = 3;
 			if(angle > 315 || angle < 45) render.direction = 1;
@@ -110,18 +103,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 		}
 
 		vector.set(0, 0);
-
-		if (Gdx.input.isKeyJustPressed(Keys.T)) {
-			GridPoint2 point = cursorblock();
-			Tile tile = getModule(World.class).getTile(point);
-			if (tile.blockdata != null && tile.blockdata instanceof InventoryTileData) {
-				StoreItemPacket packet = new StoreItemPacket();
-				packet.x = point.x;
-				packet.y = point.y;
-				packet.stack = new ItemStack(Items.wood, 20);
-				getModule(Network.class).client.sendTCP(packet);
-			}
-		}
 	}
 
 	void sendInput(InputType type, Object... params) {
@@ -154,17 +135,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 			sendInput(InputType.rightclick_down);
 		}
 		
-		/*
-		BlockInputPacket packet = new BlockInputPacket();
-		if (button == Buttons.LEFT) {
-			packet.material = Materials.torch;
-			GridPoint2 mouse = cursorblock();
-			packet.x = mouse.x;
-			packet.y = mouse.y;
-			getModule(Network.class).client.sendTCP(packet);
-		}
-		*/
-		
 		return false;
 	}
 
@@ -190,7 +160,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		//getModule(Renderer.class).camera.zoom += amount / 10f;
 		InventoryComponent inv = getModule(ClientData.class).player.getComponent(InventoryComponent.class);
 		int i = ((inv.hotbar+amount) % 4);
 		inv.hotbar = i < 0 ? i + 4 : i;

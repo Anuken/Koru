@@ -9,10 +9,7 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
-import io.anuke.ucore.spritesystem.Renderable;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.SortProviders;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.ucore.spritesystem.*;
 
 public class BlockAnimationRenderer extends EntityRenderer{
 	public RenderableList list = new RenderableList();
@@ -70,7 +67,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 			top.sprite.setOrigin(top.sprite.getWidth()/2, 0);
 			top.add(list);
 			
-			if(Koru.module(ClientData.class).player.getX() <entity.getX()) rspeed *= -1f;
+			if(Koru.module(ClientData.class).player.getX() < entity.getX()) rspeed *= -1f;
 		}
 	}
 }

@@ -13,16 +13,13 @@ import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.listeners.CollisionHandler;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
 
 public class CollisionSystem extends KoruSystem{
-	private final static float maxHitboxSize = 40;
+	private final static float maxHitboxSize = 50;
 	private final static float stepsize = 0.1f;
 	private CollisionHandler handler;
 	private ObjectSet<Long> iterated = new ObjectSet<Long>();
-	private long lastFrameID;
-	private Rectangle rect = new Rectangle();
 	private GridPoint2 point = new GridPoint2();
 	private Vector2 vector = new Vector2();
 
@@ -30,17 +27,22 @@ public class CollisionSystem extends KoruSystem{
 		super(Family.all(HitboxComponent.class, PositionComponent.class).get());
 		handler = new CollisionHandler();
 	}
+	
+	@Override
+	public void update (float deltaTime) {
+		super.update(deltaTime);
+		iterated.clear();
+	}
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
-		checkFrame();
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		hitbox.entityhitbox.update(entity);
 
 		checkCollisions(entity, hitbox);
 		
-		GridPoint2 point = vectorTerrainCollisions(entity, 0, 0);
+		GridPoint2 point = getTerrainCollisions(entity, 0, 0);
 		if(point != null){ //AHH ENTITY STUCK IN BLOCK!!
 			float blockx = World.world(point.x), blocky = World.world(point.y);
 			vector.set(entity.getX() - blockx, entity.getY() - blocky).setLength(1f);
@@ -68,7 +70,7 @@ public class CollisionSystem extends KoruSystem{
 			otherhitbox.entityhitbox.update(other);
 			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
 					&& entity.getType().collide(entity, other) && other.getType().collide(other, entity)){
-				collisionEvent(entity,other);
+				handler.dispatchEvent(entity, other);
 				otherhitbox.sleeptime = HitboxComponent.sleepduration;
 			}	
 		});
@@ -76,11 +78,7 @@ public class CollisionSystem extends KoruSystem{
 		iterated.add(entity.getID());
 	}
 
-	void collisionEvent(KoruEntity entitya, KoruEntity entityb){
-		handler.dispatchEvent(entitya, entityb);
-	}
-
-
+	//TODO make this use small steps instead of one jump
 	public void moveWithCollisions(KoruEntity entity, float mx, float my){
 		boolean wallcollision = false;
 		if( !checkTerrainCollisions(entity, mx, 0)){
@@ -133,8 +131,9 @@ public class CollisionSystem extends KoruSystem{
 		
 		entity.position().add(ax, ay);
 	}
-
-	public GridPoint2 vectorTerrainCollisions(KoruEntity entity, float mx, float my){
+	
+	/**Returns the point of terrain collision, or null if none are found*/
+	public GridPoint2 getTerrainCollisions(KoruEntity entity, float mx, float my){
 		
 		World world = World.instance();
 		
@@ -150,24 +149,15 @@ public class CollisionSystem extends KoruSystem{
 				if(!world.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tile(worldx, worldy);
 				if( !tile.solid()) continue;
-				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, rect))){
+				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp))){
 					return point.set(worldx, worldy);
 				}
-				//	rect.set(0,0,0,0);
 			}
 		}
 		return null;
 	}
 	
 	public boolean checkTerrainCollisions(KoruEntity entity, float mx, float my){
-		return vectorTerrainCollisions(entity, mx, my) != null;
+		return getTerrainCollisions(entity, mx, my) != null;
 	}
-
-	private void checkFrame(){
-		if(IServer.instance().getFrameID() != lastFrameID){
-			iterated.clear();
-			lastFrameID = IServer.instance().getFrameID();
-		}
-	}
-
 }

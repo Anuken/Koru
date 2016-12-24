@@ -6,6 +6,7 @@ import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.ucore.modules.Module;
 
+//TODO make this actually do something instead of storing a single object
 public class ClientData extends Module<Koru>{
 	public final KoruEntity player;
 	
@@ -13,12 +14,10 @@ public class ClientData extends Module<Koru>{
 		player = new KoruEntity(EntityType.player);
 		player.mapComponent(ConnectionComponent.class).name = "your player";
 		player.mapComponent(ConnectionComponent.class).local = true;
-		//player.position().set(460, 90);
 	}
 
 	@Override
 	public void update(){
 		
 	}
-
 }

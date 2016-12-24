@@ -3,32 +3,32 @@ package io.anuke.koru.network;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public abstract class SyncBuffer{
+public abstract class SyncData{
 	public long id;
 	
-	public SyncBuffer(long id){
+	public SyncData(long id){
 		this.id = id;
 	}
 	
-	public SyncBuffer(){};
+	public SyncData(){};
 	
-	public static class PositionSyncBuffer extends SyncBuffer{
+	public static class PositionSyncData extends SyncData{
 		public float x,y;
 		
-		public PositionSyncBuffer(long id, float x, float y){
+		public PositionSyncData(long id, float x, float y){
 			super(id);
 			this.x = x;
 			this.y = y;
 		}
 		
-		public PositionSyncBuffer(){}
+		public PositionSyncData(){}
 	}
 	
-	public static class PlayerSyncBuffer extends SyncBuffer{
+	public static class PlayerSyncData extends SyncData{
 		public float x,y, mouse;
 		public int direction;
 		
-		public PlayerSyncBuffer(long id, float x, float y, float mouse, int o){
+		public PlayerSyncData(long id, float x, float y, float mouse, int o){
 			super(id);
 			this.x = x;
 			this.y = y;
@@ -36,7 +36,7 @@ public abstract class SyncBuffer{
 			this.direction = o;
 		}
 		
-		public PlayerSyncBuffer(){}
+		public PlayerSyncData(){}
 	}
 	
 	@Retention(RetentionPolicy.RUNTIME)

@@ -26,7 +26,7 @@ public enum EntityType{
 	testmob{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(),
-			new RenderComponent(new MonsterRenderer()), 
+			new RenderComponent(new EnemyRenderer()), 
 			new HitboxComponent().init(12, 6, 4, 8, 3), new VelocityComponent(),
 			new SyncComponent(SyncType.position, new Interpolator()),
 			new HealthComponent()};

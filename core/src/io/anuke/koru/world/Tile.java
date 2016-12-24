@@ -7,7 +7,6 @@ import io.anuke.koru.generation.MaterialManager;
 public class Tile implements Poolable{
 	public int tileid, blockid;
 	public byte light = (byte)127;
-	public transient TileData tiledata, blockdata;
 	
 	public Tile(){}
 	
@@ -72,25 +71,9 @@ public class Tile implements Poolable{
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T>T getBlockData(Class<T> c){
-		return (T)(blockdata);
-	}
-
 	public void changeEvent(){
-		if(invalidData(tile(), tiledata)){
-			tiledata = tile().getDefaultData();
-		}
-
-		if(invalidData(block(), blockdata)){
-			blockdata = block().getDefaultData();
-		}
 		tile().changeEvent(this);
 		block().changeEvent(this);
-	}
-
-	public boolean invalidData(Material material, TileData data){
-		return material.getDataClass() == null || data == null || !material.getDataClass().equals(data.getClass());
 	}
 
 	public String toString(){
@@ -101,7 +84,5 @@ public class Tile implements Poolable{
 	public void reset(){
 		tileid = 0;
 		blockid = 0;
-		tiledata = null;
-		blockdata = null;
 	}
 }

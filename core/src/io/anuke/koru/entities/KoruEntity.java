@@ -42,9 +42,7 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private KoruEntity(){
-	}
+	private KoruEntity(){}
 
 	public static KoruEntity loadedEntity(EntityType type, long id){
 		KoruEntity entity = new KoruEntity(type);

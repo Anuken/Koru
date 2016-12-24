@@ -21,6 +21,7 @@ import io.anuke.koru.world.*;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
+//TODO move time-related stuff to another class?
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
 	public static final int loadrange = 3;
@@ -28,7 +29,6 @@ public class World extends Module<Koru>{
 	private static final float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	public final static float timescale = 40000f*0; //temporarily disabled
 	public int lastchunkx, lastchunky;
-	private static Rectangle rect = new Rectangle();
 	private boolean updated;
 	private GridPoint2 point = new GridPoint2();
 	private WorldLoader file;
@@ -185,7 +185,7 @@ public class World extends Module<Koru>{
 		Tile tile = getTile(x, y);
 		Material block = tile.block();
 		Material tilem = tile.tile();
-		return (block.getType().solid() && block.getType().getRect(tile(x), tile(y), rect).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getRect(tile(x), tile(y), rect).contains(x, y));
+		return (block.getType().solid() && block.getType().getRect(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getRect(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
 	public boolean blockSolid(int x, int y){

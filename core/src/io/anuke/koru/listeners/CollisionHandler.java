@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.entities.KoruEntity;
 
+//TODO maybe have all the listeners in one class?
 public class CollisionHandler{
 	private Array<CollisionListener> listeners = new Array<CollisionListener>();
 

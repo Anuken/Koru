@@ -1,11 +1,11 @@
 package io.anuke.koru.systems;
 
-import io.anuke.koru.components.FadeComponent;
-import io.anuke.koru.entities.KoruEntity;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+
+import io.anuke.koru.components.FadeComponent;
+import io.anuke.koru.entities.KoruEntity;
 
 public class FadeSystem extends IteratingSystem{
 
@@ -22,5 +22,4 @@ public class FadeSystem extends IteratingSystem{
 			koru.removeSelf();
 		}
 	}
-
 }

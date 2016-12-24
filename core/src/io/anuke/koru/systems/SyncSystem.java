@@ -12,9 +12,9 @@ import io.anuke.koru.components.SyncComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.network.SyncBuffer;
-import io.anuke.koru.network.SyncBuffer.PlayerSyncBuffer;
-import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
+import io.anuke.koru.network.SyncData;
+import io.anuke.koru.network.SyncData.PlayerSyncData;
+import io.anuke.koru.network.SyncData.PositionSyncData;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 
 public class SyncSystem extends KoruSystem{
@@ -41,12 +41,12 @@ public class SyncSystem extends KoruSystem{
 
 	public enum SyncType{
 		position{
-			public SyncBuffer write(KoruEntity entity){
-				return new PositionSyncBuffer(entity.getID(), entity.getX(), entity.getY());
+			public SyncData write(KoruEntity entity){
+				return new PositionSyncData(entity.getID(), entity.getX(), entity.getY());
 			}
 
-			public void read(SyncBuffer buffer, KoruEntity entity){
-				PositionSyncBuffer position = (PositionSyncBuffer)buffer;
+			public void read(SyncData buffer, KoruEntity entity){
+				PositionSyncData position = (PositionSyncData)buffer;
 				SyncComponent sync = entity.mapComponent(SyncComponent.class);
 				if(sync.interpolator != null){
 					sync.interpolator.push(entity, position.x, position.y);
@@ -56,12 +56,12 @@ public class SyncSystem extends KoruSystem{
 			}
 		},
 		player{
-			public SyncBuffer write(KoruEntity entity){
-				return new PlayerSyncBuffer(entity.getID(), entity.getX(), entity.getY(), entity.get(InputComponent.class).input.mouseangle, entity.mapComponent(RenderComponent.class).direction);
+			public SyncData write(KoruEntity entity){
+				return new PlayerSyncData(entity.getID(), entity.getX(), entity.getY(), entity.get(InputComponent.class).input.mouseangle, entity.mapComponent(RenderComponent.class).direction);
 			}
 
-			public void read(SyncBuffer buffer, KoruEntity entity){
-				PlayerSyncBuffer position = (PlayerSyncBuffer)buffer;
+			public void read(SyncData buffer, KoruEntity entity){
+				PlayerSyncData position = (PlayerSyncData)buffer;
 				entity.mapComponent(RenderComponent.class).direction = position.direction;
 				
 				if(Vector2.dst(entity.getX(), entity.getY(), position.x, position.y) > 0.1f){
@@ -82,9 +82,9 @@ public class SyncSystem extends KoruSystem{
 			}
 		};
 
-		public abstract SyncBuffer write(KoruEntity entity);
+		public abstract SyncData write(KoruEntity entity);
 
-		public abstract void read(SyncBuffer buffer, KoruEntity entity);
+		public abstract void read(SyncData buffer, KoruEntity entity);
 
 	}
 }

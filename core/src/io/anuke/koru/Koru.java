@@ -16,7 +16,7 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.InterpolationSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.RendererSystem;
-import io.anuke.koru.utils.Text;
+import io.anuke.koru.utils.Codes;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.ModuleController;
 
@@ -76,13 +76,13 @@ public class Koru extends ModuleController<Koru>{
 
 		if(IServer.active() || Gdx.app == null){
 			if(Gdx.app == null){
-				System.out.println(Text.BACK_DEFAULT + Text.BOLD + Text.LIGHT_BLUE + "[" + name + "]: "
-						+ Text.LIGHT_GREEN + o + Text.RED);
+				System.out.println(Codes.BACK_DEFAULT + Codes.BOLD + Codes.LIGHT_BLUE + "[" + name + "]: "
+						+ Codes.LIGHT_GREEN + o + Codes.RED);
 			}else{
 				Gdx.app.log(
-						Text.BACK_DEFAULT + Text.LIGHT_BLUE + "[" + Text.BLUE + name + Text.BACK_DEFAULT + "::"
-								+ Text.LIGHT_YELLOW + e.getMethodName() + Text.LIGHT_BLUE + "]",
-						Text.LIGHT_GREEN + "" + o + Text.RED);
+						Codes.BACK_DEFAULT + Codes.LIGHT_BLUE + "[" + Codes.BLUE + name + Codes.BACK_DEFAULT + "::"
+								+ Codes.LIGHT_YELLOW + e.getMethodName() + Codes.LIGHT_BLUE + "]",
+						Codes.LIGHT_GREEN + "" + o + Codes.RED);
 			}
 		}else{
 			Gdx.app.log("[" + name + "::" + e.getMethodName() + "]", "" + o);

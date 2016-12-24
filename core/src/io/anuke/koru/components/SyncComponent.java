@@ -19,7 +19,6 @@ public class SyncComponent implements Component{
 		this.interpolator = new Interpolator();
 	}
 	
-	@SuppressWarnings("unused")
 	private SyncComponent(){
 		type = null;
 		interpolator = null;

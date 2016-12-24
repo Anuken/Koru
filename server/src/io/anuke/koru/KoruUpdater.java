@@ -12,7 +12,7 @@ import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.InputSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
-import io.anuke.koru.utils.Text;
+import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.Chunk;
 
 public class KoruUpdater{
@@ -122,7 +122,7 @@ public class KoruUpdater{
 			
 			threadchunks.add(chunk);
 			if(threadchunks.size() >= pp){
-				Koru.log(Text.LIGHT_MAGENTA + "Spawning thread: " + Text.GREEN + thread);
+				Koru.log(Codes.LIGHT_MAGENTA + "Spawning thread: " + Codes.GREEN + thread);
 				
 				spawnChunkThread(threadchunks, thread++);
 				threadchunks = new ArrayList<Chunk>();
@@ -146,7 +146,7 @@ public class KoruUpdater{
 		threads ++;
 		new Thread(() -> {
 			for(Chunk chunk : chunks){
-				Koru.log(Text.YELLOW + "Saving chunks: " +Text.RED + totalchunks + " left [Thread "+thread+"]");
+				Koru.log(Codes.YELLOW + "Saving chunks: " +Codes.RED + totalchunks + " left [Thread "+thread+"]");
 				
 				file.writeChunk(chunk, thread);
 				totalchunks --;

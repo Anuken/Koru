@@ -8,21 +8,20 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.ObjectHandler;
 import io.anuke.koru.network.IServer;
+import io.anuke.koru.utils.Codes;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.utils.Text;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
 
 /**Materials IDs < 0 are generated.*/
+/**Currently unused.*/
 public class MaterialManager{
 	private static final MaterialManager instance = new MaterialManager();
 	private static final Materials[] values = Materials.values();
 	private int goffset = Integer.MIN_VALUE;
 	private int lastMaterialID = goffset;
 	private Array<GeneratedMaterial> genMaterials = new Array<GeneratedMaterial>();
-	//private ObjectMap<Integer, GeneratedMaterial> genMaterials = new ObjectMap<>();
-	//private ObjectMap<Integer, GeneratedMaterial> objects = new ObjectMap<Integer, GeneratedMaterial>();
 	
 
 	private MaterialManager() {}
@@ -39,7 +38,7 @@ public class MaterialManager{
 				ObjectHandler.instance().notifyMaterialUnknown(id);
 				return values[0];
 			}else if(mat == null){
-				Koru.log(Text.RED+"Unknown material with ID "+ Text.LIGHT_CYAN+ id + Text.RED + ". Exiting.");
+				Koru.log(Codes.RED+"Unknown material with ID "+ Codes.LIGHT_CYAN+ id + Codes.RED + ". Exiting.");
 				System.exit(-1);
 			}
 			return mat;
@@ -76,7 +75,6 @@ public class MaterialManager{
 	 * Not thread safe. Must be called with OpenGL context as pixmaps are
 	 * created.
 	 */
-	@SuppressWarnings("unchecked")
 	public void loadMaterials(FileHandle file){
 		genMaterials = new Array<GeneratedMaterial>();
 		//TODO disabled loading for now
@@ -94,7 +92,7 @@ public class MaterialManager{
 						material.loadTexture();
 					}
 				}catch(Exception e){
-					Koru.log(Text.BACK_RED + "Failure loading custom material: " + material.name + Text.BACK_DEFAULT);
+					Koru.log(Codes.BACK_RED + "Failure loading custom material: " + material.name + Codes.BACK_DEFAULT);
 					e.printStackTrace();
 				}
 			}

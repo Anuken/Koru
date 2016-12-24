@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.modules.World;
-import io.anuke.koru.network.SyncBuffer.Synced;
+import io.anuke.koru.network.SyncData.Synced;
 
 @Synced
 public class PositionComponent implements Component{

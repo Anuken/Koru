@@ -15,16 +15,16 @@ import io.anuke.koru.modules.Renderer;
 
 public class Resources{
 	private static Json json;
-	private static ObjectMap<String, ParticleEffectPool> pools = new ObjectMap<String, ParticleEffectPool>();
+	private static ObjectMap<String, ParticleEffectPool> particles = new ObjectMap<String, ParticleEffectPool>();
 	
 	public static void loadParticle(String name){
 		ParticleEffect effect = new ParticleEffect();
 		effect.load(Gdx.files.internal("particles/" + name), Resources.atlas());
-		pools.put(name, new ParticleEffectPool(effect, 5, 30));
+		particles.put(name, new ParticleEffectPool(effect, 5, 30));
 	}
 	
 	public static PooledEffect particle(String name){
-		return pools.get(name).obtain();
+		return particles.get(name).obtain();
 	}
 	
 	public static AtlasRegion region(String name){

@@ -180,14 +180,6 @@ public enum Materials implements Material{
 		
 	}
 	
-	public TileData getDefaultData(){
-		return null;
-	}
-	
-	public Class<? extends TileData> getDataClass(){
-		return null;
-	}
-	
 	public boolean growable(){
 		return false;
 	}

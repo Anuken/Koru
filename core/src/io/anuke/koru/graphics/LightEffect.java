@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
-public final class Light extends PostProcessorEffect{
+public final class LightEffect extends PostProcessorEffect{
 
 	private LightFilter light = null;
 
-	public Light(int viewportWidth, int viewportHeight) {
+	public LightEffect(int viewportWidth, int viewportHeight) {
 		setup(viewportWidth, viewportHeight);
 	}
 
@@ -17,15 +17,15 @@ public final class Light extends PostProcessorEffect{
 	}
 
 	public void setSize(int width, int height){
-		light.SetSize(width, height);
+		light.setSize(width, height);
 	}
 
 	public void setColor(float r, float g, float b, float a){
-		light.SetColor(r, g, b, a);
+		light.setColor(r, g, b, a);
 	}
 	
 	public void setColor(Color color){
-		light.SetColor(color.r, color.g, color.b, color.a);
+		light.setColor(color.r, color.g, color.b, color.a);
 	}
 
 	@Override

@@ -26,9 +26,9 @@ import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
-import io.anuke.koru.network.SyncBuffer.PlayerSyncBuffer;
-import io.anuke.koru.network.SyncBuffer.PositionSyncBuffer;
-import io.anuke.koru.network.SyncBuffer.Synced;
+import io.anuke.koru.network.SyncData.PlayerSyncData;
+import io.anuke.koru.network.SyncData.PositionSyncData;
+import io.anuke.koru.network.SyncData.Synced;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.renderers.AnimationType;
 import io.anuke.koru.systems.SyncSystem.SyncType;
@@ -77,14 +77,11 @@ public class Registrator{
 		k.register(ItemComponent.class);
 
 		k.register(ProjectileType.class);
-		k.register(SyncBuffer.class);
-		k.register(PositionSyncBuffer.class);
-		k.register(PlayerSyncBuffer.class);
+		k.register(SyncData.class);
+		k.register(PositionSyncData.class);
+		k.register(PlayerSyncData.class);
 		
 		k.register(Chunk.class);
-		k.register(TileData.class);
-		k.register(InventoryTileData.class);
-		k.register(PinetreeTileData.class);
 		k.register(Tile.class);
 		k.register(Tile[].class);
 		k.register(Tile[][].class);
@@ -163,9 +160,7 @@ public class Registrator{
 		long id;
 		EntityType type;
 
-		@SuppressWarnings("unused")
-		private EntityWrapper(){
-		}
+		private EntityWrapper(){}
 
 		public EntityWrapper(KoruEntity entity){
 			//components = entity.getComponents().toArray();
