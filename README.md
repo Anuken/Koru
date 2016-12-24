@@ -1,12 +1,13 @@
 # Koru
 
-A 2D tower defense/building/fighting game. Also a project for testing out Entity Component systems, AI, chunk generation, biome generation and shaders.
+A 2D sandbox game. Also a project for testing out Entity Component systems, AI, chunk generation, biome generation and shaders.
 
 ##Roadmap
 
-- machines, crafting, maybe some gameplay
-- pixtigen integration
-- mobile version (?)
-- connection error message
+- machines, crafting
+- block entities or data
+- tech tree
+- combat w/ knockback
+- crafting
 - clean up AI package, it's a mess
-- biome generation 
+- mobile support (???)
