@@ -55,7 +55,7 @@ public class KoruServer extends IServer{
 			server.start();
 			server.bind(Network.port, Network.port);
 
-		//	webserver = new WebServer(this, new InetSocketAddress(Network.port+1));
+			//webserver = new WebServer(this, new InetSocketAddress(Network.port+1));
 			Koru.log("Server up.");
 		}catch(Exception e){
 			e.printStackTrace();
@@ -90,6 +90,7 @@ public class KoruServer extends IServer{
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
 		config.setTitle("Map Preview");
+		config.setMaximized(true);
 		
 		new Lwjgl3Application((new MapPreview()), config);
 	}
@@ -316,14 +317,12 @@ public class KoruServer extends IServer{
 
 	public void send(ConnectionInfo info, Object object, boolean udp){
 		if(info.isWeb()){
-			//webserver.sendObject(info.socket, object); //screw GWT!
+			//webserver.sendObject(info.socket, object);
 		}else{
 			if(udp){
 				info.connection.sendUDP(object);
 			}else{
-				/*int size = */info.connection.sendTCP(object);
-				
-				//Koru.log("Sending " + object.getClass().getSimpleName() + ": " +size  + "b");
+				info.connection.sendTCP(object);
 			}
 		}
 	}

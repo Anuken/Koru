@@ -80,10 +80,11 @@ public enum EntityType{
 			return new Component[]{new TileComponent()};
 		}
 	};
-
+	
+	//TODO make this less clunky?
 	final void init(KoruEntity entity){
 		InputComponent input = entity.mapComponent(InputComponent.class);
-		if(input != null/* && IServer.active*/) input.input = new InputHandler(entity);
+		if(input != null) input.input = new InputHandler(entity);
 
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox != null) initHitbox(entity, hitbox);
@@ -97,9 +98,6 @@ public enum EntityType{
 	public boolean collide(KoruEntity entity, KoruEntity other){
 		return true;
 	}
-
-	//public void collisionEvent(KoruEntity entity, KoruEntity other){
-	//}
 	
 	public void deathEvent(KoruEntity entity, KoruEntity killer){
 		entity.removeSelfServer();
@@ -107,7 +105,6 @@ public enum EntityType{
 
 	void initHitbox(KoruEntity entity, HitboxComponent hitbox){
 	}
-
 
 	public Component[] defaultComponents(){
 		return new Component[]{};

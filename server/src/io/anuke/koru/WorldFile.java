@@ -19,6 +19,7 @@ import com.esotericsoftware.kryo.io.Input;
 import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.*;
 
+//TODO do something about the chunk writers
 public class WorldFile extends WorldLoader{
 	public final String filename = "chunk", extension = ".kw";
 	private Path file;

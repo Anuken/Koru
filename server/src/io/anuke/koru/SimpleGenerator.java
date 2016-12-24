@@ -7,6 +7,7 @@ import io.anuke.koru.world.Materials;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.noise.Noise;
 
+//infinite boring terrain
 public class SimpleGenerator implements Generator{
 
 	public Tile generate(int x, int y){

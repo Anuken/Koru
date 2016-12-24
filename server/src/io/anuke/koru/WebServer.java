@@ -1,20 +1,21 @@
 package io.anuke.koru;
 
-import io.anuke.koru.Koru;
-import io.anuke.koru.network.Serializer;
-import io.anuke.koru.network.packets.ChunkRequestPacket;
-import io.anuke.koru.network.packets.ConnectPacket;
-import io.anuke.koru.network.packets.PositionPacket;
-
 import java.net.InetSocketAddress;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.AtomicQueue;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.utils.Pools;
 
+import io.anuke.koru.network.packets.ChunkRequestPacket;
+import io.anuke.koru.network.packets.ConnectPacket;
+import io.anuke.koru.network.packets.PositionPacket;
+
+/**this is a dead class*/
 public class WebServer extends WebSocketServer{
 	final KoruServer server;
 	final Thread sendThread = new Thread(new Runner(), "WebServer Thread");
@@ -28,7 +29,6 @@ public class WebServer extends WebSocketServer{
 		sendThread.setDaemon(true);
 		sendThread.start();
 		Koru.log("Started web server.");
-		
 	}
 
 	public static class Request implements Poolable{
@@ -56,11 +56,11 @@ public class WebServer extends WebSocketServer{
 			while(true){
 				Request request = null;
 				while((request = requests.poll()) != null){
-					String string = Serializer.serialize(request.object);
+					String string = "this doesn't work"; //it really doesn't
 					request.socket.send(string);
 				}
 				try{
-					Thread.sleep(9999999999L);
+					Thread.sleep(9999999999L); //kek
 				}catch(Exception e){
 				}
 			}
@@ -85,7 +85,7 @@ public class WebServer extends WebSocketServer{
 
 	@Override
 	public void onMessage(WebSocket conn, String message){
-		Object object = Serializer.deserialize(message);
+		Object object = "deserialization doesn't exist anymore";
 		if(!(object instanceof ChunkRequestPacket) && !(object instanceof PositionPacket))
 			Koru.log(object.getClass());
 		
@@ -104,7 +104,6 @@ public class WebServer extends WebSocketServer{
 
 	@Override
 	public void onError(WebSocket conn, Exception ex){
-		//Koru.log("error: " + ex);
 		ex.printStackTrace();
 	}
 

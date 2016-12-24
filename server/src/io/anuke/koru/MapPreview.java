@@ -11,10 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.IntIntMap;
 
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.MaterialType;
-import io.anuke.koru.world.Materials;
-import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.*;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
@@ -36,7 +33,6 @@ public class MapPreview extends ApplicationAdapter{
 	static double maxt;
 
 	public void create(){
-		UCore.maximizeWindow();
 		batch = new SpriteBatch();
 		gen = new TerrainGenerator();
 
@@ -104,14 +100,6 @@ public class MapPreview extends ApplicationAdapter{
 	RidgedPerlin per = new RidgedPerlin(1, 1, 0.4f);
 	
 	int getPix(int x, int y){
-		//float temp = gen.getElevation(x, y);
-		
-		//float noise = per.getValue(x, y, 1, 0.0007f);
-		//return Color.rgba8888(noise > 0.2f ? Color.BLUE : Color.BLACK);//Color.rgba8888((Hue.blend(Color.BLACK, Color.BLUE, 	)));
-		//return /*Color.rgba8888(Hue.blend(Hue.blend(Color.FOREST, Color.TAN, (float)temp/5f), Hue.blend(Color.DARK_GRAY, Color.WHITE, (float)sum/5f), 0.5f));*/Color.rgba8888(Hue.blend2d(Color.FOREST, Color.GREEN, Color.TAN, Color.DARK_GRAY, (float)temp/5f, 
-			//	(float)sum/5f));//Color.rgba8888(Hue.blend(Color.BLUE, Color.RED, (float)temp/5f));//colors.get(gen.generate(x, y).tileid, 0);
-		
-		
 		Tile tile = gen.generate(x, y);
 		if(tile.block().getType() == MaterialType.block)return colors.get(tile.blockid, 0);
 		if(!tile.blockEmpty()) return colors.get(tile.tileid, 0)+1000;

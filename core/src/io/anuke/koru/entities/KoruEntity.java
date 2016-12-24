@@ -5,16 +5,14 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.KoruEngine;
-import io.anuke.ucore.util.QuadTree.QuadTreeObject;
 
-public class KoruEntity extends Entity implements QuadTreeObject{
+public class KoruEntity extends Entity{
 	private static KoruEngine engine;
 	private EntityType type;
 	private static long nextID;
@@ -25,7 +23,6 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 		public static HashMap<Class<?>, ComponentMapper<?>> map = new HashMap<Class<?>, ComponentMapper<?>>();
 		public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
 
-		@SuppressWarnings("unchecked")
 		public static <T> Component get(Class<T> c, KoruEntity entity){
 			if( !map.containsKey(c)){
 				map.put(c, ComponentMapper.getFor((Class<? extends Component>)c));
@@ -33,7 +30,6 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 			return (Component)(map.get(c).get(entity));
 		}
 		
-		@SuppressWarnings("unchecked")
 		public static <T> boolean has(Class<T> c, KoruEntity entity){
 			if( !map.containsKey(c)){
 				map.put(c, ComponentMapper.getFor((Class<? extends Component>)c));
@@ -79,14 +75,17 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	public long getID(){
 		return id;
 	}
-
-	@SuppressWarnings("unchecked")
+	
+	/**overridden and now safe to use (?)*/
+	public <T extends Component> T getComponent (Class<T> componentClass) {
+		return get(componentClass);
+	}
+	
 	public <T>T mapComponent(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}
 	
 	/**Equivalent to mapComponent.*/
-	@SuppressWarnings("unchecked")
 	public <T>T get(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}
@@ -123,12 +122,7 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 	}
 
 	public void removeSelf(){
-		//wat
-		if( !server()){
-			engine.removeEntity(this);
-		}else{
-			engine.removeEntity(this);
-		}
+		engine.removeEntity(this);
 	}
 
 	//ONLY CALL THIS ON RECONNECT
@@ -148,11 +142,5 @@ public class KoruEntity extends Entity implements QuadTreeObject{
 
 	public String toString(){
 		return this.type + " #" + id;
-	}
-
-	@Override
-	public void getBoundingBox(Rectangle out){
-		//not implemented yet
-		//should it be?
 	}
 }

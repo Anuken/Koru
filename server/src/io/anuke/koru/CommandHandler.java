@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 
-
+//TODO implement a better system with lambdas
 public class CommandHandler{
 	final KoruServer server;
 	Scanner scan;

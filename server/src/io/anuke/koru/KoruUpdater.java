@@ -8,10 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import io.anuke.koru.modules.World;
-import io.anuke.koru.systems.CollisionSystem;
-import io.anuke.koru.systems.InputSystem;
-import io.anuke.koru.systems.KoruEngine;
-import io.anuke.koru.systems.SyncSystem;
+import io.anuke.koru.systems.*;
 import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.Chunk;
 
@@ -21,7 +18,7 @@ public class KoruUpdater{
 	public World world;
 	public final WorldFile file;
 	private boolean isRunning = true;
-	private CopyOnWriteArrayList<SendRequest> sendQueue = new CopyOnWriteArrayList<SendRequest>();
+	private CopyOnWriteArrayList<SendRequest> sendQueue = new CopyOnWriteArrayList<SendRequest>(); //TODO remove this
 	final int maxfps = 60;
 	long frameid;
 	float delta = 1f;
@@ -44,6 +41,7 @@ public class KoruUpdater{
 		}
 	}
 	
+	//this is pretty terrible
 	void checkQueue(){
 		for(SendRequest r : sendQueue){
 			r.life -= delta;
@@ -83,7 +81,6 @@ public class KoruUpdater{
 			long sleepend = System.currentTimeMillis();
 			delta = (sleepend - start) / 1000f * 60f;
 		}
-
 	}
 
 	public KoruUpdater(KoruServer server) {
@@ -95,12 +92,9 @@ public class KoruUpdater{
 		engine.addSystem(new CollisionSystem());
 		engine.addSystem(new InputSystem());
 
-		Runtime.getRuntime().addShutdownHook(new Thread(){
-			@Override
-			public void run(){
-				saveAll();
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new Thread(()->{
+			saveAll();
+		}));
 	}
 
 	Object lock = new Object();
@@ -139,7 +133,8 @@ public class KoruUpdater{
 		}
 
 		Koru.log("Saving materials...");
-		// MaterialManager.instance().saveMaterials(Directories.materials);
+		//I lied
+		//MaterialManager.instance().saveMaterials(Directories.materials);
 	}
 
 	void spawnChunkThread(Collection<Chunk> chunks, int thread){
@@ -152,7 +147,7 @@ public class KoruUpdater{
 				totalchunks --;
 			}
 			
-			if(--threads == 0)latch.countDown();
+			if(--threads == 0) latch.countDown();
 		}).start();
 	}
 	

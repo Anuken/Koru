@@ -3,12 +3,7 @@ package io.anuke.koru.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
-import io.anuke.koru.components.ChildComponent;
-import io.anuke.koru.components.DataComponent;
-import io.anuke.koru.components.FadeComponent;
-import io.anuke.koru.components.ItemComponent;
-import io.anuke.koru.components.ParticleComponent;
-import io.anuke.koru.components.TextComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Material;

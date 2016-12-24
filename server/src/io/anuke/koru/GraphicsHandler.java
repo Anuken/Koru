@@ -10,15 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.fluxe.generation.ColorPalette;
-import io.anuke.fluxe.generation.FluxeFilter;
-import io.anuke.fluxe.generation.FluxeGenerator;
-import io.anuke.fluxe.generation.FluxeRenderer;
-import io.anuke.fluxe.generation.Fluxor;
-import io.anuke.koru.generation.GeneratedMaterial;
-import io.anuke.koru.generation.GeneratedMaterialWrapper;
-import io.anuke.koru.generation.GeneratedObject;
-import io.anuke.koru.generation.MaterialManager;
+import io.anuke.fluxe.generation.*;
+import io.anuke.koru.generation.*;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.BitmapDataPacket;
@@ -119,6 +112,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		return p;
 	}
 	
+	//haha
 	private void setParams(Object... args){
 		for(Object o : args){
 			if(o instanceof FluxeGenerator){
