@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server;
 
 import static io.anuke.koru.utils.Codes.*;
 

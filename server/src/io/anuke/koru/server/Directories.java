@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server;
 
 import com.badlogic.gdx.files.FileHandle;
 

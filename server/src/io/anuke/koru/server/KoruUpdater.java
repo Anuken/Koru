@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
+import io.anuke.koru.server.world.TerrainGenerator;
+import io.anuke.koru.server.world.WorldFile;
 import io.anuke.koru.systems.*;
 import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.Chunk;

@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +16,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
@@ -28,6 +29,7 @@ import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
+import io.anuke.koru.server.world.MapPreview;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Codes;

@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server;
 
 import java.net.InetSocketAddress;
 
@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.Pools;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.ConnectPacket;
 import io.anuke.koru.network.packets.PositionPacket;

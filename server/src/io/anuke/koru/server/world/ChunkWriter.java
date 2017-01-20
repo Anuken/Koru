@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server.world;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.compression.Lzma;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Materials;
 

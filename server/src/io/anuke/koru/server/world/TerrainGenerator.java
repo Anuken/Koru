@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server.world;
 
 import static io.anuke.ucore.UCore.clamp;
 

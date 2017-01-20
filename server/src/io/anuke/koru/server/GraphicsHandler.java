@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.fluxe.generation.*;
+import io.anuke.koru.Koru;
 import io.anuke.koru.generation.*;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IServer;

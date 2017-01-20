@@ -1,4 +1,4 @@
-package io.anuke.koru;
+package io.anuke.koru.server.world;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
