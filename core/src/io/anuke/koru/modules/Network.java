@@ -14,8 +14,8 @@ import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.NetworkListener;
 import io.anuke.koru.network.packets.*;
-import io.anuke.koru.utils.Angles;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.util.Angles;
 
 public class Network extends Module<Koru>{
 	public static final String ip = System.getProperty("user.name").equals("anuke") ? "localhost" : "107.11.42.20";

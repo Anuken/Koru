@@ -18,9 +18,9 @@ import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.systems.CollisionSystem;
-import io.anuke.koru.utils.Angles;
 import io.anuke.koru.utils.InputType;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.util.Angles;
 
 public class Input extends Module<Koru> implements InputProcessor {
 	private Vector2 vector = new Vector2();
