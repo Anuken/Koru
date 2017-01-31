@@ -12,10 +12,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.spritesystem.RenderPool;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.SortProviders;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.ucore.spritesystem.*;
 
 public enum MaterialType{
 	tile{
@@ -73,7 +70,7 @@ public enum MaterialType{
 		}
 
 		public boolean solid(){
-			return true;
+			return false;
 		}
 	},
 	overlay{

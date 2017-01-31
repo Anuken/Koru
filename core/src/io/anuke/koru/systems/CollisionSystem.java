@@ -53,7 +53,7 @@ public class CollisionSystem extends KoruSystem{
 	void blockCollisionEvent(KoruEntity entity){
 		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
 		if(hitbox.collideterrain && entity.mapComponent(DestroyOnTerrainHitComponent.class) != null){
-			entity.removeSelfServer();
+			entity.removeServer();
 		}
 	}
 

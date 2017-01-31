@@ -29,7 +29,7 @@ public class DamageListener extends CollisionListener{
 		if(health.health <= 0){
 			entity.getType().deathEvent(entity, other);
 		}else{
-			damage.sendSelf();
+			damage.send();
 		}
 	}
 

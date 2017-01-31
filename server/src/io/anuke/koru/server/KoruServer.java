@@ -124,7 +124,7 @@ public class KoruServer extends IServer{
 
 			sendToAllExceptTCP(info.id, player);
 
-			player.addSelf();
+			player.add();
 			
 			InventoryComponent inv = player.get(InventoryComponent.class);
 			
@@ -226,7 +226,7 @@ public class KoruServer extends IServer{
 			}
 			sendChatMessage("[GREEN]" + getPlayer(info).mapComponent(ConnectionComponent.class).name + " [CORAL]has disconnected.");
 			Koru.log(getPlayer(info).mapComponent(ConnectionComponent.class).name + " has disconnected.");
-			getPlayer(info).removeSelfServer();
+			getPlayer(info).removeServer();
 			removeConnection(info);
 		}catch(Exception e){
 			e.printStackTrace();

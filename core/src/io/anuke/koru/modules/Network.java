@@ -195,7 +195,7 @@ public class Network extends Module<Koru>{
 			}
 			
 			if(t.engine.getEntity(entity.getID()) == null)
-			entity.addSelf();
+			entity.add();
 		}
 		
 		if(connected && Gdx.graphics.getFrameId() % pingInterval == 0){

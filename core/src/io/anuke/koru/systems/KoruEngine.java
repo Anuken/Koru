@@ -35,7 +35,7 @@ public class KoruEngine extends Engine{
 	public boolean removeEntity(long id){
 		if(!map.entities.containsKey(id))
 			return false;
-		map.entities.get(id).removeSelf();
+		map.entities.get(id).remove();
 		return true;
 	}
 

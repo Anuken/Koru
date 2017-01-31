@@ -17,7 +17,7 @@ public enum WeaponType{
 						input.mouseangle, 10);
 				projectile.position().set(entity.position());
 
-				projectile.addSelf().sendSelf();
+				projectile.add().send();
 
 				playAnimation(AnimationType.attack);
 				weapon.cooldown = 15;

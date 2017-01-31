@@ -27,7 +27,7 @@ public class ParticleRenderer extends EntityRenderer{
 		//render.layers.update(entity.getX(), entity.getY());
 		
 		if(((ParticleRenderable)render.group.get("particle")).effect.isComplete()){
-			entity.removeSelf();
+			entity.remove();
 			((ParticleRenderable)render.group.get("particle")).effect.free();
 		}
 	}

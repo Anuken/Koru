@@ -19,7 +19,7 @@ import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{
 	public static final float cellsize = World.tilesize * World.chunksize / 2;
-	public static final int maxCells = 1600;
+	public static final int maxCells = 3000;
 	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
 	private GridMap<ArrayList<KoruEntity>> map = new GridMap<ArrayList<KoruEntity>>();
 	private boolean debug = false;
@@ -68,8 +68,6 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 				ArrayList<KoruEntity> set = map.get(x, y);
 				if(set != null){
 					for(KoruEntity e : set){
-						if(e == null)
-							Koru.log("wow, a null entity");
 						if(pred.evaluate(e) && Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range){
 							con.accept(e);
 						}

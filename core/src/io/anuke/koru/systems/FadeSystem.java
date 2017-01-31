@@ -19,7 +19,7 @@ public class FadeSystem extends IteratingSystem{
 		FadeComponent fade = koru.mapComponent(FadeComponent.class);
 		fade.life += delta;
 		if(fade.life > fade.lifetime){
-			koru.removeSelf();
+			koru.remove();
 		}
 	}
 }

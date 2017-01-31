@@ -43,7 +43,7 @@ public class CommandHandler{
 			for(int i = 0; i < 30; i++){
 				KoruEntity entity = new KoruEntity(EntityType.testmob);
 				entity.position().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
-				entity.addSelf().sendSelf();
+				entity.add().send();
 			}
 			
 			print("spawning 30 entities. (now "+PURPLE+server.updater.engine.getEntities().size()+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(server.updater.delta/60f)+LIGHT_CYAN +" FPS.)");

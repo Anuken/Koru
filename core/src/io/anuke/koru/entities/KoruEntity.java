@@ -37,6 +37,24 @@ public class KoruEntity extends Entity{
 			return (map.get(c).has(entity));
 		}
 	}
+	
+	/**overridden and now safe to use (?)*/
+	public <T extends Component> T getComponent (Class<T> componentClass) {
+		return get(componentClass);
+	}
+	
+	public <T>T mapComponent(Class<T> c){
+		return (T)(Mappers.get(c, this));
+	}
+	
+	/**Equivalent to mapComponent.*/
+	public <T>T get(Class<T> c){
+		return (T)(Mappers.get(c, this));
+	}
+	
+	public <T> boolean hasComponent(Class<T> c){
+		return (Mappers.has(c, this));
+	}
 
 	private KoruEntity(){}
 
@@ -75,24 +93,6 @@ public class KoruEntity extends Entity{
 	public long getID(){
 		return id;
 	}
-	
-	/**overridden and now safe to use (?)*/
-	public <T extends Component> T getComponent (Class<T> componentClass) {
-		return get(componentClass);
-	}
-	
-	public <T>T mapComponent(Class<T> c){
-		return (T)(Mappers.get(c, this));
-	}
-	
-	/**Equivalent to mapComponent.*/
-	public <T>T get(Class<T> c){
-		return (T)(Mappers.get(c, this));
-	}
-	
-	public <T> boolean hasComponent(Class<T> c){
-		return (Mappers.has(c, this));
-	}
 
 	public void log(Object object){
 		Koru.log("[" + id + "]: " + object);
@@ -106,27 +106,27 @@ public class KoruEntity extends Entity{
 		return this.type == type;
 	}
 
-	public KoruEntity addSelf(){
+	public KoruEntity add(){
 		engine.addEntity(this);
 		return this;
 	}
 
-	public KoruEntity sendSelf(){
+	public KoruEntity send(){
 		IServer.instance().sendEntity(this);
 		return this;
 	}
 
-	public void removeSelfServer(){
+	public void removeServer(){
 		if( !server()) return;
 		IServer.instance().removeEntity(this);
 	}
 
-	public void removeSelf(){
+	public void remove(){
 		engine.removeEntity(this);
 	}
 
-	//ONLY CALL THIS ON RECONNECT
-	//seriously
+	
+	/**Only used for resetting the player's ID on reconnect*/
 	public void resetID(long id){
 		this.id = id;
 		nextID ++;

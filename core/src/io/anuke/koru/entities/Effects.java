@@ -21,7 +21,7 @@ public class Effects{
 				KoruEntity item = new KoruEntity(EntityType.item);
 				item.get(ItemComponent.class).stack = new ItemStack(stack.item, amount > stepsize ? stepsize : amount);
 				item.position().set(x + MathUtils.random(-range,range), y + MathUtils.random(-range,range));
-				item.addSelf().sendSelf();
+				item.add().send();
 				amount -= stepsize;
 			}
 		}
@@ -37,7 +37,7 @@ public class Effects{
 		entity.mapComponent(TextComponent.class).color = color;
 		entity.mapComponent(FadeComponent.class).lifetime = lifetime;
 		entity.position().set(x, y);
-		entity.sendSelf();
+		entity.send();
 	}
 
 	public static void indicator(String text, long parent, float lifetime){
@@ -50,28 +50,28 @@ public class Effects{
 		entity.mapComponent(TextComponent.class).color = color;
 		entity.mapComponent(FadeComponent.class).lifetime = lifetime;
 		entity.mapComponent(ChildComponent.class).parent = parent;
-		entity.sendSelf();
+		entity.send();
 	}
 
 	public static void particle(String name, float x, float y, Color start, Color end, float velocity, float gravity){
 		KoruEntity entity = new KoruEntity(EntityType.particle);
 		entity.position().set(x, y);
 		entity.mapComponent(ParticleComponent.class).set(name, start, end).setSpeed(gravity, velocity);
-		entity.sendSelf();
+		entity.send();
 	}
 
 	public static void particle(Material material, float x, float y){
 		KoruEntity entity = new KoruEntity(EntityType.particle);
 		entity.position().set(x, y);
 		entity.mapComponent(ParticleComponent.class).set(material);
-		entity.sendSelf();
+		entity.send();
 	}
 
 	public static void block(Material material, int x, int y){
 		KoruEntity entity = new KoruEntity(EntityType.blockanimation);
 		entity.position().set(x * World.tilesize, y * World.tilesize);
 		entity.mapComponent(DataComponent.class).data = material;
-		entity.sendSelf();
+		entity.send();
 	}
 
 	public static void particle(String name, float x, float y, Color start, Color end){

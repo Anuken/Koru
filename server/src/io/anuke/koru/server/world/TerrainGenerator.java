@@ -8,12 +8,12 @@ import io.anuke.koru.world.Tile;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
-import io.anuke.ucore.noise.VoroniNoise;
+import io.anuke.ucore.noise.VoronoiNoise;
 
 public class TerrainGenerator implements Generator{
 	final float scale = 0.9f;
-	VoroniNoise tnoise = new VoroniNoise(0, (short) 0);
-	VoroniNoise enoise = new VoroniNoise(10, (short) 0);
+	VoronoiNoise tnoise = new VoronoiNoise(0, (short) 0);
+	VoronoiNoise enoise = new VoronoiNoise(10, (short) 0);
 	RidgedPerlin per = new RidgedPerlin(2, 1, 0.4f);
 	RidgedPerlin cper = new RidgedPerlin(3, 1, 0.4f);
 

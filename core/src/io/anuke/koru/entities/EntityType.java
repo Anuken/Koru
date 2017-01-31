@@ -100,7 +100,7 @@ public enum EntityType{
 	}
 	
 	public void deathEvent(KoruEntity entity, KoruEntity killer){
-		entity.removeSelfServer();
+		entity.removeServer();
 	}
 
 	void initHitbox(KoruEntity entity, HitboxComponent hitbox){

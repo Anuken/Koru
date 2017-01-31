@@ -29,7 +29,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		
 		if(life > lifetime){
 			list.free();
-			entity.removeSelf();
+			entity.remove();
 		}
 	}
 

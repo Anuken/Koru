@@ -15,7 +15,7 @@ import io.anuke.koru.world.*;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
-import io.anuke.ucore.noise.VoroniNoise;
+import io.anuke.ucore.noise.VoronoiNoise;
 import io.anuke.ucore.util.GridMap;
 
 public class MapPreview extends ApplicationAdapter{
@@ -93,7 +93,7 @@ public class MapPreview extends ApplicationAdapter{
 	}
 	
 
-	VoroniNoise noise = new VoroniNoise(0,(short) 0){{
+	VoronoiNoise noise = new VoronoiNoise(0,(short) 0){{
 		this.setUseDistance(true);
 	}};
 	

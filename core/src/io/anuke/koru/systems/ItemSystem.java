@@ -28,7 +28,7 @@ public class ItemSystem extends KoruSystem{
 			if(dst < 2.5){
 				other.get(InventoryComponent.class).addItem(entity.get(ItemComponent.class).stack);
 				other.get(InventoryComponent.class).sendUpdate(other);
-				entity.removeSelfServer();
+				entity.removeServer();
 			}
 		});
 	}
