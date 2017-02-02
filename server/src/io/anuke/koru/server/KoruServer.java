@@ -75,9 +75,9 @@ public class KoruServer extends IServer{
 		thread.setDaemon(true);
 		thread.start();
 		
-		createGraphics();
+		//createGraphics();
 		
-		//createMapGraphics();
+		createMapGraphics();
 	}
 	
 	void createGraphics(){

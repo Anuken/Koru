@@ -59,7 +59,7 @@ public class World extends Module<Koru>{
 		float current = colors[index];
 		float next = colors[(index == colors.length-1 ?  0 : index+1)];
 		
-		return Hue.blend(Color.WHITE, Color.BLACK, 1f-(current*(1f-mod) + next*mod), ambientColor);
+		return Hue.mix(Color.WHITE, Color.BLACK, 1f-(current*(1f-mod) + next*mod), ambientColor);
 	}
 
 	@Override

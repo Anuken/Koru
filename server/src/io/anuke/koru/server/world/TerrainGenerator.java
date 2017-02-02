@@ -31,7 +31,7 @@ public class TerrainGenerator implements Generator{
 		float e = getElevation(x, y);
 		float c = getCaveDst(x, y);
 		float se = (smoothEl(x, y) + 0.4f) / 0.82f;
-		float riv = per.getValue(x, y + 100, 0.0005f);
+		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.014f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.02f));
 
 		float t = getTemperature(x, y);
 

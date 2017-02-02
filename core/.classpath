@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
 	<classpathentry kind="lib" path="lib/kryonet-2.21-all.jar" sourcepath="/home/cobalt/Documents/Other Documents/kryonet-2.20/java/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libgdx-contribs-postprocessing"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GDXGifRecorder"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
