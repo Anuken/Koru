@@ -28,12 +28,12 @@ public class TerrainGenerator implements Generator{
 		y += 99999;
 
 		Tile tile = new Tile();
-		float e = getElevation(x, y);
-		float c = getCaveDst(x, y);
+		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.012f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.018f));
+		float e = getElevation(x, y) - riv/2f;
+		float c = getCaveDst(x, y) - riv/2.5f;
 		float se = (smoothEl(x, y) + 0.4f) / 0.82f;
-		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.014f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.02f));
-
-		float t = getTemperature(x, y);
+		
+		float t = getTemperature(x, y) - riv/3f;
 
 		if(riv > 0.23f){
 			// no river edges in lakes
@@ -248,7 +248,7 @@ public class TerrainGenerator implements Generator{
 		// temp += (Noise.nnoise(x, y, octave/32, 0.125f));
 		temp += (Noise.nnoise(x, y, octave / 64, 0.125f / 2));
 		// temp += (Noise.nnoise(x, y, octave/128, 0.125f/2));
-		temp += tnoise.noise(x, y, 1 / 1000.0) / 3.4;
+		temp += tnoise.noise(x, y, 1 / 1000.0) / 3.1;
 
 		temp /= 1.05;
 
