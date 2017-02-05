@@ -29,8 +29,9 @@ public class TerrainGenerator implements Generator{
 
 		Tile tile = new Tile();
 		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.012f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.018f));
-		float e = getElevation(x, y) - riv/2f;
-		float c = getCaveDst(x, y) - riv/2.5f;
+		float elev = getElevation(x, y) - riv/2f;
+		float cave = getCaveDst(x, y) - riv/2.1f;
+		float scave = getSmoothCaveDst(x, y) - riv/2.1f;
 		float se = (smoothEl(x, y) + 0.4f) / 0.82f;
 		
 		float t = getTemperature(x, y) - riv/3f;
@@ -47,13 +48,13 @@ public class TerrainGenerator implements Generator{
 			if(riv > 0.244)
 				tile.setMaterial(Materials.deepwater);
 
-		}else if(e > 0.85){
+		}else if(elev > 0.85){
 			tile.setMaterial(Materials.ice);
 
 			if(Math.random() < 0.03)
 				tile.setBlockMaterial(Materials.next(Materials.rock1, 4));
 
-		}else if(e > 0.76){
+		}else if(elev > 0.76){
 			tile.setMaterial(Materials.stone);
 
 			if(Math.random() < 0.05)
@@ -62,10 +63,10 @@ public class TerrainGenerator implements Generator{
 		}else if(se > 0.078){
 			if(t < 0.62){
 				if(Math.random() < 1){
-					if(Math.random() < 0.02 && e < 0.35f && e > 0.12f)
+					if(Math.random() < 0.02 && elev < 0.35f && elev > 0.12f)
 						tile.setBlockMaterial(Materials.next(Materials.bush1, 3));
 				}
-				if(e < 0.4 && e > 0.1 && t < 0.6 && t > 0.41){
+				if(elev < 0.4 && elev > 0.1 && t < 0.6 && t > 0.41){
 					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4)
 						tile.setMaterial(Materials.shortgrassblock);
 
@@ -73,8 +74,8 @@ public class TerrainGenerator implements Generator{
 						tile.setMaterial(Materials.grassblock);
 				}
 
-				if(e > 0.36f && e < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3){
-					if(rand() < br(0.12f, e)){
+				if(elev > 0.36f && elev < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3){
+					if(rand() < br(0.12f, elev)){
 						if(rand() < 0.026)
 							tile.setMaterial(Materials.next(Materials.oaktree1, 6));
 						if(rand() < 0.02)
@@ -83,7 +84,7 @@ public class TerrainGenerator implements Generator{
 							tile.setBlockMaterial(Materials.next(Materials.tallgrass1, 3));
 					}
 				}
-				if((e > 0.5f && Math.random() < clamp((e - 0.5f) * 3f) / 15f)){
+				if((elev > 0.5f && Math.random() < clamp((elev - 0.5f) * 3f) / 15f)){
 					tile.setMaterial(Materials.next(Materials.pinetree1, 4));
 					if(Math.random() < 0.04)
 						tile.setMaterial(Materials.next(Materials.rock1, 4));
@@ -146,7 +147,7 @@ public class TerrainGenerator implements Generator{
 			}
 		}
 
-		if(c > 0.7){
+		if(cave > 0.7){
 			if(riv < 0.23f){
 				tile.setMaterial(Materials.stoneblock);
 				tile.setMaterial(Materials.stone);
@@ -156,8 +157,8 @@ public class TerrainGenerator implements Generator{
 					tile.setMaterial(Materials.air);
 				}
 			}
-			tile.setLight(clamp(1f - (c - 0.7f) * 60f));
-		}else if(c > 0.69){
+			tile.setLight(clamp(1f - (scave - 0.7f) * 60f));
+		}else if(cave > 0.69){
 			if(riv < 0.23f){
 				tile.setMaterial(Materials.stone);
 				tile.setMaterial(Materials.air);
@@ -237,24 +238,40 @@ public class TerrainGenerator implements Generator{
 		x += 99999 * 3;
 		y += 99999 * 3;
 
-		double temp = 0.5f;
+		double out = 0.5f;
 		float octave = 800f;
 
-		temp += (Noise.nnoise(x, y, octave, 1f));
-		temp += (Noise.nnoise(x, y, octave / 2, 0.5f));
-		temp += (Noise.nnoise(x, y, octave / 4, 0.25f));
-		// temp += (Noise.nnoise(x, y, octave/8, 0.125f));
-		// temp += (Noise.nnoise(x, y, octave/16, 0.25f));
-		// temp += (Noise.nnoise(x, y, octave/32, 0.125f));
-		temp += (Noise.nnoise(x, y, octave / 64, 0.125f / 2));
-		// temp += (Noise.nnoise(x, y, octave/128, 0.125f/2));
-		temp += tnoise.noise(x, y, 1 / 1000.0) / 3.1;
+		out += (Noise.nnoise(x, y, octave, 1f));
+		out += (Noise.nnoise(x, y, octave / 2, 0.5f));
+		out += (Noise.nnoise(x, y, octave / 4, 0.25f));
+		out += (Noise.nnoise(x, y, octave / 64, 0.125f / 2));
+		out += tnoise.noise(x, y, 1 / 1000.0) / 3.1;
 
-		temp /= 1.05;
+		out /= 1.05;
 
-		temp = UCore.clamp(temp);
+		out = UCore.clamp(out);
 
-		return (float) temp;
+		return (float) out;
+	}
+	
+	public float getSmoothCaveDst(int x, int y){
+		x += 99999 * 3;
+		y += 99999 * 3;
+
+		double out = 0.5f;
+		float octave = 800f;
+
+		out += (Noise.nnoise(x, y, octave, 1f));
+		out += (Noise.nnoise(x, y, octave / 2, 0.5f));
+		out += (Noise.nnoise(x, y, octave / 4, 0.25f));
+		out += (Noise.nnoise(x, y, octave / 64, 0.125f / 2.5f));
+		out += tnoise.noise(x, y, 1 / 1000.0) / 3.1;
+
+		out /= 1.05;
+
+		out = UCore.clamp(out);
+
+		return (float) out;
 	}
 
 	double rand(){

@@ -99,11 +99,28 @@ public class MapPreview extends ApplicationAdapter{
 	
 	RidgedPerlin per = new RidgedPerlin(1, 1, 0.4f);
 	
+	Color temp = new Color();
+	
 	int getPix(int x, int y){
 		Tile tile = gen.generate(x, y);
-		if(tile.block().getType() == MaterialType.block)return colors.get(tile.blockid, 0);
-		if(!tile.blockEmpty()) return colors.get(tile.tileid, 0)+1000;
-		return colors.get(tile.tileid, 0);
+		float light = tile.light();
+		
+		if(tile.block().getType() == MaterialType.block){
+			temp.set(colors.get(tile.blockid, 0));
+			temp.mul(light, light, light, 1f);
+			return Color.rgba8888(temp);
+		}
+		
+		if(!tile.blockEmpty()){
+			temp.set(colors.get(tile.tileid, 0)+1000);
+			temp.mul(light, light, light, 1f);
+			return Color.rgba8888(temp);
+		}
+		
+		temp.set(colors.get(tile.tileid, 0));
+		temp.mul(light, light, light, 1f);
+		
+		return Color.rgba8888(temp);
 	}
 
 	class ChunkPix{
