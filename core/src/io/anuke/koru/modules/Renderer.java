@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 
+import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
@@ -50,7 +51,7 @@ public class Renderer extends Module<Koru>{
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	private boolean init;
-	// GifRecorder recorder;
+	public GifRecorder recorder;
 
 	public Renderer() {
 		batch = new SpriteBatch();
@@ -63,6 +64,7 @@ public class Renderer extends Module<Koru>{
 		layout = new GlyphLayout();
 		buffers = new FrameBufferMap();
 		processor = new PostProcessor(false, true, true);
+		recorder = new GifRecorder(batch);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 
@@ -135,6 +137,7 @@ public class Renderer extends Module<Koru>{
 		processor.render();
 
 		batch.setProjectionMatrix(matrix);
+		recorder.update();
 		batch.begin();
 		drawGUI();
 		batch.end();
@@ -269,7 +272,6 @@ public class Renderer extends Module<Koru>{
 	}
 
 	public void drawGUI(){
-		// recorder.update();
 		
 		if(Gdx.input.isKeyJustPressed(Keys.GRAVE)) consoleOpen = !consoleOpen;
 		if(Gdx.input.isKeyJustPressed(Keys.F3)) debug = !debug;

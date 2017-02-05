@@ -28,7 +28,7 @@ public class TerrainGenerator implements Generator{
 		y += 99999;
 
 		Tile tile = new Tile();
-		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.012f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.018f));
+		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.01f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.015f));
 		float elev = getElevation(x, y) - riv/2f;
 		float cave = getCaveDst(x, y) - riv/2.1f;
 		float scave = getSmoothCaveDst(x, y) - riv/2.1f;
@@ -157,6 +157,7 @@ public class TerrainGenerator implements Generator{
 					tile.setMaterial(Materials.air);
 				}
 			}
+			if(riv < 0.24)
 			tile.setLight(clamp(1f - (scave - 0.7f) * 60f));
 		}else if(cave > 0.69){
 			if(riv < 0.23f){
