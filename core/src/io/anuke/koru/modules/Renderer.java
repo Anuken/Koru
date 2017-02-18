@@ -237,7 +237,16 @@ public class Renderer extends Module<Koru>{
 						}else{
 							renderables[rendx][rendy] = new RenderableList();
 						}
-
+						
+						RenderPool.sprite(Resources.region("lightshadow"))
+						.setDark()
+						.setPosition(worldx*12 + 6, worldy*12+12)
+						.setSize(52, 52)
+						.center()
+						.setAlpha(1f)
+						.add(renderables[rendx][rendy]);
+						
+						/*
 						if(!tile.tileEmpty() && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
@@ -265,6 +274,7 @@ public class Renderer extends Module<Koru>{
 												+ 12 + tile.block().getType().size()){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
+						*/
 					}
 				}
 			}
