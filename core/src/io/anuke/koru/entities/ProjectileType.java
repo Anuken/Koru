@@ -1,7 +1,6 @@
 package io.anuke.koru.entities;
 
 import io.anuke.koru.components.*;
-import io.anuke.ucore.spritesystem.Renderable;
 
 public enum ProjectileType{
 	bolt, 
@@ -24,7 +23,7 @@ public enum ProjectileType{
 		
 		public void draw(KoruEntity entity, RenderComponent render){
 			super.draw(entity, render);
-			render.group.get("bolt").sprite().setAlpha(entity.mapComponent(FadeComponent.class).scaled());
+			//render.group.get("bolt").sprite().setAlpha(entity.mapComponent(FadeComponent.class).scaled());
 		}
 	};
 	
@@ -45,12 +44,14 @@ public enum ProjectileType{
 	}
 	
 	public void draw(KoruEntity entity, RenderComponent render){
+		/*
 		render.group.setPosition(entity.getX(), entity.getY());
 		float x = entity.getX(), y = entity.getY();
 		for(Renderable renderable : render.group.list()){
 			renderable.sprite().setPosition(x, y, true);
 			renderable.sprite().sprite.setRotation(entity.mapComponent(ProjectileComponent.class).getRotation() - 45);
 		}
+		*/
 	}
 	
 	public void initSprite(KoruEntity entity, RenderComponent render){

@@ -106,7 +106,7 @@ public class Network extends Module<Koru>{
 					entitiesToRemove.add(packet.id);
 				}else if(object instanceof AnimationPacket){
 					AnimationPacket packet = (AnimationPacket) object;
-					t.engine.getEntity(packet.player).getComponent(RenderComponent.class).renderer.onAnimation(packet.type);
+					//t.engine.getEntity(packet.player).getComponent(RenderComponent.class).renderer.onAnimation(packet.type);
 				}else if(object instanceof SlotChangePacket){
 					SlotChangePacket packet = (SlotChangePacket) object;
 					if(t.engine.getEntity(packet.id) == null) return;

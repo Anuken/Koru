@@ -4,69 +4,78 @@ import static io.anuke.koru.modules.World.tilesize;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.graphics.Draw;
+import io.anuke.koru.graphics.KoruDrawList;
+import io.anuke.koru.graphics.Layers;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.spritesort.DrawLayer;
 
 public enum MaterialType{
 	tile{
-
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
 			
 			if(tile.block().getType() == MaterialType.block) return;
 			
-			int type = 0;
-			if(material.variants() > 1){
-				type = rand(x,y, material.variants());
-			}
+			int type = material.variants() > 1 ? rand(x,y, material.variants()) : 0;
 			
-			RenderPool.sprite(Resources.region(type == 0 ? material.name() : material.name() + type))
-					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
-			if(Koru.module(World.class).blends(x, y, material))
-				RenderPool.sprite(Resources.region(material.name() + "edge"))
-						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.center().setLayer(-material.id() * 2 + 1).add(group);
+			group.add(-material.id() * 2, (p)->{
+				Draw.rect(type == 0 ? material.name() : material.name() + type, tile(x), tile(y));
+			});
+			
+			if(Koru.module(World.class).blends(x, y, material)){
+				group.add(-material.id() * 2 + 1, (p)->{
+					Draw.rect(material.name() + "edge", tile(x), tile(y));
+				});
+			}
 		}
 	},
 	grass{
 		Color grasscolor = new Color(0x62962fff);
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
-			RenderPool.sprite(Resources.region("grass" + (rand <= 8 ? rand : "1")))
-					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
-					.setColor(grasscolor.r * material.foilageColor().r,
-							  grasscolor.g * material.foilageColor().g,
-							  grasscolor.b * material.foilageColor().b).add(group);
 			
-			if(Koru.module(World.class).blends(x, y, material))
-				RenderPool.sprite(Resources.region("grassedge"))
-						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.setColor(grasscolor.r * material.foilageColor().r,
-								grasscolor.g * material.foilageColor().g,
-								grasscolor.b * material.foilageColor().b)
-						.center().setLayer(-material.id() * 2 + 1).add(group);
+			float r = grasscolor.r * material.foilageColor().r;
+			float g = grasscolor.r * material.foilageColor().g;
+			float b = grasscolor.r * material.foilageColor().b;
+			
+			group.add(-material.id() * 2, (p)->{
+				Draw.color(r, g, b);
+				Draw.rect("grass" + (rand <= 8 ? rand : "1"), tile(x), tile(y));
+				Draw.color();
+			});
+			
+			if(Koru.module(World.class).blends(x, y, material)){
+				group.add(-material.id() * 2 + 1, (p)->{
+					Draw.color(r, g, b);
+					Draw.rect("grassedge", tile(x), tile(y));
+					Draw.color();
+				});
+			}
 		}
 	},
 	water{
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			int type = 0;
-			if(material.variants() > 1){
-				type = rand(x,y, material.variants());
-			}
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			int type = material.variants() > 1 ? rand(x,y, material.variants()) : 0;
 			
-			RenderPool.sprite(Resources.region(type == 0 ? material.name() : material.name() + type))
-					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
-			if(Koru.module(World.class).blends(x, y, material))
-				RenderPool.sprite(Resources.region(material.name() + "edge"))
-						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.center().setLayer(-material.id() * 2 + 1).add(group);
+			group.add(-material.id() * 2, (p)->{
+				Draw.rect(type == 0 ? material.name() : material.name() + type, tile(x), tile(y));
+			});
+			
+			if(Koru.module(World.class).blends(x, y, material)){
+				group.add(-material.id() * 2 + 1, (p)->{
+					Draw.rect(material.name() + "edge", tile(x), tile(y));
+				});
+			}
 		}
 
 		public boolean solid(){
@@ -80,18 +89,16 @@ public enum MaterialType{
 		}
 	},
 	block{
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			RenderPool.sprite(Resources.region(material.name()))
-			.scaleBy(0, 0.001f)
-			.setPosition(itile(x), itile(y))
-			//.setColor(Hue.lightness(tile.light()))
-			.setProvider(SortProviders.object).add(group);
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
 			
-			RenderPool.sprite(Resources.region("walldropshadow"))
-			.setAsShadow()
-			.setPosition(tile(x), tile(y))
-			.center()
-			.setProvider(SortProviders.tile).add(group);
+			group.add(itile(y), DrawLayer.object, (p)->{
+				Draw.grect(material.name(), tile(x), itile(y));
+			});
+			
+			group.add(Layers.shadow, (p)->{
+				Draw.rect("walldropshadow", tile(x), tile(y));
+			});
 		}
 
 		public boolean tile(){
@@ -129,8 +136,10 @@ public enum MaterialType{
 		}
 	},
 	torch(new Color(0x744a28ff)){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			
+		
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			/*
 			new SpriteRenderable(Resources.region("torchflame1")){
 				public void draw(Batch batch){
 					sprite.setRegion(Resources.region("torchflame" + frame(x,y)));
@@ -159,6 +168,7 @@ public enum MaterialType{
 					.setProvider(SortProviders.object).sprite();
 
 			sprite.add(group);
+			*/
 		}
 		
 		int frame(int x, int y){
@@ -171,13 +181,14 @@ public enum MaterialType{
 	},
 	tree(Hue.rgb(80, 53, 30)){
 
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
-			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name()))
-					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())
-					.setProvider(SortProviders.object).sprite();
-
-			sprite.add(group);
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			
+			group.add(tile(y), DrawLayer.object, (p)->{
+				Draw.grect(material.name(), tile(x), tile(y) + material.offset());
+			});
+			
+			group.shadow(material.name(), tile(x), tile(y)-material.offset());
 		}
 		
 		@Override
@@ -200,7 +211,9 @@ public enum MaterialType{
 		}
 	},
 	foilage(Hue.rgb(69, 109, 29, 0.02f)){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
 			
 		//	RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
 		//			.setColor(tile.tile().foilageColor()).addShadow(group, Resources.atlas(), - material.offset())
@@ -214,7 +227,9 @@ public enum MaterialType{
 	tallgrassblock(){
 		static final float add = 0.94f;
 	
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			/*
 			float yadd = 0;
 			int blend = blendStage(x, y);
 			
@@ -246,6 +261,7 @@ public enum MaterialType{
 						.setPosition(itile(x) + 1, tile(y) + 1 + yadd);
 				sh.add(group);
 			}
+			*/
 		}
 		
 		public boolean tile(){
@@ -258,8 +274,10 @@ public enum MaterialType{
 	},
 	shortgrassblock{
 		static final float add = 0.96f;
-
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			/*
 			float xadd = 0;
 
 			if(!isGrass(x, y - 1)){
@@ -285,6 +303,7 @@ public enum MaterialType{
 				sh.setPosition(itile(x)+1, tile(y)+2+ xadd);
 				sh.add(group);
 			}
+			*/
 		}
 		
 		public int size(){
@@ -296,11 +315,13 @@ public enum MaterialType{
 		}
 	},
 	object{
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
-			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
-			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			group.add(tile(y), DrawLayer.object, (p)->{
+				Draw.grect(material.name(), tile(x), tile(y) + material.offset());
+			});
+			
+			group.shadow(material.name(), tile(x), tile(y)-material.offset());
 		}
 
 		public boolean tile(){
@@ -308,11 +329,14 @@ public enum MaterialType{
 		}
 	},
 	workbench{
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
-			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
-			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
+		@Override
+		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			
+			group.add(tile(y) + material.offset(), DrawLayer.object, (p)->{
+				Draw.grect(material.name(), x, y);
+			});
+			
+			group.shadow(material.name(), tile(x), tile(y) + material.offset() - material.offset());
 		}
 
 		public boolean tile(){
@@ -331,8 +355,8 @@ public enum MaterialType{
 		this.color = color;
 	}
 
-	public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-
+	public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+		
 	}
 
 	public boolean solid(){

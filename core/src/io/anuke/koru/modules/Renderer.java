@@ -16,8 +16,7 @@ import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.FrameBufferLayer;
-import io.anuke.koru.graphics.LightEffect;
+import io.anuke.koru.graphics.*;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
 import io.anuke.koru.network.InputHandler;
@@ -29,7 +28,9 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesort.DrawHandler;
 import io.anuke.ucore.spritesort.DrawHandler.PointerDrawer;
 import io.anuke.ucore.spritesort.DrawPointer;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.spritesystem.RenderableHandler;
+import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
@@ -50,7 +51,7 @@ public class Renderer extends Module<Koru>{
 	public LightEffect light;
 	public KoruEntity player;
 	public SpriteRenderable block;
-	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
+	public KoruDrawList[][] renderables = new KoruDrawList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	private boolean init;
@@ -68,6 +69,7 @@ public class Renderer extends Module<Koru>{
 		buffers = new FrameBufferMap();
 		processor = new PostProcessor(false, true, true);
 		recorder = new GifRecorder(batch);
+		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 
@@ -133,7 +135,7 @@ public class Renderer extends Module<Koru>{
 		clearScreen();
 		batch.begin();
 		drawMap();
-		RenderableHandler.instance().renderAll(batch);
+		DrawHandler.instance().draw();
 		drawOverlay();
 		batch.end();
 
@@ -238,7 +240,7 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new RenderableList();
+							renderables[rendx][rendy] = new KoruDrawList();
 						}
 
 						if(!tile.tileEmpty() && Math
@@ -249,13 +251,12 @@ public class Renderer extends Module<Koru>{
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
-								RenderPool.sprite(Resources.region("lightshadow"))
-								.setDark()
-								.setPosition(worldx*12 + 6, worldy*12+12)
-								.setSize(52, 52)
-								.center()
-								.setAlpha(1f-tile.light())
-								.add(renderables[rendx][rendy]);
+								
+								renderables[rendx][rendy].add(Layers.dark, (p)->{
+									Draw.color(1f-tile.light());
+									Draw.rect("lightshadow", worldx*12 + 6, worldy*12+12, 52, 52);
+									Draw.color();
+								});
 							}
 						}
 
@@ -352,7 +353,6 @@ public class Renderer extends Module<Koru>{
 		batch.begin();
 
 		for(DrawPointer layer : pointers){
-
 			boolean ended = false;
 
 			if(selected != null && (!selected.layerEquals(layer))){

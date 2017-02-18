@@ -139,7 +139,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 		// don't remove local player
 		if(render != null && !(entity.getComponent(ConnectionComponent.class) != null
 				&& entity.getComponent(ConnectionComponent.class).local == true))
-			render.group.free();
+			render.list.free();
 
 		entities.remove(((KoruEntity) entity).getID());
 	}
