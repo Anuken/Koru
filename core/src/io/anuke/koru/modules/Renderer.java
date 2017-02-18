@@ -29,10 +29,10 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
 
 public class Renderer extends Module<Koru>{
-	public static final int viewrangex = 28;
-	public static final int viewrangey = 26;
+	public static final int viewrangex = 128;
+	public static final int viewrangey = 126;
 	public final float GUIscale = 5f;
-	public final int scale = 4;
+	public final int scale = 1;
 	public boolean debug = false, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;
@@ -238,20 +238,12 @@ public class Renderer extends Module<Koru>{
 							renderables[rendx][rendy] = new RenderableList();
 						}
 						
-						RenderPool.sprite(Resources.region("lightshadow"))
-						.setDark()
-						.setPosition(worldx*12 + 6, worldy*12+12)
-						.setSize(52, 52)
-						.center()
-						.setAlpha(1f)
-						.add(renderables[rendx][rendy]);
 						
-						/*
-						if(!tile.tileEmpty() && Math
+						if(!tile.tileEmpty() /*&& Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 36){
+												+ 36*/){
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
@@ -266,15 +258,15 @@ public class Renderer extends Module<Koru>{
 						}
 
 						if(!tile.blockEmpty()
-								&& Math.abs(
+								/*&& Math.abs(
 										worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom
 												+ 12 + tile.block().getType().size()
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 12 + tile.block().getType().size()){
+												+ 12 + tile.block().getType().size()*/){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
-						*/
+						
 					}
 				}
 			}
