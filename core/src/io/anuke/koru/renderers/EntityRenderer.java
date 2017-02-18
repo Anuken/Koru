@@ -3,6 +3,7 @@ package io.anuke.koru.renderers;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.ucore.spritesystem.LambdaRenderable.Drawable;
+import io.anuke.ucore.spritesystem.Sorter;
 
 public abstract class EntityRenderer{
 	protected boolean init;
@@ -23,7 +24,7 @@ public abstract class EntityRenderer{
 	}
 	
 	public void draw(Drawable d){
-		render.list.add(0f, d);
+		render.list.add(0f, Sorter.object, d);
 	}
 	
 	float shift(float i){

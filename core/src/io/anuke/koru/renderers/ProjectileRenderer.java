@@ -19,7 +19,7 @@ public class ProjectileRenderer extends EntityRenderer{
 		//TODO specify shadows or not?
 		//sprite.addShadow(render.group, Resources.atlas());
 		sprite.setProvider(Sorter.object);
-		sprite.add("bolt", render.group);
+		//sprite.add("bolt", render.group);
 	}
 
 }

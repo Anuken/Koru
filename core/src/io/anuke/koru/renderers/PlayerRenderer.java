@@ -1,6 +1,6 @@
 package io.anuke.koru.renderers;
 
-import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.koru.graphics.Draw;
 
 public class PlayerRenderer extends EntityRenderer{
 	AnimationType animation;
@@ -42,8 +42,8 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	private void animate(){
 		if(animation == AnimationType.attack){
-			SpriteRenderable item = render.group.get("item").sprite();
-			item.sprite.rotate(fscl()*(duration*8));
+		//	SpriteRenderable item = render.group.get("item").sprite();
+		//	item.sprite.rotate(fscl()*(duration*8));
 		}
 	}
 	
@@ -51,8 +51,7 @@ public class PlayerRenderer extends EntityRenderer{
 	public void init(){
 		draw(l->{
 			l.layer = entity.getY();
-			
-			
+			Draw.grect("crab", entity.getX(), entity.getY());
 		});
 		/*
 		new SpriteRenderable(Resources.region("crab"))

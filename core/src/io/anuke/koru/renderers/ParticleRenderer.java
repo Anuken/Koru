@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
 
 import io.anuke.koru.components.ParticleComponent;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.ParticleRenderable;
 
 public class ParticleRenderer extends EntityRenderer{
 	
@@ -23,6 +22,7 @@ public class ParticleRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){
+		/*
 		render.group.get("particle").setPosition(entity.getX(), entity.getY());
 		//render.layers.update(entity.getX(), entity.getY());
 		
@@ -30,6 +30,7 @@ public class ParticleRenderer extends EntityRenderer{
 			entity.remove();
 			((ParticleRenderable)render.group.get("particle")).effect.free();
 		}
+		*/
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class ParticleRenderer extends EntityRenderer{
 		value[4] = end.g;
 		value[5] = end.b;
 		
-		render.group.add("particle", new ParticleRenderable(particle));
+		//render.group.add("particle", new ParticleRenderable(particle));
 	}
 
 }
