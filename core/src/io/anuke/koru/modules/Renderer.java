@@ -242,7 +242,14 @@ public class Renderer extends Module<Koru>{
 						}else{
 							tilearray[rendx][rendy] = new KoruDrawList();
 						}
-
+						
+						tilearray[rendx][rendy].add(Layers.dark, (p)->{
+							Draw.color(0f);
+							Draw.rect("lightshadow", worldx*12 + 6, worldy*12+12, 52, 52);
+							Draw.color();
+						});
+						
+						/*
 						if(!tile.tileEmpty() && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
@@ -269,6 +276,7 @@ public class Renderer extends Module<Koru>{
 												+ 12 + tile.block().getType().size()){
 							tile.block().getType().draw(tilearray[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
+						*/
 					}
 				}
 			}
