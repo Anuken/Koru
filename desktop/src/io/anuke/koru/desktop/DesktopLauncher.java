@@ -19,7 +19,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(d.width, d.height-100);
 		config.setWindowIcon("sprites/icon.png");
 		config.setTitle("Koru");
-		config.useVsync(true);
+		config.useVsync(false);
 		
 		new Lwjgl3Application(new Koru(new KryoClient()), config);
 		
