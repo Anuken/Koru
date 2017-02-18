@@ -41,6 +41,9 @@ public enum MaterialType{
 		
 		@Override
 		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			
+			if(tile.block().getType() == MaterialType.block) return;
+			
 			int rand = rand(x,y,16);
 			
 			float r = grasscolor.r * material.foilageColor().r;
@@ -65,6 +68,9 @@ public enum MaterialType{
 	water{
 		@Override
 		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
+			
+			if(tile.block().getType() == MaterialType.block) return;
+			
 			int type = material.variants() > 1 ? rand(x,y, material.variants()) : 0;
 			
 			group.add(-material.id() * 2, DrawLayer.tile, (p)->{
