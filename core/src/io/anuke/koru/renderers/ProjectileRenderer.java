@@ -2,7 +2,7 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.ProjectileComponent;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class ProjectileRenderer extends EntityRenderer{
@@ -18,7 +18,7 @@ public class ProjectileRenderer extends EntityRenderer{
 		sprite.sprite.setOriginCenter();
 		//TODO specify shadows or not?
 		//sprite.addShadow(render.group, Resources.atlas());
-		sprite.setProvider(SortProviders.object);
+		sprite.setProvider(Sorter.object);
 		sprite.add("bolt", render.group);
 	}
 

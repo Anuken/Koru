@@ -8,7 +8,7 @@ import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 import io.anuke.ucore.spritesystem.TextRenderable;
 
@@ -61,18 +61,18 @@ public class PlayerRenderer extends EntityRenderer{
 		
 		new SpriteRenderable(Resources.region("crab"))
 		.addShadow(render.group, Resources.atlas())
-		.setProvider(SortProviders.object)
+		.setProvider(Sorter.object)
 		.add("crab", render.group);
 		
 		SpriteRenderable item = new SpriteRenderable(Resources.region("woodaxeitem"))
-		.setProvider(SortProviders.object).sprite();
+		.setProvider(Sorter.object).sprite();
 		
 		item.add("item", render.group);
 		
 		new TextRenderable(Resources.font(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
 		.align(Align.center)
 		.setColor(Color.CORAL)
-		.setProvider(SortProviders.object)
+		.setProvider(Sorter.object)
 		.add("name", render.group);
 		
 	}

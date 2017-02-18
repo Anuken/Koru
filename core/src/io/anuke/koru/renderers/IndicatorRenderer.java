@@ -9,7 +9,7 @@ import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.TextComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.TextRenderable;
 
 public class IndicatorRenderer extends EntityRenderer{
@@ -34,7 +34,7 @@ public class IndicatorRenderer extends EntityRenderer{
 	
 		new TextRenderable(Resources.font(), entity.mapComponent(TextComponent.class).text)
 		.align(Align.right)
-		.setProvider(SortProviders.object)
+		.setProvider(Sorter.object)
 		.add("text", render.group);
 		
 		ChildComponent child = entity.mapComponent(ChildComponent.class);

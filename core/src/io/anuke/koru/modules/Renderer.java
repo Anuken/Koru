@@ -29,10 +29,10 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
 
 public class Renderer extends Module<Koru>{
-	public static final int viewrangex = 128;
-	public static final int viewrangey = 126;
+	public static final int viewrangex = 28;
+	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
-	public final int scale = 1;
+	public final int scale = 4;
 	public boolean debug = false, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;
@@ -47,6 +47,7 @@ public class Renderer extends Module<Koru>{
 	public LightEffect light;
 	public KoruEntity player;
 	public SpriteRenderable block;
+	public Sprite shadowSprite;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
@@ -107,7 +108,9 @@ public class Renderer extends Module<Koru>{
 
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
-		(block = new SpriteRenderable(Resources.region("block")).setProvider(SortProviders.object).sprite()).add();
+		(block = new SpriteRenderable(Resources.region("block")).setProvider(Sorter.object).sprite()).add();
+		shadowSprite = new Sprite(Resources.region("lightshadow"));
+		shadowSprite.setSize(52, 52);
 	}
 
 	@Override
@@ -174,7 +177,7 @@ public class Renderer extends Module<Koru>{
 			}else{
 				block.setRegion(Resources.region("block"));
 				block.sprite.setSize(12, 20);
-				block.setProvider(SortProviders.object);
+				block.setProvider(Sorter.object);
 			}
 		}else{
 			block.setColor(Color.CLEAR);

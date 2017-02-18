@@ -2,7 +2,7 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.ItemComponent;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class ItemRenderer extends EntityRenderer{
@@ -19,7 +19,7 @@ public class ItemRenderer extends EntityRenderer{
 		
 		new SpriteRenderable(Resources.region(Resources.hasRegion(itemname + "chunk") ? itemname + "chunk" : itemname + "item"))
 		.addShadow(render.group, Resources.atlas())
-		.setProvider(SortProviders.object)
+		.setProvider(Sorter.object)
 		.add("item", render.group);
 	}
 }

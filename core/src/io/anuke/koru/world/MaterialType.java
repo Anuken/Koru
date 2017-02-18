@@ -85,13 +85,13 @@ public enum MaterialType{
 			.scaleBy(0, 0.001f)
 			.setPosition(itile(x), itile(y))
 			//.setColor(Hue.lightness(tile.light()))
-			.setProvider(SortProviders.object).add(group);
+			.setProvider(Sorter.object).add(group);
 			
 			RenderPool.sprite(Resources.region("walldropshadow"))
 			.setAsShadow()
 			.setPosition(tile(x), tile(y))
 			.center()
-			.setProvider(SortProviders.tile).add(group);
+			.setProvider(Sorter.tile).add(group);
 		}
 
 		public boolean tile(){
@@ -156,7 +156,7 @@ public enum MaterialType{
 					batch.draw(Resources.region("torchflame" + frame(x,y)), sprite.getX(), sprite.getY());
 				}
 			}.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())
-					.setProvider(SortProviders.object).sprite();
+					.setProvider(Sorter.object).sprite();
 
 			sprite.add(group);
 		}
@@ -175,7 +175,7 @@ public enum MaterialType{
 
 			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name()))
 					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX().addShadow(group, Resources.atlas(), -material.offset())
-					.setProvider(SortProviders.object).sprite();
+					.setProvider(Sorter.object).sprite();
 
 			sprite.add(group);
 		}
@@ -232,7 +232,7 @@ public enum MaterialType{
 
 			for(int i = 0; i < 2; i++){
 				SpriteRenderable a = RenderPool.sprite(Resources.region("grassblock2" + blendn));
-				a.setProvider(SortProviders.object);
+				a.setProvider(Sorter.object);
 				
 				float gadd = i == 1 ? 1f : add;
 				a.sprite.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd, 1f);
@@ -273,7 +273,7 @@ public enum MaterialType{
 				float gadd = (i %2== 0 ? 1f : add);
 				SpriteRenderable a = RenderPool.sprite(Resources.region("grassf1"));
 				
-				a.setProvider(SortProviders.object);
+				a.setProvider(Sorter.object);
 				a.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd);
 				
 				a.setPosition(itile(x), itile(y) + i * (tilesize / iter) + xadd);
@@ -300,7 +300,7 @@ public enum MaterialType{
 
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
+					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
 		}
 
 		public boolean tile(){
@@ -312,7 +312,7 @@ public enum MaterialType{
 
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(SortProviders.object).add(group);
+					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
 		}
 
 		public boolean tile(){
