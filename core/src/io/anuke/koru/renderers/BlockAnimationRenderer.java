@@ -34,7 +34,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		if(entity.mapComponent(DataComponent.class).data == null){
 			throw new RuntimeException("No material specified in the data! Did you set the renderer material?");
 		}

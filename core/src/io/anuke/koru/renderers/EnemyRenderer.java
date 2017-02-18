@@ -13,7 +13,7 @@ public class EnemyRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		new SpriteRenderable(Resources.region("genericmonster"))
 		.addShadow(render.group, Resources.atlas())
 		.setProvider(Sorter.object)

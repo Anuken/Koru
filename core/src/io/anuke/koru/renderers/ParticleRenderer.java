@@ -33,7 +33,7 @@ public class ParticleRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		ParticleComponent component = entity.mapComponent(ParticleComponent.class);
 		PooledEffect particle = Resources.particle(entity.mapComponent(ParticleComponent.class).name);
 		setVelocity(particle, component.velocity, component.gravity);

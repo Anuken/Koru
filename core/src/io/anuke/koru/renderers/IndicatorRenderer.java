@@ -30,7 +30,7 @@ public class IndicatorRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 	
 		new TextRenderable(Resources.font(), entity.mapComponent(TextComponent.class).text)
 		.align(Align.right)

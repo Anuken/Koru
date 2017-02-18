@@ -2,6 +2,7 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.ucore.spritesystem.LambdaRenderable.Drawable;
 
 public abstract class EntityRenderer{
 	protected boolean init;
@@ -9,16 +10,20 @@ public abstract class EntityRenderer{
 	protected RenderComponent render;
 	
 	abstract protected void render();
-	abstract protected void initRender();
+	abstract protected void init();
 	
 	public final void renderInternal(KoruEntity entity, RenderComponent render){
 		this.entity = entity;
 		this.render = render;
 		if(!init){
-			initRender();
+			init();
 			init = true;
 		}
 		this.render();
+	}
+	
+	public void draw(Drawable d){
+		render.list.add(0f, d);
 	}
 	
 	float shift(float i){

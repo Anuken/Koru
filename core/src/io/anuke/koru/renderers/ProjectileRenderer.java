@@ -13,7 +13,7 @@ public class ProjectileRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		SpriteRenderable sprite = new SpriteRenderable(Resources.region(entity.get(ProjectileComponent.class).type.name()));//.add("bolt", render.group);
 		sprite.sprite.setOriginCenter();
 		//TODO specify shadows or not?

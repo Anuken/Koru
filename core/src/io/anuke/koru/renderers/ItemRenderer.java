@@ -14,7 +14,7 @@ public class ItemRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		String itemname = entity.get(ItemComponent.class).stack.item.name();
 		
 		new SpriteRenderable(Resources.region(Resources.hasRegion(itemname + "chunk") ? itemname + "chunk" : itemname + "item"))

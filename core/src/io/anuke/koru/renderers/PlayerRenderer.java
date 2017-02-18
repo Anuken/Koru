@@ -1,16 +1,6 @@
 package io.anuke.koru.renderers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Align;
-
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
-import io.anuke.ucore.spritesystem.TextRenderable;
 
 public class PlayerRenderer extends EntityRenderer{
 	AnimationType animation;
@@ -18,7 +8,7 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	@Override
 	public void render(){
-		
+		/*
 		render.group.get("crab").sprite().setPosition(entity.getX(), entity.getY()).centerX();
 		
 		render.group.get("crab").sprite().sprite.setRegion(Resources.region("crab" + dir() + 
@@ -47,6 +37,7 @@ public class PlayerRenderer extends EntityRenderer{
 			duration -= Gdx.graphics.getDeltaTime()*60;
 			animate();
 		}
+		*/
 	}
 	
 	private void animate(){
@@ -57,8 +48,13 @@ public class PlayerRenderer extends EntityRenderer{
 	}
 	
 	@Override
-	public void initRender(){
-		
+	public void init(){
+		draw(l->{
+			l.layer = entity.getY();
+			
+			
+		});
+		/*
 		new SpriteRenderable(Resources.region("crab"))
 		.addShadow(render.group, Resources.atlas())
 		.setProvider(Sorter.object)
@@ -74,6 +70,7 @@ public class PlayerRenderer extends EntityRenderer{
 		.setColor(Color.CORAL)
 		.setProvider(Sorter.object)
 		.add("name", render.group);
+		*/
 		
 	}
 	
