@@ -26,6 +26,9 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.*;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.spritesort.DrawHandler;
+import io.anuke.ucore.spritesort.DrawHandler.PointerDrawer;
+import io.anuke.ucore.spritesort.DrawPointer;
 import io.anuke.ucore.spritesystem.*;
 
 public class Renderer extends Module<Koru>{
@@ -68,9 +71,9 @@ public class Renderer extends Module<Koru>{
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 
-		RenderableHandler.instance().setLayerManager(new LayerManager(){
-			public void draw(Array<Renderable> renderables, Batch batch){
-				drawRenderables(renderables);
+		DrawHandler.instance().setDrawer(new PointerDrawer(){
+			public void draw(Array<DrawPointer> pointers){
+				drawPointers(pointers);
 			}
 		});
 
@@ -339,7 +342,7 @@ public class Renderer extends Module<Koru>{
 
 	}
 
-	void drawRenderables(Array<Renderable> renderables){
+	void drawPointers(Array<DrawPointer> pointers){
 		batch.end();
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
@@ -348,7 +351,7 @@ public class Renderer extends Module<Koru>{
 
 		batch.begin();
 
-		for(Renderable layer : renderables){
+		for(DrawPointer layer : pointers){
 
 			boolean ended = false;
 
@@ -363,7 +366,7 @@ public class Renderer extends Module<Koru>{
 				for(FrameBufferLayer fl : blayers){
 					if(fl.layerEquals(layer)){
 						if(ended)
-							layer.draw(batch);
+							layer.draw();
 						selected = fl;
 						beginBufferLayer(selected);
 						break;
@@ -371,7 +374,7 @@ public class Renderer extends Module<Koru>{
 				}
 			}
 
-			layer.draw(batch);
+			layer.draw();
 		}
 		if(selected != null){
 			endBufferLayer(selected, blayers);

@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.koru.modules.Renderer;
-import io.anuke.ucore.spritesystem.Renderable;
+import io.anuke.ucore.spritesort.DrawPointer;
 
 public enum FrameBufferLayer{
 	shadow("shadow", -999999){
@@ -46,8 +46,8 @@ public enum FrameBufferLayer{
 
 	protected void begin(){}
 
-	public boolean layerEquals(Renderable l){
-		return MathUtils.isEqual(l.layer(), layer, 0.01f);
+	public boolean layerEquals(DrawPointer l){
+		return MathUtils.isEqual(l.layer, layer, 0.01f);
 	}
 
 	protected void loadShader(){

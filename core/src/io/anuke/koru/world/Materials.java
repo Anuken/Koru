@@ -91,13 +91,14 @@ public enum Materials implements Material{
 	pinetree3(MaterialType.tree, -3f){{addDrop(Items.wood, 10); breakt(90);}}, 
 	pinetree4(MaterialType.tree, -5f){{addDrop(Items.wood, 10); breakt(90);}}, 
 	pinesapling(MaterialType.object, 1, false){{addDrop(Items.pinecone, 1);}}, 
-	stonepillar(MaterialType.block, 100){{addDrop(Items.stone, 2); color = new Color(0x744a28ff);}},
-	stoneblock(MaterialType.block, 50){{addDrop(Items.stone, 5); color = new Color(0x744a28ff);}},
+	stonepillar(MaterialType.block, 100){{addDrop(Items.stone, 2); color = new Color(0x777777ff);}},
+	stoneblock(MaterialType.block, 50){{addDrop(Items.stone, 5); color = new Color(0x777777ff);}},
 	woodblock(MaterialType.block, 60){{addDrop(Items.wood, 2); color = new Color(0x744a28ff);}},
 	hatcher(MaterialType.hatcher),
 	torch(MaterialType.torch, 20){{addDrop(Items.wood, 1);}},
 	box(MaterialType.chest){{addDrop(Items.wood, 10);}},
 	workbench(MaterialType.workbench){{addDrop(Items.wood, 10);}};
+	
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
 	private int breaktime;
