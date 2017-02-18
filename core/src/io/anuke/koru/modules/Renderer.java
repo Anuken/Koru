@@ -51,7 +51,7 @@ public class Renderer extends Module<Koru>{
 	public LightEffect light;
 	public KoruEntity player;
 	public SpriteRenderable block;
-	public KoruDrawList[][] renderables = new KoruDrawList[World.chunksize * World.loadrange * 2][World.chunksize
+	public KoruDrawList[][] tilearray = new KoruDrawList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	private boolean init;
@@ -229,18 +229,18 @@ public class Renderer extends Module<Koru>{
 						if(resetID != 0 && (tile.blockid != resetID && tile.tileid != resetID))
 							continue;
 
-						if(renderables[rendx][rendy] != null)
-							renderables[rendx][rendy].free();
+						if(tilearray[rendx][rendy] != null)
+							tilearray[rendx][rendy].free();
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey)
 							continue;
 
 						if(Math.abs(lastcamx - camx) > viewrangex || Math.abs(lastcamy - camy) > viewrangey)
 							continue;
 
-						if(renderables[rendx][rendy] != null){
-							renderables[rendx][rendy].free();
+						if(tilearray[rendx][rendy] != null){
+							tilearray[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new KoruDrawList();
+							tilearray[rendx][rendy] = new KoruDrawList();
 						}
 
 						if(!tile.tileEmpty() && Math
@@ -248,11 +248,11 @@ public class Renderer extends Module<Koru>{
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
 												+ 36){
-							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
+							tile.tile().getType().draw(tilearray[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
 								
-								renderables[rendx][rendy].add(Layers.dark, (p)->{
+								tilearray[rendx][rendy].add(Layers.dark, (p)->{
 									Draw.color(1f-tile.light());
 									Draw.rect("lightshadow", worldx*12 + 6, worldy*12+12, 52, 52);
 									Draw.color();
@@ -267,7 +267,7 @@ public class Renderer extends Module<Koru>{
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
 												+ 12 + tile.block().getType().size()){
-							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
+							tile.block().getType().draw(tilearray[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
 					}
 				}
@@ -347,11 +347,12 @@ public class Renderer extends Module<Koru>{
 		batch.end();
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
-
+		
 		FrameBufferLayer selected = null;
 
 		batch.begin();
-
+		
+		
 		for(DrawPointer layer : pointers){
 			boolean ended = false;
 
@@ -376,6 +377,7 @@ public class Renderer extends Module<Koru>{
 
 			layer.draw();
 		}
+		
 		if(selected != null){
 			endBufferLayer(selected, blayers);
 			selected = null;

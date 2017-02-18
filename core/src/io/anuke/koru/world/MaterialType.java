@@ -25,12 +25,12 @@ public enum MaterialType{
 			
 			int type = material.variants() > 1 ? rand(x,y, material.variants()) : 0;
 			
-			group.add(-material.id() * 2, (p)->{
+			group.add(-material.id() * 2, DrawLayer.tile, (p)->{
 				Draw.rect(type == 0 ? material.name() : material.name() + type, tile(x), tile(y));
 			});
 			
 			if(Koru.module(World.class).blends(x, y, material)){
-				group.add(-material.id() * 2 + 1, (p)->{
+				group.add(-material.id() * 2 + 1, DrawLayer.tile, (p)->{
 					Draw.rect(material.name() + "edge", tile(x), tile(y));
 				});
 			}
@@ -44,17 +44,17 @@ public enum MaterialType{
 			int rand = rand(x,y,16);
 			
 			float r = grasscolor.r * material.foilageColor().r;
-			float g = grasscolor.r * material.foilageColor().g;
-			float b = grasscolor.r * material.foilageColor().b;
+			float g = grasscolor.g * material.foilageColor().g;
+			float b = grasscolor.b * material.foilageColor().b;
 			
-			group.add(-material.id() * 2, (p)->{
+			group.add(-material.id() * 2, DrawLayer.tile, (p)->{
 				Draw.color(r, g, b);
 				Draw.rect("grass" + (rand <= 8 ? rand : "1"), tile(x), tile(y));
 				Draw.color();
 			});
 			
 			if(Koru.module(World.class).blends(x, y, material)){
-				group.add(-material.id() * 2 + 1, (p)->{
+				group.add(-material.id() * 2 + 1, DrawLayer.tile, (p)->{
 					Draw.color(r, g, b);
 					Draw.rect("grassedge", tile(x), tile(y));
 					Draw.color();
@@ -67,12 +67,12 @@ public enum MaterialType{
 		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
 			int type = material.variants() > 1 ? rand(x,y, material.variants()) : 0;
 			
-			group.add(-material.id() * 2, (p)->{
+			group.add(-material.id() * 2, DrawLayer.tile, (p)->{
 				Draw.rect(type == 0 ? material.name() : material.name() + type, tile(x), tile(y));
 			});
 			
 			if(Koru.module(World.class).blends(x, y, material)){
-				group.add(-material.id() * 2 + 1, (p)->{
+				group.add(-material.id() * 2 + 1, DrawLayer.tile, (p)->{
 					Draw.rect(material.name() + "edge", tile(x), tile(y));
 				});
 			}
@@ -96,7 +96,7 @@ public enum MaterialType{
 				Draw.grect(material.name(), tile(x), itile(y));
 			});
 			
-			group.add(Layers.shadow, (p)->{
+			group.add(Layers.shadow, DrawLayer.tile, (p)->{
 				Draw.rect("walldropshadow", tile(x), tile(y));
 			});
 		}
@@ -188,7 +188,7 @@ public enum MaterialType{
 				Draw.grect(material.name(), tile(x), tile(y) + material.offset());
 			});
 			
-			group.shadow(material.name(), tile(x), tile(y)-material.offset());
+			group.shadow(material.name(), tile(x), tile(y));
 		}
 		
 		@Override
@@ -321,7 +321,7 @@ public enum MaterialType{
 				Draw.grect(material.name(), tile(x), tile(y) + material.offset());
 			});
 			
-			group.shadow(material.name(), tile(x), tile(y)-material.offset());
+			group.shadow(material.name(), tile(x), tile(y));
 		}
 
 		public boolean tile(){
@@ -333,10 +333,10 @@ public enum MaterialType{
 		public void draw(KoruDrawList group, Material material, Tile tile, int x, int y){
 			
 			group.add(tile(y) + material.offset(), DrawLayer.object, (p)->{
-				Draw.grect(material.name(), x, y);
+				Draw.grect(material.name(), x, y + material.offset());
 			});
 			
-			group.shadow(material.name(), tile(x), tile(y) + material.offset() - material.offset());
+			group.shadow(material.name(), tile(x), tile(y));
 		}
 
 		public boolean tile(){

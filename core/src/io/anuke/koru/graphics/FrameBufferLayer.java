@@ -11,7 +11,7 @@ import io.anuke.koru.modules.Renderer;
 import io.anuke.ucore.spritesort.DrawPointer;
 
 public enum FrameBufferLayer{
-	shadow("shadow", -999999){
+	shadow("shadow", Layers.shadow){
 		public void end(){
 			batch.setColor(0,0,0,0.1f);
 			drawFull();
