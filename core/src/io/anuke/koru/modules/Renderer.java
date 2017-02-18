@@ -33,8 +33,8 @@ import io.anuke.ucore.spritesystem.SortProviders;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class Renderer extends Module<Koru>{
-	public static final int viewrangex = 28;
-	public static final int viewrangey = 26;
+	public static final int viewrangex = 128;
+	public static final int viewrangey = 126;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
 	public boolean debug = false, consoleOpen = false;
@@ -231,6 +231,7 @@ public class Renderer extends Module<Koru>{
 
 						if(tilearray[rendx][rendy] != null)
 							tilearray[rendx][rendy].free();
+						
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey)
 							continue;
 
@@ -243,18 +244,12 @@ public class Renderer extends Module<Koru>{
 							tilearray[rendx][rendy] = new KoruDrawList();
 						}
 						
-						tilearray[rendx][rendy].add(Layers.dark, (p)->{
-							Draw.color(0f);
-							Draw.rect("lightshadow", worldx*12 + 6, worldy*12+12, 52, 52);
-							Draw.color();
-						});
 						
-						/*
-						if(!tile.tileEmpty() && Math
+						if(!tile.tileEmpty()/* && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 36){
+												+ 36*/){
 							tile.tile().getType().draw(tilearray[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
@@ -267,16 +262,15 @@ public class Renderer extends Module<Koru>{
 							}
 						}
 
-						if(!tile.blockEmpty()
+						if(!tile.blockEmpty()/*
 								&& Math.abs(
 										worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom
 												+ 12 + tile.block().getType().size()
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 12 + tile.block().getType().size()){
+												+ 12 + tile.block().getType().size()*/){
 							tile.block().getType().draw(tilearray[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
-						*/
 					}
 				}
 			}
