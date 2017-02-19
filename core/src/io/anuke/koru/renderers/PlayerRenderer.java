@@ -53,6 +53,11 @@ public class PlayerRenderer extends EntityRenderer{
 			l.layer = entity.getY();
 			Draw.grect("crab", entity.getX(), entity.getY());
 		});
+		
+		draw(l->{
+			l.layer = entity.getY();
+			Draw.grect("crab", entity.getX(), entity.getY());
+		});
 		/*
 		new SpriteRenderable(Resources.region("crab"))
 		.addShadow(render.group, Resources.atlas())

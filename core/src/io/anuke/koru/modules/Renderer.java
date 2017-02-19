@@ -80,6 +80,27 @@ public class Renderer extends Module<Koru>{
 		loadMaterialColors();
 		
 		Koru.log("Loaded resources.");
+		
+		/*
+		int primes = 0;
+		
+		for(int i = 2; i <= 250; i ++){
+			boolean prime = true;
+			for(int j = 2; j <= Math.sqrt(i); j ++){
+				if(i % j == 0){
+					prime = false;
+					break;
+				}
+			}
+			
+			if(prime){
+				primes ++;
+				Koru.log(i);
+			}
+		}
+		
+		Koru.log(primes);
+		*/
 	}
 	
 	void loadMaterialColors(){
