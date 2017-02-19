@@ -1,7 +1,7 @@
 package io.anuke.koru.renderers;
 
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class EnemyRenderer extends EntityRenderer{
@@ -16,7 +16,7 @@ public class EnemyRenderer extends EntityRenderer{
 	protected void initRender(){
 		new SpriteRenderable(Resources.region("genericmonster"))
 		.addShadow(render.group, Resources.atlas())
-		.setProvider(SortProviders.object)
+		.setProvider(Sorter.object)
 		.add("monster", render.group);
 	}
 

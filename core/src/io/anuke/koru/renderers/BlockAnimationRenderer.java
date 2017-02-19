@@ -63,7 +63,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 			bot.sprite.setSize(region.getRegionWidth(), theight);
 			
 			SpriteRenderable top = new SpriteRenderable(tr);
-			top.setPosition(bot.sprite.getX(), bot.sprite.getY() + theight).setLayer(bot.layer()).setProvider(SortProviders.object);
+			top.setPosition(bot.sprite.getX(), bot.sprite.getY() + theight).setLayer(bot.layer()).setProvider(Sorter.object);
 			top.sprite.setOrigin(top.sprite.getWidth()/2, 0);
 			top.add(list);
 			

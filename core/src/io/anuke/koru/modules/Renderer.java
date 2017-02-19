@@ -29,12 +29,12 @@ import io.anuke.ucore.spritesort.DrawHandler;
 import io.anuke.ucore.spritesort.DrawHandler.PointerDrawer;
 import io.anuke.ucore.spritesort.DrawPointer;
 import io.anuke.ucore.spritesystem.RenderableHandler;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class Renderer extends Module<Koru>{
-	public static final int viewrangex = 128;
-	public static final int viewrangey = 126;
+	public static final int viewrangex = 28;
+	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
 	public boolean debug = false, consoleOpen = false;
@@ -112,7 +112,7 @@ public class Renderer extends Module<Koru>{
 
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
-		(block = new SpriteRenderable(Resources.region("block")).setProvider(SortProviders.object).sprite()).add();
+		(block = new SpriteRenderable(Resources.region("block")).setProvider(Sorter.object).sprite()).add();
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class Renderer extends Module<Koru>{
 			}else{
 				block.setRegion(Resources.region("block"));
 				block.sprite.setSize(12, 20);
-				block.setProvider(SortProviders.object);
+				block.setProvider(Sorter.object);
 			}
 		}else{
 			block.setColor(Color.CLEAR);
@@ -245,11 +245,11 @@ public class Renderer extends Module<Koru>{
 						}
 						
 						
-						if(!tile.tileEmpty()/* && Math
+						if(!tile.tileEmpty() && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 36*/){
+												+ 36){
 							tile.tile().getType().draw(tilearray[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
@@ -262,13 +262,13 @@ public class Renderer extends Module<Koru>{
 							}
 						}
 
-						if(!tile.blockEmpty()/*
+						if(!tile.blockEmpty()
 								&& Math.abs(
 										worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom
 												+ 12 + tile.block().getType().size()
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 12 + tile.block().getType().size()*/){
+												+ 12 + tile.block().getType().size()){
 							tile.block().getType().draw(tilearray[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
 					}
