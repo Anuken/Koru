@@ -1,5 +1,8 @@
 package io.anuke.koru.renderers;
 
+import com.badlogic.gdx.graphics.Color;
+
+import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.graphics.Draw;
 
 public class PlayerRenderer extends EntityRenderer{
@@ -49,33 +52,20 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	@Override
 	public void init(){
-		draw(l->{
-			l.layer = entity.getY();
-			Draw.grect("crab", entity.getX(), entity.getY());
-		});
 		
 		draw(l->{
 			l.layer = entity.getY();
 			Draw.grect("crab", entity.getX(), entity.getY());
+			
+			Draw.tcolor(Color.CORAL);
+			
+			if(!entity.get(ConnectionComponent.class).local)
+			Draw.text(entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14);
+			
+			Draw.tcolor();
 		});
-		/*
-		new SpriteRenderable(Resources.region("crab"))
-		.addShadow(render.group, Resources.atlas())
-		.setProvider(Sorter.object)
-		.add("crab", render.group);
 		
-		SpriteRenderable item = new SpriteRenderable(Resources.region("woodaxeitem"))
-		.setProvider(Sorter.object).sprite();
-		
-		item.add("item", render.group);
-		
-		new TextRenderable(Resources.font(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
-		.align(Align.center)
-		.setColor(Color.CORAL)
-		.setProvider(Sorter.object)
-		.add("name", render.group);
-		*/
-		
+		drawShadow("crab", 1, entity);
 	}
 	
 	@Override

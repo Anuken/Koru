@@ -4,13 +4,7 @@ import java.util.Calendar;
 
 import com.badlogic.gdx.Gdx;
 
-import io.anuke.koru.modules.ClientData;
-import io.anuke.koru.modules.Input;
-import io.anuke.koru.modules.Network;
-import io.anuke.koru.modules.ObjectHandler;
-import io.anuke.koru.modules.Renderer;
-import io.anuke.koru.modules.UI;
-import io.anuke.koru.modules.World;
+import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.InterpolationSystem;
@@ -66,8 +60,13 @@ public class Koru extends ModuleController<Koru>{
 
 	}
 
-	public static <T> T module(Class<T> c){
-		return instance.getModule(c);
+	//public static <T> T module(Class<T> c){
+	//	return instance.getModule(c);
+	//}
+	
+	
+	public static float delta(){
+		return IServer.active() ? IServer.instance().getDelta() : Gdx.graphics.getDeltaTime()*60f;
 	}
 
 	public static void log(Object o){

@@ -124,7 +124,6 @@ public class KoruEntity extends Entity{
 	public void remove(){
 		engine.removeEntity(this);
 	}
-
 	
 	/**Only used for resetting the player's ID on reconnect*/
 	public void resetID(long id){

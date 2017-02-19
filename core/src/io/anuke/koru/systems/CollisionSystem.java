@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectSet;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.components.DestroyOnTerrainHitComponent;
 import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.PositionComponent;
@@ -96,6 +97,7 @@ public class CollisionSystem extends KoruSystem{
 	}
 	
 	public void moveEntity(KoruEntity entity, float mx, float my){
+		float stepsize = CollisionSystem.stepsize*Koru.delta();
 		float stepx, stepy;
 		int steps;
 		
