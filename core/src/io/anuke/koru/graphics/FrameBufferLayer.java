@@ -11,18 +11,18 @@ import io.anuke.koru.modules.Renderer;
 import io.anuke.ucore.spritesystem.Renderable;
 
 public enum FrameBufferLayer{
-	shadow("shadow", -999999){
+	shadow("shadow", Layers.shadow){
 		public void end(){
 			batch.setColor(0,0,0,0.1f);
 			drawFull();
 		}
 	}, 
-	light("light", 999999){
+	light("light", Layers.light){
 		{
 			bind = 6;
 		}
 	},
-	darkness("darkness", 999999+1){
+	darkness("darkness", Layers.dark){
 		{
 			bind = 7;
 		}

@@ -8,11 +8,11 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.ObjectHandler;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.utils.Codes;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Materials;
+import io.anuke.ucore.util.ColorCodes;
 
 /**Materials IDs < 0 are generated.*/
 /**Currently unused.*/
@@ -38,7 +38,7 @@ public class MaterialManager{
 				ObjectHandler.instance().notifyMaterialUnknown(id);
 				return values[0];
 			}else if(mat == null){
-				Koru.log(Codes.RED+"Unknown material with ID "+ Codes.LIGHT_CYAN+ id + Codes.RED + ". Exiting.");
+				Koru.log(ColorCodes.RED+"Unknown material with ID "+ ColorCodes.LIGHT_CYAN+ id + ColorCodes.RED + ". Exiting.");
 				System.exit(-1);
 			}
 			return mat;
@@ -92,7 +92,7 @@ public class MaterialManager{
 						material.loadTexture();
 					}
 				}catch(Exception e){
-					Koru.log(Codes.BACK_RED + "Failure loading custom material: " + material.name + Codes.BACK_DEFAULT);
+					Koru.log(ColorCodes.BACK_RED + "Failure loading custom material: " + material.name + ColorCodes.BACK_DEFAULT);
 					e.printStackTrace();
 				}
 			}

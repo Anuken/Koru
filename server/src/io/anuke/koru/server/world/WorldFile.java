@@ -17,8 +17,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.*;
+import io.anuke.ucore.util.ColorCodes;
 
 //TODO do something about the chunk writers
 public class WorldFile extends WorldLoader{
@@ -114,7 +114,7 @@ public class WorldFile extends WorldLoader{
 	public Chunk readChunk(int x, int y){
 		synchronized(lock){
 			if(debug)
-				Koru.log(Codes.RED + "BEGIN" + Codes.YELLOW + " read chunk" + Codes.RESET);
+				Koru.log(ColorCodes.RED + "BEGIN" + ColorCodes.YELLOW + " read chunk" + ColorCodes.RESET);
 			Path path = getPath(x, y);
 
 			long time = TimeUtils.millis();
@@ -145,7 +145,7 @@ public class WorldFile extends WorldLoader{
 					Koru.log("Chunk read time elapsed: " + TimeUtils.timeSinceMillis(time));
 
 				if(debug)
-					Koru.log(Codes.GREEN + "END" + Codes.YELLOW + " read chunk" + Codes.RESET);
+					Koru.log(ColorCodes.GREEN + "END" + ColorCodes.YELLOW + " read chunk" + ColorCodes.RESET);
 				return chunk;
 			}catch(Exception e){
 				Koru.log("Error writing chunk!");

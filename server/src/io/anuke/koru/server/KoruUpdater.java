@@ -12,8 +12,8 @@ import io.anuke.koru.modules.World;
 import io.anuke.koru.server.world.TerrainGenerator;
 import io.anuke.koru.server.world.WorldFile;
 import io.anuke.koru.systems.*;
-import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.Chunk;
+import io.anuke.ucore.util.ColorCodes;
 
 public class KoruUpdater{
 	KoruServer server;
@@ -119,7 +119,7 @@ public class KoruUpdater{
 			
 			threadchunks.add(chunk);
 			if(threadchunks.size() >= pp){
-				Koru.log(Codes.LIGHT_MAGENTA + "Spawning thread: " + Codes.GREEN + thread);
+				Koru.log(ColorCodes.LIGHT_MAGENTA + "Spawning thread: " + ColorCodes.GREEN + thread);
 				
 				spawnChunkThread(threadchunks, thread++);
 				threadchunks = new ArrayList<Chunk>();
@@ -144,7 +144,7 @@ public class KoruUpdater{
 		threads ++;
 		new Thread(() -> {
 			for(Chunk chunk : chunks){
-				Koru.log(Codes.YELLOW + "Saving chunks: " +Codes.RED + totalchunks + " left [Thread "+thread+"]");
+				Koru.log(ColorCodes.YELLOW + "Saving chunks: " +ColorCodes.RED + totalchunks + " left [Thread "+thread+"]");
 				
 				file.writeChunk(chunk, thread);
 				totalchunks --;

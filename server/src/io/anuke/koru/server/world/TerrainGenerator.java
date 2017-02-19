@@ -67,14 +67,14 @@ public class TerrainGenerator implements Generator{
 						tile.setBlockMaterial(Materials.next(Materials.bush1, 3));
 				}
 				if(elev < 0.4 && elev > 0.1 && t < 0.6 && t > 0.41){
-					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4)
+					if(Noise.snoise(x, y, 120, 13) + Noise.snoise(x, y, 5, 4) > 4)
 						tile.setMaterial(Materials.shortgrassblock);
 
-					if(Noise.normalNoise(x, y, 120, 13) + Noise.normalNoise(x, y, 5, 4) > 4.5)
+					if(Noise.snoise(x, y, 120, 13) + Noise.snoise(x, y, 5, 4) > 4.5)
 						tile.setMaterial(Materials.grassblock);
 				}
 
-				if(elev > 0.36f && elev < 0.53f && Noise.normalNoise(x, y, 500, 30) + Noise.normalNoise(x, y, 9, 4) > 3){
+				if(elev > 0.36f && elev < 0.53f && Noise.snoise(x, y, 500, 30) + Noise.snoise(x, y, 9, 4) > 3){
 					if(rand() < br(0.12f, elev)){
 						if(rand() < 0.026)
 							tile.setMaterial(Materials.next(Materials.oaktree1, 6));

@@ -10,9 +10,9 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.InterpolationSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.RendererSystem;
-import io.anuke.koru.utils.Codes;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.ModuleController;
+import io.anuke.ucore.util.ColorCodes;
 
 public class Koru extends ModuleController<Koru>{
 	private static Koru instance;
@@ -52,6 +52,7 @@ public class Koru extends ModuleController<Koru>{
 			super.render();
 		}catch(Exception e){
 			e.printStackTrace();
+			
 			//write log
 			Gdx.files.local("korulog-" + Calendar.getInstance().getTime() + ".log").writeString(UCore.parseException(e), false);
 			//exit, nothing left to do here
@@ -59,11 +60,6 @@ public class Koru extends ModuleController<Koru>{
 		}
 
 	}
-
-	//public static <T> T module(Class<T> c){
-	//	return instance.getModule(c);
-	//}
-	
 	
 	public static float delta(){
 		return IServer.active() ? IServer.instance().getDelta() : Gdx.graphics.getDeltaTime()*60f;
@@ -75,13 +71,13 @@ public class Koru extends ModuleController<Koru>{
 
 		if(IServer.active() || Gdx.app == null){
 			if(Gdx.app == null){
-				System.out.println(Codes.BACK_DEFAULT + Codes.BOLD + Codes.LIGHT_BLUE + "[" + name + "]: "
-						+ Codes.LIGHT_GREEN + o + Codes.RED);
+				System.out.println(ColorCodes.BACK_DEFAULT + ColorCodes.BOLD + ColorCodes.LIGHT_BLUE + "[" + name + "]: "
+						+ ColorCodes.LIGHT_GREEN + o + ColorCodes.RED);
 			}else{
 				Gdx.app.log(
-						Codes.BACK_DEFAULT + Codes.LIGHT_BLUE + "[" + Codes.BLUE + name + Codes.BACK_DEFAULT + "::"
-								+ Codes.LIGHT_YELLOW + e.getMethodName() + Codes.LIGHT_BLUE + "]",
-						Codes.LIGHT_GREEN + "" + o + Codes.RED);
+						ColorCodes.BACK_DEFAULT + ColorCodes.LIGHT_BLUE + "[" + ColorCodes.BLUE + name + ColorCodes.BACK_DEFAULT + "::"
+								+ ColorCodes.LIGHT_YELLOW + e.getMethodName() + ColorCodes.LIGHT_BLUE + "]",
+						ColorCodes.LIGHT_GREEN + "" + o + ColorCodes.RED);
 			}
 		}else{
 			Gdx.app.log("[" + name + "::" + e.getMethodName() + "]", "" + o);

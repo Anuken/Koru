@@ -1,6 +1,6 @@
 package io.anuke.koru.server;
 
-import static io.anuke.koru.utils.Codes.*;
+import static io.anuke.ucore.util.ColorCodes.*;
 
 import java.util.Scanner;
 

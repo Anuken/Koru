@@ -14,15 +14,15 @@ public class SimpleGenerator implements Generator{
 		Tile tile = Pools.obtain(Tile.class);
 		int seed = 0;
 
-		if(Noise.normalNoise(x + seed, y + seed, 20f, 7f) > 3){
+		if(Noise.snoise(x + seed, y + seed, 20f, 7f) > 3){
 			tile.setMaterial(Materials.water);
 			return tile;
-		}else if(Noise.normalNoise(x + seed, y + seed, 20f, 7f) > 2.7f){
+		}else if(Noise.snoise(x + seed, y + seed, 20f, 7f) > 2.7f){
 			tile.setMaterial(Materials.riveredge);
 			return tile;
 		}
 
-		if(Noise.normalNoise(x + 100 + seed, y + 100 + seed, 20f, 6f) > 2f){
+		if(Noise.snoise(x + 100 + seed, y + 100 + seed, 20f, 6f) > 2f){
 			tile.setMaterial(Materials.stone);
 			return tile;
 		}

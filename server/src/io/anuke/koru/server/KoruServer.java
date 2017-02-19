@@ -32,9 +32,9 @@ import io.anuke.koru.network.packets.*;
 import io.anuke.koru.server.world.MapPreview;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
-import io.anuke.koru.utils.Codes;
 import io.anuke.koru.world.Material;
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.util.ColorCodes;
 
 public class KoruServer extends IServer{
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
@@ -378,7 +378,7 @@ public class KoruServer extends IServer{
 	}
 
 	public static void main(String[] args){
-		System.out.println(Codes.FLUSH);
+		System.out.println(ColorCodes.FLUSH);
 		System.out.flush();
 		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
 			Koru.log("Clearing world.");
