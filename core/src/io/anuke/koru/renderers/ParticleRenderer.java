@@ -23,17 +23,18 @@ public class ParticleRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){
-		render.group.get("particle").setPosition(entity.getX(), entity.getY());
-		//render.layers.update(entity.getX(), entity.getY());
+		ParticleRenderable r = (ParticleRenderable)render.list.first();
 		
-		if(((ParticleRenderable)render.group.get("particle")).effect.isComplete()){
+		r.setPosition(entity.getX(), entity.getY());
+		
+		if(r.effect.isComplete()){
 			entity.remove();
-			((ParticleRenderable)render.group.get("particle")).effect.free();
+			r.effect.free();
 		}
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		ParticleComponent component = entity.mapComponent(ParticleComponent.class);
 		PooledEffect particle = Resources.particle(entity.mapComponent(ParticleComponent.class).name);
 		setVelocity(particle, component.velocity, component.gravity);
@@ -48,7 +49,7 @@ public class ParticleRenderer extends EntityRenderer{
 		value[4] = end.g;
 		value[5] = end.b;
 		
-		render.group.add("particle", new ParticleRenderable(particle));
+		render.list.add(new ParticleRenderable(particle));
 	}
 
 }

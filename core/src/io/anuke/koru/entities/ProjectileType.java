@@ -1,7 +1,8 @@
 package io.anuke.koru.entities;
 
 import io.anuke.koru.components.*;
-import io.anuke.ucore.spritesystem.Renderable;
+import io.anuke.koru.graphics.Draw;
+import io.anuke.koru.renderers.EntityRenderer;
 
 public enum ProjectileType{
 	bolt, 
@@ -22,9 +23,15 @@ public enum ProjectileType{
 			return true;
 		}
 		
-		public void draw(KoruEntity entity, RenderComponent render){
-			super.draw(entity, render);
-			render.group.get("bolt").sprite().setAlpha(entity.mapComponent(FadeComponent.class).scaled());
+		public void draw(KoruEntity entity, EntityRenderer render, ProjectileComponent pro){
+			render.draw(l->{
+				l.layer = entity.getY()-4;
+				Draw.color(1f-entity.get(FadeComponent.class).life/lifetime());
+				Draw.grect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
+				Draw.color();
+			});
+			
+			render.drawShadow(name(), -1, entity);
 		}
 	};
 	
@@ -44,17 +51,17 @@ public enum ProjectileType{
 		return 30f;
 	}
 	
-	public void draw(KoruEntity entity, RenderComponent render){
-		render.group.setPosition(entity.getX(), entity.getY());
-		float x = entity.getX(), y = entity.getY();
-		for(Renderable renderable : render.group.list()){
-			renderable.sprite().setPosition(x, y, true);
-			renderable.sprite().sprite.setRotation(entity.mapComponent(ProjectileComponent.class).getRotation() - 45);
-		}
+	public void draw(KoruEntity entity, EntityRenderer render, ProjectileComponent pro){
+		render.draw(l->{
+			l.layer = entity.getY()-4;
+			Draw.grect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
+		});
+		
+		render.drawShadow(name(), -1, entity);
 	}
 	
-	public void initSprite(KoruEntity entity, RenderComponent render){
-		
+	public float rotation(KoruEntity entity){
+		return entity.get(ProjectileComponent.class).getRotation();
 	}
 	
 	public int damage(){

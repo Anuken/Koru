@@ -66,6 +66,7 @@ public class Renderer extends Module<Koru>{
 		buffers = new FrameBufferMap();
 		processor = new PostProcessor(false, true, true);
 		recorder = new GifRecorder(batch);
+		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 
@@ -79,6 +80,27 @@ public class Renderer extends Module<Koru>{
 		loadMaterialColors();
 		
 		Koru.log("Loaded resources.");
+		
+		/*
+		int primes = 0;
+		
+		for(int i = 2; i <= 250; i ++){
+			boolean prime = true;
+			for(int j = 2; j <= Math.sqrt(i); j ++){
+				if(i % j == 0){
+					prime = false;
+					break;
+				}
+			}
+			
+			if(prime){
+				primes ++;
+				Koru.log(i);
+			}
+		}
+		
+		Koru.log(primes);
+		*/
 	}
 	
 	void loadMaterialColors(){
@@ -229,6 +251,7 @@ public class Renderer extends Module<Koru>{
 
 						if(renderables[rendx][rendy] != null)
 							renderables[rendx][rendy].free();
+						
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey)
 							continue;
 
@@ -242,11 +265,11 @@ public class Renderer extends Module<Koru>{
 						}
 						
 						
-						if(!tile.tileEmpty() /*&& Math
+						if(!tile.tileEmpty() && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 36*/){
+												+ 36){
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
@@ -261,15 +284,14 @@ public class Renderer extends Module<Koru>{
 						}
 
 						if(!tile.blockEmpty()
-								/*&& Math.abs(
+								&& Math.abs(
 										worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom
 												+ 12 + tile.block().getType().size()
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 12 + tile.block().getType().size()*/){
+												+ 12 + tile.block().getType().size()){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
-						
 					}
 				}
 			}

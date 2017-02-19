@@ -1,16 +1,9 @@
 package io.anuke.koru.renderers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.Sorter;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
-import io.anuke.ucore.spritesystem.TextRenderable;
+import io.anuke.koru.graphics.Draw;
 
 public class PlayerRenderer extends EntityRenderer{
 	AnimationType animation;
@@ -18,7 +11,7 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	@Override
 	public void render(){
-		
+		/*
 		render.group.get("crab").sprite().setPosition(entity.getX(), entity.getY()).centerX();
 		
 		render.group.get("crab").sprite().sprite.setRegion(Resources.region("crab" + dir() + 
@@ -47,34 +40,32 @@ public class PlayerRenderer extends EntityRenderer{
 			duration -= Gdx.graphics.getDeltaTime()*60;
 			animate();
 		}
+		*/
 	}
 	
 	private void animate(){
 		if(animation == AnimationType.attack){
-			SpriteRenderable item = render.group.get("item").sprite();
-			item.sprite.rotate(fscl()*(duration*8));
+		//	SpriteRenderable item = render.group.get("item").sprite();
+		//	item.sprite.rotate(fscl()*(duration*8));
 		}
 	}
 	
 	@Override
-	public void initRender(){
+	public void init(){
 		
-		new SpriteRenderable(Resources.region("crab"))
-		.addShadow(render.group, Resources.atlas())
-		.setProvider(Sorter.object)
-		.add("crab", render.group);
+		draw(l->{
+			l.layer = entity.getY();
+			Draw.grect("crab", entity.getX(), entity.getY());
+			
+			Draw.tcolor(Color.CORAL);
+			
+			if(!entity.get(ConnectionComponent.class).local)
+			Draw.text(entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14);
+			
+			Draw.tcolor();
+		});
 		
-		SpriteRenderable item = new SpriteRenderable(Resources.region("woodaxeitem"))
-		.setProvider(Sorter.object).sprite();
-		
-		item.add("item", render.group);
-		
-		new TextRenderable(Resources.font(), entity.getComponent(ConnectionComponent.class).local ? "" : entity.getComponent(ConnectionComponent.class).name)
-		.align(Align.center)
-		.setColor(Color.CORAL)
-		.setProvider(Sorter.object)
-		.add("name", render.group);
-		
+		drawShadow("crab", 1, entity);
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package io.anuke.koru.renderers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
@@ -19,13 +18,13 @@ public class BlockAnimationRenderer extends EntityRenderer{
 
 	@Override
 	protected void render(){
-		life += Gdx.graphics.getDeltaTime()*60;
+		life += Koru.delta();
 		
 		for(Renderable r : list.renderables)
 		r.sprite().setAlpha(1f-life/lifetime);
 		
 		if(((Material)entity.mapComponent(DataComponent.class).data).getType() == MaterialType.tree)
-		list.renderables.get(2).sprite().sprite.rotate(rspeed);
+		list.renderables.get(2).sprite().sprite.rotate(rspeed*Koru.delta());
 		
 		if(life > lifetime){
 			list.free();
@@ -34,7 +33,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 	}
 
 	@Override
-	protected void initRender(){
+	protected void init(){
 		if(entity.mapComponent(DataComponent.class).data == null){
 			throw new RuntimeException("No material specified in the data! Did you set the renderer material?");
 		}
