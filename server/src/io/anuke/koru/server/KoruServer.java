@@ -77,7 +77,7 @@ public class KoruServer extends IServer{
 		
 		//createGraphics();
 		
-		createMapGraphics();
+		//createMapGraphics();
 	}
 	
 	void createGraphics(){

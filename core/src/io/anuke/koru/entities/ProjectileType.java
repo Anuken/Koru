@@ -31,7 +31,7 @@ public enum ProjectileType{
 				Draw.color();
 			});
 			
-			render.drawShadow(name(), -1, entity);
+			//render.drawShadow(name(), -1, entity);
 		}
 	};
 	
