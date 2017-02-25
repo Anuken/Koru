@@ -1,15 +1,26 @@
 # Koru
 
-A 2D sandbox game. Also a project for testing out Entity Component systems, AI, chunk generation, biome generation and shaders.
+A 2D sandbox game. Partially made as a testing ground for Entity Component systems, AI, world generation, biome generation and shaders.
 
 ![axe-wielding crabs](http://i.imgur.com/6bft2gp.png)
 
-##Roadmap
 
+###Current Features
+- infinite procedurally generated world
+- biomes and cave systems
+- building, resource collection
+- basic combat
+- specialized tools
+- interface built with visUI/scene2D
+- multiplayer, made with Kryonet
+- crabs
+- lighting system
+
+
+##Roadmap
+- proper player characters
 - machines, crafting
 - block entities or data
 - tech tree
-- combat w/ knockback
 - crafting
-- clean up AI package, it's a mess
-- mobile support (???)
+- mobile support
