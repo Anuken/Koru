@@ -8,6 +8,7 @@ precision mediump float;
 varying vec2 v_texCoords;
 
 //!!!!!DO NOT USE!!!!! - WRONG SHADER
+//USE THE ONE IN default-shaders
 
 //texture samplers
 uniform sampler2D u_texture0; //diffuse map

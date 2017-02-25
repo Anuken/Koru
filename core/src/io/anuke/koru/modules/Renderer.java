@@ -33,7 +33,7 @@ public class Renderer extends Module<Koru>{
 	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
-	public boolean debug = false, consoleOpen = false;
+	public boolean debug = true, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
@@ -100,6 +100,7 @@ public class Renderer extends Module<Koru>{
 		if(light != null)
 			light.dispose();
 		light = new LightEffect(gwidth(), gheight());
+
 		processor.addEffect(light);
 	}
 

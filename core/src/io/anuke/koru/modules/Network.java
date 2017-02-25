@@ -37,34 +37,37 @@ public class Network extends Module<Koru>{
 	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
 	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
 	public Client client;
+	public boolean started = false;
 
 	public void init(){
-		int buffer = (int)Math.pow(2, 6)*8192;
+		int buffer = (int) Math.pow(2, 6) * 8192;
 		client = new Client(buffer, buffer);
 		Registrator.register(client.getKryo());
 		client.addListener(new Listen());
 	}
 
 	public void connect(){
-		new Thread(() -> {
-			try{
-				connecting = true;
-				client.connect(12000, ip, port, port);
-				Koru.log("Connecting to server..");
-				ConnectPacket packet = new ConnectPacket();
-				packet.name = getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name;
-				client.sendTCP(packet);
-				Koru.log("Sent packet.");
+		try{
+			if(!started)
+				client.start();
+			started = true;
 
-				connected = true;
-			}catch(Exception e){
-				connecting = false;
-				connected = false;
-				e.printStackTrace();
-				lastError = "Failed to connect to server:\n" + e.getCause().getMessage();
-				Koru.log("Connection failed!");
-			}
-		}).start();
+			connecting = true;
+			client.connect(1200, ip, port, port);
+			Koru.log("Connecting to server..");
+			ConnectPacket packet = new ConnectPacket();
+			packet.name = getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name;
+			client.sendTCP(packet);
+			Koru.log("Sent packet.");
+
+			connected = true;
+		}catch(Exception e){
+			connecting = false;
+			connected = false;
+			e.printStackTrace();
+			lastError = "Failed to connect to server:\n" + (e.getCause() == null ? e.getMessage() : e.getCause().getMessage());
+			Koru.log("Connection failed!");
+		}
 
 		connecting = false;
 		initialconnect = true;
@@ -114,7 +117,8 @@ public class Network extends Module<Koru>{
 					t.engine.getEntity(packet.player).getComponent(RenderComponent.class).renderer.onAnimation(packet.type);
 				}else if(object instanceof SlotChangePacket){
 					SlotChangePacket packet = (SlotChangePacket) object;
-					if(t.engine.getEntity(packet.id) == null) return;
+					if(t.engine.getEntity(packet.id) == null)
+						return;
 					t.engine.getEntity(packet.id).getComponent(InventoryComponent.class).inventory[0][0] = packet.stack;
 				}else if(object instanceof ChatPacket){
 					ChatPacket packet = (ChatPacket) object;
@@ -154,11 +158,11 @@ public class Network extends Module<Koru>{
 			}
 		}
 	}
-	
+
 	void requestEntity(long id){
 		if(!requestedEntities.contains(id) && !entitiesToRemove.contains(id)){
 			requestedEntities.add(id);
-			
+
 			EntityRequestPacket request = new EntityRequestPacket();
 			request.id = id;
 			client.sendTCP(request);
@@ -167,22 +171,22 @@ public class Network extends Module<Koru>{
 
 	@Override
 	public void update(){
-		
+
 		if(connected && !client.isConnected()){
 			connected = false;
 			connecting = false;
 			lastError = "Connection error: Timed out.";
-			
+
 			//reset everything.
-			
+
 			World world = getModule(World.class);
-			
-			for(int x = 0; x < world.chunks.length; x ++){
-				for(int y = 0; y < world.chunks[x].length; y ++){
+
+			for(int x = 0; x < world.chunks.length; x++){
+				for(int y = 0; y < world.chunks[x].length; y++){
 					world.chunks[x][y] = null;
 				}
 			}
-			
+
 			t.engine.removeAllEntities();
 		}
 
@@ -191,41 +195,41 @@ public class Network extends Module<Koru>{
 			KoruEntity entity = entityQueue.pop();
 			if(entity == null)
 				continue;
-			
+
 			requestedEntities.remove(entity.getID());
-			
+
 			if(entitiesToRemove.contains(entity.getID())){
 				entitiesToRemove.remove(entity.getID());
 				continue;
 			}
-			
+
 			if(t.engine.getEntity(entity.getID()) == null)
-			entity.add();
+				entity.add();
 		}
-		
+
 		if(connected && Gdx.graphics.getFrameId() % pingInterval == 0){
 			client.updateReturnTripTime();
 		}
-		
+
 		KoruEntity player = getModule(ClientData.class).player;
 		ImmutableArray<Entity> entities = t.engine.getEntities();
-		
+
 		//unloads entities that are very far away
 		for(Entity e : entities){
-			KoruEntity entity = (KoruEntity)e;
+			KoruEntity entity = (KoruEntity) e;
 			if(entity.getType().unload() && entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
 				t.engine.removeEntity(e);
 			}
 		}
-		
+
 		tempids.clear();
-		
+
 		for(Long id : entitiesToRemove){
 			if(t.engine.removeEntity(id)){
 				tempids.add(id);
 			}
 		}
-		
+
 		for(Long l : tempids)
 			entitiesToRemove.remove(l);
 
@@ -242,8 +246,7 @@ public class Network extends Module<Koru>{
 		PositionPacket pos = new PositionPacket();
 		pos.x = getModule(ClientData.class).player.mapComponent(PositionComponent.class).x;
 		pos.y = getModule(ClientData.class).player.mapComponent(PositionComponent.class).y;
-		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(),
-				getModule(ClientData.class).player.getY());
+		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(), getModule(ClientData.class).player.getY());
 		getModule(ClientData.class).player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
 		pos.direction = getModule(ClientData.class).player.getComponent(RenderComponent.class).direction;
 		client.sendUDP(pos);

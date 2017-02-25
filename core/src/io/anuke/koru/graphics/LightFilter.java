@@ -16,12 +16,12 @@ public final class LightFilter extends Filter<LightFilter>{
 	}
 
 	public void setSize(int width, int height){
-		setParams("u_resolution", new Vector2(width, height));
+		setParams("resolution", new Vector2(width, height));
 		endParams();
 	}
 
 	public void setColor(float r, float g, float b, float a){
-		setParams("u_color", new Color(r, g, b, a));
+		setParams("ambientColor", new Color(r, g, b, a));
 		endParams();
 	}
 
@@ -30,7 +30,7 @@ public final class LightFilter extends Filter<LightFilter>{
 		setParams("u_texture0", u_texture0);
 		setParams("u_lightmap", 6);
 		setParams("u_darkmap", 7);
-		setParams("u_resolution", new Vector2(width, height));
+		setParams("resolution", new Vector2(width, height));
 		endParams();
 	}
 
