@@ -6,8 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import org.java_websocket.WebSocket;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -39,17 +37,15 @@ import io.anuke.ucore.util.ColorCodes;
 public class KoruServer extends IServer{
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
 	ObjectMap<Connection, ConnectionInfo> kryomap = new ObjectMap<Connection, ConnectionInfo>();
-	ObjectMap<WebSocket, ConnectionInfo> webmap = new ObjectMap<WebSocket, ConnectionInfo>();
 
 	Server server;
-	WebServer webserver;
 	KoruUpdater updater;
 	GraphicsHandler graphics;
 	CommandHandler commands;
 
 	void setup(){
 		commands = new CommandHandler(this);
-		
+
 		try{
 			server = new Server(16384 * 256, 16384 * 256);
 			Registrator.register(server.getKryo());
@@ -68,40 +64,40 @@ public class KoruServer extends IServer{
 	private void createUpdater(){
 		updater = new KoruUpdater(this);
 
-		Thread thread = (new Thread(()->{
+		Thread thread = (new Thread(() -> {
 			updater.run();
 		}));
 
 		thread.setDaemon(true);
 		thread.start();
-		
+
 		//createGraphics();
-		
+
 		//createMapGraphics();
 	}
-	
+
 	void createGraphics(){
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
 		config.setInitialVisible(false);
-		
-		new Lwjgl3Application((graphics=new GraphicsHandler()), config);
+
+		new Lwjgl3Application((graphics = new GraphicsHandler()), config);
 	}
-	
+
 	void createMapGraphics(){
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
 		config.setTitle("Map Preview");
 		config.setMaximized(true);
-		
+
 		new Lwjgl3Application((new MapPreview()), config);
 	}
 
-	public void connectPacketRecieved(ConnectPacket packet, WebSocket socket, Connection connection){
+	public void connectPacketRecieved(ConnectPacket packet, Connection connection){
 		try{
 
 			KoruEntity player = new KoruEntity(EntityType.player);
-			ConnectionInfo info = socket == null ? new ConnectionInfo(player.getID(), connection) : new ConnectionInfo(player.getID(), socket);
+			ConnectionInfo info = new ConnectionInfo(player.getID(), connection);
 
 			registerConnection(info);
 
@@ -113,8 +109,8 @@ public class KoruServer extends IServer{
 			data.time = getWorld().time;
 
 			ArrayList<Entity> entities = new ArrayList<Entity>();
-			
-			updater.engine.map().getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrange, (entity)->{
+
+			updater.engine.map().getNearbyEntities(player.getX(), player.getY(), SyncSystem.syncrange, (entity) -> {
 				entities.add(entity);
 			});
 
@@ -125,23 +121,21 @@ public class KoruServer extends IServer{
 			sendToAllExceptTCP(info.id, player);
 
 			player.add();
-			
+
 			InventoryComponent inv = player.get(InventoryComponent.class);
-			
+
 			inv.inventory[3][0] = new ItemStack(Items.woodhammer);
 			inv.inventory[2][0] = new ItemStack(Items.woodaxe);
 			inv.inventory[1][0] = new ItemStack(Items.woodpickaxe);
 			inv.inventory[0][0] = new ItemStack(Items.woodsword);
 			inv.sendUpdate(player);
-			
+
 			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player); //screw this, it isn't working properly
-			
-			
+
 			//why even try?
 			//for(ConnectionInfo i : connections.values())
 			//	player.getComponent(InventoryComponent.class).sendHotbarUpdate(updater.engine.getEntity(i.playerid), info.id);
-			
-				
+
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("Entity ID is " + player.getID() + ", connection ID is " + player.mapComponent(ConnectionComponent.class).connectionID);
 			Koru.log(packet.name + " has joined.");
@@ -155,31 +149,32 @@ public class KoruServer extends IServer{
 	public void recieved(ConnectionInfo info, Object object){
 		try{
 			if(object instanceof PositionPacket){
-				PositionPacket packet = (PositionPacket)object;
-				if( !connections.containsKey(info.id)) return;
+				PositionPacket packet = (PositionPacket) object;
+				if(!connections.containsKey(info.id))
+					return;
 
 				getPlayer(info).position().set(packet.x, packet.y);
 				getPlayer(info).mapComponent(RenderComponent.class).direction = packet.direction;
 				getPlayer(info).mapComponent(HitboxComponent.class).sleeptime = HitboxComponent.sleepduration;
 				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof EntityRequestPacket){
-				EntityRequestPacket packet = (EntityRequestPacket)object;
+				EntityRequestPacket packet = (EntityRequestPacket) object;
 				KoruEntity entity = updater.engine.getEntity(packet.id);
 				if(entity != null){
 					send(info, entity, false);
 				}
 			}else if(object instanceof ChatPacket){
-				ChatPacket packet = (ChatPacket)object;
+				ChatPacket packet = (ChatPacket) object;
 				packet.sender = updater.engine.getEntity(info.playerid).getComponent(ConnectionComponent.class).name;
 				sendToAll(packet);
 			}else if(object instanceof ChunkRequestPacket){
-				ChunkRequestPacket packet = (ChunkRequestPacket)object;
+				ChunkRequestPacket packet = (ChunkRequestPacket) object;
 				sendTCP(info.id, updater.world.createChunkPacket(packet));
 			}else if(object instanceof InputPacket){
-				InputPacket packet = (InputPacket)object;
+				InputPacket packet = (InputPacket) object;
 				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type, packet.data);
 			}else if(object instanceof SlotChangePacket){
-				SlotChangePacket packet = (SlotChangePacket)object;
+				SlotChangePacket packet = (SlotChangePacket) object;
 				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				packet.slot = UCore.clamp(packet.slot, 0, 3);
 				inv.hotbar = packet.slot;
@@ -187,29 +182,29 @@ public class KoruServer extends IServer{
 				packet.stack = inv.inventory[inv.hotbar][0];
 				sendToAllExceptTCP(info.id, packet);
 			}else if(object instanceof RecipeSelectPacket){
-				RecipeSelectPacket packet = (RecipeSelectPacket)object;
+				RecipeSelectPacket packet = (RecipeSelectPacket) object;
 				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				inv.recipe = packet.recipe;
 			}else if(object instanceof BlockInputPacket){
-				BlockInputPacket packet = (BlockInputPacket)object;
+				BlockInputPacket packet = (BlockInputPacket) object;
 				updater.world.tile(packet.x, packet.y).setMaterial(packet.material);
 				updater.world.updateTile(packet.x, packet.y);
-				
+
 			}else if(object instanceof InventoryClickPacket){
-				InventoryClickPacket packet = (InventoryClickPacket)object;
+				InventoryClickPacket packet = (InventoryClickPacket) object;
 				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
 				inv.clickSlot(packet.x, packet.y);
-				
+
 				inv.sendUpdate(updater.engine.getEntity(info.playerid));
 			}else if(object instanceof MaterialRequestPacket){
-				MaterialRequestPacket packet = (MaterialRequestPacket)object;
+				MaterialRequestPacket packet = (MaterialRequestPacket) object;
 				Material mat = MaterialManager.instance().getMaterial(packet.id);
 				if(mat == null || !(mat instanceof GeneratedMaterial)){
 					Koru.log("Invalid material requested: " + mat.id());
 					return;
 				}
 				Koru.log("Sending material type to player: " + packet.id);
-				graphics.sendMaterial(info.id, (GeneratedMaterial)mat);
+				graphics.sendMaterial(info.id, (GeneratedMaterial) mat);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -237,7 +232,7 @@ public class KoruServer extends IServer{
 	class Listen extends Listener{
 		KoruServer koru;
 
-		public Listen(KoruServer n){
+		public Listen(KoruServer n) {
 			koru = n;
 		}
 
@@ -249,11 +244,10 @@ public class KoruServer extends IServer{
 		@Override
 		public void received(Connection con, Object object){
 			if(object instanceof ConnectPacket){
-				ConnectPacket packet = (ConnectPacket)object;
-				if( !kryomap.containsKey(con)){
-					connectPacketRecieved(packet, null, con);
-				}else{
-					//already connected, ignore?
+				ConnectPacket packet = (ConnectPacket) object;
+				
+				if(!kryomap.containsKey(con)){
+					connectPacketRecieved(packet, con);
 				}
 			}else if(kryomap.containsKey(con)){
 				recieved(kryomap.get(con), object);
@@ -261,29 +255,21 @@ public class KoruServer extends IServer{
 
 		}
 	}
-	
+
 	public void sendChatMessage(String message){
 		ChatPacket packet = new ChatPacket();
 		packet.message = message;
 		sendToAll(packet);
-	}	
+	}
 
 	public void registerConnection(ConnectionInfo info){
 		connections.put(info.id, info);
-		if(info.isWeb()){
-			webmap.put(info.socket, info);
-		}else{
-			kryomap.put(info.connection, info);
-		}
+		kryomap.put(info.connection, info);
 	}
 
 	public void removeConnection(ConnectionInfo info){
 		connections.remove(info.id);
-		if(info.isWeb()){
-			webmap.remove(info.socket);
-		}else{
-			kryomap.remove(info.connection);
-		}
+		kryomap.remove(info.connection);
 	}
 
 	public void removeEntity(KoruEntity entity){
@@ -292,17 +278,17 @@ public class KoruServer extends IServer{
 		server.sendToAllTCP(remove);
 		updater.engine.removeEntity(entity);
 	}
-	
+
 	public void sendEntity(KoruEntity entity){
 		sendToAllIn(entity, entity.getX(), entity.getY(), SyncSystem.syncrange);
 	}
-	
+
 	public void sendToAllIn(Object object, float x, float y, float range){
-		updater.engine.map().getNearbyConnections(x, y, range, (entity)->{
+		updater.engine.map().getNearbyConnections(x, y, range, (entity) -> {
 			sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, object);
 		});
 	}
-	
+
 	public void sendLater(Object object){
 		updater.addToSendQueue(object);
 	}
@@ -318,32 +304,29 @@ public class KoruServer extends IServer{
 	}
 
 	public void send(ConnectionInfo info, Object object, boolean udp){
-		if(info.isWeb()){
-			//webserver.sendObject(info.socket, object);
-		}else{
-			if(udp){
-				info.connection.sendUDP(object);
-			}else{
-				info.connection.sendTCP(object);
-			}
-		}
+
+		if(udp)
+			info.connection.sendUDP(object);
+		else
+			info.connection.sendTCP(object);
+
 	}
-	
+
 	public void sendToAllExceptTCP(int id, Object object){
 		for(ConnectionInfo info : connections.values()){
 			if(info.id != id)
-			send(info, object, false);
+				send(info, object, false);
 		}
 	}
-	
+
 	public void sendToAllExcept(int id, Object object){
-		sendToAllExceptTCP(id,object);
+		sendToAllExceptTCP(id, object);
 	}
 
 	public void sendToAllExceptUDP(int id, Object object){
 		for(ConnectionInfo info : connections.values()){
 			if(info.id != id)
-			send(info, object, true);
+				send(info, object, true);
 		}
 	}
 
@@ -361,7 +344,7 @@ public class KoruServer extends IServer{
 	public long getFrameID(){
 		return updater.frameid;
 	}
-	
+
 	@Override
 	public float getDelta(){
 		return updater.delta;
@@ -382,23 +365,23 @@ public class KoruServer extends IServer{
 		System.out.flush();
 		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
 			Koru.log("Clearing world.");
-			try {
-				Files.list(Paths.get("world")).forEach((Path path)->{
-					try {
+			try{
+				Files.list(Paths.get("world")).forEach((Path path) -> {
+					try{
 						Files.delete(path);
-					} catch (IOException e) {
+					}catch(IOException e){
 						e.printStackTrace();
 					}
 				});
-			} catch (IOException e) {
+			}catch(IOException e){
 				e.printStackTrace();
 			}
 
 		}
 		new KoruServer().setup();
 	}
-	
+
 	public static KoruServer instance(){
-		return (KoruServer)IServer.instance();
+		return (KoruServer) IServer.instance();
 	}
 }

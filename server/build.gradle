@@ -8,6 +8,7 @@ repositories {
     mavenCentral()
  	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     jcenter()
+	maven { url 'https://jitpack.io' }
 }
 
 ext {
@@ -24,6 +25,8 @@ dependencies {
 	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	compile 'com.github.anuken:ucore:a3e508942a'
+	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 }
 
 test {
