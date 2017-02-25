@@ -6,13 +6,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.BitmapData;
-import io.anuke.koru.network.IClient;
-import io.anuke.koru.network.NetworkListener;
+import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
@@ -34,9 +36,12 @@ public class Network extends Module<Koru>{
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
 	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
-	public IClient client;
+	public Client client;
 
 	public void init(){
+		int buffer = (int)Math.pow(2, 6)*8192;
+		client = new Client(buffer, buffer);
+		Registrator.register(client.getKryo());
 		client.addListener(new Listen());
 	}
 
@@ -44,7 +49,7 @@ public class Network extends Module<Koru>{
 		new Thread(() -> {
 			try{
 				connecting = true;
-				client.connect(ip, port);
+				client.connect(12000, ip, port, port);
 				Koru.log("Connecting to server..");
 				ConnectPacket packet = new ConnectPacket();
 				packet.name = getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name;
@@ -65,9 +70,9 @@ public class Network extends Module<Koru>{
 		initialconnect = true;
 	}
 
-	class Listen extends NetworkListener{
+	class Listen extends Listener{
 		@Override
-		public void received(Object object){
+		public void received(Connection c, Object object){
 			try{
 				if(object instanceof DataPacket){
 					Koru.log("Recieving a data packet... ");
@@ -199,7 +204,7 @@ public class Network extends Module<Koru>{
 		}
 		
 		if(connected && Gdx.graphics.getFrameId() % pingInterval == 0){
-			client.updatePing();
+			client.updateReturnTripTime();
 		}
 		
 		KoruEntity player = getModule(ClientData.class).player;

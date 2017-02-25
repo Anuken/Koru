@@ -7,7 +7,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.network.KryoClient;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) throws Exception{
@@ -21,7 +20,7 @@ public class DesktopLauncher {
 		config.setTitle("Koru");
 		config.useVsync(false);
 		
-		new Lwjgl3Application(new Koru(new KryoClient()), config);
+		new Lwjgl3Application(new Koru(), config);
 		
 	}
 }

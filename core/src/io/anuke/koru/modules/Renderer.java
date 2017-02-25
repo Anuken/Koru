@@ -292,7 +292,7 @@ public class Renderer extends Module<Koru>{
 			"[CORAL]entities: " +t.engine.getEntities().size() +
 			"\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak +
 			"\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + 
-			"\n[RED]ping: " + getModule(Network.class).client.getPing()
+			"\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime()
 			, 0, uiheight() - 5);
 			
 			font.draw(batch, 

@@ -5,7 +5,6 @@ import java.util.Calendar;
 import com.badlogic.gdx.Gdx;
 
 import io.anuke.koru.modules.*;
-import io.anuke.koru.network.IClient;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.InterpolationSystem;
 import io.anuke.koru.systems.KoruEngine;
@@ -17,12 +16,7 @@ import io.anuke.ucore.util.ColorCodes;
 public class Koru extends ModuleController<Koru>{
 	private static Koru instance;
 	private static StringBuffer log = new StringBuffer();
-	private IClient client;
 	public KoruEngine engine;
-
-	public Koru(IClient client) {
-		this.client = client;
-	}
 
 	@Override
 	public void init(){
@@ -36,8 +30,6 @@ public class Koru extends ModuleController<Koru>{
 		addModule(World.class);
 		addModule(ObjectHandler.class);
 		addModule(UI.class);
-
-		getModule(Network.class).client = client;
 
 		engine.addSystem(new RendererSystem(getModule(Renderer.class)));
 
