@@ -16,6 +16,7 @@ import io.anuke.ucore.util.ColorCodes;
 
 /**Materials IDs < 0 are generated.*/
 /**Currently unused.*/
+//TODO cleanup or remove class
 public class MaterialManager{
 	private static final MaterialManager instance = new MaterialManager();
 	private static final Materials[] values = Materials.values();
@@ -78,6 +79,7 @@ public class MaterialManager{
 	public void loadMaterials(FileHandle file){
 		genMaterials = new Array<GeneratedMaterial>();
 		//TODO disabled loading for now
+		//(uncomment this line to enable)
 		if(genMaterials != null) return;
 		
 		try{

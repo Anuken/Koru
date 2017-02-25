@@ -1,11 +1,12 @@
 buildscript {
     repositories {
+		mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
     }
     dependencies {
-        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+		
     }
 }
 
@@ -17,7 +18,6 @@ allprojects {
     ext {
         appName = "Koru"
         gdxVersion = '1.9.5'
-        roboVMVersion = '1.12.0'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
@@ -25,9 +25,11 @@ allprojects {
     }
 
     repositories {
+		mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+		maven { url 'https://jitpack.io' }
     }
 }
 
@@ -36,27 +38,10 @@ project(":desktop") {
 
 
     dependencies {
-		compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile project(":core")
-		compile fileTree(dir: '../desktop/lib', include: '*.jar')
+		compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    }
-}
-
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
-
-
-    dependencies {
-        compile project(":core")
-		compile fileTree(dir: '../html/lib', include: '*.jar')
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
     }
 }
 
@@ -71,7 +56,10 @@ project(":core") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-		compile fileTree(dir: '../lib', include: '*.jar')
+		compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+		compile 'com.github.Anuken:GDXGifRecorder:1.1'
+		compile 'com.github.anuken:gdx-postprocessing:8173fd4bb6'
+		//compile 'com.github.anuken:ucore:a3e508942a'
     }
 }
 

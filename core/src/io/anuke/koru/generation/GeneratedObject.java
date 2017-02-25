@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import io.anuke.koru.utils.Resources;
 
+//TODO cleanup or remove class
 public abstract class GeneratedObject{
 	public final String name;
 	private transient Pixmap pixmap;

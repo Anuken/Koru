@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
 public final class LightEffect extends PostProcessorEffect{
-
 	private LightFilter light = null;
+	
 
 	public LightEffect(int viewportWidth, int viewportHeight) {
 		setup(viewportWidth, viewportHeight);

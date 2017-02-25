@@ -80,27 +80,6 @@ public class Renderer extends Module<Koru>{
 		loadMaterialColors();
 		
 		Koru.log("Loaded resources.");
-		
-		/*
-		int primes = 0;
-		
-		for(int i = 2; i <= 250; i ++){
-			boolean prime = true;
-			for(int j = 2; j <= Math.sqrt(i); j ++){
-				if(i % j == 0){
-					prime = false;
-					break;
-				}
-			}
-			
-			if(prime){
-				primes ++;
-				Koru.log(i);
-			}
-		}
-		
-		Koru.log(primes);
-		*/
 	}
 	
 	void loadMaterialColors(){
@@ -130,6 +109,7 @@ public class Renderer extends Module<Koru>{
 
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
+		
 		(block = new SpriteRenderable(Resources.region("block")).setProvider(Sorter.object).sprite()).add();
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);

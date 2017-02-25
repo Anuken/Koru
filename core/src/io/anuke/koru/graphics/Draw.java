@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.utils.Resources;
 
+
 public class Draw{
 	
 	public static void rect(String name, float x, float y){

@@ -6,6 +6,7 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 
+//TODO cleanup or remove class
 public class GeneratedMaterial extends GeneratedObject implements Material{
 	private final MaterialType type;
 	private final int id;

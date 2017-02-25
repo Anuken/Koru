@@ -53,6 +53,7 @@ public class World extends Module<Koru>{
 		}
 	}
 	
+	//TODO move time and color related function to a different class?
 	public Color getAmbientColor(){
 		int index = (int)(time*colors.length);
 		float mod = time*colors.length-index;
