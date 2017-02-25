@@ -53,7 +53,6 @@ public class KoruServer extends IServer{
 			server.start();
 			server.bind(Network.port, Network.port);
 
-			//webserver = new WebServer(this, new InetSocketAddress(Network.port+1));
 			Koru.log("Server up.");
 		}catch(Exception e){
 			e.printStackTrace();
@@ -130,9 +129,9 @@ public class KoruServer extends IServer{
 			inv.inventory[0][0] = new ItemStack(Items.woodsword);
 			inv.sendUpdate(player);
 
-			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player); //screw this, it isn't working properly
+			//doesn't seem to work
+			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player);
 
-			//why even try?
 			//for(ConnectionInfo i : connections.values())
 			//	player.getComponent(InventoryComponent.class).sendHotbarUpdate(updater.engine.getEntity(i.playerid), info.id);
 
