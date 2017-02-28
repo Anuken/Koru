@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -22,7 +21,7 @@ import io.anuke.koru.utils.InputType;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
-public class Input extends Module<Koru> implements InputProcessor {
+public class Input extends Module<Koru>{
 	private Vector2 vector = new Vector2();
 	public CollisionSystem collisions;
 	KoruEntity player;
@@ -112,21 +111,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Buttons.LEFT) {
 			sendInput(InputType.leftclick_down, blockx, blocky);
@@ -144,16 +128,6 @@ public class Input extends Module<Koru> implements InputProcessor {
 		} else if (button == Buttons.RIGHT) {
 			sendInput(InputType.rightclick_up);
 		}
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
 		return false;
 	}
 

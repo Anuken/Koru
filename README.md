@@ -15,9 +15,10 @@ A 2D sandbox game. Partially made as a testing ground for Entity Component syste
 - multiplayer, made with Kryonet
 - crabs
 - lighting system
+- ingame chat
 
 
-##Roadmap
+###Roadmap
 - proper player characters
 - machines, crafting
 - block entities or data
