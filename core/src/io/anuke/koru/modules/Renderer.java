@@ -24,6 +24,8 @@ import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.*;
+import io.anuke.layer3d.LayerList;
+import io.anuke.layer3d.LayeredRenderer;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
@@ -48,7 +50,7 @@ public class Renderer extends Module<Koru>{
 	public KoruEntity player;
 	public SpriteRenderable block;
 	public Sprite shadowSprite;
-	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
+	public LayerList[][] renderables = new LayerList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	private boolean init;
@@ -69,6 +71,8 @@ public class Renderer extends Module<Koru>{
 		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
+		LayeredRenderer.instance().camera = camera;
+		//LayeredRenderer.instance().drawShadows = true;
 
 		RenderableHandler.instance().setLayerManager(new LayerManager(){
 			public void draw(Array<Renderable> renderables, Batch batch){
@@ -127,6 +131,7 @@ public class Renderer extends Module<Koru>{
 
 		doRender();
 		updateCamera();
+
 	}
 
 	void doRender(){
@@ -136,7 +141,7 @@ public class Renderer extends Module<Koru>{
 		clearScreen();
 		batch.begin();
 		drawMap();
-		RenderableHandler.instance().renderAll(batch);
+		LayeredRenderer.instance().render(batch);
 		drawOverlay();
 		batch.end();
 
@@ -242,7 +247,7 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new RenderableList();
+							renderables[rendx][rendy] = new LayerList();
 						}
 						
 						
@@ -253,6 +258,7 @@ public class Renderer extends Module<Koru>{
 												+ 36){
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
+							/*
 							if(tile.light < 127){
 								RenderPool.sprite(Resources.region("lightshadow"))
 								.setDark()
@@ -262,6 +268,7 @@ public class Renderer extends Module<Koru>{
 								.setAlpha(1f-tile.light())
 								.add(renderables[rendx][rendy]);
 							}
+							*/
 						}
 
 						if(!tile.blockEmpty()
@@ -428,6 +435,14 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void updateCamera(){
+		if(Gdx.input.isKeyPressed(Keys.Q)){
+			LayeredRenderer.instance().camrotation += 0.5f*delta();
+		}
+		
+		if(Gdx.input.isKeyPressed(Keys.E)){
+			LayeredRenderer.instance().camrotation -= 0.5f*delta();
+		}
+		
 		camera.position.set(player.getX(), (player.getY()), 0f);
 		camera.update();
 	}

@@ -5,6 +5,7 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.graphics.Layers;
 import io.anuke.koru.utils.Resources;
+import io.anuke.layer3d.LayerList;
 import io.anuke.ucore.spritesystem.LambdaRenderable.Drawable;
 import io.anuke.ucore.spritesystem.Sorter;
 
@@ -12,6 +13,7 @@ public abstract class EntityRenderer{
 	protected boolean init;
 	protected KoruEntity entity;
 	protected RenderComponent render;
+	public LayerList list;
 	
 	protected void render(){}
 	abstract protected void init();
@@ -20,7 +22,7 @@ public abstract class EntityRenderer{
 		this.entity = entity;
 		this.render = render;
 		if(!init){
-			init();
+		//	init();
 			init = true;
 		}
 		this.render();

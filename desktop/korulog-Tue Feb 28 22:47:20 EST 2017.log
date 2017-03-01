@@ -1,0 +1,13 @@
+java.lang.NullPointerException: null
+io.anuke.ucore.graphics.Textures.get(Textures.java:24)
+io.anuke.layer3d.LayeredObject.<init>(LayeredObject.java:18)
+io.anuke.koru.world.MaterialType$2.draw(MaterialType.java:47)
+io.anuke.koru.modules.Renderer.updateTiles(Renderer.java:257)
+io.anuke.koru.modules.Renderer.updateTiles(Renderer.java:208)
+io.anuke.koru.modules.Network.update(Network.java:237)
+io.anuke.ucore.modules.ModuleController.render(ModuleController.java:56)
+io.anuke.koru.Koru.render(Koru.java:44)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:389)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:136)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:110)
+io.anuke.koru.desktop.DesktopLauncher.main(DesktopLauncher.java:23)
