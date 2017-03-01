@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Predicate;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.*;
+import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.components.SyncComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.World;
 import io.anuke.ucore.util.GridMap;
@@ -135,7 +137,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 	@Override
 	public void entityRemoved(Entity entity){
-		RenderComponent render = entity.getComponent(RenderComponent.class);
+		//RenderComponent render = entity.getComponent(RenderComponent.class);
 		// don't remove local player
 		//if(render != null && !(entity.getComponent(ConnectionComponent.class) != null
 		//		&& entity.getComponent(ConnectionComponent.class).local == true))

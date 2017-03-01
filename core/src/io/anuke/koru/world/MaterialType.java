@@ -30,7 +30,7 @@ public enum MaterialType{
 				type = rand(x, y, material.variants());
 			}
 
-			LayeredObject object = new LayeredObject(Resources.region(type == 0 ? material.name() : material.name() + type));
+			LayeredObject object = new LayeredObject(/*Resources.region(type == 0 ? material.name() : material.name() + type)*/Layers.get(material.name()));
 			object.setPosition(tile(x), tile(y));
 			group.add(object);
 		}
@@ -76,8 +76,19 @@ public enum MaterialType{
 	block{
 		public void draw(LayerList group, Material material, Tile tile, int x, int y){
 			if(material.name().equals("stoneblock")){
+				World world = Koru.module(World.class);
+				
 				LayeredObject object = new LayeredObject(Layers.get(material.name()));
 				object.setPosition(tile(x), tile(y));
+				if(world.tile(x, y -1).block().getType() == MaterialType.block &&
+						world.tile(x, y +1).block().getType() == MaterialType.block &&
+						world.tile(x+1, y).block().getType() == MaterialType.block &&
+						world.tile(x-1, y).block().getType() == MaterialType.block &&
+						world.tile(x-1, y -1).block().getType() == MaterialType.block &&
+						world.tile(x+1, y +1).block().getType() == MaterialType.block &&
+						world.tile(x+1, y-1).block().getType() == MaterialType.block &&
+						world.tile(x-1, y+1).block().getType() == MaterialType.block)
+				object.offset = 10;
 				group.add(object);
 			}
 		}

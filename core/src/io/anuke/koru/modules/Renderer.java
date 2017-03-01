@@ -24,8 +24,8 @@ import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.*;
+import io.anuke.layer3d.ArrayRenderer;
 import io.anuke.layer3d.LayerList;
-import io.anuke.layer3d.LayeredRenderer;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
@@ -71,7 +71,8 @@ public class Renderer extends Module<Koru>{
 		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
-		LayeredRenderer.instance().camera = camera;
+		ArrayRenderer.instance().camera = camera;
+		ArrayRenderer.instance().spacing = 0.8f;
 		//LayeredRenderer.instance().drawShadows = true;
 
 		RenderableHandler.instance().setLayerManager(new LayerManager(){
@@ -141,7 +142,7 @@ public class Renderer extends Module<Koru>{
 		clearScreen();
 		batch.begin();
 		drawMap();
-		LayeredRenderer.instance().render(batch);
+		ArrayRenderer.instance().render(batch);
 		drawOverlay();
 		batch.end();
 
@@ -247,7 +248,7 @@ public class Renderer extends Module<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new LayerList();
+							renderables[rendx][rendy] = new LayerList(ArrayRenderer.instance());
 						}
 						
 						
@@ -436,11 +437,11 @@ public class Renderer extends Module<Koru>{
 
 	void updateCamera(){
 		if(Gdx.input.isKeyPressed(Keys.Q)){
-			LayeredRenderer.instance().camrotation += 0.5f*delta();
+			ArrayRenderer.instance().camrotation += 0.5f*delta();
 		}
 		
 		if(Gdx.input.isKeyPressed(Keys.E)){
-			LayeredRenderer.instance().camrotation -= 0.5f*delta();
+			ArrayRenderer.instance().camrotation -= 0.5f*delta();
 		}
 		
 		camera.position.set(player.getX(), (player.getY()), 0f);

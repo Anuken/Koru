@@ -19,7 +19,7 @@ public class RendererSystem extends KoruSystem{
 
 	@Override
 	protected void processEntity(KoruEntity entity, float deltaTime){
-		RenderComponent render = entity.mapComponent(RenderComponent.class);
+		//RenderComponent render = entity.mapComponent(RenderComponent.class);
 		
 		//render.renderer.renderInternal(entity, render);
 		//if(renderHitboxes) renderHitboxes(entity, render);
