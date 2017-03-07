@@ -2,9 +2,7 @@ package io.anuke.koru.entities;
 
 import io.anuke.koru.components.KoruComponent;
 
-/**
- * Extend off of EntityType or another EntityType implementation for event usage, component definition, and other usage.
- */
+
 public abstract class EntityType{
 	
 	public abstract ComponentList components();
@@ -17,7 +15,9 @@ public abstract class EntityType{
 	
 	public boolean collide(KoruEntity entity, KoruEntity other){return true;}
 	
-	public void onDeath(KoruEntity entity){}
+	public void onDeath(KoruEntity entity, KoruEntity killer){
+		entity.removeServer();
+	}
 	
 	protected static ComponentList list(KoruComponent... components){
 		return new ComponentList(components);

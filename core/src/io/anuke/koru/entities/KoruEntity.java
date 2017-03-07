@@ -14,7 +14,7 @@ import io.anuke.koru.systems.KoruEngine;
 
 public class KoruEntity extends Entity{
 	private static KoruEngine engine;
-	private EntityType type;
+	private Class<? extends EntityType> type;
 	private static long nextID;
 	private long id;
 	private transient PositionComponent pos;
@@ -54,19 +54,19 @@ public class KoruEntity extends Entity{
 
 	private KoruEntity(){}
 
-	public static KoruEntity loadedEntity(EntityType type, long id){
+	public static KoruEntity loadedEntity(Class<? extends EntityType> type, long id){
 		KoruEntity entity = new KoruEntity(type);
 		entity.id = id;
 		return entity;
 	}
 
-	public KoruEntity(EntityType type){
+	public KoruEntity(Class<? extends EntityType> type){
 		id = nextID ++;
 		this.type = type;
-		Array<KoruComponent> components = type.components().list;
+		Array<KoruComponent> components = EntityTypes.get(type).components().list;
 		for(Component component : components)
 			this.add(component);
-		this.type.init(this);
+		EntityTypes.get(type).init(this);
 	}
 	
 	//Shortcut component getter methods.
@@ -109,10 +109,14 @@ public class KoruEntity extends Entity{
 	}
 
 	public EntityType getType(){
+		return EntityTypes.get(type);
+	}
+	
+	public Class<? extends EntityType> getTypeClass(){
 		return type;
 	}
 
-	public boolean isType(EntityType type){
+	public boolean isType(Class<? extends EntityType> type){
 		return this.type == type;
 	}
 

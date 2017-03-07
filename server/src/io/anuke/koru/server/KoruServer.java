@@ -18,8 +18,8 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.types.Player;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.ItemStack;
@@ -97,7 +97,7 @@ public class KoruServer extends IServer{
 	public void connectPacketRecieved(ConnectPacket packet, Connection connection){
 		try{
 
-			KoruEntity player = new KoruEntity(EntityType.player);
+			KoruEntity player = new KoruEntity(Player.class);
 			ConnectionInfo info = new ConnectionInfo(player.getID(), connection);
 
 			registerConnection(info);

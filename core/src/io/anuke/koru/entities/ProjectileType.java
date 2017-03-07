@@ -3,6 +3,7 @@ package io.anuke.koru.entities;
 import io.anuke.koru.components.DamageComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.ProjectileComponent;
+import io.anuke.koru.entities.types.Projectile;
 import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.renderers.EntityRenderer;
 
@@ -75,7 +76,7 @@ public enum ProjectileType{
 	}
 	
 	public static KoruEntity createProjectile(long source, ProjectileType type, float rotation, int damage){
-		KoruEntity entity = new KoruEntity(EntityType.projectile);
+		KoruEntity entity = new KoruEntity(Projectile.class);
 		entity.get(ProjectileComponent.class).type = type;
 		entity.get(ProjectileComponent.class).setRotation(entity, rotation);
 		//TODO

@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.DestroyOnTerrainHitComponent;
 import io.anuke.koru.components.ColliderComponent;
+import io.anuke.koru.components.DestroyOnTerrainHitComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.listeners.CollisionHandler;
@@ -44,7 +44,7 @@ public class CollisionSystem extends KoruSystem{
 		checkCollisions(entity, hitbox);
 		
 		GridPoint2 point = getTerrainCollisions(entity, 0, 0);
-		if(point != null){ //AHH ENTITY STUCK IN BLOCK!!
+		if(point != null){
 			float blockx = World.world(point.x), blocky = World.world(point.y);
 			vector.set(entity.getX() - blockx, entity.getY() - blocky).setLength(1f);
 			entity.position().add(vector.x, vector.y);

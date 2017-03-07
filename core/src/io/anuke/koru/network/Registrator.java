@@ -157,14 +157,14 @@ public class Registrator{
 	static class EntityWrapper{
 		HashMap<Class<?>, Component> components = new HashMap<Class<?>, Component>();
 		long id;
-		EntityType type;
+		Class<? extends EntityType> type;
 
 		private EntityWrapper(){}
 
 		public EntityWrapper(KoruEntity entity){
 			//components = entity.getComponents().toArray();
 			this.id = entity.getID();
-			this.type = entity.getType();
+			this.type = entity.getTypeClass();
 			for(Component component : entity.getComponents()){
 			
 				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
