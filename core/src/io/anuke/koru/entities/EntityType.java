@@ -22,6 +22,11 @@ public abstract class EntityType{
 	protected static ComponentList list(KoruComponent... components){
 		return new ComponentList(components);
 	}
+	
+	@Override
+	public String toString(){
+		return getClass().getSimpleName();
+	}
 	/*
 	player{
 		public Component[] defaultComponents(){

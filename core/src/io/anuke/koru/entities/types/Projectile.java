@@ -11,7 +11,7 @@ public class Projectile extends EntityType{
 	@Override
 	public ComponentList components(){
 		return list(new PositionComponent(), new RenderComponent(new ProjectileRenderer()),
-				new ColliderComponent(), new ProjectileComponent(),
+				new ColliderComponent(), new ProjectileComponent(), new VelocityComponent(),
 				new FadeComponent(), new DestroyOnTerrainHitComponent(), new DamageComponent());
 	}
 	

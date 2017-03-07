@@ -13,7 +13,6 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.KoruEngine;
 
 public class KoruEntity extends Entity{
-	private static KoruEngine engine;
 	private Class<? extends EntityType> type;
 	private static long nextID;
 	private long id;
@@ -39,8 +38,14 @@ public class KoruEntity extends Entity{
 	}
 	
 	/**overridden and now safe to use (?)*/
+	@Override
 	public <T extends Component> T getComponent (Class<T> componentClass) {
 		return get(componentClass);
+	}
+	
+	@Override
+	public Component remove (Class<? extends Component> componentClass) {
+		throw new IllegalArgumentException("Removing components is not supported.");
 	}
 	
 	/**Equivalent to getComponent.*/
@@ -122,7 +127,7 @@ public class KoruEntity extends Entity{
 	}
 
 	public KoruEntity add(){
-		engine.addEntity(this);
+		KoruEngine.instance().addEntity(this);
 		return this;
 	}
 
@@ -137,7 +142,7 @@ public class KoruEntity extends Entity{
 	}
 
 	public void remove(){
-		engine.removeEntity(this);
+		KoruEngine.instance().removeEntity(this);
 	}
 	
 	/**Only used for resetting the player's ID on reconnect*/
@@ -150,11 +155,7 @@ public class KoruEntity extends Entity{
 		return IServer.active();
 	}
 
-	public static void setEngine(KoruEngine e){
-		engine = e;
-	}
-
 	public String toString(){
-		return this.type + " #" + id;
+		return this.getType() + " #" + id;
 	}
 }

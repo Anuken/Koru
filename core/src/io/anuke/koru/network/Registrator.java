@@ -75,6 +75,7 @@ public class Registrator{
 		k.register(ParticleComponent.class);
 		k.register(DataComponent.class);
 		k.register(ItemComponent.class);
+		k.register(VelocityComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncData.class);

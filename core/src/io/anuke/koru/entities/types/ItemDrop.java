@@ -13,7 +13,7 @@ public class ItemDrop extends EntityType{
 		return list(new PositionComponent(), 
 				new RenderComponent(new ItemRenderer()),
 				new SyncComponent(SyncType.position),
-				new ItemComponent());
+				new ItemComponent(), new VelocityComponent());
 	}
 
 }
