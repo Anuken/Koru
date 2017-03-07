@@ -23,7 +23,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		for(Renderable r : list.renderables)
 		r.sprite().setAlpha(1f-life/lifetime);
 		
-		if(((Material)entity.mapComponent(DataComponent.class).data).getType() == MaterialType.tree)
+		if(((Material)entity.getComponent(DataComponent.class).data).getType() == MaterialType.tree)
 		list.renderables.get(2).sprite().sprite.rotate(rspeed*Koru.delta());
 		
 		if(life > lifetime){
@@ -34,10 +34,10 @@ public class BlockAnimationRenderer extends EntityRenderer{
 
 	@Override
 	protected void init(){
-		if(entity.mapComponent(DataComponent.class).data == null){
+		if(entity.getComponent(DataComponent.class).data == null){
 			throw new RuntimeException("No material specified in the data! Did you set the renderer material?");
 		}
-		Material material = (Material)entity.mapComponent(DataComponent.class).data;
+		Material material = (Material)entity.getComponent(DataComponent.class).data;
 		
 		int x = (int)(entity.getX()/World.tilesize);
 		int y = (int)(entity.getY()/World.tilesize);

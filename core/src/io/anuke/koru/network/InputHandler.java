@@ -165,7 +165,7 @@ public class InputHandler{
 			tileDownEvent();
 
 		// fire block click event
-		InventoryComponent inv = entity.mapComponent(InventoryComponent.class);
+		InventoryComponent inv = entity.inventory();
 		int slot = inv.hotbar;
 		ItemStack stack = inv.inventory[slot][0];
 		if(stack == null)

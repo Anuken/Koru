@@ -98,7 +98,7 @@ public class Network extends Module<Koru>{
 							requestEntity(key);
 							continue;
 						}
-						entity.mapComponent(SyncComponent.class).type.read(packet.updates.get(key), entity);
+						entity.get(SyncComponent.class).type.read(packet.updates.get(key), entity);
 					}
 				}else if(object instanceof ChunkPacket){
 					ChunkPacket packet = (ChunkPacket) object;
@@ -244,8 +244,8 @@ public class Network extends Module<Koru>{
 
 	private void sendUpdate(){
 		PositionPacket pos = new PositionPacket();
-		pos.x = getModule(ClientData.class).player.mapComponent(PositionComponent.class).x;
-		pos.y = getModule(ClientData.class).player.mapComponent(PositionComponent.class).y;
+		pos.x = getModule(ClientData.class).player.getX();
+		pos.y = getModule(ClientData.class).player.getY();
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(), getModule(ClientData.class).player.getY());
 		getModule(ClientData.class).player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
 		pos.direction = getModule(ClientData.class).player.getComponent(RenderComponent.class).direction;

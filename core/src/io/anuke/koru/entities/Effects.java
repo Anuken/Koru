@@ -33,9 +33,9 @@ public class Effects{
 
 	public static void indicator(String text, Color color, float x, float y, float lifetime){
 		KoruEntity entity = new KoruEntity(EntityType.damageindicator);
-		entity.mapComponent(TextComponent.class).text = text;
-		entity.mapComponent(TextComponent.class).color = color;
-		entity.mapComponent(FadeComponent.class).lifetime = lifetime;
+		entity.get(TextComponent.class).text = text;
+		entity.get(TextComponent.class).color = color;
+		entity.get(FadeComponent.class).lifetime = lifetime;
 		entity.position().set(x, y);
 		entity.send();
 	}
@@ -46,31 +46,31 @@ public class Effects{
 
 	public static void indicator(String text, Color color, long parent, float lifetime){
 		KoruEntity entity = new KoruEntity(EntityType.damageindicator);
-		entity.mapComponent(TextComponent.class).text = text;
-		entity.mapComponent(TextComponent.class).color = color;
-		entity.mapComponent(FadeComponent.class).lifetime = lifetime;
-		entity.mapComponent(ChildComponent.class).parent = parent;
+		entity.get(TextComponent.class).text = text;
+		entity.get(TextComponent.class).color = color;
+		entity.get(FadeComponent.class).lifetime = lifetime;
+		entity.get(ChildComponent.class).parent = parent;
 		entity.send();
 	}
 
 	public static void particle(String name, float x, float y, Color start, Color end, float velocity, float gravity){
 		KoruEntity entity = new KoruEntity(EntityType.particle);
 		entity.position().set(x, y);
-		entity.mapComponent(ParticleComponent.class).set(name, start, end).setSpeed(gravity, velocity);
+		entity.get(ParticleComponent.class).set(name, start, end).setSpeed(gravity, velocity);
 		entity.send();
 	}
 
 	public static void particle(Material material, float x, float y){
 		KoruEntity entity = new KoruEntity(EntityType.particle);
 		entity.position().set(x, y);
-		entity.mapComponent(ParticleComponent.class).set(material);
+		entity.get(ParticleComponent.class).set(material);
 		entity.send();
 	}
 
 	public static void block(Material material, int x, int y){
 		KoruEntity entity = new KoruEntity(EntityType.blockanimation);
 		entity.position().set(x * World.tilesize, y * World.tilesize);
-		entity.mapComponent(DataComponent.class).data = material;
+		entity.get(DataComponent.class).data = material;
 		entity.send();
 	}
 

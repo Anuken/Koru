@@ -35,8 +35,8 @@ public class ParticleRenderer extends EntityRenderer{
 
 	@Override
 	protected void init(){
-		ParticleComponent component = entity.mapComponent(ParticleComponent.class);
-		PooledEffect particle = Resources.particle(entity.mapComponent(ParticleComponent.class).name);
+		ParticleComponent component = entity.get(ParticleComponent.class);
+		PooledEffect particle = Resources.particle(entity.get(ParticleComponent.class).name);
 		setVelocity(particle, component.velocity, component.gravity);
 		float[] value = particle.getEmitters().first().getTint().getColors();
 		Color start = component.getStartColor();

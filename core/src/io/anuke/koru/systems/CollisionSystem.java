@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.DestroyOnTerrainHitComponent;
-import io.anuke.koru.components.HitboxComponent;
+import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.listeners.CollisionHandler;
@@ -25,7 +25,7 @@ public class CollisionSystem extends KoruSystem{
 	private Vector2 vector = new Vector2();
 
 	public CollisionSystem(){
-		super(Family.all(HitboxComponent.class, PositionComponent.class).get());
+		super(Family.all(ColliderComponent.class, PositionComponent.class).get());
 		handler = new CollisionHandler();
 	}
 	
@@ -38,7 +38,7 @@ public class CollisionSystem extends KoruSystem{
 	@Override
 	void processEntity(KoruEntity entity, float delta){
 
-		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
+		ColliderComponent hitbox = entity.mapComponent(ColliderComponent.class);
 		hitbox.entityhitbox.update(entity);
 
 		checkCollisions(entity, hitbox);
@@ -52,27 +52,27 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	void blockCollisionEvent(KoruEntity entity){
-		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
+		ColliderComponent hitbox = entity.mapComponent(ColliderComponent.class);
 		if(hitbox.collideterrain && entity.mapComponent(DestroyOnTerrainHitComponent.class) != null){
 			entity.removeServer();
 		}
 	}
 
-	void checkCollisions(KoruEntity entity, HitboxComponent hitbox){
+	void checkCollisions(KoruEntity entity, ColliderComponent hitbox){
 		
 		if(hitbox.sleeping) return;
 		
 		getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), maxHitboxSize, 
-		(aentity)-> { return aentity.hasComponent(HitboxComponent.class); }, 
+		(aentity)-> { return aentity.hasComponent(ColliderComponent.class); }, 
 		(other) -> {
 			if(other == entity || iterated.contains(other.getID())) return;
 			
-			HitboxComponent otherhitbox = other.mapComponent(HitboxComponent.class);
+			ColliderComponent otherhitbox = other.mapComponent(ColliderComponent.class);
 			otherhitbox.entityhitbox.update(other);
 			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
 					&& entity.getType().collide(entity, other) && other.getType().collide(other, entity)){
 				handler.dispatchEvent(entity, other);
-				otherhitbox.sleeptime = HitboxComponent.sleepduration;
+				otherhitbox.sleeptime = ColliderComponent.sleepduration;
 			}	
 		});
 		
@@ -139,7 +139,7 @@ public class CollisionSystem extends KoruSystem{
 		
 		World world = World.instance();
 		
-		HitboxComponent component = entity.mapComponent(HitboxComponent.class);
+		ColliderComponent component = entity.mapComponent(ColliderComponent.class);
 		float newx = entity.getX() + mx;
 		float newy = entity.getY() + my;
 		component.terrainhitbox.update(entity, mx, my);

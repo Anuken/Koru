@@ -13,7 +13,7 @@ public class InputSystem extends KoruSystem{
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
-		entity.mapComponent(InputComponent.class).input.update(delta);
+		entity.get(InputComponent.class).input.update(delta);
 	}
 
 }

@@ -2,7 +2,6 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 
-import io.anuke.koru.components.HitboxComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
@@ -19,18 +18,8 @@ public class RendererSystem extends KoruSystem{
 
 	@Override
 	protected void processEntity(KoruEntity entity, float deltaTime){
-		RenderComponent render = entity.mapComponent(RenderComponent.class);
+		RenderComponent render = entity.renderer();
 		
 		render.renderer.renderInternal(entity, render);
-		if(renderHitboxes) renderHitboxes(entity, render);
-	}
-
-	public void renderHitboxes(KoruEntity entity, RenderComponent render){
-		HitboxComponent hitbox = entity.mapComponent(HitboxComponent.class);
-		if(hitbox != null){
-			hitbox.terrainhitbox.update(entity);
-			hitbox.entityhitbox.update(entity);
-			//TODO actually render the hitboxes?
-		}
 	}
 }

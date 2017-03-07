@@ -65,7 +65,6 @@ public class Registrator{
 		k.register(AnimationType.class);
 		k.register(EntityWrapper.class);
 		k.register(PositionComponent.class);
-		k.register(VelocityComponent.class);
 		k.register(ProjectileComponent.class);
 		k.register(FadeComponent.class);
 		k.register(ConnectionComponent.class);

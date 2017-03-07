@@ -1,11 +1,9 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
-
 import io.anuke.koru.network.Interpolator;
 import io.anuke.koru.systems.SyncSystem.SyncType;
 
-public class SyncComponent implements Component{
+public class SyncComponent implements KoruComponent{
 	public final SyncType type;
 	public final Interpolator interpolator;
 	

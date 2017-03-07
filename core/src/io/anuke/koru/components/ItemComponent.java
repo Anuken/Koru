@@ -1,11 +1,9 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
-
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.SyncData.Synced;
 
 @Synced
-public class ItemComponent implements Component{
+public class ItemComponent implements KoruComponent{
 	public ItemStack stack;
 }

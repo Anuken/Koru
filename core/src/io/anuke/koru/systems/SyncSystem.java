@@ -4,11 +4,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.SyncComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
@@ -32,11 +28,11 @@ public class SyncSystem extends KoruSystem{
 		
 		getEngine().map().getNearbySyncables(player.getX(), player.getY(), syncrange, (entity)->{
 			if(entity == player) return;
-			packet.updates.put(entity.getID(), entity.mapComponent(SyncComponent.class).type.write(entity));
+			packet.updates.put(entity.getID(), entity.get(SyncComponent.class).type.write(entity));
 		});
 
 		
-		if(packet.updates.size != 0) IServer.instance().sendTCP(player.mapComponent(ConnectionComponent.class).connectionID, packet);
+		if(packet.updates.size != 0) IServer.instance().sendTCP(player.get(ConnectionComponent.class).connectionID, packet);
 	}
 
 	public enum SyncType{
@@ -47,7 +43,7 @@ public class SyncSystem extends KoruSystem{
 
 			public void read(SyncData buffer, KoruEntity entity){
 				PositionSyncData position = (PositionSyncData)buffer;
-				SyncComponent sync = entity.mapComponent(SyncComponent.class);
+				SyncComponent sync = entity.get(SyncComponent.class);
 				if(sync.interpolator != null){
 					sync.interpolator.push(entity, position.x, position.y);
 				}else{
@@ -57,22 +53,22 @@ public class SyncSystem extends KoruSystem{
 		},
 		player{
 			public SyncData write(KoruEntity entity){
-				return new PlayerSyncData(entity.getID(), entity.getX(), entity.getY(), entity.get(InputComponent.class).input.mouseangle, entity.mapComponent(RenderComponent.class).direction);
+				return new PlayerSyncData(entity.getID(), entity.getX(), entity.getY(), entity.get(InputComponent.class).input.mouseangle, entity.renderer().direction);
 			}
 
 			public void read(SyncData buffer, KoruEntity entity){
 				PlayerSyncData position = (PlayerSyncData)buffer;
-				entity.mapComponent(RenderComponent.class).direction = position.direction;
+				entity.get(RenderComponent.class).direction = position.direction;
 				
 				if(Vector2.dst(entity.getX(), entity.getY(), position.x, position.y) > 0.1f){
-					entity.mapComponent(RenderComponent.class).walkframe += Gdx.graphics.getDeltaTime()*60f*3f;
+					entity.get(RenderComponent.class).walkframe += Gdx.graphics.getDeltaTime()*60f*3f;
 				}else{
-					entity.mapComponent(RenderComponent.class).walkframe = 0;
+					entity.get(RenderComponent.class).walkframe = 0;
 				}
 				
 				entity.get(InputComponent.class).input.mouseangle = position.mouse;
 				
-				SyncComponent sync = entity.mapComponent(SyncComponent.class);
+				SyncComponent sync = entity.get(SyncComponent.class);
 				
 				if(sync.interpolator != null){
 					sync.interpolator.push(entity, position.x, position.y);

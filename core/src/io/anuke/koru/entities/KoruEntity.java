@@ -5,10 +5,10 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.KoruEngine;
 
@@ -43,11 +43,7 @@ public class KoruEntity extends Entity{
 		return get(componentClass);
 	}
 	
-	public <T>T mapComponent(Class<T> c){
-		return (T)(Mappers.get(c, this));
-	}
-	
-	/**Equivalent to mapComponent.*/
+	/**Equivalent to getComponent.*/
 	public <T>T get(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}
@@ -67,27 +63,41 @@ public class KoruEntity extends Entity{
 	public KoruEntity(EntityType type){
 		id = nextID ++;
 		this.type = type;
-		Component[] components = type.defaultComponents();
+		Array<KoruComponent> components = type.components().list;
 		for(Component component : components)
 			this.add(component);
 		this.type.init(this);
 	}
-
+	
+	//Shortcut component getter methods.
+	
 	public PositionComponent position(){
-		if(pos == null) pos = this.mapComponent(PositionComponent.class);
+		if(pos == null) pos = this.get(PositionComponent.class);
 		return pos;
 	}
 	
 	public InventoryComponent inventory(){
 		return get(InventoryComponent.class);
 	}
+	
+	public ConnectionComponent connection(){
+		return get(ConnectionComponent.class);
+	}
+	
+	public RenderComponent renderer(){
+		return get(RenderComponent.class);
+	}
+	
+	public ColliderComponent collider(){
+		return get(ColliderComponent.class);
+	}
 
 	public float getX(){
-		return this.mapComponent(PositionComponent.class).x;
+		return this.get(PositionComponent.class).x;
 	}
 
 	public float getY(){
-		return this.mapComponent(PositionComponent.class).y;
+		return this.get(PositionComponent.class).y;
 	}
 
 	public long getID(){
