@@ -9,7 +9,6 @@ public class CollisionHandler{
 	private Array<CollisionListener> listeners = new Array<CollisionListener>();
 
 	public CollisionHandler() {
-		addListener(new PhysicsListener());
 		addListener(new DamageListener());
 		addListener(new ProjectileListener());
 	}

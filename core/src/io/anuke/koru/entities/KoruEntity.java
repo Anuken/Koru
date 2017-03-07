@@ -63,7 +63,8 @@ public class KoruEntity extends Entity{
 	public KoruEntity(Class<? extends EntityType> type){
 		id = nextID ++;
 		this.type = type;
-		Array<KoruComponent> components = EntityTypes.get(type).components().list;
+		Array<KoruComponent> components = getType().components().list;
+		
 		for(Component component : components)
 			this.add(component);
 		EntityTypes.get(type).init(this);

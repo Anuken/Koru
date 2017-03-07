@@ -96,10 +96,10 @@ public class KoruServer extends IServer{
 
 	public void connectPacketRecieved(ConnectPacket packet, Connection connection){
 		try{
-
+			Koru.log("Connect packet recieved...");
 			KoruEntity player = new KoruEntity(Player.class);
 			ConnectionInfo info = new ConnectionInfo(player.getID(), connection);
-
+			
 			registerConnection(info);
 
 			player.connection().connectionID = info.id;
@@ -243,9 +243,10 @@ public class KoruServer extends IServer{
 
 		@Override
 		public void received(Connection con, Object object){
+			
 			if(object instanceof ConnectPacket){
+				Koru.log("recieved a connect packet from " + con.getID());
 				ConnectPacket packet = (ConnectPacket) object;
-				
 				if(!kryomap.containsKey(con)){
 					connectPacketRecieved(packet, con);
 				}

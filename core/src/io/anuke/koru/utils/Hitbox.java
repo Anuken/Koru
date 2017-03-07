@@ -8,7 +8,6 @@ import io.anuke.koru.entities.KoruEntity;
 public class Hitbox{
 	public Rectangle rect = new Rectangle();
 	public float centerx, centery;
-	
 
 	public boolean collides(Hitbox other){
 		return this.rect.overlaps(other.rect);

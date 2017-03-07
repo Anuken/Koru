@@ -10,7 +10,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.MathUtils;
 
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.entities.TestEntity;
+import io.anuke.koru.entities.types.TestEntity;
 
 
 public class CommandHandler{

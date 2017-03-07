@@ -1,8 +1,8 @@
 package io.anuke.koru.listeners;
 
 import io.anuke.koru.components.*;
-import io.anuke.koru.entities.DamageIndicator;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.types.DamageIndicator;
 
 public class DamageListener extends CollisionListener{
 

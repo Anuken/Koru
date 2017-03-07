@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
 import io.anuke.koru.components.*;
+import io.anuke.koru.entities.types.*;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Material;

@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
@@ -20,7 +19,6 @@ public class CollisionSystem extends KoruSystem{
 	private final static float maxHitboxSize = 50;
 	private final static float stepsize = 0.1f;
 	private CollisionHandler handler;
-	private ObjectSet<Long> iterated = new ObjectSet<Long>();
 	private GridPoint2 point = new GridPoint2();
 	private Vector2 vector = new Vector2();
 
@@ -28,23 +26,12 @@ public class CollisionSystem extends KoruSystem{
 		super(Family.all(ColliderComponent.class, PositionComponent.class).get());
 		handler = new CollisionHandler();
 	}
-	
-	@Override
-	public void update (float deltaTime) {
-		super.update(deltaTime);
-		iterated.clear();
-	}
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
-
-		ColliderComponent hitbox = entity.mapComponent(ColliderComponent.class);
-		hitbox.entityhitbox.update(entity);
-
-		checkCollisions(entity, hitbox);
 		
 		GridPoint2 point = getTerrainCollisions(entity, 0, 0);
-		if(point != null){
+		if(point != null){ //entity is stuck in block
 			float blockx = World.world(point.x), blocky = World.world(point.y);
 			vector.set(entity.getX() - blockx, entity.getY() - blocky).setLength(1f);
 			entity.position().add(vector.x, vector.y);
@@ -52,31 +39,10 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	void blockCollisionEvent(KoruEntity entity){
-		ColliderComponent hitbox = entity.mapComponent(ColliderComponent.class);
-		if(hitbox.collideterrain && entity.mapComponent(DestroyOnTerrainHitComponent.class) != null){
+		ColliderComponent hitbox = entity.collider();
+		if(hitbox.collideterrain && entity.get(DestroyOnTerrainHitComponent.class) != null){
 			entity.removeServer();
 		}
-	}
-
-	void checkCollisions(KoruEntity entity, ColliderComponent hitbox){
-		
-		if(hitbox.sleeping) return;
-		
-		getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), maxHitboxSize, 
-		(aentity)-> { return aentity.hasComponent(ColliderComponent.class); }, 
-		(other) -> {
-			if(other == entity || iterated.contains(other.getID())) return;
-			
-			ColliderComponent otherhitbox = other.mapComponent(ColliderComponent.class);
-			otherhitbox.entityhitbox.update(other);
-			if(hitbox.entityhitbox.collides(otherhitbox.entityhitbox) && otherhitbox.entityhitbox.collides(hitbox.entityhitbox) 
-					&& entity.getType().collide(entity, other) && other.getType().collide(other, entity)){
-				handler.dispatchEvent(entity, other);
-				otherhitbox.sleeptime = ColliderComponent.sleepduration;
-			}	
-		});
-		
-		iterated.add(entity.getID());
 	}
 
 	//TODO make this use small steps instead of one jump
@@ -139,10 +105,10 @@ public class CollisionSystem extends KoruSystem{
 		
 		World world = World.instance();
 		
-		ColliderComponent component = entity.mapComponent(ColliderComponent.class);
+		ColliderComponent component = entity.collider();
 		float newx = entity.getX() + mx;
 		float newy = entity.getY() + my;
-		component.terrainhitbox.update(entity, mx, my);
+		component.terrain.update(entity, mx, my);
 		int tilex = World.tile(newx);
 		int tiley = World.tile(newy);
 		for(int rx = -1;rx <= 1;rx ++){
@@ -151,7 +117,7 @@ public class CollisionSystem extends KoruSystem{
 				if(!world.inBounds(worldx, worldy)) continue;
 				Tile tile = world.tile(worldx, worldy);
 				if( !tile.solid()) continue;
-				if(component.terrainhitbox.collides(tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp))){
+				if(component.terrain.collides(tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp))){
 					return point.set(worldx, worldy);
 				}
 			}

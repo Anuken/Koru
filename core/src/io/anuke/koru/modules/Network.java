@@ -56,7 +56,7 @@ public class Network extends Module<Koru>{
 			client.connect(1200, ip, port, port);
 			Koru.log("Connecting to server..");
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name;
+			packet.name = getModule(ClientData.class).player.connection().name;
 			client.sendTCP(packet);
 			Koru.log("Sent packet.");
 
@@ -238,7 +238,7 @@ public class Network extends Module<Koru>{
 			chunksAdded = false;
 		}
 
-		if(Gdx.graphics.getFrameId() % packetFrequency == 0)
+		if(connected && Gdx.graphics.getFrameId() % packetFrequency == 0)
 			sendUpdate();
 	}
 

@@ -21,6 +21,7 @@ import io.anuke.koru.components.*;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
+import io.anuke.koru.entities.types.*;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.MaterialManager;
@@ -79,6 +80,14 @@ public class Registrator{
 		k.register(SyncData.class);
 		k.register(PositionSyncData.class);
 		k.register(PlayerSyncData.class);
+		
+		k.register(Player.class);
+		k.register(ItemDrop.class);
+		k.register(Particle.class);
+		k.register(Projectile.class);
+		k.register(TestEntity.class);
+		k.register(DamageIndicator.class);
+		k.register(BlockAnimation.class);
 		
 		k.register(Chunk.class);
 		k.register(Tile.class);
