@@ -70,11 +70,7 @@ public class Renderer extends Module<Koru>{
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 
-		RenderableHandler.instance().setLayerManager(new LayerManager(){
-			public void draw(Array<Renderable> renderables, Batch batch){
-				drawRenderables(renderables);
-			}
-		});
+		RenderableHandler.instance().setLayerManager(this::drawRenderables);
 
 		addEffects();
 		loadMaterialColors();
@@ -347,7 +343,7 @@ public class Renderer extends Module<Koru>{
 
 	}
 
-	void drawRenderables(Array<Renderable> renderables){
+	void drawRenderables(Array<Renderable> renderables, Batch batch){
 		batch.end();
 
 		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
