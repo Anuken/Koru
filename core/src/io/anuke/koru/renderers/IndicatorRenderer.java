@@ -3,7 +3,9 @@ package io.anuke.koru.renderers;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.*;
+import io.anuke.koru.components.ChildComponent;
+import io.anuke.koru.components.FadeComponent;
+import io.anuke.koru.components.TextComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.spritesystem.Sorter;
@@ -14,10 +16,10 @@ public class IndicatorRenderer extends EntityRenderer{
 	
 	@Override
 	protected void render(){
-		ChildComponent child = entity.mapComponent(ChildComponent.class);
+		ChildComponent child = entity.get(ChildComponent.class);
 		KoruEntity parent = Koru.getEngine().getEntity(child.parent);
 		
-		child.offset += 0.2f * 20f/entity.mapComponent(FadeComponent.class).lifetime;
+		child.offset += 0.2f * 20f/entity.get(FadeComponent.class).lifetime;
 		
 		if(parent != null){
 			entity.position().set(parent.getX(), parent.getY() + child.offset);
@@ -29,16 +31,17 @@ public class IndicatorRenderer extends EntityRenderer{
 	@Override
 	protected void init(){
 	
-		new TextRenderable(Resources.font(), entity.mapComponent(TextComponent.class).text)
+		new TextRenderable(Resources.font(), entity.get(TextComponent.class).text)
 		.align(Align.right)
 		.setProvider(Sorter.object);
 		//.add("text", render.group);
 		
-		ChildComponent child = entity.mapComponent(ChildComponent.class);
+		ChildComponent child = entity.get(ChildComponent.class);
 		KoruEntity parent = Koru.getEngine().getEntity(child.parent);
 		if(parent == null) return;
 		
-		child.offset = parent.mapComponent(HitboxComponent.class).height;
+		//TODO
+		//child.offset = parent.get(ColliderComponent.class).height;
 	}
 
 }

@@ -1,13 +1,12 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.koru.network.SyncData.Synced;
 import io.anuke.koru.world.Material;
 
 @Synced
-public class ParticleComponent implements Component{
+public class ParticleComponent implements KoruComponent{
 	public int colorstart, colorend;
 	public Material material;
 	public String name = "spark";

@@ -5,16 +5,15 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.components.PositionComponent;
+import io.anuke.koru.components.*;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.KoruEngine;
 
 public class KoruEntity extends Entity{
-	private static KoruEngine engine;
-	private EntityType type;
+	private Class<? extends EntityType> type;
 	private static long nextID;
 	private long id;
 	private transient PositionComponent pos;
@@ -39,15 +38,17 @@ public class KoruEntity extends Entity{
 	}
 	
 	/**overridden and now safe to use (?)*/
+	@Override
 	public <T extends Component> T getComponent (Class<T> componentClass) {
 		return get(componentClass);
 	}
 	
-	public <T>T mapComponent(Class<T> c){
-		return (T)(Mappers.get(c, this));
+	@Override
+	public Component remove (Class<? extends Component> componentClass) {
+		throw new IllegalArgumentException("Removing components is not supported.");
 	}
 	
-	/**Equivalent to mapComponent.*/
+	/**Equivalent to getComponent.*/
 	public <T>T get(Class<T> c){
 		return (T)(Mappers.get(c, this));
 	}
@@ -58,36 +59,51 @@ public class KoruEntity extends Entity{
 
 	private KoruEntity(){}
 
-	public static KoruEntity loadedEntity(EntityType type, long id){
+	public static KoruEntity loadedEntity(Class<? extends EntityType> type, long id){
 		KoruEntity entity = new KoruEntity(type);
 		entity.id = id;
 		return entity;
 	}
 
-	public KoruEntity(EntityType type){
+	public KoruEntity(Class<? extends EntityType> type){
 		id = nextID ++;
 		this.type = type;
-		Component[] components = type.defaultComponents();
+		Array<KoruComponent> components = getType().components().list;
+		
 		for(Component component : components)
 			this.add(component);
-		this.type.init(this);
+		EntityTypes.get(type).init(this);
 	}
-
+	
+	//Shortcut component getter methods.
+	
 	public PositionComponent position(){
-		if(pos == null) pos = this.mapComponent(PositionComponent.class);
+		if(pos == null) pos = this.get(PositionComponent.class);
 		return pos;
 	}
 	
 	public InventoryComponent inventory(){
 		return get(InventoryComponent.class);
 	}
+	
+	public ConnectionComponent connection(){
+		return get(ConnectionComponent.class);
+	}
+	
+	public RenderComponent renderer(){
+		return get(RenderComponent.class);
+	}
+	
+	public ColliderComponent collider(){
+		return get(ColliderComponent.class);
+	}
 
 	public float getX(){
-		return this.mapComponent(PositionComponent.class).x;
+		return this.get(PositionComponent.class).x;
 	}
 
 	public float getY(){
-		return this.mapComponent(PositionComponent.class).y;
+		return this.get(PositionComponent.class).y;
 	}
 
 	public long getID(){
@@ -99,15 +115,19 @@ public class KoruEntity extends Entity{
 	}
 
 	public EntityType getType(){
+		return EntityTypes.get(type);
+	}
+	
+	public Class<? extends EntityType> getTypeClass(){
 		return type;
 	}
 
-	public boolean isType(EntityType type){
+	public boolean isType(Class<? extends EntityType> type){
 		return this.type == type;
 	}
 
 	public KoruEntity add(){
-		engine.addEntity(this);
+		KoruEngine.instance().addEntity(this);
 		return this;
 	}
 
@@ -122,7 +142,7 @@ public class KoruEntity extends Entity{
 	}
 
 	public void remove(){
-		engine.removeEntity(this);
+		KoruEngine.instance().removeEntity(this);
 	}
 	
 	/**Only used for resetting the player's ID on reconnect*/
@@ -135,11 +155,7 @@ public class KoruEntity extends Entity{
 		return IServer.active();
 	}
 
-	public static void setEngine(KoruEngine e){
-		engine = e;
-	}
-
 	public String toString(){
-		return this.type + " #" + id;
+		return this.getType() + " #" + id;
 	}
 }

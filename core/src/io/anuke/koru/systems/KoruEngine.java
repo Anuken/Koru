@@ -7,18 +7,19 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.IServer;
 
 public class KoruEngine extends Engine{
+	private static KoruEngine instance;
 	private EntityMapper map;
 
 	public KoruEngine() {
 		super();
 
-		KoruEntity.setEngine(this);
+		instance = this;
+		
 		map = new EntityMapper();
 
 		addEntityListener(map);
+		addSystem(new UpdateSystem());
 		addSystem(new VelocitySystem());
-		addSystem(new FadeSystem());
-		addSystem(new ItemSystem());
 
 		if(IServer.active())
 			addSystem(map);
@@ -60,6 +61,10 @@ public class KoruEngine extends Engine{
 			throw new RuntimeException("Entity conflict! An entity with that ID already exists!");
 
 		super.addEntity(entity);
+	}
+	
+	public static KoruEngine instance(){
+		return instance;
 	}
 
 }

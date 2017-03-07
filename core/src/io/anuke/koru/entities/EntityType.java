@@ -1,14 +1,33 @@
 package io.anuke.koru.entities;
 
-import com.badlogic.ashley.core.Component;
+import io.anuke.koru.components.KoruComponent;
 
-import io.anuke.koru.components.*;
-import io.anuke.koru.network.InputHandler;
-import io.anuke.koru.network.Interpolator;
-import io.anuke.koru.renderers.*;
-import io.anuke.koru.systems.SyncSystem.SyncType;
 
-public enum EntityType{
+public abstract class EntityType{
+	
+	public abstract ComponentList components();
+	
+	public void init(KoruEntity entity){}
+	
+	public void update(KoruEntity entity){}
+	
+	public boolean unload(){return true;}
+	
+	public boolean collide(KoruEntity entity, KoruEntity other){return true;}
+	
+	public void onDeath(KoruEntity entity, KoruEntity killer){
+		entity.removeServer();
+	}
+	
+	protected static ComponentList list(KoruComponent... components){
+		return new ComponentList(components);
+	}
+	
+	@Override
+	public String toString(){
+		return getClass().getSimpleName();
+	}
+	/*
 	player{
 		public Component[] defaultComponents(){
 			return new Component[]{new PositionComponent(), new ConnectionComponent(),
@@ -90,7 +109,6 @@ public enum EntityType{
 		if(hitbox != null) initHitbox(entity, hitbox);
 	}
 	
-	/**whether to unload this entity when it gets too far away*/
 	public boolean unload(){
 		return true;
 	}
@@ -109,4 +127,5 @@ public enum EntityType{
 	public Component[] defaultComponents(){
 		return new Component[]{};
 	}
+	*/
 }

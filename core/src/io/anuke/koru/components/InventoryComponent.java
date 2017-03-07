@@ -1,6 +1,5 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import io.anuke.koru.entities.KoruEntity;
@@ -10,7 +9,7 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 
-public class InventoryComponent implements Component{
+public class InventoryComponent implements KoruComponent{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
 	public ItemStack[][] inventory;
 	public ItemStack selected;
@@ -63,14 +62,14 @@ public class InventoryComponent implements Component{
 		InventoryUpdatePacket update = new InventoryUpdatePacket();
 		update.selected = selected;
 		update.stacks = inventory;
-		IServer.instance().sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, update);
+		IServer.instance().sendTCP(entity.connection().connectionID, update);
 	}
 	
 	/**Server-side only.*/
 	public void sendHotbarUpdate(KoruEntity entity){
 		SlotChangePacket update = new SlotChangePacket();
 		update.stack = hotbarStack();
-		IServer.instance().sendToAllExcept(entity.mapComponent(ConnectionComponent.class).connectionID, update);
+		IServer.instance().sendToAllExcept(entity.connection().connectionID, update);
 	}
 	
 	/**Server-side only.*/

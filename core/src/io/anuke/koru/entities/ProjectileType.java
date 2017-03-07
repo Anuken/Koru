@@ -1,6 +1,7 @@
 package io.anuke.koru.entities;
 
 import io.anuke.koru.components.*;
+import io.anuke.koru.entities.types.Projectile;
 import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.renderers.EntityRenderer;
 
@@ -73,14 +74,16 @@ public enum ProjectileType{
 	}
 	
 	public static KoruEntity createProjectile(long source, ProjectileType type, float rotation, int damage){
-		KoruEntity entity = new KoruEntity(EntityType.projectile);
-		entity.mapComponent(ProjectileComponent.class).type = type;
-		entity.mapComponent(ProjectileComponent.class).setRotation(entity, rotation);
-		entity.mapComponent(VelocityComponent.class).velocity.set(type.speed(), 0).rotate(rotation);
-		entity.mapComponent(FadeComponent.class).lifetime = type.lifetime();
-		entity.mapComponent(HitboxComponent.class).entityRect().setSize(type.hitsize());
-		entity.mapComponent(DamageComponent.class).source = source;
-		entity.mapComponent(DamageComponent.class).damage = damage == -1 ? type.damage() : damage;
+		KoruEntity entity = new KoruEntity(Projectile.class);
+		entity.get(ProjectileComponent.class).type = type;
+		entity.get(ProjectileComponent.class).setRotation(entity, rotation);
+		//TODO
+		entity.get(VelocityComponent.class).velocity.set(type.speed(), 0).rotate(rotation);
+		entity.get(FadeComponent.class).lifetime = type.lifetime();
+		//TODO
+		//entity.get(ColliderComponent.class).entityRect().setSize(type.hitsize());
+		entity.get(DamageComponent.class).source = source;
+		entity.get(DamageComponent.class).damage = damage == -1 ? type.damage() : damage;
 		return entity;
 	}
 }

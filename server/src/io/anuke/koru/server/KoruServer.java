@@ -15,9 +15,11 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.*;
-import io.anuke.koru.entities.EntityType;
+import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.components.InputComponent;
+import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.types.Player;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.ItemStack;
@@ -94,14 +96,14 @@ public class KoruServer extends IServer{
 
 	public void connectPacketRecieved(ConnectPacket packet, Connection connection){
 		try{
-
-			KoruEntity player = new KoruEntity(EntityType.player);
+			Koru.log("Connect packet recieved...");
+			KoruEntity player = new KoruEntity(Player.class);
 			ConnectionInfo info = new ConnectionInfo(player.getID(), connection);
-
+			
 			registerConnection(info);
 
-			player.mapComponent(ConnectionComponent.class).connectionID = info.id;
-			player.mapComponent(ConnectionComponent.class).name = packet.name;
+			player.connection().connectionID = info.id;
+			player.connection().name = packet.name;
 
 			DataPacket data = new DataPacket();
 			data.playerid = player.getID();
@@ -136,7 +138,7 @@ public class KoruServer extends IServer{
 			//	player.getComponent(InventoryComponent.class).sendHotbarUpdate(updater.engine.getEntity(i.playerid), info.id);
 
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
-			Koru.log("Entity ID is " + player.getID() + ", connection ID is " + player.mapComponent(ConnectionComponent.class).connectionID);
+			Koru.log("Entity ID is " + player.getID() + ", connection ID is " + player.connection().connectionID);
 			Koru.log(packet.name + " has joined.");
 		}catch(Exception e){
 			e.printStackTrace();
@@ -153,9 +155,8 @@ public class KoruServer extends IServer{
 					return;
 
 				getPlayer(info).position().set(packet.x, packet.y);
-				getPlayer(info).mapComponent(RenderComponent.class).direction = packet.direction;
-				getPlayer(info).mapComponent(HitboxComponent.class).sleeptime = HitboxComponent.sleepduration;
-				getPlayer(info).mapComponent(InputComponent.class).input.mouseangle = packet.mouseangle;
+				getPlayer(info).renderer().direction = packet.direction;
+				getPlayer(info).get(InputComponent.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof EntityRequestPacket){
 				EntityRequestPacket packet = (EntityRequestPacket) object;
 				KoruEntity entity = updater.engine.getEntity(packet.id);
@@ -171,10 +172,10 @@ public class KoruServer extends IServer{
 				sendTCP(info.id, updater.world.createChunkPacket(packet));
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket) object;
-				getPlayer(info).mapComponent(InputComponent.class).input.inputEvent(packet.type, packet.data);
+				getPlayer(info).get(InputComponent.class).input.inputEvent(packet.type, packet.data);
 			}else if(object instanceof SlotChangePacket){
 				SlotChangePacket packet = (SlotChangePacket) object;
-				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
+				InventoryComponent inv = getPlayer(info).inventory();
 				packet.slot = UCore.clamp(packet.slot, 0, 3);
 				inv.hotbar = packet.slot;
 				packet.id = info.playerid;
@@ -182,7 +183,7 @@ public class KoruServer extends IServer{
 				sendToAllExceptTCP(info.id, packet);
 			}else if(object instanceof RecipeSelectPacket){
 				RecipeSelectPacket packet = (RecipeSelectPacket) object;
-				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
+				InventoryComponent inv = getPlayer(info).inventory();
 				inv.recipe = packet.recipe;
 			}else if(object instanceof BlockInputPacket){
 				BlockInputPacket packet = (BlockInputPacket) object;
@@ -191,7 +192,7 @@ public class KoruServer extends IServer{
 
 			}else if(object instanceof InventoryClickPacket){
 				InventoryClickPacket packet = (InventoryClickPacket) object;
-				InventoryComponent inv = getPlayer(info).mapComponent(InventoryComponent.class);
+				InventoryComponent inv = getPlayer(info).inventory();
 				inv.clickSlot(packet.x, packet.y);
 
 				inv.sendUpdate(updater.engine.getEntity(info.playerid));
@@ -218,8 +219,8 @@ public class KoruServer extends IServer{
 				Koru.log("An unknown player has disconnected.");
 				return;
 			}
-			sendChatMessage("[GREEN]" + getPlayer(info).mapComponent(ConnectionComponent.class).name + " [CORAL]has disconnected.");
-			Koru.log(getPlayer(info).mapComponent(ConnectionComponent.class).name + " has disconnected.");
+			sendChatMessage("[GREEN]" + getPlayer(info).connection().name + " [CORAL]has disconnected.");
+			Koru.log(getPlayer(info).connection().name + " has disconnected.");
 			getPlayer(info).removeServer();
 			removeConnection(info);
 		}catch(Exception e){
@@ -242,9 +243,10 @@ public class KoruServer extends IServer{
 
 		@Override
 		public void received(Connection con, Object object){
+			
 			if(object instanceof ConnectPacket){
+				Koru.log("recieved a connect packet from " + con.getID());
 				ConnectPacket packet = (ConnectPacket) object;
-				
 				if(!kryomap.containsKey(con)){
 					connectPacketRecieved(packet, con);
 				}
@@ -284,7 +286,7 @@ public class KoruServer extends IServer{
 
 	public void sendToAllIn(Object object, float x, float y, float range){
 		updater.engine.map().getNearbyConnections(x, y, range, (entity) -> {
-			sendTCP(entity.mapComponent(ConnectionComponent.class).connectionID, object);
+			sendTCP(entity.connection().connectionID, object);
 		});
 	}
 

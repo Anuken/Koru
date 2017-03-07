@@ -1,7 +1,5 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
-
-public class WeaponComponent implements Component{
+public class WeaponComponent implements KoruComponent{
 	public float cooldown;
 }

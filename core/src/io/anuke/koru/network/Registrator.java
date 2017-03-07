@@ -21,6 +21,7 @@ import io.anuke.koru.components.*;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
+import io.anuke.koru.entities.types.*;
 import io.anuke.koru.generation.GeneratedMaterial;
 import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.MaterialManager;
@@ -65,7 +66,6 @@ public class Registrator{
 		k.register(AnimationType.class);
 		k.register(EntityWrapper.class);
 		k.register(PositionComponent.class);
-		k.register(VelocityComponent.class);
 		k.register(ProjectileComponent.class);
 		k.register(FadeComponent.class);
 		k.register(ConnectionComponent.class);
@@ -75,11 +75,20 @@ public class Registrator{
 		k.register(ParticleComponent.class);
 		k.register(DataComponent.class);
 		k.register(ItemComponent.class);
+		k.register(VelocityComponent.class);
 
 		k.register(ProjectileType.class);
 		k.register(SyncData.class);
 		k.register(PositionSyncData.class);
 		k.register(PlayerSyncData.class);
+		
+		k.register(Player.class);
+		k.register(ItemDrop.class);
+		k.register(Particle.class);
+		k.register(Projectile.class);
+		k.register(TestEntity.class);
+		k.register(DamageIndicator.class);
+		k.register(BlockAnimation.class);
 		
 		k.register(Chunk.class);
 		k.register(Tile.class);
@@ -158,14 +167,14 @@ public class Registrator{
 	static class EntityWrapper{
 		HashMap<Class<?>, Component> components = new HashMap<Class<?>, Component>();
 		long id;
-		EntityType type;
+		Class<? extends EntityType> type;
 
 		private EntityWrapper(){}
 
 		public EntityWrapper(KoruEntity entity){
 			//components = entity.getComponents().toArray();
 			this.id = entity.getID();
-			this.type = entity.getType();
+			this.type = entity.getTypeClass();
 			for(Component component : entity.getComponents()){
 			
 				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){

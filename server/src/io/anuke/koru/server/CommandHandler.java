@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.MathUtils;
 
-import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.types.TestEntity;
 
 
 public class CommandHandler{
@@ -47,7 +47,7 @@ public class CommandHandler{
 		
 		cmd("spawn", ()->{
 			for(int i = 0; i < 30; i++){
-				KoruEntity entity = new KoruEntity(EntityType.testmob);
+				KoruEntity entity = new KoruEntity(TestEntity.class);
 				entity.position().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
 				entity.add().send();
 			}

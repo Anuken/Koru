@@ -1,11 +1,11 @@
 package io.anuke.koru.components;
 
-import com.badlogic.ashley.core.Component;
-
+import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.Interpolator;
 import io.anuke.koru.systems.SyncSystem.SyncType;
 
-public class SyncComponent implements Component{
+public class SyncComponent implements KoruComponent{
 	public final SyncType type;
 	public final Interpolator interpolator;
 	
@@ -22,5 +22,13 @@ public class SyncComponent implements Component{
 	private SyncComponent(){
 		type = null;
 		interpolator = null;
+	}
+	
+	@Override
+	public void update(KoruEntity entity){
+		if(IServer.active() || (entity.connection() != null && entity.connection().local == true)) return;
+		SyncComponent sync = entity.get(SyncComponent.class);
+
+		if(sync.interpolator != null) sync.interpolator.update(entity);
 	}
 }

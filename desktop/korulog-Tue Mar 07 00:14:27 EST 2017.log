@@ -1,0 +1,9 @@
+java.lang.NullPointerException: null
+io.anuke.koru.modules.Network.sendUpdate(Network.java:250)
+io.anuke.koru.modules.Network.update(Network.java:242)
+io.anuke.ucore.modules.ModuleController.render(ModuleController.java:56)
+io.anuke.koru.Koru.render(Koru.java:44)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:389)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:136)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:110)
+io.anuke.koru.desktop.DesktopLauncher.main(DesktopLauncher.java:23)
