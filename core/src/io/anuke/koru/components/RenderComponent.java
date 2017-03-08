@@ -20,4 +20,10 @@ public class RenderComponent implements KoruComponent{
 		if(!IServer.active())
 		renderer.renderInternal(entity, this);
 	}
+	
+	@Override
+	public void onRemove(KoruEntity entity){
+		if(!(entity.connection() != null && entity.connection().local == true))
+		list.free();
+	}
 }

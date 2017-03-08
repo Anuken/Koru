@@ -20,6 +20,7 @@ public class KoruEngine extends Engine{
 		addEntityListener(map);
 		addSystem(new UpdateSystem());
 		addSystem(new VelocitySystem());
+		addSystem(new CollisionSystem());
 
 		if(IServer.active())
 			addSystem(map);

@@ -21,6 +21,7 @@ public class Player extends EntityType{
 	
 	public void init(KoruEntity entity){
 		entity.get(InputComponent.class).input = new InputHandler(entity);
+		entity.collider().collider.drag = 0.73f;
 	}
 	
 	public boolean unload(){

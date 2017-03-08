@@ -11,7 +11,9 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.server.world.TerrainGenerator;
 import io.anuke.koru.server.world.WorldFile;
-import io.anuke.koru.systems.*;
+import io.anuke.koru.systems.InputSystem;
+import io.anuke.koru.systems.KoruEngine;
+import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
 import io.anuke.ucore.util.ColorCodes;
 
@@ -92,7 +94,6 @@ public class KoruUpdater{
 		world = new World(file);
 		engine = new KoruEngine();
 		engine.addSystem(new SyncSystem());
-		engine.addSystem(new CollisionSystem());
 		engine.addSystem(new InputSystem());
 
 		Runtime.getRuntime().addShutdownHook(new Thread(()->{

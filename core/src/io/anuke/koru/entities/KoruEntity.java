@@ -72,6 +72,10 @@ public class KoruEntity extends Entity{
 		
 		for(Component component : components)
 			this.add(component);
+		
+		for(KoruComponent component : components)
+			component.onAdd(this);
+		
 		EntityTypes.get(type).init(this);
 	}
 	

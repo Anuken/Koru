@@ -16,14 +16,12 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
-import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.InputType;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
 public class Input extends Module<Koru>{
 	private Vector2 vector = new Vector2();
-	public CollisionSystem collisions;
 	KoruEntity player;
 	int blockx, blocky;
 
@@ -33,7 +31,6 @@ public class Input extends Module<Koru>{
 		plex.addProcessor(this);
 		Gdx.input.setInputProcessor(plex);
 		player = getModule(ClientData.class).player;
-		collisions = new CollisionSystem();
 	}
 
 	@Override
@@ -60,7 +57,7 @@ public class Input extends Module<Koru>{
 		
 		vector.set(0, 0);
 
-		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 2f)*delta();
+		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 2.2f);
 
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			vector.y += speed;
@@ -92,7 +89,8 @@ public class Input extends Module<Koru>{
 		float lastx = player.getX();
 		float lasty = player.getY();
 		
-		collisions.moveEntity(player, vector.x, vector.y);
+		//collisions.moveEntity(player, vector.x, vector.y);
+		player.collider().collider.applyImpulse(vector.x*delta(), vector.y*delta());
 		
 		if(Vector2.dst(lastx, lasty, player.getX(), player.getY()) > 0.05f){
 			render.walkframe += delta();

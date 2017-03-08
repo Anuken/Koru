@@ -60,7 +60,7 @@ project(":core") {
 		compile 'com.github.Anuken:GDXGifRecorder:c9fa647'
 		compile 'com.github.anuken:gdx-postprocessing:8173fd4bb6'
 		compile 'com.github.anuken:ucore:a3e508942a'
-		compile 'com.github.anuken:gdx-aabb:4c29608'
+		//compile 'com.github.anuken:gdx-aabb:4049c40'
     }
 }
 

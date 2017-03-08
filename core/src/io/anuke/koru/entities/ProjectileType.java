@@ -1,6 +1,8 @@
 package io.anuke.koru.entities;
 
-import io.anuke.koru.components.*;
+import io.anuke.koru.components.DamageComponent;
+import io.anuke.koru.components.FadeComponent;
+import io.anuke.koru.components.ProjectileComponent;
 import io.anuke.koru.entities.types.Projectile;
 import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.renderers.EntityRenderer;
@@ -9,7 +11,7 @@ public enum ProjectileType{
 	bolt, 
 	slash{
 		public float lifetime(){
-			return 8f;
+			return 12f;
 		}
 		
 		public float speed(){
@@ -62,7 +64,7 @@ public enum ProjectileType{
 	}
 	
 	public float rotation(KoruEntity entity){
-		return entity.get(ProjectileComponent.class).getRotation();
+		return entity.collider().collider.getVelocity().angle();
 	}
 	
 	public int damage(){
@@ -76,12 +78,12 @@ public enum ProjectileType{
 	public static KoruEntity createProjectile(long source, ProjectileType type, float rotation, int damage){
 		KoruEntity entity = new KoruEntity(Projectile.class);
 		entity.get(ProjectileComponent.class).type = type;
-		entity.get(ProjectileComponent.class).setRotation(entity, rotation);
 		//TODO
-		entity.get(VelocityComponent.class).velocity.set(type.speed(), 0).rotate(rotation);
+		entity.collider().collider.getVelocity().set(type.speed(), 0).rotate(rotation);
+		entity.collider().collider.drag = 0;
+		
 		entity.get(FadeComponent.class).lifetime = type.lifetime();
-		//TODO
-		//entity.get(ColliderComponent.class).entityRect().setSize(type.hitsize());
+		
 		entity.get(DamageComponent.class).source = source;
 		entity.get(DamageComponent.class).damage = damage == -1 ? type.damage() : damage;
 		return entity;

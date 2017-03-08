@@ -11,10 +11,16 @@ public class Projectile extends EntityType{
 	@Override
 	public ComponentList components(){
 		return list(new PositionComponent(), new RenderComponent(new ProjectileRenderer()),
-				new ColliderComponent(), new ProjectileComponent(), new VelocityComponent(),
+				new ColliderComponent(), new ProjectileComponent(),
 				new FadeComponent(), new DestroyOnTerrainHitComponent(), new DamageComponent());
 	}
 	
+	@Override
+	public void init(KoruEntity entity){
+		entity.collider().collider.trigger = true;
+	}
+	
+	@Override
 	public boolean collide(KoruEntity entity, KoruEntity other){
 		return entity.get(DamageComponent.class).source != other.getID() 
 				&& !entity.get(ProjectileComponent.class).hit.contains(other.getID());

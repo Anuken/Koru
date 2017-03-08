@@ -2,11 +2,9 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 
-import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.VelocityComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.network.IServer;
 
 public class VelocitySystem extends KoruSystem{
 	private CollisionSystem collisions;
@@ -23,14 +21,14 @@ public class VelocitySystem extends KoruSystem{
 		
 		float addx = velocity.velocity.x * delta, addy = velocity.velocity.y * delta;
 
-		ColliderComponent hitbox = entity.collider();
+		//ColliderComponent hitbox = entity.collider();
 
-		if(hitbox != null && IServer.active() && hitbox.collideterrain){
-			collisions.moveWithCollisions(entity, addx, addy);
-		}else{
+		//if(hitbox != null && IServer.active() && hitbox.collideterrain){
+			//collisions.moveWithCollisions(entity, addx, addy);
+		//}else{
 			entity.position().x += addx;
 			entity.position().y += addy;
-		}
+		//}
 		//Koru.log(velocity.velocity);
 		velocity.velocity.scl((float)Math.pow(1f - velocity.drag, delta));
 	}

@@ -3,41 +3,65 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.Koru;
+import io.anuke.aabb.ColliderEngine;
 import io.anuke.koru.components.ColliderComponent;
-import io.anuke.koru.components.DestroyOnTerrainHitComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.listeners.CollisionHandler;
-import io.anuke.koru.modules.World;
-import io.anuke.koru.world.Tile;
 
 public class CollisionSystem extends KoruSystem{
 	private final static float maxHitboxSize = 50;
 	private final static float stepsize = 0.1f;
-	private CollisionHandler handler;
+	private ColliderEngine engine;
 	private GridPoint2 point = new GridPoint2();
 	private Vector2 vector = new Vector2();
 
 	public CollisionSystem(){
 		super(Family.all(ColliderComponent.class, PositionComponent.class).get());
-		handler = new CollisionHandler();
+		engine = new ColliderEngine();
+	}
+	
+	public ColliderEngine getColliderEngine(){
+		return engine;
+	}
+	
+	@Override
+	public void update (float deltaTime) {
+		engine.update(deltaTime/60f);
+		super.update(deltaTime);
 	}
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
+		ColliderComponent co = entity.collider();
 		
+		if(!co.init){
+			co.collider.x = entity.getX();
+			co.collider.y = entity.getY();
+			co.lastx = entity.getX();
+			co.lasty = entity.getY();
+			//co.collider.maxVelocity = 0.8f;
+			//
+			engine.addCollider(co.collider);
+			co.init = true;
+		}else{
+			entity.position().add(co.collider.x - co.lastx, co.collider.y - co.lasty);
+			co.lastx = co.collider.x;
+			co.lasty = co.collider.y;
+		}
+			
+		/*
 		GridPoint2 point = getTerrainCollisions(entity, 0, 0);
 		if(point != null){ //entity is stuck in block
 			float blockx = World.world(point.x), blocky = World.world(point.y);
 			vector.set(entity.getX() - blockx, entity.getY() - blocky).setLength(1f);
 			entity.position().add(vector.x, vector.y);
 		}
+		*/
 	}
-
+	
+	/*
 	void blockCollisionEvent(KoruEntity entity){
 		ColliderComponent hitbox = entity.collider();
 		if(hitbox.collideterrain && entity.get(DestroyOnTerrainHitComponent.class) != null){
@@ -100,7 +124,7 @@ public class CollisionSystem extends KoruSystem{
 		entity.position().add(ax, ay);
 	}
 	
-	/**Returns the point of terrain collision, or null if none are found*/
+	/**Returns the point of terrain collision, or null if none are found
 	public GridPoint2 getTerrainCollisions(KoruEntity entity, float mx, float my){
 		
 		World world = World.instance();
@@ -128,4 +152,5 @@ public class CollisionSystem extends KoruSystem{
 	public boolean checkTerrainCollisions(KoruEntity entity, float mx, float my){
 		return getTerrainCollisions(entity, mx, my) != null;
 	}
+	*/
 }
