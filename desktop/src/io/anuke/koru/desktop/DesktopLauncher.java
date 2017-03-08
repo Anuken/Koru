@@ -9,7 +9,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import io.anuke.koru.Koru;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) throws Exception{
+	public static void main (String[] arg){
 		
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -18,7 +18,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(d.width, d.height-100);
 		config.setWindowIcon("sprites/icon.png");
 		config.setTitle("Koru");
-		//config.useVsync(false);
+		config.useVsync(false);
 		
 		new Lwjgl3Application(new Koru(), config);
 		

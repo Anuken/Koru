@@ -3,12 +3,17 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import io.anuke.aabb.Collider;
 import io.anuke.aabb.ColliderEngine;
+import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.modules.World;
+import io.anuke.koru.world.Tile;
 
 public class CollisionSystem extends KoruSystem{
 	private final static float maxHitboxSize = 50;
@@ -28,8 +33,8 @@ public class CollisionSystem extends KoruSystem{
 	
 	@Override
 	public void update (float deltaTime) {
-		engine.update(deltaTime/60f);
 		super.update(deltaTime);
+		engine.update(deltaTime/60f);
 	}
 
 	@Override
@@ -50,6 +55,8 @@ public class CollisionSystem extends KoruSystem{
 			co.lastx = co.collider.x;
 			co.lasty = co.collider.y;
 		}
+		
+		checkTerrainCollisions(co.collider);
 			
 		/*
 		GridPoint2 point = getTerrainCollisions(entity, 0, 0);
@@ -59,6 +66,42 @@ public class CollisionSystem extends KoruSystem{
 			entity.position().add(vector.x, vector.y);
 		}
 		*/
+	}
+	
+	void checkTerrainCollisions(Collider collider){
+		World world = World.instance();
+		float x = collider.x + collider.getVelocity().x*Koru.delta();
+		float y = collider.y + collider.getVelocity().y*Koru.delta();
+		float w = collider.w;
+		float h = collider.h;
+		int tilex = World.tile(x);
+		int tiley = World.tile(y);
+		int range = 1;
+		for(int rx = -range;rx <= range; rx ++){
+			for(int ry = -range;ry <= range; ry ++){
+				int worldx = tilex + rx, worldy = tiley + ry;
+				if(!world.inBounds(worldx, worldy)) continue;
+				Tile tile = world.tile(worldx, worldy);
+				if( !tile.solid()) continue;
+				
+				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
+				Rectangle col = collider.getBounds();
+				
+				col.x = x-w/2;
+				
+				if(col.overlaps(out)){
+					collider.getVelocity().scl(-1f*collider.restitution, 1f);
+				}
+				
+				col.x = collider.x-w/2;
+				
+				col.y = y-h/2;
+				
+				if(col.overlaps(out)){
+					collider.getVelocity().scl(1f, -1f*collider.restitution);
+				}
+			}
+		}
 	}
 	
 	/*
