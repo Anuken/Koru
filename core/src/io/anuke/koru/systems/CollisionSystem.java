@@ -1,5 +1,7 @@
 package io.anuke.koru.systems;
 
+import java.util.function.Consumer;
+
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
@@ -41,6 +43,17 @@ public class CollisionSystem extends KoruSystem{
 				handler.dispatchEvent(ka, kb);
 			});
 		}
+		
+		//prevents objects from moving into walls
+		engine.setPositionVerifier((c, x, y)->{
+			Rectangle col = c.getBounds();
+			col.x = x - c.w / 2;
+			col.y = y - c.h / 2;
+			
+			return !checkCollisions(x, y, col);
+		});
+		
+		
 	}
 
 	public ColliderEngine getColliderEngine(){
@@ -49,8 +62,9 @@ public class CollisionSystem extends KoruSystem{
 
 	@Override
 	public void update(float deltaTime){
+		engine.updateCollisions();
 		super.update(deltaTime);
-		engine.update(deltaTime / 60f);
+		engine.updateForces(deltaTime / 60f);
 	}
 
 	@Override
@@ -87,11 +101,31 @@ public class CollisionSystem extends KoruSystem{
 
 	void checkTerrainCollisions(Collider collider, ColliderComponent comp){
 		//TODO fix entities being pushed into blocks
-		World world = World.instance();
 		float x = collider.x + collider.getVelocity().x * Koru.delta();
 		float y = collider.y + collider.getVelocity().y * Koru.delta();
 		float w = collider.w;
 		float h = collider.h;
+		
+		checkTerrain(x, y, out->{
+			Rectangle col = collider.getBounds();
+
+			col.height *= comp.terrainScl;
+
+			col.x = x - w / 2;
+
+			if(col.overlaps(out)){
+				collider.getVelocity().scl(-1f * collider.restitution, 1f);
+			}
+
+			col.x = collider.x - w / 2;
+
+			col.y = y - h / 2;
+
+			if(col.overlaps(out)){
+				collider.getVelocity().scl(1f, -1f * collider.restitution);
+			}
+		});
+		/*
 		int tilex = World.tile(x);
 		int tiley = World.tile(y);
 		int range = 1;
@@ -124,6 +158,50 @@ public class CollisionSystem extends KoruSystem{
 				}
 			}
 		}
+		*/
+	}
+	
+	void checkTerrain(float x, float y, Consumer<Rectangle> cons){
+		World world = World.instance();
+		int tilex = World.tile(x);
+		int tiley = World.tile(y);
+		int range = 1;
+		for(int rx = -range; rx <= range; rx++){
+			for(int ry = -range; ry <= range; ry++){
+				int worldx = tilex + rx, worldy = tiley + ry;
+				if(!world.inBounds(worldx, worldy))
+					continue;
+				Tile tile = world.tile(worldx, worldy);
+				if(!tile.solid())
+					continue;
+
+				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
+				cons.accept(out);
+			}
+		}
+	}
+	
+	boolean checkCollisions(float x, float y, Rectangle rect){
+		World world = World.instance();
+		int tilex = World.tile(x);
+		int tiley = World.tile(y);
+		int range = 1;
+		for(int rx = -range; rx <= range; rx++){
+			for(int ry = -range; ry <= range; ry++){
+				int worldx = tilex + rx, worldy = tiley + ry;
+				if(!world.inBounds(worldx, worldy))
+					continue;
+				Tile tile = world.tile(worldx, worldy);
+				if(!tile.solid())
+					continue;
+
+				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
+				
+				if(out.overlaps(rect)) return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/*
