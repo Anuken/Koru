@@ -90,6 +90,11 @@ public class Draw{
 		Resources.font().setColor(color);
 	}
 	
+	/**Alpha color.*/
+	public static void tcolor(float alpha){
+		Resources.font().setColor(1f, 1f, 1f, alpha);
+	}
+	
 	public static void tcolor(){
 		Resources.font().setColor(Color.WHITE);
 	}

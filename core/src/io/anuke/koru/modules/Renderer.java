@@ -21,6 +21,7 @@ import io.anuke.koru.graphics.LightEffect;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
 import io.anuke.koru.network.InputHandler;
+import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.*;
@@ -33,7 +34,7 @@ public class Renderer extends Module<Koru>{
 	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
-	public boolean debug = true, consoleOpen = false;
+	public boolean debug = false, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
@@ -135,7 +136,9 @@ public class Renderer extends Module<Koru>{
 		drawMap();
 		RenderableHandler.instance().renderAll(batch);
 		drawOverlay();
-		Koru.getEngine().update(0);
+		
+		if(debug) Koru.getEngine().getSystem(CollisionDebugSystem.class).update(0);
+		
 		batch.end();
 
 		processor.render();

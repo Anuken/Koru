@@ -7,41 +7,29 @@ import io.anuke.koru.components.ChildComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.TextComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.Sorter;
-import io.anuke.ucore.spritesystem.TextRenderable;
+import io.anuke.koru.graphics.Draw;
 
 public class IndicatorRenderer extends EntityRenderer{
-	float lastx, lasty;
 	
 	@Override
 	protected void render(){
-		ChildComponent child = entity.get(ChildComponent.class);
-		KoruEntity parent = Koru.getEngine().getEntity(child.parent);
-		
-		child.offset += 0.2f * 20f/entity.get(FadeComponent.class).lifetime;
-		
-		if(parent != null){
-			entity.position().set(parent.getX(), parent.getY() + child.offset);
-		}
-		
-		//render.group.setPosition(entity.getX(), entity.getY());
 	}
 
 	@Override
 	protected void init(){
-	
-		new TextRenderable(Resources.font(), entity.get(TextComponent.class).text)
-		.align(Align.right)
-		.setProvider(Sorter.object);
-		//.add("text", render.group);
 		
-		ChildComponent child = entity.get(ChildComponent.class);
-		KoruEntity parent = Koru.getEngine().getEntity(child.parent);
-		if(parent == null) return;
-		
-		//TODO
-		//child.offset = parent.get(ColliderComponent.class).height;
+		draw((p)->{
+			ChildComponent child = entity.get(ChildComponent.class);
+			KoruEntity parent = Koru.getEngine().getEntity(child.parent);
+			if(parent == null) return;
+			
+			p.layer = parent.getY()-1;
+			
+			Draw.tcolor(1f-entity.get(FadeComponent.class).life/entity.get(FadeComponent.class).lifetime);
+			Draw.text(entity.get(TextComponent.class).text, parent.getX(), parent.getY() + parent.collider().collider.h*1.5f
+					+ entity.get(FadeComponent.class).life/6f, Align.center);
+			Draw.tcolor();
+		});
 	}
 
 }
