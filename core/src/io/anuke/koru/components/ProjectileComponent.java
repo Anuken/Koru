@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.network.SyncData.Synced;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 
 @Synced
 public class ProjectileComponent implements KoruComponent{

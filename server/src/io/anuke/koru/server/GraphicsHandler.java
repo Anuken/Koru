@@ -1,34 +1,15 @@
 package io.anuke.koru.server;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
-
-import io.anuke.fluxe.generation.*;
-import io.anuke.koru.Koru;
-import io.anuke.koru.generation.*;
-import io.anuke.koru.network.BitmapData;
-import io.anuke.koru.network.IServer;
-import io.anuke.koru.network.packets.BitmapDataPacket;
-import io.anuke.koru.network.packets.GeneratedMaterialPacket;
-import io.anuke.koru.world.MaterialType;
-import io.anuke.koru.world.Materials;
-import io.anuke.ucore.graphics.Atlas;
-import io.anuke.ucore.util.ColorCodes;
 
 public class GraphicsHandler extends ApplicationAdapter{
+	/*
 	private static int nextBitmapID;
 	final int maxImagePacketSize = 512;
 	FluxeRenderer renderer;
 	Fluxor flux;
 
-	/** Thread safe. */
+	/** Thread safe. 
 	public void sendMaterial(int id, GeneratedMaterial mat){
 		Pixmap pix = mat.getPixmap();
 		Array<Object> packets = generateBitmapPacketList(pix);
@@ -45,7 +26,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		IServer.instance().sendTCP(id, packet);
 	}
 
-	/** Thread safe. Does not immediately generate the pixmap. */
+	/** Thread safe. Does not immediately generate the pixmap. 
 	public GeneratedMaterial scheduleNewMaterial(MaterialType type, Object... params){
 		GeneratedMaterial mat = MaterialManager.instance().createMaterial(type);
 		Koru.log("Generating a new material with ID " + mat.id() + ".");
@@ -60,7 +41,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		return mat;
 	}
 
-	/** Not thread safe. */
+	/** Not thread safe. 
 	public GeneratedMaterial generateNewMaterial(MaterialType type, Object... params){
 		GeneratedMaterial mat = MaterialManager.instance().createMaterial(type);
 		Koru.log("Generating a new material with ID " + mat.id() + ".");
@@ -105,7 +86,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 		return packets;
 	}
 	
-	/** Not thread safe.*/
+	/** Not thread safe.
 	private Pixmap generatePixmap(GeneratedMaterial mat, Object... args){
 		setParams(args);
 		flux.size = MathUtils.random(30, 50);
@@ -182,7 +163,7 @@ public class GraphicsHandler extends ApplicationAdapter{
 			for(int i = 0; i < 5; i ++)
 				generateNewMaterial(MaterialType.tree, Generators.simpletree, 0.15f);
 		}
-		*/
+		
 	}
 
 	public void render(){
@@ -200,4 +181,5 @@ public class GraphicsHandler extends ApplicationAdapter{
 		PixmapIO.writePNG(Gdx.files.local("tree.png"), p);
 		return p;
 	}
+	*/
 }

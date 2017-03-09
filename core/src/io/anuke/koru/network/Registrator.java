@@ -28,10 +28,9 @@ import io.anuke.koru.generation.GeneratedMaterialWrapper;
 import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
-import io.anuke.koru.network.SyncData.PlayerSyncData;
-import io.anuke.koru.network.SyncData.PositionSyncData;
-import io.anuke.koru.network.SyncData.Synced;
 import io.anuke.koru.network.packets.*;
+import io.anuke.koru.network.syncing.SyncData;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.renderers.AnimationType;
 import io.anuke.koru.systems.SyncSystem.SyncType;
 import io.anuke.koru.utils.InputType;
@@ -82,8 +81,6 @@ public class Registrator{
 		k.register(Collider.class);
 		k.register(ProjectileType.class);
 		k.register(SyncData.class);
-		k.register(PositionSyncData.class);
-		k.register(PlayerSyncData.class);
 		
 		k.register(Player.class);
 		k.register(ItemDrop.class);
@@ -175,13 +172,12 @@ public class Registrator{
 		private EntityWrapper(){}
 
 		public EntityWrapper(KoruEntity entity){
-			//components = entity.getComponents().toArray();
+			
 			this.id = entity.getID();
 			this.type = entity.getTypeClass();
 			for(Component component : entity.getComponents()){
 			
 				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
-					//if(component instanceof FadeComponent)Koru.log("sent:" + ((FadeComponent)component).lifetime);
 					components.put(component.getClass(), component);
 				}
 			}
@@ -189,24 +185,22 @@ public class Registrator{
 
 		public KoruEntity getEntity(){
 			KoruEntity entity = KoruEntity.loadedEntity(type, id);
-			//Koru.log("Entity: " + entity.getID());
 			ImmutableArray<Component> icomponents = entity.getComponents();
+			
 			for(Component component : icomponents){
-				//Koru.log("Iterating component: " + component.getClass().getSimpleName());
+				
 				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
-					//if(component instanceof FadeComponent)Koru.log("recieved:" + ((FadeComponent)component).lifetime);
 					toadd.add(components.get(component.getClass()));
-				//	Koru.log("Adding synced component: " + components.get(component.getClass()).getClass().getSimpleName());
 				}
 			}
+			
 			for(Component component : toadd){
 				entity.add(component);
 			}
+			
+			entity.getType().init(entity);
+			
 			toadd.clear();
-			//for(Object co : components){
-				//if(!co.getClass().isAnnotationPresent(Unchanged.class))
-			//	entity.add((Component)co);
-			//}
 			return entity;
 
 		}

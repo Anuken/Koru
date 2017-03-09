@@ -2,7 +2,7 @@ package io.anuke.koru.components;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.koru.network.SyncData.Synced;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.world.Material;
 
 @Synced

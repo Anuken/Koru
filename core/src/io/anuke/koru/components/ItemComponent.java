@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.network.SyncData.Synced;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.systems.KoruEngine;
 
 @Synced

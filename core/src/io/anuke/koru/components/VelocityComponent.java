@@ -2,7 +2,7 @@ package io.anuke.koru.components;
 
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.network.SyncData.Synced;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 
 @Synced
 public class VelocityComponent implements KoruComponent{

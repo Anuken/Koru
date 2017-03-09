@@ -43,20 +43,21 @@ public class CollisionSystem extends KoruSystem{
 		
 		if(!co.init){
 			co.collider.x = entity.getX();
-			co.collider.y = entity.getY();
-			co.lastx = entity.getX();
-			co.lasty = entity.getY();
-			//co.collider.maxVelocity = 0.8f;
-			//
+			co.collider.y = entity.getY() + (co.grounded ? co.collider.h/2 : 0);
+			co.lastx = co.collider.x;
+			co.lasty = co.collider.y;
 			engine.addCollider(co.collider);
 			co.init = true;
 		}else{
 			entity.position().add(co.collider.x - co.lastx, co.collider.y - co.lasty);
+			co.collider.setPosition(entity.getX(), entity.getY() + (co.grounded ? co.collider.h/2 : 0));
 			co.lastx = co.collider.x;
 			co.lasty = co.collider.y;
+			
 		}
 		
-		checkTerrainCollisions(co.collider);
+		if(!co.collider.trigger)
+		checkTerrainCollisions(co.collider, co);
 			
 		/*
 		GridPoint2 point = getTerrainCollisions(entity, 0, 0);
@@ -68,7 +69,7 @@ public class CollisionSystem extends KoruSystem{
 		*/
 	}
 	
-	void checkTerrainCollisions(Collider collider){
+	void checkTerrainCollisions(Collider collider, ColliderComponent comp){
 		World world = World.instance();
 		float x = collider.x + collider.getVelocity().x*Koru.delta();
 		float y = collider.y + collider.getVelocity().y*Koru.delta();
@@ -86,6 +87,8 @@ public class CollisionSystem extends KoruSystem{
 				
 				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
 				Rectangle col = collider.getBounds();
+				
+				col.height *= comp.terrainScl;
 				
 				col.x = x-w/2;
 				

@@ -15,13 +15,14 @@ public class Player extends EntityType{
 		return list(new PositionComponent(), new ConnectionComponent(),
 				new RenderComponent(new PlayerRenderer()), new ColliderComponent(), 
 				new WeaponComponent(),
-				new SyncComponent(SyncType.player), new InputComponent(), 
+				new SyncComponent(SyncType.player, null), new InputComponent(), 
 				new HealthComponent(), new InventoryComponent(4,6));
 	}
 	
 	public void init(KoruEntity entity){
 		entity.get(InputComponent.class).input = new InputHandler(entity);
 		entity.collider().collider.drag = 0.73f;
+		entity.collider().collider.setSize(8, 6);
 	}
 	
 	public boolean unload(){

@@ -1,4 +1,4 @@
-package io.anuke.koru.network;
+package io.anuke.koru.network.syncing;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;

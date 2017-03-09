@@ -2,7 +2,7 @@ package io.anuke.koru.components;
 
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.network.Interpolator;
+import io.anuke.koru.network.syncing.Interpolator;
 import io.anuke.koru.systems.SyncSystem.SyncType;
 
 public class SyncComponent implements KoruComponent{

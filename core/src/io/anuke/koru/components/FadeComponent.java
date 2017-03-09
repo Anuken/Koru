@@ -2,7 +2,7 @@ package io.anuke.koru.components;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.network.SyncData.Synced;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 
 @Synced
 public class FadeComponent implements KoruComponent{

@@ -51,8 +51,9 @@ public class Renderer extends Module<Koru>{
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
 			* World.loadrange * 2];
 	public int lastcamx, lastcamy;
-	private boolean init;
 	public GifRecorder recorder;
+	
+	private boolean init;
 
 	public Renderer() {
 		batch = new SpriteBatch();
@@ -134,6 +135,7 @@ public class Renderer extends Module<Koru>{
 		drawMap();
 		RenderableHandler.instance().renderAll(batch);
 		drawOverlay();
+		Koru.getEngine().update(0);
 		batch.end();
 
 		processor.render();

@@ -195,8 +195,8 @@ public enum MaterialType{
 
 		public Rectangle getRect(int x, int y, Rectangle rectangle){
 			float width = 7;
-			float height = 2;
-			return rectangle.set(x * World.tilesize + width / 2, y * World.tilesize + 6 + height / 2, width, height);
+			float height = 3;
+			return rectangle.set(x * World.tilesize + width / 2f, y * World.tilesize + 6 + height / 2f, width, height);
 		}
 	},
 	foilage(Hue.rgb(69, 109, 29, 0.02f)){

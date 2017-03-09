@@ -56,16 +56,18 @@ public class KoruEntity extends Entity{
 	public <T> boolean hasComponent(Class<T> c){
 		return (Mappers.has(c, this));
 	}
-
-	private KoruEntity(){}
+	
+	public KoruEntity(Class<? extends EntityType> type){
+		this(type, true);
+	}
 
 	public static KoruEntity loadedEntity(Class<? extends EntityType> type, long id){
-		KoruEntity entity = new KoruEntity(type);
+		KoruEntity entity = new KoruEntity(type, false);
 		entity.id = id;
 		return entity;
 	}
 
-	public KoruEntity(Class<? extends EntityType> type){
+	private KoruEntity(Class<? extends EntityType> type, boolean initialize){
 		id = nextID ++;
 		this.type = type;
 		Array<KoruComponent> components = getType().components().list;
@@ -76,8 +78,11 @@ public class KoruEntity extends Entity{
 		for(KoruComponent component : components)
 			component.onAdd(this);
 		
+		if(initialize)
 		EntityTypes.get(type).init(this);
 	}
+	
+	private KoruEntity(){}
 	
 	//Shortcut component getter methods.
 	

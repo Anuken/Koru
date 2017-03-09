@@ -30,11 +30,9 @@ public enum ProjectileType{
 			render.draw(l->{
 				l.layer = entity.getY()-4;
 				Draw.color(1f-entity.get(FadeComponent.class).life/lifetime());
-				Draw.grect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
+				Draw.rect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
 				Draw.color();
 			});
-			
-			//render.drawShadow(name(), -1, entity);
 		}
 	};
 	
@@ -57,7 +55,7 @@ public enum ProjectileType{
 	public void draw(KoruEntity entity, EntityRenderer render, ProjectileComponent pro){
 		render.draw(l->{
 			l.layer = entity.getY()-4;
-			Draw.grect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
+			Draw.rect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
 		});
 		
 		render.drawShadow(name(), -1, entity);

@@ -13,7 +13,7 @@ public class TestEntity extends EntityType{
 		return list(new PositionComponent(),
 				new RenderComponent(new EnemyRenderer()), 
 				new ColliderComponent(),
-				new SyncComponent(SyncType.position),
+				new SyncComponent(SyncType.physics),
 				new HealthComponent());
 	}
 

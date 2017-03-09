@@ -249,6 +249,8 @@ public class Network extends Module<Koru>{
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(), getModule(ClientData.class).player.getY());
 		getModule(ClientData.class).player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
 		pos.direction = getModule(ClientData.class).player.getComponent(RenderComponent.class).direction;
+		pos.velocity = getModule(ClientData.class).player.collider().collider.getVelocity();
+		
 		client.sendUDP(pos);
 	}
 
