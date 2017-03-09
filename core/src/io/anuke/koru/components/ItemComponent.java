@@ -15,7 +15,7 @@ public class ItemComponent implements KoruComponent{
 	@Override
 	public void update(KoruEntity entity){
 		KoruEngine.instance().map().getNearbyEntities(entity.getX(), entity.getY(), 30, 
-		(aentity)-> aentity.hasComponent(InventoryComponent.class) && !aentity.inventory().full(), 
+		(aentity)-> aentity.has(InventoryComponent.class) && !aentity.inventory().full(), 
 		(other)->{
 			float dst =  other.position().dist(entity.position());
 					

@@ -1,9 +1,8 @@
 # Koru
 
-A 2D sandbox game. Partially made as a testing ground for Entity Component systems, AI, world generation, biome generation and shaders.
+A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing ground for Entity Component systems, AI, world generation, biome generation and shaders.
 
 ![axe-wielding crabs](http://i.imgur.com/6bft2gp.png)
-
 
 ###Current Features
 - infinite procedurally generated world
@@ -16,6 +15,7 @@ A 2D sandbox game. Partially made as a testing ground for Entity Component syste
 - crabs
 - lighting system
 - ingame chat
+- (currently unstable) AABB physics
 
 
 ###Roadmap

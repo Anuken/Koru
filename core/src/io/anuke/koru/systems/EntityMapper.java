@@ -26,11 +26,11 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	
 	//TODO remove these nasty predicates and try something cleaner
 	public static Predicate<KoruEntity> connectionPredicate = (entity) -> {
-		return entity.hasComponent(ConnectionComponent.class);
+		return entity.has(ConnectionComponent.class);
 	};
 
 	public static Predicate<KoruEntity> syncedPredicate = (entity) -> {
-		return entity.hasComponent(SyncComponent.class);
+		return entity.has(SyncComponent.class);
 	};
 
 	public static Predicate<KoruEntity> allPredicate = (entity) -> {

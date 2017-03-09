@@ -2,6 +2,7 @@ package io.anuke.koru.server;
 
 import com.badlogic.gdx.ApplicationAdapter;
 
+/**disabled - procedurally generated stuff is no longer needed*/
 public class GraphicsHandler extends ApplicationAdapter{
 	/*
 	private static int nextBitmapID;

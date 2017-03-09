@@ -7,7 +7,7 @@ public class ProjectileListener extends CollisionListener{
 
 	@Override
 	boolean accept(KoruEntity entity, KoruEntity other){
-		return entity.hasComponent(ProjectileComponent.class);
+		return entity.has(ProjectileComponent.class);
 	}
 
 	@Override

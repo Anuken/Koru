@@ -86,6 +86,7 @@ public class CollisionSystem extends KoruSystem{
 	}
 
 	void checkTerrainCollisions(Collider collider, ColliderComponent comp){
+		//TODO fix entities being pushed into blocks
 		World world = World.instance();
 		float x = collider.x + collider.getVelocity().x * Koru.delta();
 		float y = collider.y + collider.getVelocity().y * Koru.delta();

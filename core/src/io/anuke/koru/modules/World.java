@@ -27,7 +27,7 @@ public class World extends Module<Koru>{
 	public static final int loadrange = 3;
 	public static final int tilesize = 12;
 	private static final float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
-	public final static float timescale = 40000f*0; //temporarily disabled
+	public final static float timescale = 40000f*0; //temporarily disabled for testing - remove 0 to enable
 	public int lastchunkx, lastchunky;
 	private boolean updated;
 	private GridPoint2 point = new GridPoint2();

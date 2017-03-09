@@ -13,11 +13,13 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.KoruEngine;
 
 public class KoruEntity extends Entity{
-	private Class<? extends EntityType> type;
 	private static long nextID;
+	
 	private long id;
+	private Class<? extends EntityType> type;
 	private transient PositionComponent pos;
 
+	
 	public static class Mappers{
 		public static HashMap<Class<?>, ComponentMapper<?>> map = new HashMap<Class<?>, ComponentMapper<?>>();
 		public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
@@ -53,7 +55,7 @@ public class KoruEntity extends Entity{
 		return (T)(Mappers.get(c, this));
 	}
 	
-	public <T> boolean hasComponent(Class<T> c){
+	public <T> boolean has(Class<T> c){
 		return (Mappers.has(c, this));
 	}
 	

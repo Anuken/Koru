@@ -12,7 +12,7 @@ public class Projectile extends EntityType{
 	public ComponentList components(){
 		return list(new PositionComponent(), new RenderComponent(new ProjectileRenderer()),
 				new ColliderComponent(), new ProjectileComponent(),
-				new FadeComponent(), new DestroyOnTerrainHitComponent(), new DamageComponent());
+				new FadeComponent(), new ContactDestroyComponent(), new DamageComponent());
 	}
 	
 	@Override
