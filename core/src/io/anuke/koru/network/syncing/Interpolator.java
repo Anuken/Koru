@@ -7,7 +7,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 
 public class Interpolator{
-	static final float correctrange = 100f;
+	static final float correctrange = 15f;
 	static Vector2 temp1 = new Vector2();
 	static Vector2 temp2 = new Vector2();
 	long lastupdate = -1;
@@ -30,7 +30,10 @@ public class Interpolator{
 	public void update(KoruEntity entity){
 		temp1.set(entity.getX(), entity.getY());
 		temp2.set(lastx + entity.getX(),lasty + entity.getY());
-		temp1.interpolate(temp2, 0.25f*Koru.delta(), Interpolation.linear);
+		if(entity.collider() != null){
+			temp2.add(entity.collider().collider.getVelocity());
+		}
+		temp1.interpolate(temp2, 0.15f*Koru.delta(), Interpolation.linear);
 		entity.position().set(temp1.x, temp1.y);
 	}
 	

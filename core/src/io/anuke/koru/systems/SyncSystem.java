@@ -88,7 +88,6 @@ public class SyncSystem extends KoruSystem{
 				
 				entity.get(InputComponent.class).input.mouseangle = data.get(2);
 				entity.collider().collider.getVelocity().set(data.get(4));
-				
 				SyncComponent sync = entity.get(SyncComponent.class);
 				
 				if(sync.interpolator != null){
