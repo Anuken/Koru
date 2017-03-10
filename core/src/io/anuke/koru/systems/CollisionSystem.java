@@ -125,6 +125,20 @@ public class CollisionSystem extends KoruSystem{
 				collider.getVelocity().scl(1f, -1f * collider.restitution);
 			}
 		});
+		
+		checkTerrain(x, y, out->{
+			Rectangle col = collider.getBounds();
+			col.height *= comp.terrainScl;
+			
+			if(col.overlaps(out)){
+				out.getCenter(vector);
+				vector.sub(collider.x, collider.y);
+				vector.setLength(1f);
+				
+				collider.x -= vector.x;
+				collider.y -= vector.y;
+			}
+		});
 		/*
 		int tilex = World.tile(x);
 		int tiley = World.tile(y);
