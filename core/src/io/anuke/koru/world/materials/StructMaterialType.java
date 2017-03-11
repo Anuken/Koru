@@ -14,7 +14,7 @@ public class StructMaterialType{
 			color = new Color(0x744a28ff);
 		}
 		
-		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
+		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			
 			//light overlay
 			new SpriteRenderable(Resources.region("torchflame1")){
@@ -53,7 +53,7 @@ public class StructMaterialType{
 	
 	public static final BaseMaterialType chest = new BaseMaterialType(false, false){
 		
-		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
+		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
@@ -63,7 +63,7 @@ public class StructMaterialType{
 	
 	public static final BaseMaterialType workbench = new BaseMaterialType(false, false){
 		
-		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
+		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()

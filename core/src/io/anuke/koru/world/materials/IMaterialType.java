@@ -9,7 +9,7 @@ import io.anuke.koru.world.Tile;
 import io.anuke.ucore.spritesystem.RenderableList;
 
 public interface IMaterialType{
-	public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y);
+	public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y);
 	
 	public boolean tile();
 

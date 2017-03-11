@@ -27,7 +27,6 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.IMaterial;
 import io.anuke.koru.world.materials.MaterialType;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
@@ -172,13 +171,13 @@ public class Renderer extends Module<Koru>{
 				&& inv.hasAll(Recipes.values()[inv.recipe].requirements())){
 			
 			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach 
-					&& IMaterial.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+					&& World.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
 			}else{
 				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);
 			}
 			
-			IMaterial result = Recipes.values()[inv.recipe].result();
+			BaseMaterial result = Recipes.values()[inv.recipe].result();
 
 			if(result.getType() == MaterialType.tile){
 				block.setRegion(Resources.region("blank"));

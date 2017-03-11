@@ -20,7 +20,7 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.materials.IMaterial;
+import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.MaterialType;
 import io.anuke.ucore.graphics.Hue;
 
@@ -115,7 +115,7 @@ public class RecipeMenu extends VisTable{
 			batch.setColor(getColor());
 			batch.draw(Resources.region(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2")), getX(), getY(), getWidth(), getHeight());
 			
-			IMaterial result = recipe.result();
+			BaseMaterial result = recipe.result();
 			TextureRegion region = Resources.region(result.name());
 			
 			float w = region.getRegionWidth()*pscale,h = region.getRegionHeight()*pscale;

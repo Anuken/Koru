@@ -1,8 +1,8 @@
 package io.anuke.koru.network.packets;
 
-import io.anuke.koru.world.materials.IMaterial;
+import io.anuke.koru.world.materials.BaseMaterial;
 
 public class BlockInputPacket{
 	public int x, y; 
-	public IMaterial material;
+	public BaseMaterial material;
 }

@@ -1,6 +1,6 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.world.materials.IMaterial;
+import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.StructMaterial;
 
 public enum Recipes implements Recipe{
@@ -9,10 +9,10 @@ public enum Recipes implements Recipe{
 	torch(StructMaterial.torch, new ItemStack(Items.wood, 1)),
 	workbench(StructMaterial.workbench, new ItemStack(Items.wood, 10));
 	
-	IMaterial result;
+	BaseMaterial result;
 	ItemStack[] requirements;
 	
-	private Recipes(IMaterial result, ItemStack... requirements){
+	private Recipes(BaseMaterial result, ItemStack... requirements){
 		this.result = result;
 		this.requirements = requirements;
 	}
@@ -21,7 +21,7 @@ public enum Recipes implements Recipe{
 		return requirements;
 	}
 
-	public IMaterial result(){
+	public BaseMaterial result(){
 		return result;
 	}
 

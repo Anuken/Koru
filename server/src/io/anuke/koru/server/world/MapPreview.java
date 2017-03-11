@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.IntIntMap;
 
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.IMaterial;
 import io.anuke.koru.world.materials.MaterialType;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
@@ -43,7 +42,7 @@ public class MapPreview extends ApplicationAdapter{
 
 		Pixmap pixmap = atlas.getPixmapOf(atlas.findRegion("grass"));
 
-		for(IMaterial material : BaseMaterial.getAll()){
+		for(BaseMaterial material : BaseMaterial.getAll()){
 			if(!material.getType().tile() && material.getType() != MaterialType.block)
 				continue;
 			AtlasRegion region = atlas.findRegion(material.name());

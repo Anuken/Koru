@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.world.Tile;
-public abstract class BaseMaterial implements IMaterial{
+public abstract class BaseMaterial{
 	private static ArrayList<BaseMaterial> materials = new ArrayList<BaseMaterial>();
 	private static int lastid;
 	
@@ -48,58 +48,51 @@ public abstract class BaseMaterial implements IMaterial{
 		drops.add(new ItemStack(item, amount));
 	}
 
-	@Override
 	public Vector3 foilageTint(){
 		return foilageTint;
 	}
 	
-	@Override
 	public int breaktime(){
 		return breaktime;
 	}
 	
-	@Override
+	public boolean isBreakable(){
+		return breaktime > 0;
+	}
+	
 	public boolean collisionsEnabled(){
 		return collisions;
 	}
 	
-	@Override
 	public int id(){
 		return id;
 	}
 	
-	@Override
 	public String name(){
 		return name;
 	}
 	
-	@Override
 	public IMaterialType getType(){
 		return type;
 	}
 	
-	@Override
 	public float offset(){
 		return offset;
 	}
 	
-	@Override
 	public Color getColor(){
 		if(type.getColor() != null) return type.getColor();
 		return color;
 	}
 	
-	@Override
 	public ItemStack[] getDrops(){
 		return drops.toArray(ItemStack.class);
 	}
 	
-	@Override
 	public void changeEvent(Tile tile){
 		
 	}
 	
-	@Override
 	public int variants(){
 		return variants;
 	}

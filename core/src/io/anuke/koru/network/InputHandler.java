@@ -15,7 +15,6 @@ import io.anuke.koru.items.Recipes;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.IMaterial;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialType;
 
@@ -48,7 +47,7 @@ public class InputHandler{
 
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block())
-					&& tile.block().breakable()){
+					&& tile.block().isBreakable()){
 				blockhold += delta * stack.item.power();
 
 				if((int) (blockhold) % 20 == 1)
@@ -113,7 +112,7 @@ public class InputHandler{
 
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
-					&& IMaterial.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+					&& World.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 
 				tile.setMaterial(Recipes.values()[inv.recipe].result());
 				IServer.instance().getWorld().updateTile(blockx, blocky);
