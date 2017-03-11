@@ -20,8 +20,6 @@ import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.types.Player;
-import io.anuke.koru.generation.GeneratedMaterial;
-import io.anuke.koru.generation.MaterialManager;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.Network;
@@ -32,7 +30,6 @@ import io.anuke.koru.network.packets.*;
 import io.anuke.koru.server.world.MapPreview;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
-import io.anuke.koru.world.Material;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.util.ColorCodes;
 
@@ -197,15 +194,6 @@ public class KoruServer extends IServer{
 				inv.clickSlot(packet.x, packet.y);
 
 				inv.sendUpdate(updater.engine.getEntity(info.playerid));
-			}else if(object instanceof MaterialRequestPacket){
-				MaterialRequestPacket packet = (MaterialRequestPacket) object;
-				Material mat = MaterialManager.instance().getMaterial(packet.id);
-				if(mat == null || !(mat instanceof GeneratedMaterial)){
-					Koru.log("Invalid material requested: " + mat.id());
-					return;
-				}
-				Koru.log("Sending material type to player: " + packet.id);
-				//graphics.sendMaterial(info.id, (GeneratedMaterial) mat);
 			}
 		}catch(Exception e){
 			e.printStackTrace();

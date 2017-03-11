@@ -1,11 +1,12 @@
-package io.anuke.koru.world;
+package io.anuke.koru.world.materials;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.world.Tile;
 
-public interface Material{
+public interface IMaterial{
 	public Vector3 foilageTint();
 	
 	public default int breaktime(){return 0;} // 0 means not breakable
@@ -16,7 +17,7 @@ public interface Material{
 	
 	public String name();
 	
-	public MaterialType getType();
+	public IMaterialType getType();
 	
 	public default float offset(){return 0;}
 	
@@ -30,13 +31,15 @@ public interface Material{
 	
 	public default boolean breakable(){return breaktime() > 0;}
 	
+	/*
 	public static boolean isPlaceable(Material material, Tile tile){
 		
 		if(!material.getType().tile()){
-			return (tile.blockEmpty() || tile.block().getType() == MaterialType.foilage);
+			return (tile.blockEmpty() || tile.block().getType() == IMaterialType.foilage);
 		}else{
 			return tile.tile() != material && 
-				(tile.blockEmpty() || tile.block().getType() == MaterialType.torch);
+				(tile.blockEmpty() || tile.block().getType() == IMaterialType.torch);
 		}		
 	}
+	*/
 }

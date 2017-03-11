@@ -10,8 +10,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.network.Registrator;
 import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.materials.BaseMaterial;
 
 public class ChunkWriter{
 	private Kryo kryo;
@@ -20,7 +21,7 @@ public class ChunkWriter{
 	public ChunkWriter(){
 		kryo = new Kryo();
 		kryo.register(Chunk.class);
-		kryo.register(Materials.class);
+		kryo.register(BaseMaterial.class, new Registrator.MaterialsSerializer());
 	}
 
 	public void writeChunk(Chunk chunk, Path path, boolean compress){

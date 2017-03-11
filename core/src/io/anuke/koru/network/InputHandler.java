@@ -14,7 +14,10 @@ import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Recipes;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.*;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.materials.IMaterial;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.MaterialType;
 
 public class InputHandler{
 	public final static float reach = 75;
@@ -63,7 +66,7 @@ public class InputHandler{
 
 					Effects.drops(World.world(blockx), World.world(blocky), tile.block().getDrops());
 
-					tile.setBlockMaterial(Materials.air);
+					tile.setBlockMaterial(Material.air);
 
 					// schedule this later.
 
@@ -110,7 +113,7 @@ public class InputHandler{
 
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
-					&& Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+					&& IMaterial.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 
 				tile.setMaterial(Recipes.values()[inv.recipe].result());
 				IServer.instance().getWorld().updateTile(blockx, blocky);

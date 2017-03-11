@@ -1,9 +1,9 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.world.Material;
+import io.anuke.koru.world.materials.IMaterial;
 
 //TODO implements customizable recipes (extendable recipes, that is)
 public interface Recipe{
 	public ItemStack[] requirements();
-	public Material result();
+	public IMaterial result();
 }

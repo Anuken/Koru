@@ -2,7 +2,9 @@ package io.anuke.koru.world;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import io.anuke.koru.generation.MaterialManager;
+import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.IMaterial;
+import io.anuke.koru.world.materials.Material;
 
 public class Tile implements Poolable{
 	public int tileid, blockid;
@@ -10,7 +12,7 @@ public class Tile implements Poolable{
 	
 	public Tile(){}
 	
-	public Tile(Material tile, Material block){
+	public Tile(IMaterial tile, IMaterial block){
 		tileid = tile.id();
 		blockid = block.id();
 	}
@@ -23,12 +25,12 @@ public class Tile implements Poolable{
 		light = (byte)(f*127);
 	}
 	
-	public Material tile(){
-		return MaterialManager.instance().getMaterial(tileid);
+	public IMaterial tile(){
+		return BaseMaterial.getMaterial(tileid);
 	}
 	
-	public Material block(){
-		return MaterialManager.instance().getMaterial(blockid);
+	public IMaterial block(){
+		return BaseMaterial.getMaterial(blockid);
 	}
 	
 	public boolean tileEmpty(){
@@ -39,18 +41,18 @@ public class Tile implements Poolable{
 		return blockid == 0;
 	}
 
-	public Tile setTileMaterial(Material m){
+	public Tile setTileMaterial(IMaterial m){
 		tileid = m.id();
 		return this;
 	}
 
-	public Tile setBlockMaterial(Material m){
+	public Tile setBlockMaterial(IMaterial m){
 		blockid = m.id();
 		return this;
 	}
 
-	public void setMaterial(Material m){
-		if(m == Materials.air){
+	public void setMaterial(IMaterial m){
+		if(m == Material.air){
 			blockid = 0;
 			return;
 		}
@@ -65,7 +67,7 @@ public class Tile implements Poolable{
 		return tile().getType().solid() || block().getType().solid();
 	}
 
-	public Material solidMaterial(){
+	public IMaterial solidMaterial(){
 		if(block().getType().solid()) return block();
 		if(tile().getType().solid()) return tile();
 		return null;

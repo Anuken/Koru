@@ -9,16 +9,16 @@ import com.badlogic.gdx.math.Vector3;
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.*;
+import io.anuke.koru.world.Tile;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.spritesystem.*;
 
-public class NaturalMaterialType{
+public class MaterialType{
 	public static final Color grasscolor = new Color(0x62962fff);
 	
 	public static final BaseMaterialType tile = new BaseMaterialType(){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			if(tile.block().getType() == MaterialType.block) return;
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
+			if(tile.block().getType() == block) return;
 			
 			int type = 0;
 			if(material.variants() > 1){
@@ -35,7 +35,7 @@ public class NaturalMaterialType{
 	};
 	
 	public static final BaseMaterialType grass = new BaseMaterialType(){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
 			RenderPool.sprite(Resources.region("grass" + (rand <= 8 ? rand : "1")))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
@@ -54,7 +54,7 @@ public class NaturalMaterialType{
 	};
 	
 	public static final BaseMaterialType water = new BaseMaterialType(){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			int type = 0;
 			if(material.variants() > 1){
 				type = rand(x,y, material.variants());
@@ -70,7 +70,7 @@ public class NaturalMaterialType{
 	};
 	
 	public static final BaseMaterialType block = new BaseMaterialType(false, true){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			RenderPool.sprite(Resources.region(material.name()))
 			.scaleBy(0, 0.001f)
 			.setPosition(utile(x), utile(y))
@@ -89,7 +89,7 @@ public class NaturalMaterialType{
 			color = Hue.rgb(80, 53, 30);
 		}
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 
 			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name()))
 					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
@@ -107,7 +107,7 @@ public class NaturalMaterialType{
 	};
 	
 	public static final BaseMaterialType object = new BaseMaterialType(false, false){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
 					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
@@ -117,7 +117,7 @@ public class NaturalMaterialType{
 	public static final BaseMaterialType tallgrassblock = new BaseMaterialType(false, false){
 		static final float add = 0.94f;
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			float yadd = 0;
 			
 			Vector3 tint = tile.tile().foilageTint();
@@ -162,7 +162,7 @@ public class NaturalMaterialType{
 	public static final BaseMaterialType shortgrassblock = new BaseMaterialType(false, false){
 		static final float add = 0.96f;
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			float xadd = 0;
 			
 			Vector3 tint = tile.tile().foilageTint();
@@ -204,6 +204,6 @@ public class NaturalMaterialType{
 	}
 
 	static boolean isGrass(int x, int y){
-		return World.instance().isType(x, y, Materials.grassblock) || World.instance().isType(x, y, Materials.shortgrassblock);
+		return World.instance().isType(x, y, Material.grassblock) || World.instance().isType(x, y, Material.shortgrassblock);
 	}
 }

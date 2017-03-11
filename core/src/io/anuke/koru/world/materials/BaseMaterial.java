@@ -8,31 +8,33 @@ import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Tile;
-
-public abstract class BaseMaterial implements Material{
-	private static ArrayList<Material> materials = new ArrayList<Material>();
+public abstract class BaseMaterial implements IMaterial{
+	private static ArrayList<BaseMaterial> materials = new ArrayList<BaseMaterial>();
 	private static int lastid;
 	
 	private final int id;
 	private final String name;
-	private final MaterialType type;
+	private final IMaterialType type;
 	
 	protected Vector3 foilageTint = new Vector3(1f, 1f, 1f);
 	protected int breaktime;
 	protected boolean collisions = true;
 	protected Array<ItemStack> drops = new Array<ItemStack>();
-	protected Color color = Color.CLEAR;
 	protected float offset = 0;
 	protected int variants = 1;
 	
-	public static Material getMaterial(int id){
+	public Color color = Color.CLEAR;
+	
+	public static BaseMaterial getMaterial(int id){
 		return materials.get(id);
 	}
 	
-	protected BaseMaterial(String name, MaterialType type){
+	public static Iterable<BaseMaterial> getAll(){
+		return materials;
+	}
+	
+	protected BaseMaterial(String name, IMaterialType type){
 		id = lastid++;
 		this.name = name;
 		this.type = type;
@@ -72,7 +74,7 @@ public abstract class BaseMaterial implements Material{
 	}
 	
 	@Override
-	public MaterialType getType(){
+	public IMaterialType getType(){
 		return type;
 	}
 	

@@ -5,12 +5,11 @@ import static io.anuke.koru.modules.World.tilesize;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.anuke.koru.world.Material;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.spritesystem.RenderableList;
 
 public interface IMaterialType{
-	public void draw(RenderableList group, Material material, Tile tile, int x, int y);
+	public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y);
 	
 	public boolean tile();
 

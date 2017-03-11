@@ -3,11 +3,8 @@ package io.anuke.koru.world.materials;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Rectangle;
 
-import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.Material;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.spritesystem.*;
 
@@ -17,7 +14,7 @@ public class StructMaterialType{
 			color = new Color(0x744a28ff);
 		}
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			
 			//light overlay
 			new SpriteRenderable(Resources.region("torchflame1")){
@@ -56,40 +53,21 @@ public class StructMaterialType{
 	
 	public static final BaseMaterialType chest = new BaseMaterialType(false, false){
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 			
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
 					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
 		}
-
-		public Rectangle getHitbox(int x, int y, Rectangle rectangle){
-			int i = 1;
-			return rectangle.set(x * World.tilesize + 1, y * World.tilesize + 1, World.tilesize - i * 2,
-					World.tilesize - 5);
-		}
-
-		public boolean tile(){
-			return false;
-		}
-
-		public boolean solid(){
-			return true;
-		}
-
 	};
 	
 	public static final BaseMaterialType workbench = new BaseMaterialType(false, false){
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(RenderableList group, IMaterial material, Tile tile, int x, int y){
 
 			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
 					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
-		}
-
-		public boolean tile(){
-			return false;
 		}
 	};
 }

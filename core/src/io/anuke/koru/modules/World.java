@@ -18,6 +18,7 @@ import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.*;
+import io.anuke.koru.world.materials.IMaterial;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
@@ -184,8 +185,8 @@ public class World extends Module<Koru>{
 
 	public boolean positionSolid(float x, float y){
 		Tile tile = getTile(x, y);
-		Material block = tile.block();
-		Material tilem = tile.tile();
+		IMaterial block = tile.block();
+		IMaterial tilem = tile.tile();
 		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
@@ -197,18 +198,18 @@ public class World extends Module<Koru>{
 		return !blockSolid(x - 1, y) || !blockSolid(x + 1, y) || !blockSolid(x, y - 1) || !blockSolid(x, y + 1);
 	}
 
-	public boolean blends(int x, int y, Material material){
+	public boolean blends(int x, int y, IMaterial material){
 		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
-	public boolean isType(int x, int y, Material material){
+	public boolean isType(int x, int y, IMaterial material){
 		if( !inBounds(x, y)){
 			return true;
 		}
 		return tile(x, y).block() == material || tile(x, y).tile() == material;
 	}
 
-	public GridPoint2 search(Material material, int x, int y, int range){
+	public GridPoint2 search(IMaterial material, int x, int y, int range){
 		float nearest = Float.MAX_VALUE;
 		for(int cx = -range;cx <= range;cx ++){
 			for(int cy = -range;cy <= range;cy ++){
