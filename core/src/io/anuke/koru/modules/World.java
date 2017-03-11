@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
@@ -51,6 +52,7 @@ public class World extends Module<Koru>{
 	public World(){
 		Material.load();
 		StructMaterial.load();
+		BlockRecipe.load();
 		
 		if( !IServer.active()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];

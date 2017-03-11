@@ -71,7 +71,7 @@ public class Effects{
 	public static void block(BaseMaterial material, int x, int y){
 		KoruEntity entity = new KoruEntity(BlockAnimation.class);
 		entity.position().set(x * World.tilesize, y * World.tilesize);
-		entity.get(DataComponent.class).data = material;
+		entity.get(MaterialComponent.class).matid = material.id();
 		entity.send();
 	}
 
