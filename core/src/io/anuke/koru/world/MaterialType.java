@@ -83,7 +83,7 @@ public enum MaterialType{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			RenderPool.sprite(Resources.region(material.name()))
 			.scaleBy(0, 0.001f)
-			.setPosition(itile(x), itile(y))
+			.setPosition(utile(x), utile(y))
 			//.setColor(Hue.lightness(tile.light()))
 			.setProvider(Sorter.object).add(group);
 			
@@ -104,7 +104,7 @@ public enum MaterialType{
 	},
 	chest{
 
-		public Rectangle getRect(int x, int y, Rectangle rectangle){
+		public Rectangle getHitbox(int x, int y, Rectangle rectangle){
 			int i = 1;
 			return rectangle.set(x * World.tilesize + 1, y * World.tilesize + 1, World.tilesize - i * 2,
 					World.tilesize - 5);
@@ -193,7 +193,7 @@ public enum MaterialType{
 			return true;
 		}
 
-		public Rectangle getRect(int x, int y, Rectangle rectangle){
+		public Rectangle getHitbox(int x, int y, Rectangle rectangle){
 			float width = 7;
 			float height = 3;
 			return rectangle.set(x * World.tilesize + width / 2f, y * World.tilesize + 6 + height / 2f, width, height);
@@ -237,13 +237,13 @@ public enum MaterialType{
 				float gadd = i == 1 ? 1f : add;
 				a.sprite.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd, 1f);
 
-				a.setPosition(itile(x), itile(y) + yadd + i * 6);
+				a.setPosition(utile(x), utile(y) + yadd + i * 6);
 				group.add(a);
 			}
 
 			if(!isGrass(x, y + 1)){
 				SpriteRenderable sh = RenderPool.sprite(Resources.region("grassblock2" +blendn)).setAsShadow()
-						.setPosition(itile(x) + 1, tile(y) + 1 + yadd);
+						.setPosition(utile(x) + 1, tile(y) + 1 + yadd);
 				sh.add(group);
 			}
 		}
@@ -276,13 +276,13 @@ public enum MaterialType{
 				a.setProvider(Sorter.object);
 				a.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd);
 				
-				a.setPosition(itile(x), itile(y) + i * (tilesize / iter) + xadd);
+				a.setPosition(utile(x), utile(y) + i * (tilesize / iter) + xadd);
 				a.add(group);
 			}
 
 			if(!isGrass(x, y + 1)){
 				SpriteRenderable sh = RenderPool.sprite(Resources.region("grassf1")).setAsShadow();
-				sh.setPosition(itile(x)+1, tile(y)+2+ xadd);
+				sh.setPosition(utile(x)+1, tile(y)+2+ xadd);
 				sh.add(group);
 			}
 		}
@@ -321,7 +321,6 @@ public enum MaterialType{
 	};;
 	protected final Color grasscolor = new Color(0x62962fff).mul(0.97f,0.97f,0.97f,1f);
 	private Color color = null;
-	protected World world;
 
 	private MaterialType() {
 
@@ -339,7 +338,7 @@ public enum MaterialType{
 		return false;
 	}
 
-	public Rectangle getRect(int x, int y, Rectangle rectangle){
+	public Rectangle getHitbox(int x, int y, Rectangle rectangle){
 		return rectangle.set(x * tilesize, y * tilesize, tilesize, tilesize);
 	}
 
@@ -350,12 +349,14 @@ public enum MaterialType{
 	public Color getColor(){
 		return color;
 	}
-
+	
+	/**Centered tile posiiton.*/
 	int tile(int i){
 		return i * tilesize + tilesize / 2;
 	}
 	
-	int itile(int i){
+	/**Uncentered tile position.*/
+	int utile(int i){
 		return i*tilesize;
 	}
 	

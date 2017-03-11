@@ -39,7 +39,7 @@ public class CollisionDebugSystem extends KoruSystem{
 				if(!tile.solid())
 					continue;
 
-				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
+				Rectangle out = tile.solidMaterial().getType().getHitbox(worldx, worldy, Rectangle.tmp2);
 				Draw.color(Color.PURPLE);
 				Draw.linerect(out.x, out.y, out.width, out.height);
 				Draw.color(Color.WHITE);

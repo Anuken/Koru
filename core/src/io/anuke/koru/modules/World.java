@@ -186,7 +186,7 @@ public class World extends Module<Koru>{
 		Tile tile = getTile(x, y);
 		Material block = tile.block();
 		Material tilem = tile.tile();
-		return (block.getType().solid() && block.getType().getRect(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getRect(tile(x), tile(y), Rectangle.tmp).contains(x, y));
+		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
 	public boolean blockSolid(int x, int y){
