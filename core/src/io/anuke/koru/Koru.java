@@ -15,6 +15,7 @@ import io.anuke.ucore.util.ColorCodes;
 public class Koru extends ModuleController<Koru>{
 	private static Koru instance;
 	private static StringBuffer log = new StringBuffer();
+	private float time;
 	public KoruEngine engine;
 
 	@Override
@@ -35,7 +36,9 @@ public class Koru extends ModuleController<Koru>{
 
 	@Override
 	public void render(){
-
+		
+		time += delta();
+		
 		try{
 			engine.update(Gdx.graphics.getDeltaTime()*60f);
 			super.render();
@@ -82,6 +85,10 @@ public class Koru extends ModuleController<Koru>{
 		if(o instanceof Exception){
 			((Exception) o).printStackTrace();
 		}
+	}
+	
+	public static float time(){
+		return instance.time;
 	}
 
 	public static CharSequence getLog(){

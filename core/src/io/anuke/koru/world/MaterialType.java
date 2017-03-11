@@ -2,7 +2,6 @@ package io.anuke.koru.world;
 
 import static io.anuke.koru.modules.World.tilesize;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -141,7 +140,7 @@ public enum MaterialType{
 			new SpriteRenderable(Resources.region("light")){
 				public void draw(Batch batch){
 					sprite.setOriginCenter();
-					sprite.setScale(1f + (float)Math.sin(Gdx.graphics.getFrameId()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
+					sprite.setScale(1f + (float)Math.sin(Koru.time()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
 					
 					super.draw(batch);
 				}
@@ -162,7 +161,7 @@ public enum MaterialType{
 		}
 		
 		int frame(int x, int y){
-			return (int)(1+(rand(x,y,50)+Gdx.graphics.getFrameId()/4)%4);
+			return (int)(1+(rand(x,y,50)+Koru.time()/4)%4);
 		}
 		
 		public boolean tile(){
