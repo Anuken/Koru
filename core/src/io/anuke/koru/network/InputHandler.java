@@ -9,9 +9,9 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.items.BaseBlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
-import io.anuke.koru.items.Recipes;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Tile;
@@ -110,14 +110,18 @@ public class InputHandler{
 
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 
+			BaseBlockRecipe recipe = null;
+			
+			if(inv.recipe != -1) recipe = BaseBlockRecipe.getRecipe(inv.recipe);
+			
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
-					&& inv.recipe != -1 && inv.hasAll(Recipes.values()[inv.recipe].requirements())
-					&& World.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+					&& inv.recipe != -1 && inv.hasAll(recipe.requirements())
+					&& World.isPlaceable(recipe.result(), tile)){
 
-				tile.setMaterial(Recipes.values()[inv.recipe].result());
+				tile.setMaterial(recipe.result());
 				IServer.instance().getWorld().updateTile(blockx, blocky);
 
-				inv.removeAll(Recipes.values()[inv.recipe].requirements());
+				inv.removeAll(recipe.requirements());
 				inv.sendUpdate(entity);
 			}
 

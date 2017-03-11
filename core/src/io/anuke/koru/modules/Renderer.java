@@ -18,8 +18,8 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.graphics.LightEffect;
+import io.anuke.koru.items.BaseBlockRecipe;
 import io.anuke.koru.items.ItemType;
-import io.anuke.koru.items.Recipes;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.RepackableAtlas;
@@ -168,16 +168,16 @@ public class Renderer extends Module<Koru>{
 		Tile tile = world.getTile(getModule(Input.class).cursorblock());
 
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
-				&& inv.hasAll(Recipes.values()[inv.recipe].requirements())){
+				&& inv.hasAll(BaseBlockRecipe.getRecipe(inv.recipe).requirements())){
 			
 			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach 
-					&& World.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+					&& World.isPlaceable(BaseBlockRecipe.getRecipe(inv.recipe).result(), tile)){
 				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
 			}else{
 				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);
 			}
 			
-			BaseMaterial result = Recipes.values()[inv.recipe].result();
+			BaseMaterial result = BaseBlockRecipe.getRecipe(inv.recipe).result();
 
 			if(result.getType() == MaterialType.tile){
 				block.setRegion(Resources.region("blank"));

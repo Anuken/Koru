@@ -13,9 +13,8 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.items.BaseBlockRecipe;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.items.Recipe;
-import io.anuke.koru.items.Recipes;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
@@ -31,13 +30,13 @@ public class RecipeMenu extends VisTable{
 	Slot selected;
 	
 	public RecipeMenu(){
-		for(int i = 0; i < Recipes.values().length; i ++){
-			Slot slot = new Slot(Recipes.values()[i],i,0);
+		for(BaseBlockRecipe recipe : BaseBlockRecipe.getAll()){
+			Slot slot = new Slot(recipe, recipe.id(), 0);
 			add(slot).size(slotsize);
 		}
 		row();
 		
-		add(req).colspan(Recipes.values().length).height(64);
+		add(req).colspan(BaseBlockRecipe.getAll().size()).height(64);
 	}
 	
 	public void act(float delta){
@@ -86,9 +85,9 @@ public class RecipeMenu extends VisTable{
 	class Slot extends Actor{
 		public final int x, y;
 		public final ClickListener click;
-		public final Recipe recipe;
+		public final BaseBlockRecipe recipe;
 		
-		public Slot(Recipe recipe, int x, int y) {
+		public Slot(BaseBlockRecipe recipe, int x, int y) {
 			this.x = x;
 			this.y = y;
 			this.recipe = recipe;
