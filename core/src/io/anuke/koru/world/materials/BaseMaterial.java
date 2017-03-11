@@ -38,6 +38,8 @@ public abstract class BaseMaterial{
 		id = lastid++;
 		this.name = name;
 		this.type = type;
+		
+		materials.add(this);
 	}
 	
 	protected void addDrops(ItemStack... stacks){
@@ -95,5 +97,10 @@ public abstract class BaseMaterial{
 	
 	public int variants(){
 		return variants;
+	}
+	
+	@Override
+	public String toString(){
+		return name() + ":" + id();
 	}
 }

@@ -20,12 +20,7 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			if(tile.block().getType() == block) return;
 			
-			int type = 0;
-			if(material.variants() > 1){
-				type = rand(x,y, material.variants());
-			}
-			
-			RenderPool.sprite(Resources.region(type == 0 ? material.name() : material.name() + type))
+			RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material)))
 					.setPosition(utile(x), utile(y)).setLayer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
 				RenderPool.sprite(Resources.region(material.name() + "edge"))
@@ -55,12 +50,7 @@ public class MaterialType{
 	
 	public static final BaseMaterialType water = new BaseMaterialType(){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
-			int type = 0;
-			if(material.variants() > 1){
-				type = rand(x,y, material.variants());
-			}
-			
-			RenderPool.sprite(Resources.region(type == 0 ? material.name() : material.name() + type))
+			RenderPool.sprite(Resources.region(material.name()  + variantString(x, y, material)))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
 				RenderPool.sprite(Resources.region(material.name() + "edge"))
@@ -90,13 +80,16 @@ public class MaterialType{
 		}
 		
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
-
-			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name()))
+			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material)))
 					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
 					.addShadow(group, Resources.atlas(), -material.offset())
 					.setProvider(Sorter.object).sprite();
 
 			sprite.add(group);
+		}
+		
+		public int size(){
+			return 180;
 		}
 		
 		public Rectangle getHitbox(int x, int y, Rectangle rectangle){
@@ -108,7 +101,7 @@ public class MaterialType{
 	
 	public static final BaseMaterialType object = new BaseMaterialType(false, false){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
-			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
+			RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material))).setPosition(tile(x), tile(y) + material.offset())
 			.setLayer(tile(y)).centerX()
 					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
 		}

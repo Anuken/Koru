@@ -20,8 +20,7 @@ import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
-import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.StructMaterialType;
+import io.anuke.koru.world.materials.*;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
@@ -50,6 +49,9 @@ public class World extends Module<Koru>{
 	}
 
 	public World(){
+		Material.load();
+		StructMaterial.load();
+		
 		if( !IServer.active()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
 			chunks = new Chunk[loadrange * 2][loadrange * 2];

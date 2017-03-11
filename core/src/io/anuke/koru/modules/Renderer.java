@@ -338,6 +338,7 @@ public class Renderer extends Module<Koru>{
 
 				return;
 			}
+			
 			Tile tile = world.getTile(cursor);
 
 			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);

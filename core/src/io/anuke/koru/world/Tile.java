@@ -78,7 +78,7 @@ public class Tile implements Poolable{
 	}
 
 	public String toString(){
-		return "Tile:[block=" + tile() + " tile=" + block() + " {"+  light +"} ]";
+		return "Tile:[block=" + block() + " tile=" + tile() + " {"+  light +"} ]";
 	}
 
 	@Override

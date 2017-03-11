@@ -46,5 +46,6 @@ public class StructMaterial{
 	public static final BaseMaterial workbench = new BaseMaterial("workbench",  StructMaterialType.workbench){{
 		addDrop(Items.wood, 10);
 	}};
-
+	
+	public static void load(){}
 }

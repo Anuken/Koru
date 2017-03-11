@@ -43,6 +43,11 @@ public abstract class BaseMaterialType{
 	int utile(int i){
 		return i*tilesize;
 	}
+	
+	/**Variant string.*/
+	String variantString(int x, int y, BaseMaterial material){
+		return material.variants() > 1 ? (rand(x,y, material.variants()) + "") : "";
+	}
 
 	public boolean tile(){
 		return tile;
