@@ -2,7 +2,8 @@ package io.anuke.koru.world;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import io.anuke.koru.generation.MaterialManager;
+import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.Material;
 
 public class Tile implements Poolable{
 	public int tileid, blockid;
@@ -10,7 +11,7 @@ public class Tile implements Poolable{
 	
 	public Tile(){}
 	
-	public Tile(Material tile, Material block){
+	public Tile(BaseMaterial tile, BaseMaterial block){
 		tileid = tile.id();
 		blockid = block.id();
 	}
@@ -23,12 +24,12 @@ public class Tile implements Poolable{
 		light = (byte)(f*127);
 	}
 	
-	public Material tile(){
-		return MaterialManager.instance().getMaterial(tileid);
+	public BaseMaterial tile(){
+		return BaseMaterial.getMaterial(tileid);
 	}
 	
-	public Material block(){
-		return MaterialManager.instance().getMaterial(blockid);
+	public BaseMaterial block(){
+		return BaseMaterial.getMaterial(blockid);
 	}
 	
 	public boolean tileEmpty(){
@@ -39,18 +40,18 @@ public class Tile implements Poolable{
 		return blockid == 0;
 	}
 
-	public Tile setTileMaterial(Material m){
+	public Tile setTileMaterial(BaseMaterial m){
 		tileid = m.id();
 		return this;
 	}
 
-	public Tile setBlockMaterial(Material m){
+	public Tile setBlockMaterial(BaseMaterial m){
 		blockid = m.id();
 		return this;
 	}
 
-	public void setMaterial(Material m){
-		if(m == Materials.air){
+	public void setMaterial(BaseMaterial m){
+		if(m == Material.air){
 			blockid = 0;
 			return;
 		}
@@ -65,7 +66,7 @@ public class Tile implements Poolable{
 		return tile().getType().solid() || block().getType().solid();
 	}
 
-	public Material solidMaterial(){
+	public BaseMaterial solidMaterial(){
 		if(block().getType().solid()) return block();
 		if(tile().getType().solid()) return tile();
 		return null;
@@ -77,7 +78,7 @@ public class Tile implements Poolable{
 	}
 
 	public String toString(){
-		return "Tile:[block=" + tile() + " tile=" + block() + " {"+  light +"} ]";
+		return "Tile:[block=" + block() + " tile=" + tile() + " {"+  light +"} ]";
 	}
 
 	@Override

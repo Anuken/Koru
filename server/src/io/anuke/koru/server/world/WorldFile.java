@@ -17,7 +17,11 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.world.*;
+import io.anuke.koru.network.Registrator;
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Generator;
+import io.anuke.koru.world.WorldLoader;
+import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.ucore.util.ColorCodes;
 
 //TODO do something about the chunk writers
@@ -45,7 +49,7 @@ public class WorldFile extends WorldLoader{
 
 		kryo = new Kryo();
 		kryo.register(Chunk.class);
-		kryo.register(Materials.class);
+		kryo.register(BaseMaterial.class, new Registrator.MaterialsSerializer());
 		this.file = file;
 		this.generator = generator;
 

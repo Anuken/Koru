@@ -17,7 +17,10 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
-import io.anuke.koru.world.*;
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.WorldLoader;
+import io.anuke.koru.world.materials.*;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
@@ -46,11 +49,19 @@ public class World extends Module<Koru>{
 	}
 
 	public World(){
+		Material.load();
+		StructMaterial.load();
+		
 		if( !IServer.active()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
 		}
+	}
+	
+	public void init(){
+		network = getModule(Network.class);
+		renderer = getModule(Renderer.class);
 	}
 	
 	//TODO move time and color related function to a different class?
@@ -184,9 +195,9 @@ public class World extends Module<Koru>{
 
 	public boolean positionSolid(float x, float y){
 		Tile tile = getTile(x, y);
-		Material block = tile.block();
-		Material tilem = tile.tile();
-		return (block.getType().solid() && block.getType().getRect(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getRect(tile(x), tile(y), Rectangle.tmp).contains(x, y));
+		BaseMaterial block = tile.block();
+		BaseMaterial tilem = tile.tile();
+		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
 	public boolean blockSolid(int x, int y){
@@ -197,18 +208,18 @@ public class World extends Module<Koru>{
 		return !blockSolid(x - 1, y) || !blockSolid(x + 1, y) || !blockSolid(x, y - 1) || !blockSolid(x, y + 1);
 	}
 
-	public boolean blends(int x, int y, Material material){
+	public boolean blends(int x, int y, BaseMaterial material){
 		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
-	public boolean isType(int x, int y, Material material){
+	public boolean isType(int x, int y, BaseMaterial material){
 		if( !inBounds(x, y)){
 			return true;
 		}
 		return tile(x, y).block() == material || tile(x, y).tile() == material;
 	}
 
-	public GridPoint2 search(Material material, int x, int y, int range){
+	public GridPoint2 search(BaseMaterial material, int x, int y, int range){
 		float nearest = Float.MAX_VALUE;
 		for(int cx = -range;cx <= range;cx ++){
 			for(int cy = -range;cy <= range;cy ++){
@@ -324,9 +335,15 @@ public class World extends Module<Koru>{
 	static <T> boolean inBounds(int x, int y, T[][] array){
 		return x >= 0 && y >= 0 && x < array.length && y < array[0].length;
 	}
-
-	public void init(){
-		network = getModule(Network.class);
-		renderer = getModule(Renderer.class);
+	
+	//TODO make this work with transparency instead of specific types
+	public static boolean isPlaceable(BaseMaterial material, Tile tile){
+		
+		if(!material.getType().tile()){
+			return (tile.blockEmpty());
+		}else{
+			return tile.tile() != material && 
+				(tile.blockEmpty() || tile.block().getType() == StructMaterialType.torch);
+		}		
 	}
 }

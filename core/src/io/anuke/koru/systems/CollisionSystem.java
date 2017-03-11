@@ -29,7 +29,8 @@ public class CollisionSystem extends KoruSystem{
 	public CollisionSystem() {
 		super(Family.all(ColliderComponent.class, PositionComponent.class).get());
 		engine = new ColliderEngine();
-
+		
+		//setup contact listeners/filters on server
 		if(IServer.active()){
 			engine.setContactFilter((a, b) -> {
 				KoruEntity ka = (KoruEntity) a.data;
@@ -89,11 +90,9 @@ public class CollisionSystem extends KoruSystem{
 
 		if(!co.collider.trigger)
 			checkTerrainCollisions(co.collider, co);
-		
 	}
 
 	void checkTerrainCollisions(Collider collider, ColliderComponent comp){
-		//TODO fix entities being pushed into blocks
 		float x = collider.x + collider.getVelocity().x * Koru.delta();
 		float y = collider.y + collider.getVelocity().y * Koru.delta();
 		float w = collider.w;
@@ -133,7 +132,6 @@ public class CollisionSystem extends KoruSystem{
 				collider.y -= vector.y;
 			}
 		});
-		
 	}
 	
 	void checkTerrain(float x, float y, Consumer<Rectangle> cons){
@@ -150,7 +148,7 @@ public class CollisionSystem extends KoruSystem{
 				if(!tile.solid())
 					continue;
 
-				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
+				Rectangle out = tile.solidMaterial().getType().getHitbox(worldx, worldy, Rectangle.tmp2);
 				cons.accept(out);
 			}
 		}
@@ -170,7 +168,7 @@ public class CollisionSystem extends KoruSystem{
 				if(!tile.solid())
 					continue;
 
-				Rectangle out = tile.solidMaterial().getType().getRect(worldx, worldy, Rectangle.tmp2);
+				Rectangle out = tile.solidMaterial().getType().getHitbox(worldx, worldy, Rectangle.tmp2);
 				
 				if(out.overlaps(rect)) return true;
 			}

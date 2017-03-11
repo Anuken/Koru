@@ -28,7 +28,6 @@ public class Koru extends ModuleController<Koru>{
 		addModule(Input.class);
 		addModule(ClientData.class);
 		addModule(World.class);
-		addModule(ObjectHandler.class);
 		addModule(UI.class);
 		
 		engine.addSystem(new CollisionDebugSystem());

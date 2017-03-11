@@ -1,18 +1,18 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.Materials;
+import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.StructMaterial;
 
 public enum Recipes implements Recipe{
-	woodblock(Materials.woodblock, new ItemStack(Items.wood, 2)),
-	stonepillar(Materials.stonepillar, new ItemStack(Items.stone, 2)),
-	torch(Materials.torch, new ItemStack(Items.wood, 1)),
-	workbench(Materials.workbench, new ItemStack(Items.wood, 10));
+	woodblock(StructMaterial.woodblock, new ItemStack(Items.wood, 2)),
+	stonepillar(StructMaterial.stonepillar, new ItemStack(Items.stone, 2)),
+	torch(StructMaterial.torch, new ItemStack(Items.wood, 1)),
+	workbench(StructMaterial.workbench, new ItemStack(Items.wood, 10));
 	
-	Material result;
+	BaseMaterial result;
 	ItemStack[] requirements;
 	
-	private Recipes(Material result, ItemStack... requirements){
+	private Recipes(BaseMaterial result, ItemStack... requirements){
 		this.result = result;
 		this.requirements = requirements;
 	}
@@ -21,7 +21,7 @@ public enum Recipes implements Recipe{
 		return requirements;
 	}
 
-	public Material result(){
+	public BaseMaterial result(){
 		return result;
 	}
 

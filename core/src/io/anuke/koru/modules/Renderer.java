@@ -24,7 +24,10 @@ import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.*;
+import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.MaterialType;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
@@ -82,7 +85,7 @@ public class Renderer extends Module<Koru>{
 	
 	void loadMaterialColors(){
 		
-		for(Materials material : Materials.values()){
+		for(BaseMaterial material : BaseMaterial.getAll()){
 			if(material.getType().tile()) continue;
 			
 			TextureRegion region = atlas.findRegion(material.name());
@@ -167,13 +170,14 @@ public class Renderer extends Module<Koru>{
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
 				&& inv.hasAll(Recipes.values()[inv.recipe].requirements())){
 			
-			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach && Material.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
+			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach 
+					&& World.isPlaceable(Recipes.values()[inv.recipe].result(), tile)){
 				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
 			}else{
 				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);
 			}
 			
-			Material result = Recipes.values()[inv.recipe].result();
+			BaseMaterial result = Recipes.values()[inv.recipe].result();
 
 			if(result.getType() == MaterialType.tile){
 				block.setRegion(Resources.region("blank"));
@@ -334,6 +338,7 @@ public class Renderer extends Module<Koru>{
 
 				return;
 			}
+			
 			Tile tile = world.getTile(cursor);
 
 			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);

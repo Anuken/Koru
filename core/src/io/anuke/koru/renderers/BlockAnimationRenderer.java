@@ -6,8 +6,8 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.DataComponent;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.world.Material;
-import io.anuke.koru.world.MaterialType;
+import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.MaterialType;
 import io.anuke.ucore.spritesystem.*;
 
 public class BlockAnimationRenderer extends EntityRenderer{
@@ -23,7 +23,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		for(Renderable r : list.renderables)
 		r.sprite().setAlpha(1f-life/lifetime);
 		
-		if(((Material)entity.getComponent(DataComponent.class).data).getType() == MaterialType.tree)
+		if(((BaseMaterial)entity.getComponent(DataComponent.class).data).getType() == MaterialType.tree)
 		list.renderables.get(2).sprite().sprite.rotate(rspeed*Koru.delta());
 		
 		if(life > lifetime){
@@ -37,7 +37,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		if(entity.getComponent(DataComponent.class).data == null){
 			throw new RuntimeException("No material specified in the data! Did you set the renderer material?");
 		}
-		Material material = (Material)entity.getComponent(DataComponent.class).data;
+		BaseMaterial material = (BaseMaterial)entity.getComponent(DataComponent.class).data;
 		
 		int x = (int)(entity.getX()/World.tilesize);
 		int y = (int)(entity.getY()/World.tilesize);
