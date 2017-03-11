@@ -4,10 +4,13 @@ import static io.anuke.koru.modules.World.tilesize;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.modules.World;
+import io.anuke.koru.world.Tile;
+import io.anuke.ucore.spritesystem.RenderableList;
 
-public abstract class BaseMaterialType implements IMaterialType{
+public abstract class BaseMaterialType{
 	public boolean tile, solid;
 	public Color color = Color.WHITE;
 	
@@ -41,18 +44,25 @@ public abstract class BaseMaterialType implements IMaterialType{
 		return i*tilesize;
 	}
 
-	@Override
 	public boolean tile(){
 		return tile;
 	}
 
-	@Override
 	public Color getColor(){
 		return color;
 	}
 
-	@Override
 	public boolean solid(){
 		return solid;
+	}
+	
+	public abstract void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y);
+	
+	public int size(){
+		return 24;
+	}
+
+	public Rectangle getHitbox(int x, int y, Rectangle rectangle){
+		return rectangle.set(x * tilesize, y * tilesize, tilesize, tilesize);
 	}
 }

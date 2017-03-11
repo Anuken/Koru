@@ -15,7 +15,7 @@ public abstract class BaseMaterial{
 	
 	private final int id;
 	private final String name;
-	private final IMaterialType type;
+	private final BaseMaterialType type;
 	
 	protected Vector3 foilageTint = new Vector3(1f, 1f, 1f);
 	protected int breaktime;
@@ -34,7 +34,7 @@ public abstract class BaseMaterial{
 		return materials;
 	}
 	
-	protected BaseMaterial(String name, IMaterialType type){
+	protected BaseMaterial(String name, BaseMaterialType type){
 		id = lastid++;
 		this.name = name;
 		this.type = type;
@@ -72,7 +72,7 @@ public abstract class BaseMaterial{
 		return name;
 	}
 	
-	public IMaterialType getType(){
+	public BaseMaterialType getType(){
 		return type;
 	}
 	
