@@ -2,6 +2,7 @@ package io.anuke.koru.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.items.Item;
@@ -102,7 +103,7 @@ public enum Materials implements Material{
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
 	private int breaktime;
-	private boolean enablecollisions = true;
+	private boolean collisions = true;
 	private Array<ItemStack> drops = new Array<ItemStack>();
 	public Color color = Color.CLEAR;
 	private float offset = 0;
@@ -127,7 +128,7 @@ public enum Materials implements Material{
 	private Materials(MaterialType type, int breaktime, boolean collisions){
 		this.type = type;
 		this.breaktime = breaktime;
-		this.enablecollisions = collisions;
+		this.collisions = collisions;
 	}
 	
 	private Materials(MaterialType type, Color foilageColor){
@@ -149,7 +150,7 @@ public enum Materials implements Material{
 		this.foilageColor = foilageColor;
 	}
 	
-	public Color foilageColor(){ // the color that plants have on this tile
+	public Vector3 foilageTint(){ // the color that plants have on this tile
 		return foilageColor;
 	}
 	
@@ -162,7 +163,7 @@ public enum Materials implements Material{
 	}
 	
 	public boolean collisionsEnabled(){ //if collisions are enabled
-		return enablecollisions;
+		return collisions;
 	}
 	
 	public MaterialType getType(){ //the type

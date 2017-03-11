@@ -3,6 +3,7 @@ package io.anuke.koru.world.materials;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.items.Item;
@@ -10,7 +11,6 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.world.Material;
 import io.anuke.koru.world.MaterialType;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.graphics.Hue;
 
 public abstract class BaseMaterial implements Material{
 	private static ArrayList<Material> materials = new ArrayList<Material>();
@@ -20,10 +20,9 @@ public abstract class BaseMaterial implements Material{
 	private final String name;
 	private final MaterialType type;
 	
-	
-	protected Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
+	protected Vector3 foilageTint = new Vector3(1f, 1f, 1f);
 	protected int breaktime;
-	protected boolean enablecollisions = true;
+	protected boolean collisions = true;
 	protected Array<ItemStack> drops = new Array<ItemStack>();
 	protected Color color = Color.CLEAR;
 	protected float offset = 0;
@@ -48,8 +47,8 @@ public abstract class BaseMaterial implements Material{
 	}
 
 	@Override
-	public Color foilageColor(){
-		return foilageColor;
+	public Vector3 foilageTint(){
+		return foilageTint;
 	}
 	
 	@Override
@@ -59,7 +58,7 @@ public abstract class BaseMaterial implements Material{
 	
 	@Override
 	public boolean collisionsEnabled(){
-		return enablecollisions;
+		return collisions;
 	}
 	
 	@Override

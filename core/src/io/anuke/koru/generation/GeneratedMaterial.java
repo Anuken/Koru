@@ -26,7 +26,7 @@ public class GeneratedMaterial extends GeneratedObject implements Material{
 	protected GeneratedMaterial(){super(null); type = null; id=0;}
 
 	@Override
-	public Color foilageColor(){
+	public Color foilageTint(){
 		return Color.WHITE;
 	}
 

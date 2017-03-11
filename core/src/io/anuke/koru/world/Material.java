@@ -1,11 +1,12 @@
 package io.anuke.koru.world;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.items.ItemStack;
 
 public interface Material{
-	public Color foilageColor();
+	public Vector3 foilageTint();
 	
 	public default int breaktime(){return 0;} // 0 means not breakable
 	

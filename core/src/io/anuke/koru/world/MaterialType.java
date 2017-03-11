@@ -41,16 +41,16 @@ public enum MaterialType{
 			int rand = rand(x,y,16);
 			RenderPool.sprite(Resources.region("grass" + (rand <= 8 ? rand : "1")))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
-					.setColor(grasscolor.r * material.foilageColor().r,
-							  grasscolor.g * material.foilageColor().g,
-							  grasscolor.b * material.foilageColor().b).add(group);
+					.setColor(grasscolor.r * material.foilageTint().x,
+							  grasscolor.g * material.foilageTint().y,
+							  grasscolor.b * material.foilageTint().z).add(group);
 			
 			if(Koru.module(World.class).blends(x, y, material))
 				RenderPool.sprite(Resources.region("grassedge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.setColor(grasscolor.r * material.foilageColor().r,
-								grasscolor.g * material.foilageColor().g,
-								grasscolor.b * material.foilageColor().b)
+						.setColor(grasscolor.r * material.foilageTint().x,
+								grasscolor.g * material.foilageTint().y,
+								grasscolor.b * material.foilageTint().z)
 						.center().setLayer(-material.id() * 2 + 1).add(group);
 		}
 	},
@@ -318,7 +318,7 @@ public enum MaterialType{
 		public boolean tile(){
 			return false;
 		}
-	};;
+	};
 	protected final Color grasscolor = new Color(0x62962fff).mul(0.97f,0.97f,0.97f,1f);
 	private Color color = null;
 

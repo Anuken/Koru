@@ -3,6 +3,8 @@ package io.anuke.koru.world.materials;
 import static io.anuke.koru.modules.World.tilesize;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
@@ -11,7 +13,8 @@ import io.anuke.koru.world.*;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.spritesystem.*;
 
-public abstract class NaturalMaterialType extends BaseMaterialType{
+public class NaturalMaterialType{
+	public static final Color grasscolor = new Color(0x62962fff);
 	
 	public static final BaseMaterialType tile = new BaseMaterialType(){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
@@ -32,22 +35,20 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 	};
 	
 	public static final BaseMaterialType grass = new BaseMaterialType(){
-		Color grasscolor = new Color(0x62962fff);
-		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
 			RenderPool.sprite(Resources.region("grass" + (rand <= 8 ? rand : "1")))
 					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
-					.setColor(grasscolor.r * material.foilageColor().r,
-							  grasscolor.g * material.foilageColor().g,
-							  grasscolor.b * material.foilageColor().b).add(group);
+					.setColor(grasscolor.r * material.foilageTint().x,
+							  grasscolor.g * material.foilageTint().y,
+							  grasscolor.b * material.foilageTint().z).add(group);
 			
 			if(Koru.module(World.class).blends(x, y, material))
 				RenderPool.sprite(Resources.region("grassedge"))
 						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.setColor(grasscolor.r * material.foilageColor().r,
-								grasscolor.g * material.foilageColor().g,
-								grasscolor.b * material.foilageColor().b)
+						.setColor(grasscolor.r * material.foilageTint().x,
+								grasscolor.g * material.foilageTint().y,
+								grasscolor.b * material.foilageTint().z)
 						.center().setLayer(-material.id() * 2 + 1).add(group);
 		}
 	};
@@ -97,6 +98,12 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 
 			sprite.add(group);
 		}
+		
+		public Rectangle getHitbox(int x, int y, Rectangle rectangle){
+			float width = 7;
+			float height = 3;
+			return rectangle.set(x * World.tilesize + width / 2f, y * World.tilesize + 6 + height / 2f, width, height);
+		}
 	};
 	
 	public static final BaseMaterialType object = new BaseMaterialType(false, false){
@@ -113,7 +120,7 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float yadd = 0;
 			
-			Color grasscolor = tile.tile().foilageColor();
+			Vector3 tint = tile.tile().foilageTint();
 			
 			int blend = blendStage(x, y);
 			
@@ -134,7 +141,7 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 				a.setProvider(Sorter.object);
 				
 				float gadd = i == 1 ? 1f : add;
-				a.sprite.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd, 1f);
+				a.sprite.setColor(grasscolor.r * gadd * tint.x, grasscolor.g * gadd * tint.y, grasscolor.b * gadd * tint.z, 1f);
 
 				a.setPosition(utile(x), utile(y) + yadd + i * 6);
 				group.add(a);
@@ -146,6 +153,10 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 				sh.add(group);
 			}
 		}
+		
+		public int size(){
+			return 16;
+		}
 	};
 	
 	public static final BaseMaterialType shortgrassblock = new BaseMaterialType(false, false){
@@ -154,7 +165,7 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float xadd = 0;
 			
-			Color grasscolor = tile.tile().foilageColor();
+			Vector3 tint = tile.tile().foilageTint();
 			
 			int iter = 4;
 
@@ -164,7 +175,7 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 				SpriteRenderable a = RenderPool.sprite(Resources.region("grassf1"));
 				
 				a.setProvider(Sorter.object);
-				a.setColor(grasscolor.r * gadd, grasscolor.g * gadd, grasscolor.b * gadd);
+				a.setColor(grasscolor.r * gadd*tint.x, grasscolor.g * gadd*tint.y, grasscolor.b * gadd*tint.z);
 				
 				a.setPosition(utile(x), utile(y) + i * (tilesize / iter) + xadd);
 				a.add(group);
@@ -175,6 +186,10 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 				sh.setPosition(utile(x)+1, tile(y)+2+ xadd);
 				sh.add(group);
 			}
+		}
+		
+		public int size(){
+			return 16;
 		}
 	};
 	
@@ -189,6 +204,6 @@ public abstract class NaturalMaterialType extends BaseMaterialType{
 	}
 
 	static boolean isGrass(int x, int y){
-		return world().isType(x, y, Materials.grassblock) || world().isType(x, y, Materials.shortgrassblock);
+		return World.instance().isType(x, y, Materials.grassblock) || World.instance().isType(x, y, Materials.shortgrassblock);
 	}
 }
