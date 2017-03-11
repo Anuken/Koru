@@ -12,7 +12,7 @@ import io.anuke.ucore.spritesystem.RenderableList;
 
 public abstract class BaseMaterialType{
 	public boolean tile, solid;
-	public Color color = Color.WHITE;
+	public Color color;
 	
 	public BaseMaterialType(boolean tile, boolean solid){
 		this.tile = tile;
@@ -47,6 +47,15 @@ public abstract class BaseMaterialType{
 	/**Variant string.*/
 	String variantString(int x, int y, BaseMaterial material){
 		return material.variants() > 1 ? (rand(x,y, material.variants()) + "") : "";
+	}
+	
+	/**Variant number for this position.*/
+	int variantNum(int x, int y, BaseMaterial material){
+		return rand(x,y, material.variants())-1;
+	}
+	
+	float variantOffset(int x, int y, BaseMaterial material){
+		return (material.offsets == null ? material.offset : material.offsets[variantNum(x,y, material)]);
 	}
 
 	public boolean tile(){

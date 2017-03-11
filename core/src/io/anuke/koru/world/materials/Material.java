@@ -122,30 +122,30 @@ public class Material{
 	}};
 	
 	public static final BaseMaterial deadtree = new BaseMaterial("deadtree", tree){{
-		offset = -4f;
 		variants = 4;
+		offsets(-4, -3, -4, -1);
 	}};
 	
 	public static final BaseMaterial oaktree = new BaseMaterial("oaktree", tree){{
-		offset = -10f;
 		variants = 6;
+		offsets(-10, -10, -10, -4, -4, -4);
 	}};
 	
 	public static final BaseMaterial willowtree = new BaseMaterial("willowtree", tree){{
-		offset = -4f;
 		variants = 4;
+		offsets(-4, -3, -4, -3);
 	}};
 	
 	public static final BaseMaterial burnedtree = new BaseMaterial("burnedtree", tree){{
-		offset = -5f;
 		variants = 4;
+		offsets(-4, -3, -4, -1);
 	}};
 	
 	public static final BaseMaterial pinetree = new BaseMaterial("pinetree", tree){{
 		addDrop(Items.wood, 10);
 		breaktime = 90;
-		offset = -5f;
 		variants = 4;
+		offsets(-5f, -3f, -3f, -5f);
 	}};
 	
 	public static final BaseMaterial pinesapling = new BaseMaterial("pinesapling", object){{

@@ -22,6 +22,7 @@ public abstract class BaseMaterial{
 	protected boolean collisions = true;
 	protected Array<ItemStack> drops = new Array<ItemStack>();
 	protected float offset = 0;
+	protected float[] offsets;
 	protected int variants = 1;
 	
 	public Color color = Color.CLEAR;
@@ -40,6 +41,10 @@ public abstract class BaseMaterial{
 		this.type = type;
 		
 		materials.add(this);
+	}
+	
+	protected void offsets(float... offsets){
+		this.offsets = offsets;
 	}
 	
 	protected void addDrops(ItemStack... stacks){

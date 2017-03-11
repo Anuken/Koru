@@ -80,9 +80,11 @@ public class MaterialType{
 		}
 		
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
+			float offset = variantOffset(x, y, material);
+			
 			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material)))
-					.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset())
+					.setPosition(tile(x), tile(y) + offset).setLayer(tile(y)).centerX()
+					.addShadow(group, Resources.atlas(), -offset)
 					.setProvider(Sorter.object).sprite();
 
 			sprite.add(group);
