@@ -29,7 +29,6 @@ public interface Material{
 	
 	public default boolean breakable(){return breaktime() > 0;}
 	
-	
 	public static boolean isPlaceable(Material material, Tile tile){
 		
 		if(!material.getType().tile()){

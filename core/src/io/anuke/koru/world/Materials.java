@@ -98,6 +98,7 @@ public enum Materials implements Material{
 	torch(MaterialType.torch, 20){{addDrop(Items.wood, 1);}},
 	box(MaterialType.chest){{addDrop(Items.wood, 10);}},
 	workbench(MaterialType.workbench){{addDrop(Items.wood, 10);}};
+	
 	private MaterialType type = MaterialType.tile;
 	private Color foilageColor = Hue.rgb(69, 109, 29, 0.04f);
 	private int breaktime;
