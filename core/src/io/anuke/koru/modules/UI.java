@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
@@ -25,6 +26,7 @@ import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.ui.ChatTable;
 import io.anuke.koru.ui.InventoryMenu;
 import io.anuke.koru.ui.RecipeMenu;
+import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.modules.Module;
 
 public class UI extends Module<Koru> {
@@ -201,10 +203,15 @@ public class UI extends Module<Koru> {
 
 	@Override
 	public void update() {
+		long start = TimeUtils.nanoTime();
+		
 		updateUIVisibility();
 		
 		stage.act();
 		stage.draw();
+		
+		if(Profiler.update())
+			Profiler.uiTime = TimeUtils.timeSinceNanos(start);
 	}
 
 	@Override

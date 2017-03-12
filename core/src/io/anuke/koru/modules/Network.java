@@ -3,9 +3,7 @@ package io.anuke.koru.modules;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.*;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -16,8 +14,10 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
+import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
+import io.anuke.ucore.util.Timers;
 
 public class Network extends Module<Koru>{
 	public static final String ip = System.getProperty("user.name").equals("anuke") ? "localhost" : "107.11.42.20";
@@ -156,7 +156,8 @@ public class Network extends Module<Koru>{
 
 	@Override
 	public void update(){
-
+		long start = TimeUtils.nanoTime();
+		
 		if(connected && !client.isConnected()){
 			connected = false;
 			connecting = false;
@@ -174,7 +175,7 @@ public class Network extends Module<Koru>{
 
 			t.engine.removeAllEntities();
 		}
-
+		
 		while(entityQueue.size != 0){
 
 			KoruEntity entity = entityQueue.pop();
@@ -192,10 +193,10 @@ public class Network extends Module<Koru>{
 				entity.add();
 		}
 
-		if(connected && Gdx.graphics.getFrameId() % pingInterval == 0){
+		if(connected && Timers.get("ping", pingInterval)){
 			client.updateReturnTripTime();
 		}
-
+		
 		KoruEntity player = getModule(ClientData.class).player;
 		ImmutableArray<Entity> entities = t.engine.getEntities();
 
@@ -208,23 +209,26 @@ public class Network extends Module<Koru>{
 		}
 
 		tempids.clear();
-
+		
 		for(Long id : entitiesToRemove){
 			if(t.engine.removeEntity(id)){
 				tempids.add(id);
 			}
 		}
-
+		
 		for(Long l : tempids)
 			entitiesToRemove.remove(l);
-
+		
 		if(chunksAdded){
 			getModule(Renderer.class).updateTiles();
 			chunksAdded = false;
 		}
 
-		if(connected && Gdx.graphics.getFrameId() % packetFrequency == 0)
+		if(connected && Timers.get("nupdate", packetFrequency))
 			sendUpdate();
+		
+		if(Profiler.update())
+			Profiler.networkTime = TimeUtils.timeSinceNanos(start);
 	}
 
 	private void sendUpdate(){

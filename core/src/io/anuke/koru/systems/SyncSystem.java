@@ -10,6 +10,7 @@ import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.network.syncing.SyncData;
+import io.anuke.ucore.util.Timers;
 
 public class SyncSystem extends KoruSystem{
 	static public float syncrange = 150;
@@ -20,7 +21,7 @@ public class SyncSystem extends KoruSystem{
 
 	@Override
 	protected void processEntity(KoruEntity player, float delta){
-		if(IServer.instance().getFrameID() % Network.packetFrequency != 0) return;
+		if(!Timers.get(Network.packetFrequency)) return;
 
 		WorldUpdatePacket packet = new WorldUpdatePacket();
 		

@@ -3,10 +3,10 @@ package io.anuke.koru.world.materials;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import io.anuke.koru.Koru;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.util.Timers;
 
 public class StructMaterialType{
 	public static final BaseMaterialType torch = new BaseMaterialType(false, false){
@@ -28,7 +28,7 @@ public class StructMaterialType{
 			new SpriteRenderable(Resources.region("light")){
 				public void draw(Batch batch){
 					sprite.setOriginCenter();
-					sprite.setScale(1f + (float)Math.sin(Koru.time()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
+					sprite.setScale(1f + (float)Math.sin(Timers.time()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
 					
 					super.draw(batch);
 				}
@@ -47,7 +47,7 @@ public class StructMaterialType{
 		}
 		
 		int frame(int x, int y){
-			return (int)(1+(rand(x,y,50)+Koru.time()/4)%4);
+			return (int)(1+(rand(x,y,50)+Timers.time()/4)%4);
 		}
 	};
 	

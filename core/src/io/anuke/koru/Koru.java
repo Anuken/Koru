@@ -3,19 +3,21 @@ package io.anuke.koru;
 import java.util.Calendar;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.systems.KoruEngine;
+import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.ModuleController;
 import io.anuke.ucore.util.ColorCodes;
+import io.anuke.ucore.util.Timers;
 
 public class Koru extends ModuleController<Koru>{
 	private static Koru instance;
 	private static StringBuffer log = new StringBuffer();
-	private float time;
 	public KoruEngine engine;
 
 	@Override
@@ -36,11 +38,25 @@ public class Koru extends ModuleController<Koru>{
 	@Override
 	public void render(){
 		
-		time += delta();
+		Timers.update(delta());
 		
 		try{
+			long start = TimeUtils.nanoTime();
+			
 			engine.update(Gdx.graphics.getDeltaTime()*60f);
+			
+			if(Profiler.update())
+			Profiler.engineTime = TimeUtils.timeSinceNanos(start);
+			
+			long mstart = TimeUtils.nanoTime();
+			
 			super.render();
+			
+			if(Profiler.update()){
+				Profiler.moduleTime = TimeUtils.timeSinceNanos(mstart);
+				Profiler.totalTime = TimeUtils.timeSinceNanos(start);
+			}
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			
@@ -84,12 +100,9 @@ public class Koru extends ModuleController<Koru>{
 		if(o instanceof Exception){
 			((Exception) o).printStackTrace();
 		}
-	}
-	
-	public static float time(){
-		return instance.time;
-	}
 
+	}
+		
 	public static CharSequence getLog(){
 		return log;
 	}

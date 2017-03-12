@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
@@ -18,6 +19,7 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.systems.SyncSystem;
+import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
@@ -78,6 +80,8 @@ public class World extends Module<Koru>{
 
 	@Override
 	public void update(){
+		long start = TimeUtils.nanoTime();
+		
 		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
 	
 		time += !IServer.active() ? Gdx.graphics.getDeltaTime()*60f/timescale : IServer.instance().getDelta()/timescale;
@@ -119,6 +123,9 @@ public class World extends Module<Koru>{
 		lastchunky = newy;
 
 		sendChunkRequest();
+		
+		if(Profiler.update())
+			Profiler.worldTime = TimeUtils.timeSinceNanos(start);
 	}
 	
 	void checkUnloadChunks(){

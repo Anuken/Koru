@@ -64,10 +64,13 @@ public class ChatTable extends VisTable{
 		batch.setColor(shadowColor);
 		if(chatOpen)
 			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight());
-		super.draw(batch, alpha);
 		
+		font.getData().setScale(2f);
 		font.getData().down = -21.5f;
 		font.getData().lineHeight = 22f;
+		
+		super.draw(batch, alpha);
+		
 		
 		float spacing = chatspace;
 		

@@ -1,14 +1,15 @@
 package io.anuke.koru.modules;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.*;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 
@@ -22,6 +23,7 @@ import io.anuke.koru.items.BaseBlockRecipe;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.systems.CollisionDebugSystem;
+import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
@@ -121,6 +123,8 @@ public class Renderer extends Module<Koru>{
 	public void update(){
 		if(!init && processor.getCombinedBuffer().height < Gdx.graphics.getHeight()){resetProcessor(); init = true;}
 		
+		long start = TimeUtils.nanoTime();
+		
 		light.setColor(world.getAmbientColor());
 
 		updateCamera();
@@ -128,10 +132,14 @@ public class Renderer extends Module<Koru>{
 
 		doRender();
 		updateCamera();
+		
+		if(Profiler.update())
+		Profiler.renderTime = TimeUtils.timeSinceNanos(start);
 	}
 
 	void doRender(){
-
+		
+		
 		processor.capture();
 
 		clearScreen();
@@ -145,7 +153,8 @@ public class Renderer extends Module<Koru>{
 		batch.end();
 
 		processor.render();
-
+		
+		
 		batch.setProjectionMatrix(matrix);
 		recorder.update();
 		batch.begin();
@@ -285,20 +294,31 @@ public class Renderer extends Module<Koru>{
 	}
 
 	public void drawGUI(){
+		//font.setUseIntegerPositions(false);
 		
 		if(Gdx.input.isKeyJustPressed(Keys.GRAVE)) consoleOpen = !consoleOpen;
 		if(Gdx.input.isKeyJustPressed(Keys.F3)) debug = !debug;
 		
-		font.getData().setScale(1 / GUIscale);
+		font.getData().setScale(1f / GUIscale);
 		font.setColor(Color.WHITE);
 		
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + "[WHITE] FPS", 0, uiheight());
+		
+		NumberFormat f = DecimalFormat.getInstance();
+		
 		if(debug){
 			font.draw(batch, 
 			"[CORAL]entities: " +t.engine.getEntities().size() +
 			"\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak +
 			"\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + 
-			"\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime()
+			"\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() +
+			"\n[ORANGE]render ns: " + f.format(Profiler.renderTime)+
+			"\nworld ns: " + f.format(Profiler.engineTime)+
+			"\nui ns: " + f.format(Profiler.uiTime)+ 
+			"\nnetwork ns: " + f.format(Profiler.networkTime)+ 
+			"\nengine ns: " + f.format(Profiler.worldTime)+
+			"\nmodule ns: " + f.format(Profiler.moduleTime)+
+			"\ntotal ns: " + f.format(Profiler.totalTime)
 			, 0, uiheight() - 5);
 			
 			font.draw(batch, 
@@ -311,7 +331,7 @@ public class Renderer extends Module<Koru>{
 			font.draw(batch, "[CORAL]" + Koru.getLog(), 0, uiheight() - 35);
 		}
 		
-		font.getData().setScale(1 / GUIscale);
+		font.getData().setScale(1f / GUIscale);
 
 		String launcher = "";
 

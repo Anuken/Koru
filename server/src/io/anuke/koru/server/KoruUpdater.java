@@ -16,6 +16,7 @@ import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
 import io.anuke.ucore.util.ColorCodes;
+import io.anuke.ucore.util.Timers;
 
 public class KoruUpdater{
 	KoruServer server;
@@ -36,6 +37,7 @@ public class KoruUpdater{
 
 	void loop(){
 		try{
+			Timers.update(delta);
 			engine.update(delta);
 			world.update();
 			checkQueue();

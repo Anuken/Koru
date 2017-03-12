@@ -25,7 +25,7 @@ dependencies {
 	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-	compile 'com.github.anuken:ucore:a3e508942a'
+	compile 'com.github.anuken:ucore:320f76f'
 	compile 'com.github.anuken:gdx-aabb:92a40247c4'
 	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 }
