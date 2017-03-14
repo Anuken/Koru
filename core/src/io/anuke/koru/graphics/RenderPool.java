@@ -6,7 +6,7 @@ import io.anuke.ucore.spritesystem.*;
 
 public class RenderPool{
 	
-	public static KoruRenderable sprite(String region){
+	public static KoruRenderable get(String region){
 		return Pools.obtain(KoruRenderable.class).region(region);
 	}
 	
@@ -19,7 +19,7 @@ public class RenderPool{
 	}
 
 	public static SpriteRenderable light(){
-		return Pools.obtain(SpriteRenderable.class);
+		return Pools.obtain(KoruRenderable.class);
 	}
 	
 	public static ParticleRenderable particle(){

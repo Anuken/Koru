@@ -44,9 +44,9 @@ public class StructMaterialType{
 					batch.setColor(1,1,1,sprite.getColor().a);
 					batch.draw(Resources.region("torchflame" + frame(x,y)), sprite.getX(), sprite.getY());
 				}
-			}.addShadow(group, -material.offset())
-			.set(tile(x), tile(y) + material.offset()).layer(tile(y)).centerX()
-			.sort(Sorter.object).add(group);
+			}.set(tile(x), tile(y) + material.offset()).layer(tile(y)).centerX()
+			.sort(Sorter.object)
+			.addShadow(group, -material.offset()).add(group);
 		}
 		
 		int frame(int x, int y){
@@ -58,10 +58,10 @@ public class StructMaterialType{
 		
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			
-			RenderPool.sprite(material.name())
-			.addShadow(group, -material.offset())
+			RenderPool.get(material.name())
 			.set(tile(x), tile(y) + material.offset())
 			.layer(tile(y)).centerX()
+			.addShadow(group, -material.offset())
 					.sort(Sorter.object).add(group);
 		}
 	};
@@ -70,10 +70,10 @@ public class StructMaterialType{
 		
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 
-			RenderPool.sprite(material.name())
-			.addShadow(group, -material.offset())
+			RenderPool.get(material.name())
 			.set(tile(x), tile(y) + material.offset())
 			.layer(tile(y)).centerX()
+			.addShadow(group, -material.offset())
 					.sort(Sorter.object).add(group);
 		}
 	};

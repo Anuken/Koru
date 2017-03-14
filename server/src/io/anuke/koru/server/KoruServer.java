@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -285,12 +284,7 @@ public class KoruServer extends IServer{
 	}
 
 	public void sendLater(Object object){
-		//EXTREMELY smart way to do this
-		Gdx.app.postRunnable(()->{
-			Gdx.app.postRunnable(()->{
-				sendToAll(object);
-			});
-		});
+		updater.addToSendQueue(object);
 	}
 
 	public void sendToAll(Object object){

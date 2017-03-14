@@ -1,11 +1,7 @@
 package io.anuke.koru.graphics;
 
-import com.badlogic.gdx.graphics.Color;
-
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.RenderableGroup;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.ucore.spritesystem.*;
 
 public class KoruRenderable extends SpriteRenderable{
 	
@@ -22,10 +18,10 @@ public class KoruRenderable extends SpriteRenderable{
 	}
 	
 	public KoruRenderable generateShadow(){
-		return (KoruRenderable) new KoruRenderable("shadow"
+		return (KoruRenderable)RenderPool.get("shadow"
 				+ (int) (sprite.getRegionWidth() * 0.8f / 2f + Math.pow(sprite.getRegionWidth(), 1.5f) / 200f) * 2)
 						.set(sprite.getX() + (int) (sprite.getWidth() / 2), sprite.getY(), true, true)
-						.color(new Color(0, 0, 0, 1f)).layer(-999999);
+						.color(0, 0, 0).layer(-999999);
 	}
 
 	public KoruRenderable shadow(){
@@ -59,6 +55,45 @@ public class KoruRenderable extends SpriteRenderable{
 		list.add("shadow", generateShadow().add(0, offset));
 		return this;
 	}
+	
+	public KoruRenderable set(float x, float y){
+		super.set(x, y);
+		return this;
+	}
+	
+	public KoruRenderable set(float x, float y, boolean center){
+		return (KoruRenderable)super.set(x, y, center, false);
+	}
+
+	public KoruRenderable set(float x, float y, boolean center, boolean block){
+		return (KoruRenderable)super.set(x, y, center, block);
+	}
+
+	public KoruRenderable centerX(){
+		super.centerX();
+		return this;
+	}
+	
+	public KoruRenderable sort(Sorter provider){
+		super.sort(provider);
+		return this;
+	}
+	
+	public KoruRenderable layer(float layer){
+		super.layer(layer);
+		return this;
+	}
+
+	public KoruRenderable centerY(){
+		super.centerY();
+		return this;
+	}
+
+	public KoruRenderable center(){
+		super.center();
+		return this;
+	}
+
 	
 	@Override
 	public void onFree(){

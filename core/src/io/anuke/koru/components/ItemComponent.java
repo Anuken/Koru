@@ -22,7 +22,7 @@ public class ItemComponent implements KoruComponent{
 					if(dst > 2f)
 						entity.get(VelocityComponent.class).velocity.add(tmp.set(other.getX() - entity.getX(), other.getY() - entity.getY()).nor().scl(1.5f));
 					
-			if(dst < 2.5){
+			if(dst < 1.5){
 				other.get(InventoryComponent.class).addItem(stack);
 				other.get(InventoryComponent.class).sendUpdate(other);
 				entity.removeServer();

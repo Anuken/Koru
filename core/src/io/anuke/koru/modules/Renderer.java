@@ -268,7 +268,7 @@ public class Renderer extends Module<Koru>{
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
-								RenderPool.sprite("lightshadow")
+								RenderPool.get("lightshadow")
 								.dark()
 								.set(worldx*12 + 6, worldy*12+12)
 								.size(52, 52)
