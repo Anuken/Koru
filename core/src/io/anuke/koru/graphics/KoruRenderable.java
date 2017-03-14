@@ -1,5 +1,6 @@
 package io.anuke.koru.graphics;
 
+import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.spritesystem.*;
 
@@ -53,6 +54,16 @@ public class KoruRenderable extends SpriteRenderable{
 	
 	public KoruRenderable addShadow(RenderableGroup list, float offset){
 		list.add("shadow", generateShadow().add(0, offset));
+		return this;
+	}
+	
+	public KoruRenderable tile(int x, int y){
+		super.set(x*World.tilesize+World.tilesize/2, y*World.tilesize+World.tilesize/2);
+		return this;
+	}
+	
+	public KoruRenderable utile(int x, int y){
+		super.set(x*World.tilesize, y*World.tilesize);
 		return this;
 	}
 	

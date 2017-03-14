@@ -24,7 +24,7 @@ public class MaterialType{
 			
 			if(world().blends(x, y, material))
 				sprite((material.name() + "edge"))
-						.set(tile(x), tile(y))
+						.tile(x, y)
 						.center().layer(-material.id() * 2 + 1).add(group);
 		}
 	};
@@ -33,14 +33,14 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
 			sprite("grass" + (rand <= 8 ? rand : "1"))
-					.set(x * World.tilesize, y * World.tilesize).layer(-material.id() * 2)
+					.utile(x, y).layer(-material.id() * 2)
 					.color(grasscolor.r * material.foilageTint().x,
 							  grasscolor.g * material.foilageTint().y,
 							  grasscolor.b * material.foilageTint().z).add(group);
 			
 			if(world().blends(x, y, material))
 				sprite("grassedge")
-						.set(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.tile(x, y)
 						.color(grasscolor.r * material.foilageTint().x,
 								grasscolor.g * material.foilageTint().y,
 								grasscolor.b * material.foilageTint().z)
@@ -56,7 +56,7 @@ public class MaterialType{
 			
 			if(world().blends(x, y, material))
 				sprite((material.name() + "edge"))
-						.set(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.tile(x, y)
 						.center().layer(-material.id() * 2 + 1).add(group);
 		}
 	};
@@ -64,13 +64,13 @@ public class MaterialType{
 	public static final BaseMaterialType block = new BaseMaterialType(false, true){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			sprite((material.name()))
+			.utile(x, y)
 			.scale(0, 0.001f)
-			.set(utile(x), utile(y))
 			.sort(Sorter.object).add(group);
 			
 			sprite(("walldropshadow"))
 			.shadow()
-			.set(tile(x), tile(y))
+			.tile(x, y)
 			.center()
 			.sort(Sorter.tile).add(group);
 		}
