@@ -10,6 +10,7 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Profiler;
+import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.ModuleController;
 import io.anuke.ucore.util.ColorCodes;
@@ -22,6 +23,8 @@ public class Koru extends ModuleController<Koru>{
 
 	@Override
 	public void init(){
+		Resources.loadMaterials();
+		
 		instance = this;
 		engine = new KoruEngine();
 

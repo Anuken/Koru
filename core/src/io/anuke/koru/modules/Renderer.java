@@ -54,8 +54,8 @@ public class Renderer extends Module<Koru>{
 	public KoruEntity player;
 	public SpriteRenderable block;
 	public Sprite shadowSprite;
-	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize
-			* World.loadrange * 2];
+	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2]
+			[World.chunksize * World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	public GifRecorder recorder;
 	
@@ -153,7 +153,6 @@ public class Renderer extends Module<Koru>{
 		batch.end();
 
 		processor.render();
-		
 		
 		batch.setProjectionMatrix(matrix);
 		recorder.update();

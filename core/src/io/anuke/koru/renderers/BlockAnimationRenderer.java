@@ -43,7 +43,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		int x = (int)(entity.getX()/World.tilesize);
 		int y = (int)(entity.getY()/World.tilesize);
 		
-		material.getType().draw(list, material, Koru.module(World.class).getTile(x, y), x, y);
+		material.getType().draw(list, material, Koru.module(World.class).getWorldTile(x, y), x, y);
 		
 		if(material.getType() == MaterialType.tree){
 			

@@ -144,7 +144,7 @@ public class CollisionSystem extends KoruSystem{
 				int worldx = tilex + rx, worldy = tiley + ry;
 				if(!world.inBounds(worldx, worldy))
 					continue;
-				Tile tile = world.tile(worldx, worldy);
+				Tile tile = world.getTile(worldx, worldy);
 				if(!tile.solid())
 					continue;
 
@@ -164,7 +164,7 @@ public class CollisionSystem extends KoruSystem{
 				int worldx = tilex + rx, worldy = tiley + ry;
 				if(!world.inBounds(worldx, worldy))
 					continue;
-				Tile tile = world.tile(worldx, worldy);
+				Tile tile = world.getTile(worldx, worldy);
 				if(!tile.solid())
 					continue;
 

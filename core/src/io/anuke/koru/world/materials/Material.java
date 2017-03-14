@@ -67,7 +67,7 @@ public class Material{
 		
 	}};
 	
-	public static final BaseMaterial ice = new BaseMaterial("gravel", tile){{
+	public static final BaseMaterial ice = new BaseMaterial("ice", tile){{
 		variants = 7;
 	}};
 	

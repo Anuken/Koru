@@ -43,7 +43,7 @@ public class InputHandler{
 		
 		// block breaking
 		if(key(InputType.leftclick_down)){
-			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
+			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
 
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& stack != null && stack.item.type() == ItemType.tool && stack.item.breaks(tile.block())
@@ -106,7 +106,7 @@ public class InputHandler{
 
 		if(type == ItemType.hammer){
 
-			Tile tile = IServer.instance().getWorld().tile(blockx, blocky);
+			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
 
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 

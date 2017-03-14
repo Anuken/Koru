@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
@@ -23,7 +22,8 @@ import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
-import io.anuke.koru.world.materials.*;
+import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.StructMaterialType;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
@@ -52,9 +52,6 @@ public class World extends Module<Koru>{
 	}
 
 	public World(){
-		Material.load();
-		StructMaterial.load();
-		BlockRecipe.load();
 		
 		if( !IServer.active()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
@@ -186,31 +183,15 @@ public class World extends Module<Koru>{
 		return IServer.active() ? IServer.instance().getWorld() : Koru.module(World.class);
 	}
 
-	public Tile getTile(GridPoint2 point){
-		return tile(point.x, point.y);
-	}
-	
-	public Tile getTile(long c){
-		int x = (int)(c >> 32);
-		int y = (int)c;
-		return tile(x,y);
-	}
-
-	public Tile getTile(float fx, float fy){
-		int x = tile(fx);
-		int y = tile(fy);
-		return tile(x, y);
-	}
-
 	public boolean positionSolid(float x, float y){
-		Tile tile = getTile(x, y);
+		Tile tile = getWorldTile(x, y);
 		BaseMaterial block = tile.block();
 		BaseMaterial tilem = tile.tile();
 		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
 	public boolean blockSolid(int x, int y){
-		return tile(x, y).solid();
+		return getTile(x, y).solid();
 	}
 
 	public boolean isAccesible(int x, int y){
@@ -225,7 +206,7 @@ public class World extends Module<Koru>{
 		if( !inBounds(x, y)){
 			return true;
 		}
-		return tile(x, y).block() == material || tile(x, y).tile() == material;
+		return getTile(x, y).block() == material || getTile(x, y).tile() == material;
 	}
 
 	public GridPoint2 search(BaseMaterial material, int x, int y, int range){
@@ -234,7 +215,7 @@ public class World extends Module<Koru>{
 			for(int cy = -range;cy <= range;cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
-				if(tile(worldx, worldy).block() == material || tile(worldx, worldy).tile() == material){
+				if(getTile(worldx, worldy).block() == material || getTile(worldx, worldy).tile() == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
 						point.set(worldx, worldy);
@@ -274,17 +255,17 @@ public class World extends Module<Koru>{
 
 	public void updateTile(int x, int y){
 		updated = true;
-		tile(x, y).changeEvent();
-		IServer.instance().sendToAllIn(new TileUpdatePacket(x, y, tile(x, y)), world(x), world(y), tilesize*chunksize*(1+loadrange));
+		getTile(x, y).changeEvent();
+		IServer.instance().sendToAllIn(new TileUpdatePacket(x, y, getTile(x, y)), world(x), world(y), tilesize*chunksize*(1+loadrange));
 	}
 
 	public void updateLater(int x, int y){
 		updated = true;
-		tile(x, y).changeEvent();
-		IServer.instance().sendLater(new TileUpdatePacket(x, y, tile(x, y)));
+		getTile(x, y).changeEvent();
+		IServer.instance().sendLater(new TileUpdatePacket(x, y, getTile(x, y)));
 	}
 
-	public Tile tile(int x, int y){
+	public Tile getTile(int x, int y){
 		if( !IServer.active()){
 			Chunk chunk = getRelativeChunk(x, y);
 			return chunk == null ? null : chunk.getWorldTile(x, y);
@@ -293,6 +274,22 @@ public class World extends Module<Koru>{
 		if(x < 0) cx --;
 		if(y < 0) cy --;
 		return file.getChunk(cx, cy).getWorldTile(x, y);
+	}
+	
+	public Tile getTile(GridPoint2 point){
+		return getTile(point.x, point.y);
+	}
+	
+	public Tile getTile(long c){
+		int x = (int)(c >> 32);
+		int y = (int)c;
+		return getTile(x,y);
+	}
+
+	public Tile getWorldTile(float fx, float fy){
+		int x = tile(fx);
+		int y = tile(fy);
+		return getTile(x, y);
 	}
 	
 	public void setTile(int x, int y, Tile tile){

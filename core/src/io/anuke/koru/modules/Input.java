@@ -14,9 +14,11 @@ import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
+import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.utils.InputType;
+import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
@@ -89,7 +91,7 @@ public class Input extends Module<Koru>{
 		float lastx = player.getX();
 		float lasty = player.getY();
 		
-		//collisions.moveEntity(player, vector.x, vector.y);
+		
 		player.collider().collider.applyImpulse(vector.x*delta(), vector.y*delta());
 		
 		if(Vector2.dst(lastx, lasty, player.getX(), player.getY()) > 0.05f){
@@ -100,12 +102,27 @@ public class Input extends Module<Koru>{
 
 		vector.set(0, 0);
 	}
+	
+	public boolean keyDown (int keycode) {
+		if(keycode >= Keys.NUM_1 && keycode < Keys.NUM_5){
+			player.inventory().hotbar = keycode - Keys.NUM_1;
+		}
+		return false;
+	}
 
 	void sendInput(InputType type, Object... params) {
 		InputPacket packet = new InputPacket();
 		packet.data = params;
 		packet.type = type;
 		getModule(Network.class).client.sendTCP(packet);
+	}
+	
+	void sendBlock(){
+		BlockInputPacket p = new BlockInputPacket();
+		p.x = blockx;
+		p.y = blocky;
+		p.material = Material.grassblock.id();
+		getModule(Network.class).client.sendTCP(p);
 	}
 
 	@Override

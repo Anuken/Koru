@@ -2,6 +2,7 @@ package io.anuke.koru.server.world;
 
 import static io.anuke.ucore.UCore.clamp;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
@@ -20,6 +21,7 @@ public class TerrainGenerator implements Generator{
 	{
 		enoise.setUseDistance(true);
 		tnoise.setUseDistance(true);
+		Koru.log(Material.ice.id());
 	}
 
 	@Override

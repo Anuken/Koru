@@ -30,6 +30,8 @@ import io.anuke.koru.network.packets.*;
 import io.anuke.koru.server.world.MapPreview;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.systems.SyncSystem;
+import io.anuke.koru.utils.Resources;
+import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.util.ColorCodes;
 
@@ -43,6 +45,8 @@ public class KoruServer extends IServer{
 	CommandHandler commands;
 
 	void setup(){
+		Resources.loadMaterials();
+		
 		commands = new CommandHandler(this);
 
 		try{
@@ -185,7 +189,7 @@ public class KoruServer extends IServer{
 				inv.recipe = packet.recipe;
 			}else if(object instanceof BlockInputPacket){
 				BlockInputPacket packet = (BlockInputPacket) object;
-				updater.world.tile(packet.x, packet.y).setMaterial(packet.material);
+				updater.world.getTile(packet.x, packet.y).setMaterial(BaseMaterial.getMaterial(packet.material));
 				updater.world.updateTile(packet.x, packet.y);
 
 			}else if(object instanceof InventoryClickPacket){

@@ -8,12 +8,21 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 
+import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.modules.Renderer;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.StructMaterial;
 
 public class Resources{
 	private static Json json;
 	private static ObjectMap<String, ParticleEffectPool> particles = new ObjectMap<String, ParticleEffectPool>();
 	private static Renderer rend;
+	
+	public static void loadMaterials(){
+		Material.load();
+		StructMaterial.load();
+		BlockRecipe.load();
+	}
 	
 	public static void loadParticle(String name){
 		ParticleEffect effect = new ParticleEffect();
