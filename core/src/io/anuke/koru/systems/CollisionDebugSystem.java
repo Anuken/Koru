@@ -51,8 +51,6 @@ public class CollisionDebugSystem extends KoruSystem{
 	void processEntity(KoruEntity entity, float delta){
 		Collider col = entity.collider().collider;
 		Rectangle bounds = col.getBounds();
-		
-		//if(!entity.collider().grounded) Koru.log(entity + " not grounded");
 
 		Draw.color(col.kinematic ? Color.CORAL : Color.YELLOW);
 		Draw.linerect(bounds.x, bounds.y, bounds.width, bounds.height);
