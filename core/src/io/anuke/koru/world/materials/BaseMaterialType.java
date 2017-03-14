@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
+import io.anuke.koru.graphics.KoruRenderable;
+import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.spritesystem.RenderableList;
@@ -54,8 +56,14 @@ public abstract class BaseMaterialType{
 		return rand(x,y, material.variants())-1;
 	}
 	
+	/**Offset at a certain location.*/
 	float variantOffset(int x, int y, BaseMaterial material){
 		return (material.offsets == null ? material.offset : material.offsets[variantNum(x,y, material)]);
+	}
+	
+	/**Shortcut method.*/
+	protected KoruRenderable sprite(String name){
+		return RenderPool.get(name);
 	}
 
 	public boolean tile(){

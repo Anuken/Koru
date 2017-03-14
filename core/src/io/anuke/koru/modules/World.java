@@ -29,24 +29,27 @@ import io.anuke.koru.world.materials.StructMaterialType;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
-//TODO move time-related stuff to another class?
+
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
 	public static final int loadrange = 3;
 	public static final int tilesize = 12;
+	
+	private static Color ambientColor = new Color();
 	private static final float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	public final static float timescale = 40000f*0; //temporarily disabled for testing - remove 0 to enable
-	public int lastchunkx, lastchunky;
+	
 	private boolean updated;
 	private GridPoint2 point = new GridPoint2();
 	private WorldLoader file;
 	private Renderer renderer;
-	Network network;
+	private Network network;
+	private boolean[][] chunkloaded;
+	
+	public int lastchunkx, lastchunky;
 	public Chunk[][] chunks; //client-side tiles
 	public Chunk[][] tempchunks; //temporary operation chunks
-	boolean[][] chunkloaded;
 	public float time = 0f; //world time
-	private Color ambientColor = new Color();
 	
 	public World(WorldLoader loader){
 		this();
