@@ -3,9 +3,12 @@ package io.anuke.koru.world.materials;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import io.anuke.koru.graphics.KoruRenderable;
+import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.util.Timers;
 
 public class StructMaterialType{
@@ -17,33 +20,33 @@ public class StructMaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			
 			//light overlay
-			new SpriteRenderable(Resources.region("torchflame1")){
+			new KoruRenderable("torchflame1"){
 				public void draw(Batch batch){
 					sprite.setRegion(Resources.region("torchflame" + frame(x,y)));
 					super.draw(batch);
 				}
-			}.setPosition(tile(x), tile(y)).centerX().setLight().add(group);
+			}.light().set(tile(x), tile(y)).centerX().add(group);
 			
 			//radius light
-			new SpriteRenderable(Resources.region("light")){
+			new KoruRenderable("light"){
 				public void draw(Batch batch){
 					sprite.setOriginCenter();
 					sprite.setScale(1f + (float)Math.sin(Timers.time()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
 					
 					super.draw(batch);
 				}
-			}.setPosition(tile(x), tile(y)+6).center().setLight().setColor(0.5f, 0.4f, 0.2f).add(group);
+			}.light().set(tile(x), tile(y)+6).center().color(0.5f, 0.4f, 0.2f).add(group);
 			
 			//actual torch
-			new SpriteRenderable(Resources.region(material.name())){
+			new KoruRenderable(material.name()){
 				public void draw(Batch batch){
 					sprite.draw(batch);
 					batch.setColor(1,1,1,sprite.getColor().a);
 					batch.draw(Resources.region("torchflame" + frame(x,y)), sprite.getX(), sprite.getY());
 				}
-			}.setPosition(tile(x), tile(y) + material.offset()).setLayer(tile(y)).centerX()
-			.addShadow(group, Resources.atlas(), -material.offset())
-			.setProvider(Sorter.object).add(group);
+			}.addShadow(group, -material.offset())
+			.set(tile(x), tile(y) + material.offset()).layer(tile(y)).centerX()
+			.sort(Sorter.object).add(group);
 		}
 		
 		int frame(int x, int y){
@@ -55,9 +58,11 @@ public class StructMaterialType{
 		
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			
-			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
-			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
+			RenderPool.sprite(material.name())
+			.addShadow(group, -material.offset())
+			.set(tile(x), tile(y) + material.offset())
+			.layer(tile(y)).centerX()
+					.sort(Sorter.object).add(group);
 		}
 	};
 	
@@ -65,9 +70,11 @@ public class StructMaterialType{
 		
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 
-			RenderPool.sprite(Resources.region(material.name())).setPosition(tile(x), tile(y) + material.offset())
-			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
+			RenderPool.sprite(material.name())
+			.addShadow(group, -material.offset())
+			.set(tile(x), tile(y) + material.offset())
+			.layer(tile(y)).centerX()
+					.sort(Sorter.object).add(group);
 		}
 	};
 }

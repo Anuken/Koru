@@ -1,5 +1,7 @@
 package io.anuke.koru.modules;
 
+import static io.anuke.ucore.UCore.inBounds;
+
 import java.util.Collection;
 
 import com.badlogic.ashley.core.Entity;
@@ -203,7 +205,7 @@ public class World extends Module<Koru>{
 	}
 
 	public boolean isType(int x, int y, BaseMaterial material){
-		if( !inBounds(x, y)){
+		if( !inClientBounds(x, y)){
 			return true;
 		}
 		return getTile(x, y).block() == material || getTile(x, y).tile() == material;
@@ -230,7 +232,7 @@ public class World extends Module<Koru>{
 		return null;
 	}
 
-	public boolean inBounds(int x, int y){
+	public boolean inClientBounds(int x, int y){
 		if(IServer.active()) return true;
 		int tx = tile(renderer.camera.position.x);
 		int ty = tile(renderer.camera.position.y);
@@ -318,28 +320,24 @@ public class World extends Module<Koru>{
 		return nint(i/tilesize);
 	}
 	
-	public static int nint(float b){
-		return b < 0 ? (int)(b-1) : (int)b;
-	}
-
 	public static float world(int i){
 		return tilesize * i + tilesize / 2;
 	}
 	
-	public static long getLong(int x, int y){
+	static int nint(float b){
+		return b < 0 ? (int)(b-1) : (int)b;
+	}
+	
+	static long getLong(int x, int y){
 		return (long)x << 32 | y & 0xFFFFFFFFL;
 	}
 	
-	public static int getX(long l){
+	static int getX(long l){
 		return(int)(l >> 32);
 	}
 	
-	public static int getY(long l){
+	static int getY(long l){
 		return (int)l;
-	}
-	
-	static <T> boolean inBounds(int x, int y, T[][] array){
-		return x >= 0 && y >= 0 && x < array.length && y < array[0].length;
 	}
 	
 	//TODO make this work with transparency instead of specific types

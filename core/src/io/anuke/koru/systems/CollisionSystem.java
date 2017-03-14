@@ -142,7 +142,7 @@ public class CollisionSystem extends KoruSystem{
 		for(int rx = -range; rx <= range; rx++){
 			for(int ry = -range; ry <= range; ry++){
 				int worldx = tilex + rx, worldy = tiley + ry;
-				if(!world.inBounds(worldx, worldy))
+				if(!world.inClientBounds(worldx, worldy))
 					continue;
 				Tile tile = world.getTile(worldx, worldy);
 				if(!tile.solid())
@@ -162,7 +162,7 @@ public class CollisionSystem extends KoruSystem{
 		for(int rx = -range; rx <= range; rx++){
 			for(int ry = -range; ry <= range; ry++){
 				int worldx = tilex + rx, worldy = tiley + ry;
-				if(!world.inBounds(worldx, worldy))
+				if(!world.inClientBounds(worldx, worldy))
 					continue;
 				Tile tile = world.getTile(worldx, worldy);
 				if(!tile.solid())

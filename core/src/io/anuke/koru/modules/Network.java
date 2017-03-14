@@ -106,7 +106,7 @@ public class Network extends Module<Koru>{
 					chunksAdded = true;
 				}else if(object instanceof TileUpdatePacket){
 					TileUpdatePacket packet = (TileUpdatePacket) object;
-					if(getModule(World.class).inBounds(packet.x, packet.y))
+					if(getModule(World.class).inClientBounds(packet.x, packet.y))
 						getModule(World.class).setTile(packet.x, packet.y, packet.tile);
 					chunksAdded = true;
 				}else if(object instanceof EntityRemovePacket){

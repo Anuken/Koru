@@ -25,7 +25,7 @@ public class ParticleRenderer extends EntityRenderer{
 	protected void render(){
 		ParticleRenderable r = (ParticleRenderable)render.list.first();
 		
-		r.setPosition(entity.getX(), entity.getY());
+		r.set(entity.getX(), entity.getY());
 		
 		if(r.effect.isComplete()){
 			entity.remove();

@@ -19,6 +19,7 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.graphics.LightEffect;
+import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.items.BaseBlockRecipe;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.InputHandler;
@@ -114,7 +115,7 @@ public class Renderer extends Module<Koru>{
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
 		
-		(block = new SpriteRenderable(Resources.region("block")).setProvider(Sorter.object).sprite()).add();
+		(block = new SpriteRenderable(Resources.region("block")).sort(Sorter.object).sprite()).add();
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
 	}
@@ -172,7 +173,7 @@ public class Renderer extends Module<Koru>{
 			vector.y -= 12;
 		InventoryComponent inv = player.getComponent(InventoryComponent.class);
 
-		block.setPosition((int) (vector.x / 12) * 12, (int) (vector.y / 12) * 12);
+		block.set((int) (vector.x / 12) * 12, (int) (vector.y / 12) * 12);
 		Tile tile = world.getTile(getModule(Input.class).cursorblock());
 
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
@@ -188,15 +189,15 @@ public class Renderer extends Module<Koru>{
 			BaseMaterial result = BaseBlockRecipe.getRecipe(inv.recipe).result();
 
 			if(result.getType() == MaterialType.tile){
-				block.setRegion(Resources.region("blank"));
+				block.region(Resources.region("blank"));
 				block.sprite.setSize(12, 12);
 			}else{
-				block.setRegion(Resources.region("block"));
+				block.region(Resources.region("block"));
 				block.sprite.setSize(12, 20);
-				block.setProvider(Sorter.object);
+				block.sort(Sorter.object);
 			}
 		}else{
-			block.setColor(Color.CLEAR);
+			block.color(Color.CLEAR);
 		}
 	}
 
@@ -267,12 +268,12 @@ public class Renderer extends Module<Koru>{
 							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
-								RenderPool.sprite(Resources.region("lightshadow"))
-								.setDark()
-								.setPosition(worldx*12 + 6, worldy*12+12)
-								.setSize(52, 52)
+								RenderPool.sprite("lightshadow")
+								.dark()
+								.set(worldx*12 + 6, worldy*12+12)
+								.size(52, 52)
 								.center()
-								.setAlpha(1f-tile.light())
+								.alpha(1f-tile.light())
 								.add(renderables[rendx][rendy]);
 							}
 						}
@@ -352,7 +353,7 @@ public class Renderer extends Module<Koru>{
 			GridPoint2 cursor = getModule(Input.class).cursorblock();
 			float cx = Gdx.input.getX() / GUIscale,
 					cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
-			if(!world.inBounds(cursor.x, cursor.y)){
+			if(!world.inClientBounds(cursor.x, cursor.y)){
 				font.draw(batch, "[RED]Out of bounds.", cx, cy);
 
 				return;

@@ -4,8 +4,6 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.SmoothableGraphPath;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.modules.World;
-
 public class TiledGraphPath extends DefaultGraphPath<Long> implements SmoothableGraphPath<Long, Vector2>{
 
 	private Vector2 tmpPosition = new Vector2();
@@ -16,9 +14,10 @@ public class TiledGraphPath extends DefaultGraphPath<Long> implements Smoothable
 	 * @param index the index of the node you want to know the position of*/
 	@Override
 	public Vector2 getNodePosition(int index){
-		Long node = nodes.get(index);
+		//Long node = nodes.get(index);
 		
-		return tmpPosition.set(World.world(World.getX(node)), World.world(World.getY(node)));
+		//return tmpPosition.set(World.world(World.getX(node)), World.world(World.getY(node)));
+		return Vector2.Zero;
 	}
 
 	@Override

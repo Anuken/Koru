@@ -21,7 +21,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		life += Koru.delta();
 		
 		for(Renderable r : list.renderables)
-		r.sprite().setAlpha(1f-life/lifetime);
+		r.sprite().alpha(1f-life/lifetime);
 		
 		if(((BaseMaterial)entity.get(MaterialComponent.class).material()).getType() == MaterialType.tree)
 		list.renderables.get(2).sprite().sprite.rotate(rspeed*Koru.delta());
@@ -63,7 +63,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 			bot.sprite.setSize(region.getRegionWidth(), theight);
 			
 			SpriteRenderable top = new SpriteRenderable(tr);
-			top.setPosition(bot.sprite.getX(), bot.sprite.getY() + theight).setLayer(bot.layer()).setProvider(Sorter.object);
+			top.set(bot.sprite.getX(), bot.sprite.getY() + theight).layer(bot.getLayer()).sort(Sorter.object);
 			top.sprite.setOrigin(top.sprite.getWidth()/2, 0);
 			top.add(list);
 			

@@ -7,11 +7,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.spritesystem.Sorter;
+import io.anuke.ucore.spritesystem.SpriteRenderable;
 
 public class MaterialType{
 	public static final Color grasscolor = new Color(0x62962fff);
@@ -20,57 +22,57 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			if(tile.block().getType() == block) return;
 			
-			RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material)))
-					.setPosition(utile(x), utile(y)).setLayer(-material.id() * 2).add(group);
+			RenderPool.sprite((material.name() + variantString(x, y, material)))
+					.set(utile(x), utile(y)).layer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
-				RenderPool.sprite(Resources.region(material.name() + "edge"))
-						.setPosition(tile(x), tile(y))
-						.center().setLayer(-material.id() * 2 + 1).add(group);
+				RenderPool.sprite((material.name() + "edge"))
+						.set(tile(x), tile(y))
+						.center().layer(-material.id() * 2 + 1).add(group);
 		}
 	};
 	
 	public static final BaseMaterialType grass = new BaseMaterialType(){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
-			RenderPool.sprite(Resources.region("grass" + (rand <= 8 ? rand : "1")))
-					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2)
-					.setColor(grasscolor.r * material.foilageTint().x,
+			RenderPool.sprite(("grass" + (rand <= 8 ? rand : "1")))
+					.set(x * World.tilesize, y * World.tilesize).layer(-material.id() * 2)
+					.color(grasscolor.r * material.foilageTint().x,
 							  grasscolor.g * material.foilageTint().y,
 							  grasscolor.b * material.foilageTint().z).add(group);
 			
 			if(Koru.module(World.class).blends(x, y, material))
-				RenderPool.sprite(Resources.region("grassedge"))
-						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.setColor(grasscolor.r * material.foilageTint().x,
+				RenderPool.sprite(("grassedge"))
+						.set(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.color(grasscolor.r * material.foilageTint().x,
 								grasscolor.g * material.foilageTint().y,
 								grasscolor.b * material.foilageTint().z)
-						.center().setLayer(-material.id() * 2 + 1).add(group);
+						.center().layer(-material.id() * 2 + 1).add(group);
 		}
 	};
 	
 	public static final BaseMaterialType water = new BaseMaterialType(){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
-			RenderPool.sprite(Resources.region(material.name()  + variantString(x, y, material)))
-					.setPosition(x * World.tilesize, y * World.tilesize).setLayer(-material.id() * 2).add(group);
+			RenderPool.sprite((material.name()  + variantString(x, y, material)))
+					.set(x * World.tilesize, y * World.tilesize).layer(-material.id() * 2).add(group);
 			if(Koru.module(World.class).blends(x, y, material))
-				RenderPool.sprite(Resources.region(material.name() + "edge"))
-						.setPosition(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
-						.center().setLayer(-material.id() * 2 + 1).add(group);
+				RenderPool.sprite((material.name() + "edge"))
+						.set(x * World.tilesize + World.tilesize / 2, y * World.tilesize + World.tilesize / 2)
+						.center().layer(-material.id() * 2 + 1).add(group);
 		}
 	};
 	
 	public static final BaseMaterialType block = new BaseMaterialType(false, true){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
-			RenderPool.sprite(Resources.region(material.name()))
-			.scaleBy(0, 0.001f)
-			.setPosition(utile(x), utile(y))
-			.setProvider(Sorter.object).add(group);
+			RenderPool.sprite((material.name()))
+			.scale(0, 0.001f)
+			.set(utile(x), utile(y))
+			.sort(Sorter.object).add(group);
 			
-			RenderPool.sprite(Resources.region("walldropshadow"))
-			.setAsShadow()
-			.setPosition(tile(x), tile(y))
+			RenderPool.sprite(("walldropshadow"))
+			.shadow()
+			.set(tile(x), tile(y))
 			.center()
-			.setProvider(Sorter.tile).add(group);
+			.sort(Sorter.tile).add(group);
 		}
 	};
 	
@@ -82,10 +84,10 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			float offset = variantOffset(x, y, material);
 			
-			SpriteRenderable sprite = RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material)))
-					.setPosition(tile(x), tile(y) + offset).setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -offset)
-					.setProvider(Sorter.object).sprite();
+			SpriteRenderable sprite = RenderPool.sprite((material.name() + variantString(x, y, material)))
+					.addShadow(group, -offset)
+					.set(tile(x), tile(y) + offset).layer(tile(y)).centerX()
+					.sort(Sorter.object).sprite();
 
 			sprite.add(group);
 		}
@@ -103,9 +105,11 @@ public class MaterialType{
 	
 	public static final BaseMaterialType object = new BaseMaterialType(false, false){
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
-			RenderPool.sprite(Resources.region(material.name() + variantString(x, y, material))).setPosition(tile(x), tile(y) + material.offset())
-			.setLayer(tile(y)).centerX()
-					.addShadow(group, Resources.atlas(), -material.offset()).setProvider(Sorter.object).add(group);
+			RenderPool.sprite((material.name() + variantString(x, y, material)))
+			.addShadow(group, -material.offset())
+			.layer(tile(y))
+			.set(tile(x), tile(y) + material.offset())
+			.centerX().sort(Sorter.object).add(group);	
 		}
 	};
 	
@@ -130,21 +134,20 @@ public class MaterialType{
 				yadd = 2;
 			}
 
-
 			for(int i = 0; i < 2; i++){
-				SpriteRenderable a = RenderPool.sprite(Resources.region("grassblock2" + blendn));
-				a.setProvider(Sorter.object);
+				SpriteRenderable a = RenderPool.sprite(("grassblock2" + blendn));
+				a.sort(Sorter.object);
 				
 				float gadd = i == 1 ? 1f : add;
 				a.sprite.setColor(grasscolor.r * gadd * tint.x, grasscolor.g * gadd * tint.y, grasscolor.b * gadd * tint.z, 1f);
 
-				a.setPosition(utile(x), utile(y) + yadd + i * 6);
+				a.set(utile(x), utile(y) + yadd + i * 6);
 				group.add(a);
 			}
 
 			if(!isGrass(x, y + 1)){
-				SpriteRenderable sh = RenderPool.sprite(Resources.region("grassblock2" +blendn)).setAsShadow()
-						.setPosition(utile(x) + 1, tile(y) + 1 + yadd);
+				SpriteRenderable sh = RenderPool.sprite(("grassblock2" +blendn)).shadow()
+						.set(utile(x) + 1, tile(y) + 1 + yadd);
 				sh.add(group);
 			}
 		}
@@ -167,18 +170,18 @@ public class MaterialType{
 			for(int i = 0; i < iter; i++){
 				if(i == 0 && !isGrass(x, y - 1)) continue;
 				float gadd = (i %2== 0 ? 1f : add);
-				SpriteRenderable a = RenderPool.sprite(Resources.region("grassf1"));
+				SpriteRenderable a = RenderPool.sprite(("grassf1"));
 				
-				a.setProvider(Sorter.object);
-				a.setColor(grasscolor.r * gadd*tint.x, grasscolor.g * gadd*tint.y, grasscolor.b * gadd*tint.z);
+				a.sort(Sorter.object);
+				a.color(grasscolor.r * gadd*tint.x, grasscolor.g * gadd*tint.y, grasscolor.b * gadd*tint.z);
 				
-				a.setPosition(utile(x), utile(y) + i * (tilesize / iter) + xadd);
+				a.set(utile(x), utile(y) + i * (tilesize / iter) + xadd);
 				a.add(group);
 			}
 
 			if(!isGrass(x, y + 1)){
-				SpriteRenderable sh = RenderPool.sprite(Resources.region("grassf1")).setAsShadow();
-				sh.setPosition(utile(x)+1, tile(y)+2+ xadd);
+				SpriteRenderable sh = RenderPool.sprite(("grassf1")).shadow();
+				sh.set(utile(x)+1, tile(y)+2+ xadd);
 				sh.add(group);
 			}
 		}

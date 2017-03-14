@@ -47,7 +47,7 @@ public enum FrameBufferLayer{
 	protected void begin(){}
 
 	public boolean layerEquals(Renderable l){
-		return MathUtils.isEqual(l.layer(), layer, 0.01f);
+		return MathUtils.isEqual(l.getLayer(), layer, 0.01f);
 	}
 
 	protected void loadShader(){
