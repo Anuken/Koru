@@ -4,7 +4,7 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 
 ![axe-wielding crabs](http://i.imgur.com/6bft2gp.png)
 
-###Current Features
+### Current Features
 - infinite procedurally generated world
 - biomes and cave systems
 - building, resource collection
@@ -18,7 +18,7 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 - (currently unstable) AABB physics
 
 
-###Roadmap
+### Roadmap
 - proper player characters
 - machines, crafting
 - block entities or data
