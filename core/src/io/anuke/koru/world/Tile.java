@@ -1,18 +1,30 @@
 package io.anuke.koru.world;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.Material;
 
 public class Tile implements Poolable{
-	public int tileid, blockid;
-	public byte light = (byte)127;
+	public static final int LAYER_SIZE = 10;
 	
-	public Tile(){}
+	public byte light = (byte)127, top = 0;
+	public int[] layers;
+	public int blockid;
+	
+	/**Used for deserialization.*/
+	public static Tile unloadedTile(){
+		return new Tile();
+	}
+	
+	private Tile(){}
 	
 	public Tile(BaseMaterial tile, BaseMaterial block){
-		tileid = tile.id();
+		layers = new int[LAYER_SIZE];
+		layers[top] = tile.id();
 		blockid = block.id();
 	}
 	
@@ -24,66 +36,79 @@ public class Tile implements Poolable{
 		light = (byte)(f*127);
 	}
 	
-	public BaseMaterial tile(){
-		return BaseMaterial.getMaterial(tileid);
+	public int tileid(){
+		return layers[top];
+	}
+	
+	public BaseMaterial topTile(){
+		return !IServer.active() ? BaseMaterial.getMaterial(layers[0]) : BaseMaterial.getMaterial(layers[top]);
 	}
 	
 	public BaseMaterial block(){
+		
 		return BaseMaterial.getMaterial(blockid);
-	}
-	
-	public boolean tileEmpty(){
-		return tileid == 0;
 	}
 	
 	public boolean blockEmpty(){
 		return blockid == 0;
 	}
 
-	public Tile setTileMaterial(BaseMaterial m){
-		tileid = m.id();
-		return this;
-	}
-
-	public Tile setBlockMaterial(BaseMaterial m){
+	public void setBlockMaterial(BaseMaterial m){
 		blockid = m.id();
-		return this;
 	}
-
+	
+	public void addTile(BaseMaterial m){
+		if(!canAddTile()) throw new RuntimeException("Too many tiles added!");
+		
+		layers[++top] = m.id();
+	}
+	
+	public void removeTile(){
+		if(!canRemoveTile()) throw new RuntimeException("Too many tiles removed!");
+		
+		layers[top--] = 0;
+	}
+	
+	public boolean canAddTile(){
+		return top+1 < layers.length;
+	}
+	
+	public boolean canRemoveTile(){
+		return top > 0;
+	}
+	
+	/**Sets either the top block or tile. Used mostly for generation.*/
 	public void setMaterial(BaseMaterial m){
 		if(m == Material.air){
-			blockid = 0;
-			return;
-		}
-		if(m.getType().tile()){
-			tileid = m.id();
+			blockid = Material.air.id();
+		}else if(m.getType().tile()){
+			layers[top] = m.id();
 		}else{
 			blockid = m.id();
 		}
 	}
 
 	public boolean solid(){
-		return tile().getType().solid() || block().getType().solid();
+		return topTile().getType().solid() || block().getType().solid();
 	}
 
 	public BaseMaterial solidMaterial(){
 		if(block().getType().solid()) return block();
-		if(tile().getType().solid()) return tile();
+		if(topTile().getType().solid()) return topTile();
 		return null;
 	}
 
 	public void changeEvent(){
-		tile().changeEvent(this);
+		topTile().changeEvent(this);
 		block().changeEvent(this);
 	}
 
 	public String toString(){
-		return "Tile:[block=" + block() + " tile=" + tile() + " {"+  light +"} ]";
+		return "Tile:[block=" + block() + " tile=" + topTile() + " {"+  light +"} ]";
 	}
 
 	@Override
 	public void reset(){
-		tileid = 0;
-		blockid = 0;
+		Arrays.fill(layers, 0);
 	}
 }

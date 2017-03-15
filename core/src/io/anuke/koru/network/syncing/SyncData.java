@@ -28,6 +28,7 @@ public class SyncData{
 		return get(1);
 	}
 	
+	/**Components marked with this annotation are serialized.*/
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Synced{}
 	

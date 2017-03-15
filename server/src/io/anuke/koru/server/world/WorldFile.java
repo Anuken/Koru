@@ -30,8 +30,7 @@ public class WorldFile extends WorldLoader{
 	private Path file;
 	private ConcurrentHashMap<String, Path> files = new ConcurrentHashMap<String, Path>();
 	private Kryo kryo; // for reading only
-	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); // server-side
-																								// chunks
+	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); // server-side chunks
 	private Generator generator;
 	private ChunkWriter[] writers = new ChunkWriter[Runtime.getRuntime().availableProcessors()];
 	private Object lock = new Object();
@@ -86,34 +85,7 @@ public class WorldFile extends WorldLoader{
 			files.put(path.getFileName().toString(), path);
 			return;
 		}
-		
 	}
-
-	/*
-	 * public void writeChunk(Chunk chunk){ synchronized (lock){ if(debug)
-	 * Koru.log(Text.RED + "BEGIN" + Text.BLUE + " write chunk" + Text.RESET);
-	 * Path path = Paths.get(file.toString(), "/" + fileName(chunk.x, chunk.y));
-	 * 
-	 * long time = TimeUtils.millis();
-	 * 
-	 * try{ ByteArrayOutputStream stream = new ByteArrayOutputStream(); Output
-	 * output = new Output(stream); kryo.writeObject(output, chunk);
-	 * output.close();
-	 * 
-	 * ByteArrayInputStream in = new ByteArrayInputStream(stream.toByteArray());
-	 * FileOutputStream file = new FileOutputStream(path.toString());
-	 * 
-	 * Lzma.compress(in, file);
-	 * 
-	 * stream.close(); in.close(); file.close();
-	 * 
-	 * if(debug) Koru.log("Chunk write time elapsed: " +
-	 * TimeUtils.timeSinceMillis(time)); }catch(Exception e){
-	 * Koru.log("Error writing chunk!"); e.printStackTrace(); }
-	 * files.put(path.getFileName().toString(), path); if(debug)
-	 * Koru.log(Text.GREEN + "END" + Text.BLUE + " write chunk" + Text.RESET); }
-	 * }
-	 */
 
 	public Chunk readChunk(int x, int y){
 		synchronized(lock){

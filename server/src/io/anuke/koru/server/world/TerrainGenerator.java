@@ -2,7 +2,6 @@ package io.anuke.koru.server.world;
 
 import static io.anuke.ucore.UCore.clamp;
 
-import io.anuke.koru.Koru;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
@@ -21,7 +20,6 @@ public class TerrainGenerator implements Generator{
 	{
 		enoise.setUseDistance(true);
 		tnoise.setUseDistance(true);
-		Koru.log(Material.ice.id());
 	}
 
 	@Override
@@ -29,7 +27,7 @@ public class TerrainGenerator implements Generator{
 		x += 99999;
 		y += 99999;
 
-		Tile tile = new Tile();
+		Tile tile = new Tile(Material.air, Material.air);
 		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.01f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.015f));
 		float elev = getElevation(x, y) - riv/2f;
 		float cave = getCaveDst(x, y) - riv/2.1f;
@@ -218,7 +216,6 @@ public class TerrainGenerator implements Generator{
 		temp += (Noise.nnoise(x, y, octave / 2, 0.5f));
 		temp += (Noise.nnoise(x, y, octave / 4, 0.25f));
 		temp += (Noise.nnoise(x, y, octave / 8, 0.125f));
-		// temp += (Noise.nnoise(x, y, octave/16, 0.25f));
 		temp += (Noise.nnoise(x, y, octave / 32, 0.125f));
 		temp += (Noise.nnoise(x, y, octave / 64, 0.125f / 2));
 		temp += (Noise.nnoise(x, y, octave / 128, 0.125f / 2));

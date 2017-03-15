@@ -20,12 +20,12 @@ public class MaterialType{
 			if(tile.block().getType() == block) return;
 			
 			sprite(material.name() + variantString(x, y, material))
-					.set(utile(x), utile(y)).layer(-material.id() * 2).add(group);
+					.set(utile(x), utile(y)).layer(-material.id() * 2 - tile.top*3).add(group);
 			
 			if(world().blends(x, y, material))
 				sprite((material.name() + "edge"))
 						.tile(x, y)
-						.center().layer(-material.id() * 2 + 1).add(group);
+						.center().layer(-material.id() * 2 + 1 - tile.top*3).add(group);
 		}
 	};
 	
@@ -117,7 +117,7 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			float yadd = 0;
 			
-			Vector3 tint = tile.tile().foilageTint();
+			Vector3 tint = tile.topTile().foilageTint();
 			
 			int blend = blendStage(x, y);
 			
@@ -161,7 +161,7 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			float xadd = 0;
 			
-			Vector3 tint = tile.tile().foilageTint();
+			Vector3 tint = tile.topTile().foilageTint();
 			
 			int iter = 4;
 

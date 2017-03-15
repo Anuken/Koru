@@ -114,12 +114,12 @@ public class MapPreview extends ApplicationAdapter{
 		}
 		
 		if(!tile.blockEmpty()){
-			temp.set(colors.get(tile.tileid, 0)+1000);
+			temp.set(colors.get(tile.topTile().id(), 0)+1000);
 			temp.mul(light, light, light, 1f);
 			return Color.rgba8888(temp);
 		}
 		
-		temp.set(colors.get(tile.tileid, 0));
+		temp.set(colors.get(tile.topTile().id(), 0));
 		temp.mul(light, light, light, 1f);
 		
 		return Color.rgba8888(temp);
