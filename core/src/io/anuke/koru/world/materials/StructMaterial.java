@@ -12,11 +12,15 @@ public class StructMaterial{
 	//Tiles
 	
 	public static final BaseMaterial woodfloor = new BaseMaterial("woodfloor", tile){{
-		addDrop(Items.wood, 2);
+		addDrop(Items.wood, 1);
+		color = new Color(0x744a28ff);
+		breaktime = 20;
 	}};
 	
 	public static final BaseMaterial stonefloor = new BaseMaterial("stonefloor", tile){{
 		addDrop(Items.stone, 2);
+		color = new Color(0x717171ff);
+		breaktime = 20;
 	}};
 	
 	

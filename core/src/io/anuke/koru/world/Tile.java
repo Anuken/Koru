@@ -44,18 +44,13 @@ public class Tile implements Poolable{
 	}
 	
 	public BaseMaterial block(){
+		
 		return BaseMaterial.getMaterial(blockid);
 	}
 	
 	public boolean blockEmpty(){
 		return blockid == 0;
 	}
-	
-	/*
-	public void setTileMaterial(BaseMaterial m){
-		tileid = m.id();
-	}
-	*/
 
 	public void setBlockMaterial(BaseMaterial m){
 		blockid = m.id();
@@ -80,7 +75,8 @@ public class Tile implements Poolable{
 	public boolean canRemoveTile(){
 		return top > 0;
 	}
-
+	
+	/**Sets either the top block or tile. Used mostly for generation.*/
 	public void setMaterial(BaseMaterial m){
 		if(m == Material.air){
 			blockid = Material.air.id();
