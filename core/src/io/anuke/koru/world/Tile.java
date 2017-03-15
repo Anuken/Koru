@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.Material;
 
@@ -40,7 +41,7 @@ public class Tile implements Poolable{
 	}
 	
 	public BaseMaterial topTile(){
-		return BaseMaterial.getMaterial(layers[top]);
+		return !IServer.active() ? BaseMaterial.getMaterial(layers[0]) : BaseMaterial.getMaterial(layers[top]);
 	}
 	
 	public BaseMaterial block(){

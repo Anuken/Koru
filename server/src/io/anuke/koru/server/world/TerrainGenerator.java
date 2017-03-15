@@ -216,7 +216,6 @@ public class TerrainGenerator implements Generator{
 		temp += (Noise.nnoise(x, y, octave / 2, 0.5f));
 		temp += (Noise.nnoise(x, y, octave / 4, 0.25f));
 		temp += (Noise.nnoise(x, y, octave / 8, 0.125f));
-		// temp += (Noise.nnoise(x, y, octave/16, 0.25f));
 		temp += (Noise.nnoise(x, y, octave / 32, 0.125f));
 		temp += (Noise.nnoise(x, y, octave / 64, 0.125f / 2));
 		temp += (Noise.nnoise(x, y, octave / 128, 0.125f / 2));

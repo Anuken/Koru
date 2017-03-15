@@ -130,6 +130,7 @@ public class Registrator{
 			tile.layers = new int[]{k.readObject(i, int.class)};
 			tile.blockid = k.readObject(i, int.class);
 			tile.light = k.readObject(i, byte.class);
+			tile.top = k.readObject(i, byte.class);
 			return tile;
 		}
 
@@ -138,6 +139,7 @@ public class Registrator{
 			k.writeObject(o, t.tileid());
 			k.writeObject(o, t.blockid);
 			k.writeObject(o, t.light);
+			k.writeObject(o, t.top);
 		}
 	}
 	
