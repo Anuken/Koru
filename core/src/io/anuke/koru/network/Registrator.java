@@ -90,7 +90,7 @@ public class Registrator{
 		k.register(BlockAnimation.class);
 		
 		k.register(Chunk.class);
-		k.register(Tile.class);
+		k.register(Tile.class, new TileSerializer());
 		k.register(Tile[].class);
 		k.register(Tile[][].class);
 		k.register(Tile[][][].class);
@@ -118,6 +118,22 @@ public class Registrator{
 		k.register(Class.class);
 
 		k.register(KoruEntity.class, new EntitySerializer());
+	}
+	
+	public static class TileSerializer extends Serializer<Tile>{
+		@Override
+		public Tile read(Kryo k, Input i, Class<Tile> c){
+			Tile tile = Tile.unloadedTile();
+			tile.layers = new int[]{k.readObject(i, int.class)};
+			tile.blockid = k.readObject(i, int.class);
+			return tile;
+		}
+
+		@Override
+		public void write(Kryo k, Output o, Tile t){
+			k.writeObject(o, t.tileid());
+			k.writeObject(o, t.blockid);
+		}
 	}
 	
 	public static class MaterialsSerializer extends Serializer<BaseMaterial>{

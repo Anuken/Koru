@@ -1,18 +1,28 @@
 package io.anuke.koru.world;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.Material;
 
 public class Tile implements Poolable{
-	public int tileid, blockid;
-	public byte light = (byte)127;
+	public static final int LAYER_SIZE = 10;
 	
-	public Tile(){}
+	public byte light = (byte)127, top = 0;
+	public int[] layers;
+	public int blockid;
+	
+	/**Used for deserialization.*/
+	public static Tile unloadedTile(){
+		return new Tile();
+	}
+	
+	private Tile(){}
 	
 	public Tile(BaseMaterial tile, BaseMaterial block){
-		tileid = tile.id();
+		layers = new int[LAYER_SIZE];
+		layers[top] = tile.id();
 		blockid = block.id();
 	}
 	
@@ -24,39 +34,35 @@ public class Tile implements Poolable{
 		light = (byte)(f*127);
 	}
 	
+	public int tileid(){
+		return layers[top];
+	}
+	
 	public BaseMaterial tile(){
-		return BaseMaterial.getMaterial(tileid);
+		return BaseMaterial.getMaterial(layers[top]);
 	}
 	
 	public BaseMaterial block(){
 		return BaseMaterial.getMaterial(blockid);
 	}
 	
-	public boolean tileEmpty(){
-		return tileid == 0;
-	}
-	
 	public boolean blockEmpty(){
 		return blockid == 0;
 	}
-
-	public Tile setTileMaterial(BaseMaterial m){
+	
+	/*
+	public void setTileMaterial(BaseMaterial m){
 		tileid = m.id();
-		return this;
 	}
+	*/
 
-	public Tile setBlockMaterial(BaseMaterial m){
+	public void setBlockMaterial(BaseMaterial m){
 		blockid = m.id();
-		return this;
 	}
 
 	public void setMaterial(BaseMaterial m){
-		if(m == Material.air){
-			blockid = 0;
-			return;
-		}
 		if(m.getType().tile()){
-			tileid = m.id();
+			layers[top] = m.id();
 		}else{
 			blockid = m.id();
 		}
@@ -83,7 +89,6 @@ public class Tile implements Poolable{
 
 	@Override
 	public void reset(){
-		tileid = 0;
-		blockid = 0;
+		Arrays.fill(layers, 0);
 	}
 }
