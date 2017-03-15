@@ -117,7 +117,7 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			float yadd = 0;
 			
-			Vector3 tint = tile.tile().foilageTint();
+			Vector3 tint = tile.topTile().foilageTint();
 			
 			int blend = blendStage(x, y);
 			
@@ -161,7 +161,7 @@ public class MaterialType{
 		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
 			float xadd = 0;
 			
-			Vector3 tint = tile.tile().foilageTint();
+			Vector3 tint = tile.topTile().foilageTint();
 			
 			int iter = 4;
 

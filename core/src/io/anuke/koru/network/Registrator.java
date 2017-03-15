@@ -116,6 +116,7 @@ public class Registrator{
 		k.register(byte[].class);
 		k.register(int[].class);
 		k.register(Class.class);
+		
 
 		k.register(KoruEntity.class, new EntitySerializer());
 	}
@@ -124,6 +125,8 @@ public class Registrator{
 		@Override
 		public Tile read(Kryo k, Input i, Class<Tile> c){
 			Tile tile = Tile.unloadedTile();
+			
+			tile.light = k.readObject(i, byte.class);
 			tile.layers = new int[]{k.readObject(i, int.class)};
 			tile.blockid = k.readObject(i, int.class);
 			return tile;
@@ -133,6 +136,7 @@ public class Registrator{
 		public void write(Kryo k, Output o, Tile t){
 			k.writeObject(o, t.tileid());
 			k.writeObject(o, t.blockid);
+			k.writeObject(o, t.light);
 		}
 	}
 	

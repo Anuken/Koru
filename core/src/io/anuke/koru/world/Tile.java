@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.Material;
 
 public class Tile implements Poolable{
 	public static final int LAYER_SIZE = 10;
@@ -38,7 +39,7 @@ public class Tile implements Poolable{
 		return layers[top];
 	}
 	
-	public BaseMaterial tile(){
+	public BaseMaterial topTile(){
 		return BaseMaterial.getMaterial(layers[top]);
 	}
 	
@@ -59,9 +60,31 @@ public class Tile implements Poolable{
 	public void setBlockMaterial(BaseMaterial m){
 		blockid = m.id();
 	}
+	
+	public void addTile(BaseMaterial m){
+		if(!canAddTile()) throw new RuntimeException("Too many tiles added!");
+		
+		layers[++top] = m.id();
+	}
+	
+	public void removeTile(){
+		if(!canRemoveTile()) throw new RuntimeException("Too many tiles removed!");
+		
+		layers[top--] = 0;
+	}
+	
+	public boolean canAddTile(){
+		return top+1 < layers.length;
+	}
+	
+	public boolean canRemoveTile(){
+		return top > 0;
+	}
 
 	public void setMaterial(BaseMaterial m){
-		if(m.getType().tile()){
+		if(m == Material.air){
+			blockid = Material.air.id();
+		}else if(m.getType().tile()){
 			layers[top] = m.id();
 		}else{
 			blockid = m.id();
@@ -69,22 +92,22 @@ public class Tile implements Poolable{
 	}
 
 	public boolean solid(){
-		return tile().getType().solid() || block().getType().solid();
+		return topTile().getType().solid() || block().getType().solid();
 	}
 
 	public BaseMaterial solidMaterial(){
 		if(block().getType().solid()) return block();
-		if(tile().getType().solid()) return tile();
+		if(topTile().getType().solid()) return topTile();
 		return null;
 	}
 
 	public void changeEvent(){
-		tile().changeEvent(this);
+		topTile().changeEvent(this);
 		block().changeEvent(this);
 	}
 
 	public String toString(){
-		return "Tile:[block=" + block() + " tile=" + tile() + " {"+  light +"} ]";
+		return "Tile:[block=" + block() + " tile=" + topTile() + " {"+  light +"} ]";
 	}
 
 	@Override

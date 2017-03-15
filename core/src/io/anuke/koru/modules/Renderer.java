@@ -254,12 +254,12 @@ public class Renderer extends Module<Koru>{
 						}
 						
 						
-						if(tile.tile() != Material.air && Math
+						if(tile.topTile() != Material.air && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
 												+ 36){
-							tile.tile().getType().draw(renderables[rendx][rendy], tile.tile(), tile, worldx, worldy);
+							tile.topTile().getType().draw(renderables[rendx][rendy], tile.topTile(), tile, worldx, worldy);
 							
 							if(tile.light < 127){
 								RenderPool.get("lightshadow")

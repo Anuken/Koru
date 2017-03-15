@@ -191,7 +191,7 @@ public class World extends Module<Koru>{
 	public boolean positionSolid(float x, float y){
 		Tile tile = getWorldTile(x, y);
 		BaseMaterial block = tile.block();
-		BaseMaterial tilem = tile.tile();
+		BaseMaterial tilem = tile.topTile();
 		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
@@ -211,7 +211,7 @@ public class World extends Module<Koru>{
 		if( !inClientBounds(x, y)){
 			return true;
 		}
-		return getTile(x, y).block() == material || getTile(x, y).tile() == material;
+		return getTile(x, y).block() == material || getTile(x, y).topTile() == material;
 	}
 
 	public GridPoint2 search(BaseMaterial material, int x, int y, int range){
@@ -220,7 +220,7 @@ public class World extends Module<Koru>{
 			for(int cy = -range;cy <= range;cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
-				if(getTile(worldx, worldy).block() == material || getTile(worldx, worldy).tile() == material){
+				if(getTile(worldx, worldy).block() == material || getTile(worldx, worldy).topTile() == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
 						point.set(worldx, worldy);
@@ -349,7 +349,7 @@ public class World extends Module<Koru>{
 		if(!material.getType().tile()){
 			return (tile.blockEmpty());
 		}else{
-			return tile.tile() != material && 
+			return tile.topTile() != material && 
 				(tile.blockEmpty() || tile.block().getType() == StructMaterialType.torch);
 		}		
 	}
