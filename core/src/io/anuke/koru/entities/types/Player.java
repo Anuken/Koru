@@ -25,6 +25,10 @@ public class Player extends EntityType{
 		entity.collider().collider.setSize(8, 6);
 	}
 	
+	public boolean removeDeath(){
+		return false;
+	}
+	
 	public boolean unload(){
 		return false;
 	}

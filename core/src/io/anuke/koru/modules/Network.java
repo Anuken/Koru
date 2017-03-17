@@ -31,26 +31,24 @@ public class Network extends Module<Koru>{
 	private boolean connected;
 	private String lastError;
 	private boolean chunksAdded = false;
-	private Array<Long> tempids = new Array<Long>();
+	private LongArray tempids = new LongArray();
 	private Array<KoruEntity> entityQueue = new Array<KoruEntity>();
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
 	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
 	public Client client;
-	public boolean started = false;
-
+	
+	@Override
 	public void init(){
 		int buffer = (int) Math.pow(2, 6) * 8192;
 		client = new Client(buffer, buffer);
 		Registrator.register(client.getKryo());
 		client.addListener(new Listen());
+		client.start();
 	}
 
 	public void connect(){
 		try{
-			if(!started)
-				client.start();
-			started = true;
 
 			connecting = true;
 			client.connect(1200, ip, port, port);
@@ -216,8 +214,8 @@ public class Network extends Module<Koru>{
 			}
 		}
 		
-		for(Long l : tempids)
-			entitiesToRemove.remove(l);
+		for(int i = 0; i < tempids.size; i ++)
+			entitiesToRemove.remove(tempids.get(i));
 		
 		if(chunksAdded){
 			getModule(Renderer.class).updateTiles();

@@ -15,7 +15,10 @@ public abstract class EntityType{
 	
 	public boolean collide(KoruEntity entity, KoruEntity other){return true;}
 	
+	public boolean removeDeath(){return true;}
+	
 	public void onDeath(KoruEntity entity, KoruEntity killer){
+		if(removeDeath())
 		entity.removeServer();
 	}
 	

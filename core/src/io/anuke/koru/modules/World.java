@@ -29,7 +29,6 @@ import io.anuke.koru.world.materials.StructMaterialType;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
-
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
 	public static final int loadrange = 3;
