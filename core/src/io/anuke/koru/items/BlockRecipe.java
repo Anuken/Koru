@@ -1,19 +1,54 @@
 package io.anuke.koru.items;
 
-import static io.anuke.koru.items.BaseBlockRecipe.recipe;
+import java.util.ArrayList;
 
-import io.anuke.koru.world.materials.StructMaterial;
+import io.anuke.koru.world.materials.Material;
 
 public class BlockRecipe{
+	private static ArrayList<BlockRecipe> recipes = new ArrayList<BlockRecipe>();
+	private static int lastid;
 	
-	static{
-		recipe(StructMaterial.woodblock);
-		recipe(StructMaterial.stonepillar);
-		recipe(StructMaterial.woodfloor);
-		recipe(StructMaterial.stonefloor);
-		recipe(StructMaterial.torch);
-		recipe(StructMaterial.workbench);
+	private final int id;
+	
+	Material result;
+	ItemStack[] requirements;
+	
+	public static BlockRecipe getRecipe(int id){
+		return recipes.get(id);
 	}
-
-	public static void load(){}
+	
+	public static ArrayList<BlockRecipe> getAll(){
+		return recipes;
+	}
+	
+	public BlockRecipe(Material result){
+		this(result, result.getDrops());
+	}
+	
+	public BlockRecipe(Material result, ItemStack...req){
+		this.result = result;
+		this.requirements = req;
+		id = lastid++;
+		recipes.add(this);
+	}
+	
+	public ItemStack[] requirements(){
+		return requirements;
+	}
+	
+	public Material result(){
+		return result;
+	}
+	
+	public int id(){
+		return id;
+	}
+	
+	protected static void recipe(Material result){
+		new BlockRecipe(result);
+	}
+	
+	protected static void recipe(Material result, ItemStack...req){
+		new BlockRecipe(result, req);
+	}
 }

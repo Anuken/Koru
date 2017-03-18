@@ -11,13 +11,14 @@ import io.anuke.ucore.spritesystem.RenderableList;
 import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.util.Timers;
 
-public class StructMaterialType{
-	public static final BaseMaterialType torch = new BaseMaterialType(false, false){
+public class StructMaterialTypes{
+	
+	public static final MaterialType torch = new MaterialType(false, false){
 		{
 			color = new Color(0x744a28ff);
 		}
 		
-		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
 			//light overlay
 			new KoruRenderable("torchflame1"){
@@ -54,9 +55,9 @@ public class StructMaterialType{
 		}
 	};
 	
-	public static final BaseMaterialType chest = new BaseMaterialType(false, false){
+	public static final MaterialType chest = new MaterialType(false, false){
 		
-		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
 			RenderPool.get(material.name())
 			.set(tile(x), tile(y) + material.offset())
@@ -66,9 +67,9 @@ public class StructMaterialType{
 		}
 	};
 	
-	public static final BaseMaterialType workbench = new BaseMaterialType(false, false){
+	public static final MaterialType workbench = new MaterialType(false, false){
 		
-		public void draw(RenderableList group, BaseMaterial material, Tile tile, int x, int y){
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 
 			RenderPool.get(material.name())
 			.set(tile(x), tile(y) + material.offset())

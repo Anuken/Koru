@@ -9,15 +9,15 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.items.BaseBlockRecipe;
+import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialType;
+import io.anuke.koru.world.materials.Materials;
+import io.anuke.koru.world.materials.MaterialTypes;
 
 public class InputHandler{
 	public final static float reach = 75;
@@ -45,10 +45,10 @@ public class InputHandler{
 		// block breaking
 		if(key(InputType.leftclick_down)){
 			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
-			BaseMaterial block = tile.block();
-			BaseMaterial floor = tile.topTile();
+			Material block = tile.block();
+			Material floor = tile.topTile();
 			
-			BaseMaterial select = null;
+			Material select = null;
 			
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& stack != null && stack.item.type() == ItemType.tool){
@@ -66,13 +66,13 @@ public class InputHandler{
 				blockhold += delta * stack.item.power();
 
 				if((int) (blockhold) % 20 == 1)
-					Effects.blockParticle(World.world(blockx), select.getType() == MaterialType.block
+					Effects.blockParticle(World.world(blockx), select.getType() == MaterialTypes.block
 							? World.world(blocky) - 6 : World.world(blocky), select);
 
 				if(blockhold >= select.breaktime()){
 					Effects.blockBreakParticle(World.world(blockx), World.world(blocky) - 1, select);
 
-					if(select.getType() == MaterialType.tree)
+					if(select.getType() == MaterialTypes.tree)
 						Effects.block(select, blockx, blocky);
 
 					// entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
@@ -83,7 +83,7 @@ public class InputHandler{
 					if(select == floor)
 						tile.removeTile();
 					else
-						tile.setBlockMaterial(Material.air);
+						tile.setBlockMaterial(Materials.air);
 
 					// schedule this later.
 
@@ -128,9 +128,9 @@ public class InputHandler{
 
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 
-			BaseBlockRecipe recipe = null;
+			BlockRecipe recipe = null;
 			
-			if(inv.recipe != -1) recipe = BaseBlockRecipe.getRecipe(inv.recipe);
+			if(inv.recipe != -1) recipe = BlockRecipe.getRecipe(inv.recipe);
 			
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& inv.recipe != -1 && inv.hasAll(recipe.requirements())

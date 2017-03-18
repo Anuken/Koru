@@ -6,8 +6,8 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.MaterialComponent;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.MaterialType;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.ucore.spritesystem.*;
 
 public class BlockAnimationRenderer extends EntityRenderer{
@@ -23,7 +23,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		for(Renderable r : list.renderables)
 		r.sprite().alpha(1f-life/lifetime);
 		
-		if(((BaseMaterial)entity.get(MaterialComponent.class).material()).getType() == MaterialType.tree)
+		if(((Material)entity.get(MaterialComponent.class).material()).getType() == MaterialTypes.tree)
 		list.renderables.get(2).sprite().sprite.rotate(rspeed*Koru.delta());
 		
 		if(life > lifetime){
@@ -38,14 +38,14 @@ public class BlockAnimationRenderer extends EntityRenderer{
 			throw new RuntimeException("No material specified in the data! Did you set the renderer material?");
 		}
 		
-		BaseMaterial material = (BaseMaterial)entity.get(MaterialComponent.class).material();
+		Material material = (Material)entity.get(MaterialComponent.class).material();
 		
 		int x = (int)(entity.getX()/World.tilesize);
 		int y = (int)(entity.getY()/World.tilesize);
 		
 		material.getType().draw(list, material, Koru.module(World.class).getWorldTile(x, y), x, y);
 		
-		if(material.getType() == MaterialType.tree){
+		if(material.getType() == MaterialTypes.tree){
 			
 			SpriteRenderable bot = list.renderables.get(1).sprite();
 			

@@ -13,14 +13,14 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.items.BaseBlockRecipe;
+import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.MaterialType;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.ucore.graphics.Hue;
 
 public class RecipeMenu extends VisTable{
@@ -30,13 +30,13 @@ public class RecipeMenu extends VisTable{
 	Slot selected;
 	
 	public RecipeMenu(){
-		for(BaseBlockRecipe recipe : BaseBlockRecipe.getAll()){
+		for(BlockRecipe recipe : BlockRecipe.getAll()){
 			Slot slot = new Slot(recipe, recipe.id(), 0);
 			add(slot).size(slotsize);
 		}
 		row();
 		
-		add(req).colspan(BaseBlockRecipe.getAll().size()).height(64);
+		add(req).colspan(BlockRecipe.getAll().size()).height(64);
 	}
 	
 	public void act(float delta){
@@ -85,9 +85,9 @@ public class RecipeMenu extends VisTable{
 	class Slot extends Actor{
 		public final int x, y;
 		public final ClickListener click;
-		public final BaseBlockRecipe recipe;
+		public final BlockRecipe recipe;
 		
-		public Slot(BaseBlockRecipe recipe, int x, int y) {
+		public Slot(BlockRecipe recipe, int x, int y) {
 			this.x = x;
 			this.y = y;
 			this.recipe = recipe;
@@ -114,12 +114,12 @@ public class RecipeMenu extends VisTable{
 			batch.setColor(getColor());
 			batch.draw(Resources.region(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2")), getX(), getY(), getWidth(), getHeight());
 			
-			BaseMaterial result = recipe.result();
+			Material result = recipe.result();
 			TextureRegion region = Resources.region(result.name());
 			
 			float w = region.getRegionWidth()*pscale,h = region.getRegionHeight()*pscale;
 			
-			if(result.getType() == MaterialType.tile){
+			if(result.getType() == MaterialTypes.tile){
 				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);
 			}else{
 				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, 4*pscale+ getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);

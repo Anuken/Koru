@@ -7,7 +7,7 @@ import io.anuke.koru.components.*;
 import io.anuke.koru.entities.types.*;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.Material;
 
 public class Effects{
 
@@ -61,14 +61,14 @@ public class Effects{
 		entity.send();
 	}
 
-	public static void particle(BaseMaterial material, float x, float y){
+	public static void particle(Material material, float x, float y){
 		KoruEntity entity = new KoruEntity(Particle.class);
 		entity.position().set(x, y);
 		entity.get(ParticleComponent.class).set(material);
 		entity.send();
 	}
 
-	public static void block(BaseMaterial material, int x, int y){
+	public static void block(Material material, int x, int y){
 		KoruEntity entity = new KoruEntity(BlockAnimation.class);
 		entity.position().set(x * World.tilesize, y * World.tilesize);
 		entity.get(MaterialComponent.class).matid = material.id();
@@ -99,15 +99,15 @@ public class Effects{
 		particle(entity, color, color);
 	}
 
-	public static void blockParticle(float x, float y, BaseMaterial material){
+	public static void blockParticle(float x, float y, Material material){
 		particle("spark", x, y, material.getColor(), material.getColor(), 1f, 1f);
 	}
 
-	public static void blockBreakParticle(float x, float y, BaseMaterial material){
+	public static void blockBreakParticle(float x, float y, Material material){
 		particle("break", x, y, material.getColor(), material.getColor(), 1f, 1f);
 	}
 
-	public static void blockParticle(int x, int y, BaseMaterial material){
+	public static void blockParticle(int x, int y, Material material){
 		particle("spark", World.world(x), World.world(y), material.getColor(), material.getColor(), 1f, 1f);
 	}
 }

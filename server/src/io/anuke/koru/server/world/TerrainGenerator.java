@@ -4,7 +4,7 @@ import static io.anuke.ucore.UCore.clamp;
 
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
@@ -27,7 +27,7 @@ public class TerrainGenerator implements Generator{
 		x += 99999;
 		y += 99999;
 
-		Tile tile = new Tile(Material.air, Material.air);
+		Tile tile = new Tile(Materials.air, Materials.air);
 		float riv = per.getValue(x, y + 100, 0.0005f) + Noise.nnoise(x, y, 10f, 0.01f)  + Math.abs(Noise.nnoise(x, y, 20f, 0.015f));
 		float elev = getElevation(x, y) - riv/2f;
 		float cave = getCaveDst(x, y) - riv/2.1f;
@@ -39,127 +39,127 @@ public class TerrainGenerator implements Generator{
 		if(riv > 0.23f){
 			// no river edges in lakes
 			if(se > 0.063f){
-				tile.setMaterial(Material.stone);
+				tile.setMaterial(Materials.stone);
 			}else{
-				tile.setMaterial(Material.water);
+				tile.setMaterial(Materials.water);
 			}
 			if(riv > 0.236)
-				tile.setMaterial(Material.water);
+				tile.setMaterial(Materials.water);
 			if(riv > 0.244)
-				tile.setMaterial(Material.deepwater);
+				tile.setMaterial(Materials.deepwater);
 
 		}else if(elev > 0.85){
-			tile.setMaterial(Material.ice);
+			tile.setMaterial(Materials.ice);
 
 			if(Math.random() < 0.03)
-				tile.setBlockMaterial(Material.rock);
+				tile.setBlockMaterial(Materials.rock);
 
 		}else if(elev > 0.76){
-			tile.setMaterial(Material.stone);
+			tile.setMaterial(Materials.stone);
 
 			if(Math.random() < 0.05)
-				tile.setBlockMaterial(Material.rock);
+				tile.setBlockMaterial(Materials.rock);
 
 		}else if(se > 0.078){
 			if(t < 0.62){
 				if(Math.random() < 1){
 					if(Math.random() < 0.02 && elev < 0.35f && elev > 0.12f)
-						tile.setBlockMaterial(Material.bush);
+						tile.setBlockMaterial(Materials.bush);
 				}
 				if(elev < 0.4 && elev > 0.1 && t < 0.6 && t > 0.41){
 					if(Noise.snoise(x, y, 120, 13) + Noise.snoise(x, y, 5, 4) > 4)
-						tile.setMaterial(Material.shortgrassblock);
+						tile.setMaterial(Materials.shortgrassblock);
 
 					if(Noise.snoise(x, y, 120, 13) + Noise.snoise(x, y, 5, 4) > 4.5)
-						tile.setMaterial(Material.grassblock);
+						tile.setMaterial(Materials.grassblock);
 				}
 
 				if(elev > 0.36f && elev < 0.53f && Noise.snoise(x, y, 500, 30) + Noise.snoise(x, y, 9, 4) > 3){
 					if(rand() < br(0.12f, elev)){
 						if(rand() < 0.026)
-							tile.setMaterial(Material.oaktree);
+							tile.setMaterial(Materials.oaktree);
 						if(rand() < 0.02)
-							tile.setMaterial(Material.mushy);
+							tile.setMaterial(Materials.mushy);
 					}
 				}
 				if((elev > 0.5f && Math.random() < clamp((elev - 0.5f) * 3f) / 15f)){
-					tile.setMaterial(Material.pinetree);
+					tile.setMaterial(Materials.pinetree);
 					if(Math.random() < 0.04)
-						tile.setMaterial(Material.rock);
+						tile.setMaterial(Materials.rock);
 
 					if(Math.random() < 0.002)
-						tile.setBlockMaterial(Material.pinesapling);
+						tile.setBlockMaterial(Materials.pinesapling);
 				}
 
 				if(t < 0.4){
-					tile.setMaterial(Material.darkgrass);
+					tile.setMaterial(Materials.darkgrass);
 				}else{
-					tile.setMaterial(Material.forestgrass);
+					tile.setMaterial(Materials.forestgrass);
 				}
 			}else if(t < 0.8){
-				tile.setMaterial(Material.burntgrass);
+				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.03)
-					tile.setBlockMaterial(Material.drybush);
+					tile.setBlockMaterial(Materials.drybush);
 				if(Math.random() < 0.003)
-					tile.setBlockMaterial(Material.deadtree);
+					tile.setBlockMaterial(Materials.deadtree);
 
 				if(Math.random() < 0.01)
-					tile.setBlockMaterial(Material.rock);
+					tile.setBlockMaterial(Materials.rock);
 
 			}else if(t < 0.83){
-				tile.setMaterial(Material.burntgrass);
+				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.001)
-					tile.setBlockMaterial(Material.deadtree);
+					tile.setBlockMaterial(Materials.deadtree);
 				if(Math.random() < 0.001)
-					tile.setBlockMaterial(Material.burnedtree);
+					tile.setBlockMaterial(Materials.burnedtree);
 			}else{
-				tile.setMaterial(Material.sand);
+				tile.setMaterial(Materials.sand);
 				if(Math.random() < 0.02)
-					tile.setBlockMaterial(Material.rock);
+					tile.setBlockMaterial(Materials.rock);
 
 			}
 
 		}else{
 			if(t < 0.3){
-				tile.setMaterial(Material.darkgrass);
+				tile.setMaterial(Materials.darkgrass);
 			}else{
-				tile.setMaterial(Material.forestgrass);
+				tile.setMaterial(Materials.forestgrass);
 			}
 			if(se < 0.063f){
-				tile.setMaterial(Material.water);
+				tile.setMaterial(Materials.water);
 				if(se < 0.054)
-					tile.setMaterial(Material.deepwater);
+					tile.setMaterial(Materials.deepwater);
 			}else if(se < 0.066){
-				tile.setMaterial(Material.stone);
+				tile.setMaterial(Materials.stone);
 				if(Math.random() < 0.01)
-					tile.setMaterial(Material.rock);
+					tile.setMaterial(Materials.rock);
 				if(Math.random() < 0.005)
-					tile.setMaterial(Material.rock);
+					tile.setMaterial(Materials.rock);
 			}else{
 				if(Math.random() < 0.006 && se > 0.069)
-					tile.setMaterial(Material.willowtree);
+					tile.setMaterial(Materials.willowtree);
 			}
 		}
 
 		if(cave > 0.7){
 			if(riv < 0.23f){
-				tile.setMaterial(Material.stoneblock);
-				tile.setMaterial(Material.stone);
+				tile.setMaterial(Materials.stoneblock);
+				tile.setMaterial(Materials.stone);
 
 				if(Noise.nnoise(x, y, 100, 0.5f) + Noise.nnoise(x, y, 15, 1) + Noise.nnoise(x, y, 50, 1)
 						+ cper.getValue(x, y, 0.005f) > 0.19){
-					tile.setMaterial(Material.air);
+					tile.setMaterial(Materials.air);
 				}
 			}
 			if(riv < 0.24)
 			tile.setLight(clamp(1f - (scave - 0.7f) * 60f));
 		}else if(cave > 0.69){
 			if(riv < 0.23f){
-				tile.setMaterial(Material.stone);
-				tile.setMaterial(Material.air);
+				tile.setMaterial(Materials.stone);
+				tile.setMaterial(Materials.air);
 
 				if(Math.random() < 0.05)
-					tile.setBlockMaterial(Material.rock);
+					tile.setBlockMaterial(Materials.rock);
 			}
 		}
 

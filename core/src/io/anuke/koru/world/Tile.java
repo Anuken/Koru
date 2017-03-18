@@ -5,8 +5,8 @@ import java.util.Arrays;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.Materials;
 
 public class Tile implements Poolable{
 	public static final int LAYER_SIZE = 10;
@@ -22,7 +22,7 @@ public class Tile implements Poolable{
 	
 	private Tile(){}
 	
-	public Tile(BaseMaterial tile, BaseMaterial block){
+	public Tile(Material tile, Material block){
 		layers = new int[LAYER_SIZE];
 		layers[top] = tile.id();
 		blockid = block.id();
@@ -40,24 +40,24 @@ public class Tile implements Poolable{
 		return layers[top];
 	}
 	
-	public BaseMaterial topTile(){
-		return !IServer.active() ? BaseMaterial.getMaterial(layers[0]) : BaseMaterial.getMaterial(layers[top]);
+	public Material topTile(){
+		return !IServer.active() ? Material.getMaterial(layers[0]) : Material.getMaterial(layers[top]);
 	}
 	
-	public BaseMaterial block(){
+	public Material block(){
 		
-		return BaseMaterial.getMaterial(blockid);
+		return Material.getMaterial(blockid);
 	}
 	
 	public boolean blockEmpty(){
 		return blockid == 0;
 	}
 
-	public void setBlockMaterial(BaseMaterial m){
+	public void setBlockMaterial(Material m){
 		blockid = m.id();
 	}
 	
-	public void addTile(BaseMaterial m){
+	public void addTile(Material m){
 		if(!canAddTile()) throw new RuntimeException("Too many tiles added!");
 		
 		layers[++top] = m.id();
@@ -78,9 +78,9 @@ public class Tile implements Poolable{
 	}
 	
 	/**Sets either the top block or tile. Used mostly for generation.*/
-	public void setMaterial(BaseMaterial m){
-		if(m == Material.air){
-			blockid = Material.air.id();
+	public void setMaterial(Material m){
+		if(m == Materials.air){
+			blockid = Materials.air.id();
 		}else if(m.getType().tile()){
 			layers[top] = m.id();
 		}else{
@@ -92,7 +92,7 @@ public class Tile implements Poolable{
 		return topTile().getType().solid() || block().getType().solid();
 	}
 
-	public BaseMaterial solidMaterial(){
+	public Material solidMaterial(){
 		if(block().getType().solid()) return block();
 		if(topTile().getType().solid()) return topTile();
 		return null;

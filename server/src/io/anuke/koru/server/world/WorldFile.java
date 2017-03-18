@@ -21,7 +21,7 @@ import io.anuke.koru.network.Registrator;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.WorldLoader;
-import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.util.ColorCodes;
 
 //TODO do something about the chunk writers
@@ -48,7 +48,7 @@ public class WorldFile extends WorldLoader{
 
 		kryo = new Kryo();
 		kryo.register(Chunk.class);
-		kryo.register(BaseMaterial.class, new Registrator.MaterialsSerializer());
+		kryo.register(Material.class, new Registrator.MaterialsSerializer());
 		this.file = file;
 		this.generator = generator;
 

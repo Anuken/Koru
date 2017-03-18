@@ -3,12 +3,12 @@ package io.anuke.koru.components;
 import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.koru.network.syncing.SyncData.Synced;
-import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.Material;
 
 @Synced
 public class ParticleComponent implements KoruComponent{
 	public int colorstart, colorend;
-	public BaseMaterial material;
+	public Material material;
 	public String name = "spark";
 	public float gravity = 1f, velocity = 1f;
 
@@ -19,7 +19,7 @@ public class ParticleComponent implements KoruComponent{
 		return this;
 	}
 	
-	public ParticleComponent set(BaseMaterial material){
+	public ParticleComponent set(Material material){
 		this.material = material;
 		return this;
 	}

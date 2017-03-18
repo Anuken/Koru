@@ -33,7 +33,7 @@ import io.anuke.koru.systems.SyncSystem.SyncType;
 import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.BaseMaterial;
+import io.anuke.koru.world.materials.Material;
 
 public class Registrator{
 	
@@ -94,7 +94,7 @@ public class Registrator{
 		k.register(Tile[].class);
 		k.register(Tile[][].class);
 		k.register(Tile[][][].class);
-		k.register(BaseMaterial.class, new MaterialsSerializer());
+		k.register(Material.class, new MaterialsSerializer());
 		k.register(ItemStack.class);
 		k.register(ItemStack[].class);
 		k.register(ItemStack[][].class);
@@ -143,14 +143,14 @@ public class Registrator{
 		}
 	}
 	
-	public static class MaterialsSerializer extends Serializer<BaseMaterial>{
+	public static class MaterialsSerializer extends Serializer<Material>{
 		@Override
-		public BaseMaterial read(Kryo k, Input i, Class<BaseMaterial> c){
-			return (BaseMaterial)BaseMaterial.getMaterial(k.readObject(i, int.class));
+		public Material read(Kryo k, Input i, Class<Material> c){
+			return (Material)Material.getMaterial(k.readObject(i, int.class));
 		}
 
 		@Override
-		public void write(Kryo k, Output o, BaseMaterial m){
+		public void write(Kryo k, Output o, Material m){
 			k.writeObject(o, m.id());
 		}
 	}

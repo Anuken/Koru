@@ -18,7 +18,7 @@ import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.utils.InputType;
-import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
@@ -121,7 +121,7 @@ public class Input extends Module<Koru>{
 		BlockInputPacket p = new BlockInputPacket();
 		p.x = blockx;
 		p.y = blocky;
-		p.material = Material.grassblock.id();
+		p.material = Materials.grassblock.id();
 		getModule(Network.class).client.sendTCP(p);
 	}
 

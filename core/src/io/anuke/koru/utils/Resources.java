@@ -8,10 +8,10 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 
-import io.anuke.koru.items.BlockRecipe;
+import io.anuke.koru.items.BlockRecipes;
 import io.anuke.koru.modules.Renderer;
-import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.StructMaterial;
+import io.anuke.koru.world.materials.Materials;
+import io.anuke.koru.world.materials.StructMaterials;
 
 public class Resources{
 	private static Json json;
@@ -19,9 +19,9 @@ public class Resources{
 	private static Renderer rend;
 	
 	public static void loadMaterials(){
-		Material.load();
-		StructMaterial.load();
-		BlockRecipe.load();
+		Materials.load();
+		StructMaterials.load();
+		BlockRecipes.load();
 	}
 	
 	public static void loadParticle(String name){

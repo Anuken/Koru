@@ -20,7 +20,7 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.FrameBufferLayer;
 import io.anuke.koru.graphics.LightEffect;
 import io.anuke.koru.graphics.RenderPool;
-import io.anuke.koru.items.BaseBlockRecipe;
+import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.systems.CollisionDebugSystem;
@@ -29,9 +29,9 @@ import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.BaseMaterial;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialType;
+import io.anuke.koru.world.materials.Materials;
+import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
@@ -89,7 +89,7 @@ public class Renderer extends Module<Koru>{
 	
 	void loadMaterialColors(){
 		
-		for(BaseMaterial material : BaseMaterial.getAll()){
+		for(Material material : Material.getAll()){
 			if(material.getType().tile()) continue;
 			
 			TextureRegion region = atlas.findRegion(material.name());
@@ -178,18 +178,18 @@ public class Renderer extends Module<Koru>{
 		Tile tile = world.getTile(getModule(Input.class).cursorblock());
 
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
-				&& inv.hasAll(BaseBlockRecipe.getRecipe(inv.recipe).requirements())){
+				&& inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
 			
 			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach 
-					&& World.isPlaceable(BaseBlockRecipe.getRecipe(inv.recipe).result(), tile)){
+					&& World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
 				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
 			}else{
 				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);
 			}
 			
-			BaseMaterial result = BaseBlockRecipe.getRecipe(inv.recipe).result();
+			Material result = BlockRecipe.getRecipe(inv.recipe).result();
 
-			if(result.getType() == MaterialType.tile){
+			if(result.getType() == MaterialTypes.tile){
 				block.region(Resources.region("blank"));
 				block.sprite.setSize(12, 12);
 			}else{
@@ -254,7 +254,7 @@ public class Renderer extends Module<Koru>{
 						}
 						
 						
-						if(tile.topTile() != Material.air && Math
+						if(tile.topTile() != Materials.air && Math
 								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
 								&& Math.abs(
 										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom

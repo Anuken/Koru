@@ -24,8 +24,8 @@ import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
-import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.StructMaterialType;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.StructMaterialTypes;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
@@ -189,8 +189,8 @@ public class World extends Module<Koru>{
 
 	public boolean positionSolid(float x, float y){
 		Tile tile = getWorldTile(x, y);
-		BaseMaterial block = tile.block();
-		BaseMaterial tilem = tile.topTile();
+		Material block = tile.block();
+		Material tilem = tile.topTile();
 		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
@@ -202,18 +202,18 @@ public class World extends Module<Koru>{
 		return !blockSolid(x - 1, y) || !blockSolid(x + 1, y) || !blockSolid(x, y - 1) || !blockSolid(x, y + 1);
 	}
 
-	public boolean blends(int x, int y, BaseMaterial material){
+	public boolean blends(int x, int y, Material material){
 		return !isType(x, y + 1, material) || !isType(x, y - 1, material) || !isType(x + 1, y, material) || !isType(x - 1, y, material);
 	}
 
-	public boolean isType(int x, int y, BaseMaterial material){
+	public boolean isType(int x, int y, Material material){
 		if( !inClientBounds(x, y)){
 			return true;
 		}
 		return getTile(x, y).block() == material || getTile(x, y).topTile() == material;
 	}
 
-	public GridPoint2 search(BaseMaterial material, int x, int y, int range){
+	public GridPoint2 search(Material material, int x, int y, int range){
 		float nearest = Float.MAX_VALUE;
 		for(int cx = -range;cx <= range;cx ++){
 			for(int cy = -range;cy <= range;cy ++){
@@ -343,13 +343,13 @@ public class World extends Module<Koru>{
 	}
 	
 	//TODO make this work with transparency instead of specific types
-	public static boolean isPlaceable(BaseMaterial material, Tile tile){
+	public static boolean isPlaceable(Material material, Tile tile){
 		
 		if(!material.getType().tile()){
 			return (tile.blockEmpty());
 		}else{
 			return tile.topTile() != material && 
-				(tile.blockEmpty() || tile.block().getType() == StructMaterialType.torch);
+				(tile.blockEmpty() || tile.block().getType() == StructMaterialTypes.torch);
 		}		
 	}
 }

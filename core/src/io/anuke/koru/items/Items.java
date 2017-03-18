@@ -1,17 +1,17 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.world.materials.BaseMaterial;
-import io.anuke.koru.world.materials.MaterialType;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.MaterialTypes;
 
 public enum Items implements Item{
 	stick, wood, pinecone, water, stone,
 	woodaxe(ItemType.tool, 1f){
-		public boolean breaks(BaseMaterial mat){
-			return mat.getType() == MaterialType.tree || mat.name().contains("wood") || mat.name().contains("torch");
+		public boolean breaks(Material mat){
+			return mat.getType() == MaterialTypes.tree || mat.name().contains("wood") || mat.name().contains("torch");
 		}
 	},
 	woodpickaxe(ItemType.tool, 1f){
-		public boolean breaks(BaseMaterial mat){
+		public boolean breaks(Material mat){
 			return mat.name().contains("stone") || mat.name().contains("rock");
 		}
 	},
@@ -47,7 +47,7 @@ public enum Items implements Item{
 		return power;
 	}
 	
-	public boolean breaks(BaseMaterial mat){
+	public boolean breaks(Material mat){
 		return true;
 	}
 	

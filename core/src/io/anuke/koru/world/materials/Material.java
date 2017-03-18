@@ -1,164 +1,111 @@
 package io.anuke.koru.world.materials;
 
-import static io.anuke.koru.world.materials.MaterialType.*;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
-import io.anuke.koru.items.Items;
+import io.anuke.koru.items.Item;
+import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.world.Tile;
+public abstract class Material{
+	private static ArrayList<Material> materials = new ArrayList<Material>();
+	private static int lastid;
+	
+	private final int id;
+	private final String name;
+	private final MaterialType type;
+	
+	protected Vector3 foilageTint = new Vector3(1f, 1f, 1f);
+	protected int breaktime;
+	protected boolean collisions = true;
+	protected Array<ItemStack> drops = new Array<ItemStack>();
+	protected float offset = 0;
+	protected float[] offsets;
+	protected int variants = 1;
+	
+	public Color color = Color.CLEAR;
+	
+	public static Material getMaterial(int id){
+		return materials.get(id);
+	}
+	
+	public static Iterable<Material> getAll(){
+		return materials;
+	}
+	
+	protected Material(String name, MaterialType type){
+		id = lastid++;
+		this.name = name;
+		this.type = type;
+		
+		materials.add(this);
+	}
+	
+	protected void offsets(float... offsets){
+		this.offsets = offsets;
+	}
+	
+	protected void addDrops(ItemStack... stacks){
+		drops.addAll(stacks);
+	}
+	
+	protected void addDrop(Item item, int amount){
+		drops.add(new ItemStack(item, amount));
+	}
 
-/**Natural materials generated in the world.*/
-public class Material{
-	//Tiles
+	public Vector3 foilageTint(){
+		return foilageTint;
+	}
 	
-	public static final BaseMaterial air = new BaseMaterial("air", tile){{
+	public int breaktime(){
+		return breaktime;
+	}
+	
+	public boolean isBreakable(){
+		return breaktime > 0;
+	}
+	
+	public boolean collisionsEnabled(){
+		return collisions;
+	}
+	
+	public int id(){
+		return id;
+	}
+	
+	public String name(){
+		return name;
+	}
+	
+	public MaterialType getType(){
+		return type;
+	}
+	
+	public float offset(){
+		return offset;
+	}
+	
+	public Color getColor(){
+		if(type.getColor() != null) return type.getColor();
+		return color;
+	}
+	
+	public ItemStack[] getDrops(){
+		return drops.toArray(ItemStack.class);
+	}
+	
+	public void changeEvent(Tile tile){
 		
-	}};
+	}
 	
-	public static final BaseMaterial forestgrass = new BaseMaterial("grass", grass){{
-		
-	}};
+	public int variants(){
+		return variants;
+	}
 	
-	public static final BaseMaterial darkgrass = new BaseMaterial("grass", grass){{
-		foilageTint = new Vector3(0.8f, 0.92f, 0.86f);
-	}};
-	
-	public static final BaseMaterial swampgrass = new BaseMaterial("grass", grass){{
-		
-	}};
-	
-	public static final BaseMaterial drygrass = new BaseMaterial("grass", grass){{
-		foilageTint = new Vector3(1.3f, 1.1f, 0.98f);
-	}};
-	
-	public static final BaseMaterial burntgrass = new BaseMaterial("grass", grass){{
-		foilageTint = new Vector3(1.6f, 1.2f, 0.94f);
-	}};
-	
-	public static final BaseMaterial bluegrass = new BaseMaterial("grass", grass){{
-		
-	}};
-	
-	public static final BaseMaterial water = new BaseMaterial("water",  MaterialType.water){{
-		
-	}};
-	
-	public static final BaseMaterial deepwater = new BaseMaterial("deepwater",  MaterialType.water){{
-		
-	}};
-	
-	public static final BaseMaterial darkrock = new BaseMaterial("darkrock", tile){{
-		
-	}};
-	
-	public static final BaseMaterial magmarock = new BaseMaterial("magmarock", tile){{
-		
-	}};
-	
-	public static final BaseMaterial cobblestone = new BaseMaterial("cobblestone", tile){{
-		
-	}};
-	
-	public static final BaseMaterial sand = new BaseMaterial("sand", tile){{
-		variants = 7;
-	}};
-	
-	public static final BaseMaterial gravel = new BaseMaterial("gravel", tile){{
-		
-	}};
-	
-	public static final BaseMaterial ice = new BaseMaterial("ice", tile){{
-		variants = 7;
-	}};
-	
-	public static final BaseMaterial riveredge = new BaseMaterial("riveredge", tile){{
-		
-	}};
-	
-	public static final BaseMaterial stone = new BaseMaterial("stone", tile){{
-		variants = 7;
-	}};
-	
-	
-	//Objects,  blocks
-	
-	
-	public static final BaseMaterial grassblock = new BaseMaterial("grassblock",  MaterialType.tallgrassblock){{
-		
-	}};
-	
-	public static final BaseMaterial shortgrassblock = new BaseMaterial("shortgrassblock",  MaterialType.shortgrassblock){{
-		
-	}};
-	
-	public static final BaseMaterial mossyrock = new BaseMaterial("mossyrock", object){{
-		
-	}};
-	
-	public static final BaseMaterial rock = new BaseMaterial("rock", object){{
-		breaktime = 50; 
-		addDrop(Items.stone, 2); 
-		color = new Color(0x717171ff);
-		offset = -1f;
-		variants = 4;
-	}};
-	
-	public static final BaseMaterial blackrock = new BaseMaterial("blackrock", object){{
-		variants = 4;
-	}};
-	
-	public static final BaseMaterial mushy = new BaseMaterial("mushy", object){{
-		variants = 8;
-	}};
-	
-	public static final BaseMaterial drybush = new BaseMaterial("drybush", object){{
-		offset = -1f;
-		variants = 3;
-	}};
-	
-	public static final BaseMaterial bush = new BaseMaterial("bush", object){{
-		offset = -1f;
-		variants = 3;
-	}};
-	
-	public static final BaseMaterial deadtree = new BaseMaterial("deadtree", tree){{
-		variants = 4;
-		offsets(-4, -3, -4, -1);
-	}};
-	
-	public static final BaseMaterial oaktree = new BaseMaterial("oaktree", tree){{
-		variants = 6;
-		offsets(-10, -10, -10, -4, -4, -4);
-	}};
-	
-	public static final BaseMaterial willowtree = new BaseMaterial("willowtree", tree){{
-		variants = 4;
-		offsets(-4, -3, -4, -3);
-	}};
-	
-	public static final BaseMaterial burnedtree = new BaseMaterial("burnedtree", tree){{
-		variants = 4;
-		offsets(-4, -3, -4, -1);
-	}};
-	
-	public static final BaseMaterial pinetree = new BaseMaterial("pinetree", tree){{
-		addDrop(Items.wood, 10);
-		breaktime = 90;
-		variants = 4;
-		offsets(-5f, -3f, -3f, -5f);
-	}};
-	
-	public static final BaseMaterial pinesapling = new BaseMaterial("pinesapling", object){{
-		addDrop(Items.pinecone, 1);
-		collisions = false;
-		breaktime = 1;
-	}};
-	
-	public static final BaseMaterial stoneblock = new BaseMaterial("stoneblock", block){{
-		addDrop(Items.stone, 5); 
-		color = new Color(0x717171ff);
-		breaktime = 50;
-	}};
-	
-	public static void load(){}
+	@Override
+	public String toString(){
+		return name() + ":" + id();
+	}
 }
