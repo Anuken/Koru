@@ -18,7 +18,7 @@ public class StructMaterial{
 	}};
 	
 	public static final BaseMaterial stonefloor = new BaseMaterial("stonefloor", tile){{
-		addDrop(Items.stone, 2);
+		addDrop(Items.stone, 1);
 		color = new Color(0x717171ff);
 		breaktime = 20;
 	}};

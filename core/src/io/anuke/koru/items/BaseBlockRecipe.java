@@ -21,6 +21,10 @@ public class BaseBlockRecipe{
 		return recipes;
 	}
 	
+	public BaseBlockRecipe(BaseMaterial result){
+		this(result, result.getDrops());
+	}
+	
 	public BaseBlockRecipe(BaseMaterial result, ItemStack...req){
 		this.result = result;
 		this.requirements = req;
