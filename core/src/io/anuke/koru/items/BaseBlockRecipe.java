@@ -43,4 +43,12 @@ public class BaseBlockRecipe{
 	public int id(){
 		return id;
 	}
+	
+	protected static void recipe(BaseMaterial result){
+		new BaseBlockRecipe(result);
+	}
+	
+	protected static void recipe(BaseMaterial result, ItemStack...req){
+		new BaseBlockRecipe(result, req);
+	}
 }
