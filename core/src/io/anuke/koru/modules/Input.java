@@ -106,6 +106,9 @@ public class Input extends Module<Koru>{
 	public boolean keyDown (int keycode) {
 		if(keycode >= Keys.NUM_1 && keycode < Keys.NUM_5){
 			player.inventory().hotbar = keycode - Keys.NUM_1;
+			SlotChangePacket packet = new SlotChangePacket();
+			packet.slot = player.inventory().hotbar;
+			getModule(Network.class).client.sendTCP(packet);
 		}
 		return false;
 	}

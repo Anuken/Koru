@@ -349,7 +349,7 @@ public class World extends Module<Koru>{
 			return (tile.blockEmpty());
 		}else{
 			return tile.topTile() != material && 
-				(tile.blockEmpty() || tile.block().getType() == StructMaterialTypes.torch);
+				(tile.blockEmpty() || tile.block().getType() == StructMaterialTypes.torch) && tile.canAddTile();
 		}		
 	}
 }

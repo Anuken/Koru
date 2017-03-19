@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.world.Tile;
+				
 public abstract class Material{
 	private static ArrayList<Material> materials = new ArrayList<Material>();
 	private static int lastid;
