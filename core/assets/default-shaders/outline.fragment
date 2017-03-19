@@ -5,24 +5,18 @@ precision mediump int;
 
 uniform sampler2D u_texture;
 
-// The inverse of the viewport dimensions along X and Y
-uniform vec2 u_viewportInverse;
-
-// Color of the outline
 uniform vec4 u_color;
 
 varying vec4 v_color;
 varying vec2 v_texCoord;
 
-#define ALPHA_VALUE_BORDER 0.5
-
 void main() {
+
+	ivec2 size = textureSize2D(u_texture, 0);
 
 	vec2 T = v_texCoord.xy;
 
-	vec2 v = u_viewportInverse;
-	
-	vec2 s = T;
+	vec2 v = vec2(1.0/size.x, 1.0/size.y);
 
 	bool empty = texture2D(u_texture, T).a > 0.1;
 	bool any = false;
@@ -30,20 +24,9 @@ void main() {
 	float thickness = 1.0;
 	float step = 1.0;
 
-	float i = 1.0;
-
-	///for(float ix = -thickness; ix <= thickness; ix += step){
-	//	for(float iy = -thickness; iy <= thickness; iy += step)
-
-	
-	if(texture2D(u_texture, s + vec2(0, step*i) * v).a > 0.1 || texture2D(u_texture, s + vec2(0, -step*i) * v).a > 0.1 ||
-		texture2D(u_texture, s + vec2(step*i, 0) * v).a > 0.1 || texture2D(u_texture, s + vec2(-step*i, 0) * v).a > 0.1)
+	if(texture2D(u_texture, T + vec2(0, step) * v).a > 0.1 || texture2D(u_texture, T + vec2(0, -step) * v).a > 0.1 ||
+		texture2D(u_texture, T + vec2(step, 0) * v).a > 0.1 || texture2D(u_texture, T + vec2(-step, 0) * v).a > 0.1)
 		any = true;
-	//}
-
-	
-		//any = any || texture2D(u_texture, s + vec2(0, iy*1.159) * v).a < 0.1;
-	//}
 
 	empty = !empty && any;
 

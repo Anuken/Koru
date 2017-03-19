@@ -39,6 +39,7 @@ public class Renderer extends Module<Koru>{
 	public static final int viewrangey = 26;
 	public final float GUIscale = 5f;
 	public final int scale = 4;
+	public final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
 	public boolean debug = false, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;
@@ -180,8 +181,7 @@ public class Renderer extends Module<Koru>{
 		if(tile != null && tile.block().interactable()
 				&& Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach){
 
-			Draw.shader(Shaders.outline, 0.6f, 0.6f, 1f, 1f);
-			//Draw.color(Color.BLACK);
+			Draw.shader(Shaders.outline, outlineColor.r, outlineColor.g, outlineColor.b, 1f);
 			
 			Draw.crect("sticks", x * World.tilesize, y * World.tilesize, 12, 12);
 
@@ -449,6 +449,7 @@ public class Renderer extends Module<Koru>{
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
 		camera.setToOrtho(false, width / scale, height / scale);
 		light.setSize(width, height);
+		resetProcessor();
 	}
 
 	void resetProcessor(){
