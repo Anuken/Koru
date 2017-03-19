@@ -4,7 +4,7 @@ import io.anuke.koru.components.*;
 import io.anuke.koru.entities.ComponentList;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.network.InputHandler;
+import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.renderers.PlayerRenderer;
 import io.anuke.koru.systems.SyncSystem.SyncType;
 

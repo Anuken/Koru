@@ -12,12 +12,13 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.input.InputType;
+import io.anuke.koru.input.KeyBindings;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
-import io.anuke.koru.utils.InputType;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
@@ -37,7 +38,7 @@ public class Input extends Module<Koru>{
 
 	@Override
 	public void update() {
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+		if (Gdx.input.isKeyPressed(KeyBindings.exit)) {
 			Gdx.app.exit();
 		}
 		
@@ -61,16 +62,16 @@ public class Input extends Module<Koru>{
 
 		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 2.2f);
 
-		if (Gdx.input.isKeyPressed(Keys.W)) {
+		if (Gdx.input.isKeyPressed(KeyBindings.move_up)) {
 			vector.y += speed;
 		}
-		if (Gdx.input.isKeyPressed(Keys.A)) {
+		if (Gdx.input.isKeyPressed(KeyBindings.move_left)) {
 			vector.x -= speed;
 		}
-		if (Gdx.input.isKeyPressed(Keys.S)) {
+		if (Gdx.input.isKeyPressed(KeyBindings.move_down)) {
 			vector.y -= speed;
 		}
-		if (Gdx.input.isKeyPressed(Keys.D)) {
+		if (Gdx.input.isKeyPressed(KeyBindings.move_right)) {
 			vector.x += speed;
 		}
 		
@@ -83,8 +84,8 @@ public class Input extends Module<Koru>{
 			render.direction = 2-(int)((angle-45)/90f);
 			if(render.direction == 1) render.direction = 3;
 			if(angle > 315 || angle < 45) render.direction = 1;
-		}else if(key(Keys.W) || key(Keys.A) || key(Keys.S) || key(Keys.D)){
-			render.direction = (key(Keys.D) ? 1 : (key(Keys.A) ? 3 : (key(Keys.S) ? 0 : 2)));
+		}else if(key(KeyBindings.move_up) || key(KeyBindings.move_left) || key(KeyBindings.move_down) || key(KeyBindings.move_right)){
+			render.direction = (key(KeyBindings.move_right) ? 1 : (key(KeyBindings.move_left) ? 3 : (key(KeyBindings.move_down) ? 0 : 2)));
 		}
 
 		vector.limit(speed);
@@ -104,12 +105,17 @@ public class Input extends Module<Koru>{
 	}
 	
 	public boolean keyDown (int keycode) {
+		
+		//TODO keybindings for this as well
 		if(keycode >= Keys.NUM_1 && keycode < Keys.NUM_5){
 			player.inventory().hotbar = keycode - Keys.NUM_1;
 			SlotChangePacket packet = new SlotChangePacket();
 			packet.slot = player.inventory().hotbar;
 			getModule(Network.class).client.sendTCP(packet);
+		}else if(keycode == KeyBindings.interact){
+			sendInput(InputType.interact, blockx, blocky);
 		}
+		
 		return false;
 	}
 
@@ -132,6 +138,9 @@ public class Input extends Module<Koru>{
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Buttons.LEFT) {
 			sendInput(InputType.leftclick_down, blockx, blocky);
+			
+			if(player.inventory().hotbarStack() == null || player.inventory().hotbarStack().item.type() == ItemType.material)
+			sendInput(InputType.interact, blockx, blocky);
 		} else if (button == Buttons.RIGHT) {
 			sendInput(InputType.rightclick_down);
 		}

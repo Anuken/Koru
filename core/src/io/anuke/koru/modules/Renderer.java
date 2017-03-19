@@ -18,9 +18,9 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.*;
+import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemType;
-import io.anuke.koru.network.InputHandler;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.RepackableAtlas;
@@ -117,7 +117,7 @@ public class Renderer extends Module<Koru>{
 		Resources.loadParticle("break");
 
 		new LambdaRenderable(this::drawBlockOverlay).add();
-		new LambdaRenderable(-512 * 2-2, Sorter.tile, this::drawTileOverlay).add();
+		new LambdaRenderable(-Layers.light-1, Sorter.object, this::drawTileOverlay).add();
 
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
@@ -131,6 +131,10 @@ public class Renderer extends Module<Koru>{
 		}
 
 		long start = TimeUtils.nanoTime();
+		
+		if(getModule(Network.class).connected())
+			Cursors.setCursor("cursor");
+		
 
 		light.setColor(world.getAmbientColor());
 
@@ -139,6 +143,9 @@ public class Renderer extends Module<Koru>{
 
 		doRender();
 		updateCamera();
+		
+		if(getModule(Network.class).connected())
+			Cursors.updateCursor();
 
 		if(Profiler.update())
 			Profiler.renderTime = TimeUtils.timeSinceNanos(start);
@@ -180,12 +187,16 @@ public class Renderer extends Module<Koru>{
 
 		if(tile != null && tile.block().interactable()
 				&& Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach){
+			
+			Cursors.setCursor("select");
 
 			Draw.shader(Shaders.outline, outlineColor.r, outlineColor.g, outlineColor.b, 1f);
 			
 			Draw.crect("sticks", x * World.tilesize, y * World.tilesize, 12, 12);
 
 			Draw.shader(null);
+			
+			//Draw.text("Q to collect", x*World.tilesize, y*World.tilesize);
 		}
 	}
 

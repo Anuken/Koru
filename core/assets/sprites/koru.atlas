@@ -741,7 +741,7 @@ items/woodaxeitem
   orig: 12, 12
   offset: 0, 0
   index: -1
-items/stoneitem
+items/stickitem
   rotate: false
   xy: 29, 1
   size: 12, 12
@@ -755,7 +755,7 @@ items/slotselect
   orig: 16, 16
   offset: 0, 0
   index: -1
-items/wooditem
+items/stoneitem
   rotate: false
   xy: 43, 1
   size: 12, 12
@@ -769,7 +769,7 @@ items/slot
   orig: 16, 16
   offset: 0, 0
   index: -1
-items/woodhammeritem
+items/wooditem
   rotate: false
   xy: 57, 1
   size: 12, 12
@@ -783,30 +783,37 @@ items/slotset
   orig: 16, 16
   offset: 0, 0
   index: -1
-items/woodsworditem
+items/woodhammeritem
   rotate: false
   xy: 71, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-items/woodpickaxeitem
+items/woodsworditem
   rotate: false
   xy: 85, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
+items/woodpickaxeitem
+  rotate: false
+  xy: 91, 19
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 items/woodchunk
   rotate: false
-  xy: 91, 24
+  xy: 105, 24
   size: 7, 7
   orig: 7, 7
   offset: 0, 0
   index: -1
 items/stonechunk
   rotate: false
-  xy: 91, 15
+  xy: 114, 24
   size: 7, 7
   orig: 7, 7
   offset: 0, 0

@@ -1,6 +1,6 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.network.InputHandler.ClickEvent;
+import io.anuke.koru.input.InputHandler.ClickEvent;
 import io.anuke.koru.world.materials.Material;
 
 public interface Item{

@@ -14,7 +14,6 @@ public class Shaders{
 	
 	public static void setParams(ShaderProgram shader, Object... params){
 		if(shader == outline){
-			
 			shader.begin();
 			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
 			shader.end();

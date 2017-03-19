@@ -1,6 +1,5 @@
-package io.anuke.koru.network;
+package io.anuke.koru.input;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
@@ -13,12 +12,13 @@ import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.utils.InputType;
+import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.Materials;
 
+//TODO make this less messy
 public class InputHandler{
 	public final static float reach = 75;
 	public float mouseangle;
@@ -150,6 +150,19 @@ public class InputHandler{
 
 		}
 	}
+	
+	private void onInteract(){
+		Tile tile = World.instance().getTile(blockx, blocky);
+		
+		if(tile.block().interactable()){
+			
+			entity.inventory().addItems(tile.block().getDrops());
+			entity.inventory().sendUpdate(entity);
+			
+			tile.setBlockMaterial(Materials.air);
+			World.instance().updateTile(blockx, blocky);
+		}
+	}
 
 	private void rawClick(boolean left){
 		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
@@ -181,8 +194,10 @@ public class InputHandler{
 			blocky = (int) data[1];
 
 			click(true);
-		}else if(type == InputType.r){
-			Effects.particle(entity, Color.BLUE);
+		}else if(type == InputType.interact){
+			blockx = (int) data[0];
+			blocky = (int) data[1];
+			onInteract();
 		}
 	}
 	

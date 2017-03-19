@@ -11,6 +11,7 @@ import com.esotericsoftware.kryonet.Listener;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.graphics.Cursors;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
@@ -59,6 +60,7 @@ public class Network extends Module<Koru>{
 			Koru.log("Sent packet.");
 
 			connected = true;
+			Cursors.setCursor("cursor");
 		}catch(Exception e){
 			connecting = false;
 			connected = false;
