@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
-import com.bitfire.utils.ShaderLoader;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.ucore.spritesystem.Renderable;
 
@@ -67,7 +67,10 @@ public enum FrameBufferLayer{
 	}
 
 	public static void loadShaders(){
-		ShaderLoader.BasePath = "shaders/";
+		Koru.log("Loading shaders...");
+		
+		Shaders.loadAll();
+		
 		for(FrameBufferLayer layer : values()){
 			layer.loadShader();
 		}

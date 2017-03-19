@@ -82,6 +82,10 @@ public class Materials{
 	
 	//Objects,  blocks
 	
+	public static final Material sticks = new Material("sticks", overlay){{
+		addDrop(Items.stick, 1);
+		interactable = true;
+	}};
 	
 	public static final Material grassblock = new Material("grassblock",  MaterialTypes.tallgrassblock){{
 		

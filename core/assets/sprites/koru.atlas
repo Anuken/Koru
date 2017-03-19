@@ -402,7 +402,7 @@ objects/grassf2
   orig: 12, 19
   offset: 0, 0
   index: -1
-objects/hatcher-3
+objects/sticks
   rotate: false
   xy: 363, 52
   size: 12, 12
@@ -423,7 +423,7 @@ objects/grassblock2edge
   orig: 12, 19
   offset: 0, 0
   index: -1
-objects/hatcher-1
+objects/stick
   rotate: false
   xy: 377, 52
   size: 12, 12
@@ -465,6 +465,13 @@ objects/rock4
   orig: 12, 16
   offset: 0, 0
   index: -1
+objects/hatcher-3
+  rotate: false
+  xy: 133, 128
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 objects/rock2
   rotate: false
   xy: 823, 166
@@ -486,121 +493,128 @@ objects/rock3
   orig: 12, 16
   offset: 0, 0
   index: -1
+objects/hatcher-1
+  rotate: false
+  xy: 405, 58
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 objects/wheatgrass1
   rotate: false
-  xy: 133, 132
+  xy: 837, 168
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
   index: -1
 objects/rock1
   rotate: false
-  xy: 837, 166
+  xy: 419, 60
   size: 12, 10
   orig: 12, 10
   offset: 0, 0
   index: -1
 objects/wheatgrass3
   rotate: false
-  xy: 405, 62
+  xy: 853, 168
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
   index: -1
 objects/mossyrock2
   rotate: false
-  xy: 851, 168
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy6
-  rotate: false
-  xy: 421, 62
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy1
-  rotate: false
-  xy: 865, 168
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy4
-  rotate: false
-  xy: 435, 62
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy5
-  rotate: false
-  xy: 879, 168
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy2
-  rotate: false
-  xy: 449, 62
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy7
-  rotate: false
-  xy: 893, 168
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy3
-  rotate: false
-  xy: 463, 62
-  size: 12, 8
-  orig: 12, 8
-  offset: 0, 0
-  index: -1
-objects/mushy8
-  rotate: false
-  xy: 907, 168
+  xy: 433, 62
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/torchflame1
   rotate: false
-  xy: 395, 40
+  xy: 147, 128
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
+objects/mushy6
+  rotate: false
+  xy: 869, 168
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy1
+  rotate: false
+  xy: 447, 62
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy4
+  rotate: false
+  xy: 883, 168
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy5
+  rotate: false
+  xy: 461, 62
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy2
+  rotate: false
+  xy: 897, 168
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy7
+  rotate: false
+  xy: 475, 62
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy3
+  rotate: false
+  xy: 911, 168
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
+objects/mushy8
+  rotate: false
+  xy: 925, 168
+  size: 12, 8
+  orig: 12, 8
+  offset: 0, 0
+  index: -1
 objects/torchflame4
   rotate: false
-  xy: 405, 48
+  xy: 395, 40
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame2
   rotate: false
-  xy: 395, 26
+  xy: 405, 44
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torch
   rotate: false
-  xy: 405, 34
+  xy: 395, 26
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame3
   rotate: false
-  xy: 415, 48
+  xy: 405, 30
   size: 8, 12
   orig: 8, 12
   offset: 0, 0

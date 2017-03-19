@@ -96,6 +96,10 @@ public class TerrainGenerator implements Generator{
 				}else{
 					tile.setMaterial(Materials.forestgrass);
 				}
+				
+				if(Math.random() < 0.01)
+					tile.setMaterial(Materials.sticks);
+				
 			}else if(t < 0.8){
 				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.03)

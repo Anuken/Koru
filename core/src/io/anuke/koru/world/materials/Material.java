@@ -25,6 +25,7 @@ public abstract class Material{
 	protected float offset = 0;
 	protected float[] offsets;
 	protected int variants = 1;
+	protected boolean interactable = false;
 	
 	public Color color = Color.CLEAR;
 	
@@ -70,6 +71,10 @@ public abstract class Material{
 	
 	public boolean collisionsEnabled(){
 		return collisions;
+	}
+	
+	public boolean interactable(){
+		return interactable;
 	}
 	
 	public int id(){

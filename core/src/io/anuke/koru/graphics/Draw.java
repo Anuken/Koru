@@ -5,6 +5,7 @@ import static io.anuke.ucore.UCore.clamp;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.utils.Resources;
@@ -12,6 +13,21 @@ import io.anuke.ucore.graphics.ShapeUtils;
 
 
 public class Draw{
+	
+	public static void shader(ShaderProgram shader, Object...params){
+		boolean rendering = batch().isDrawing();
+		
+		if(rendering)
+			batch().end();
+		
+		if(shader != null)
+		Shaders.setParams(shader, params);
+		
+		batch().setShader(shader);
+		
+		if(rendering)
+			batch().begin();
+	}
 	
 	public static void rect(String name, float x, float y){
 		TextureRegion region = Resources.region(name);
@@ -40,6 +56,11 @@ public class Draw{
 	public static void rect(String name, float x, float y, float w, float h){
 		TextureRegion region = Resources.region(name);
 		Resources.batch().draw(region, x - w/2, y - h/2, w, h);
+	}
+	
+	public static void crect(String name, float x, float y, float w, float h){
+		TextureRegion region = Resources.region(name);
+		Resources.batch().draw(region, x, y, w, h);
 	}
 	
 	public static void linerect(float x, float y, float w, float h){

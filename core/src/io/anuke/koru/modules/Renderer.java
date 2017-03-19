@@ -17,9 +17,7 @@ import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.FrameBufferLayer;
-import io.anuke.koru.graphics.LightEffect;
-import io.anuke.koru.graphics.RenderPool;
+import io.anuke.koru.graphics.*;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.InputHandler;
@@ -30,8 +28,8 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.spritesystem.*;
@@ -54,13 +52,11 @@ public class Renderer extends Module<Koru>{
 	public PostProcessor processor;
 	public LightEffect light;
 	public KoruEntity player;
-	public SpriteRenderable block;
 	public Sprite shadowSprite;
-	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2]
-			[World.chunksize * World.loadrange * 2];
+	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	public GifRecorder recorder;
-	
+
 	private boolean init;
 
 	public Renderer() {
@@ -78,25 +74,28 @@ public class Renderer extends Module<Koru>{
 		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
+		Shaders.loadAll();
 
 		RenderableHandler.instance().setLayerManager(this::drawRenderables);
 
 		addEffects();
 		loadMaterialColors();
-		
+
 		Koru.log("Loaded resources.");
 	}
-	
+
 	void loadMaterialColors(){
-		
+
 		for(Material material : Material.getAll()){
-			if(material.getType().tile()) continue;
-			
+			if(material.getType().tile())
+				continue;
+
 			TextureRegion region = atlas.findRegion(material.name());
-			if(region == null) continue;
-			
+			if(region == null)
+				continue;
+
 			Pixmap pixmap = atlas.getPixmapOf(region);
-			
+
 			material.color = new Color(pixmap.getPixel(region.getRegionX(), region.getRegionY()));
 		}
 	}
@@ -115,18 +114,23 @@ public class Renderer extends Module<Koru>{
 
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
-		
-		(block = new SpriteRenderable(Resources.region("block")).sort(Sorter.object).sprite()).add();
+
+		new LambdaRenderable(this::drawBlockOverlay).add();
+		new LambdaRenderable(-512 * 2-2, Sorter.tile, this::drawTileOverlay).add();
+
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
 	}
 
 	@Override
 	public void update(){
-		if(!init && processor.getCombinedBuffer().height < Gdx.graphics.getHeight()){resetProcessor(); init = true;}
-		
+		if(!init && processor.getCombinedBuffer().height < Gdx.graphics.getHeight()){
+			resetProcessor();
+			init = true;
+		}
+
 		long start = TimeUtils.nanoTime();
-		
+
 		light.setColor(world.getAmbientColor());
 
 		updateCamera();
@@ -134,28 +138,28 @@ public class Renderer extends Module<Koru>{
 
 		doRender();
 		updateCamera();
-		
+
 		if(Profiler.update())
-		Profiler.renderTime = TimeUtils.timeSinceNanos(start);
+			Profiler.renderTime = TimeUtils.timeSinceNanos(start);
 	}
 
 	void doRender(){
-		
-		
+
 		processor.capture();
 
 		clearScreen();
 		batch.begin();
 		drawMap();
 		RenderableHandler.instance().renderAll(batch);
-		drawOverlay();
-		
-		if(debug) Koru.getEngine().getSystem(CollisionDebugSystem.class).update(0);
-		
+		//drawOverlay();
+
+		if(debug)
+			Koru.getEngine().getSystem(CollisionDebugSystem.class).update(0);
+
 		batch.end();
 
 		processor.render();
-		
+
 		batch.setProjectionMatrix(matrix);
 		recorder.update();
 		batch.begin();
@@ -164,49 +168,78 @@ public class Renderer extends Module<Koru>{
 		batch.setColor(Color.WHITE);
 	}
 
-	void drawOverlay(){
+	void drawTileOverlay(LambdaRenderable r){
 
-		unproject();
+		setCursorTile();
 
-		if(vector.x < 0)
-			vector.x -= 12;
-		if(vector.y < 0)
-			vector.y -= 12;
-		InventoryComponent inv = player.getComponent(InventoryComponent.class);
+		int x = cursorX();
+		int y = cursorY();
 
-		block.set((int) (vector.x / 12) * 12, (int) (vector.y / 12) * 12);
-		Tile tile = world.getTile(getModule(Input.class).cursorblock());
+		Tile tile = world.getTile(x, y);
 
-		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer
-				&& inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
+		if(tile != null && tile.block().interactable()
+				&& Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach){
+
+			Draw.shader(Shaders.outline, 0.6f, 0.6f, 1f, 1f);
+			//Draw.color(Color.BLACK);
 			
-			if(Vector2.dst(World.world((int) (vector.x / 12)), World.world((int) (vector.y / 12)), player.getX(), player.getY()) < InputHandler.reach 
-					&& World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
-				block.sprite.setColor(0.5f, 1f, 0.5f, 0.3f);
+			Draw.crect("sticks", x * World.tilesize, y * World.tilesize, 12, 12);
+
+			Draw.shader(null);
+		}
+	}
+
+	void drawBlockOverlay(LambdaRenderable r){
+
+		setCursorTile();
+
+		int x = cursorX();
+		int y = cursorY();
+
+		r.layer = y * World.tilesize;
+
+		r.sort(Sorter.object);
+
+		InventoryComponent inv = player.inventory();
+
+		Tile tile = world.getTile(x, y);
+
+		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer && inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
+
+			if(Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach && World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
+				Draw.color(0.5f, 1f, 0.5f, 0.3f);
 			}else{
-				block.sprite.setColor(1f, 0.5f, 0.5f, 0.3f);
+				Draw.color(1f, 0.5f, 0.5f, 0.3f);
 			}
-			
+
 			Material result = BlockRecipe.getRecipe(inv.recipe).result();
 
 			if(result.getType() == MaterialTypes.tile){
-				block.region(Resources.region("blank"));
-				block.sprite.setSize(12, 12);
+				Draw.crect("blank", x, y, 12, 12);
 			}else{
-				block.region(Resources.region("block"));
-				block.sprite.setSize(12, 20);
-				block.sort(Sorter.object);
+				Draw.crect("block", x, y, 12, 20);
 			}
-		}else{
-			block.color(Color.CLEAR);
+
+			Draw.color();
 		}
+	}
+
+	void setCursorTile(){
+		unproject();
+	}
+
+	int cursorX(){
+		return World.tile(vector.x);
+	}
+
+	int cursorY(){
+		return World.tile(vector.y);
 	}
 
 	void drawMap(){
 		if(Gdx.graphics.getFrameId() == 5)
 			updateTiles();
-		int camx = Math.round(camera.position.x / World.tilesize),
-				camy = Math.round(camera.position.y / World.tilesize);
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		if(lastcamx != camx || lastcamy != camy){
 			updateTiles();
@@ -216,14 +249,9 @@ public class Renderer extends Module<Koru>{
 		lastcamy = camy;
 	}
 
-	/**
-	 * If resetID does not equal 0, it will only updated tiles whose ID is
-	 * resetID
-	 */
 	public void updateTiles(){
 
-		int camx = Math.round(camera.position.x / World.tilesize),
-				camy = Math.round(camera.position.y / World.tilesize);
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		for(int chunkx = 0; chunkx < World.loadrange * 2; chunkx++){
 			for(int chunky = 0; chunky < World.loadrange * 2; chunky++){
@@ -240,7 +268,7 @@ public class Renderer extends Module<Koru>{
 
 						if(renderables[rendx][rendy] != null)
 							renderables[rendx][rendy].free();
-						
+
 						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey)
 							continue;
 
@@ -252,33 +280,16 @@ public class Renderer extends Module<Koru>{
 						}else{
 							renderables[rendx][rendy] = new RenderableList();
 						}
-						
-						
-						if(tile.topTile() != Materials.air && Math
-								.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24
-								&& Math.abs(
-										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 36){
+
+						if(tile.topTile() != Materials.air && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24 && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 36){
 							tile.topTile().getType().draw(renderables[rendx][rendy], tile.topTile(), tile, worldx, worldy);
-							
+
 							if(tile.light < 127){
-								RenderPool.get("lightshadow")
-								.dark()
-								.set(worldx*12 + 6, worldy*12+12)
-								.size(52, 52)
-								.center()
-								.alpha(1f-tile.light())
-								.add(renderables[rendx][rendy]);
+								RenderPool.get("lightshadow").dark().set(worldx * 12 + 6, worldy * 12 + 12).size(52, 52).center().alpha(1f - tile.light()).add(renderables[rendx][rendy]);
 							}
 						}
 
-						if(!tile.blockEmpty()
-								&& Math.abs(
-										worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom
-												+ 12 + tile.block().getType().size()
-								&& Math.abs(
-										worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom
-												+ 12 + tile.block().getType().size()){
+						if(!tile.blockEmpty() && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 12 + tile.block().getType().size() && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 12 + tile.block().getType().size()){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
 					}
@@ -289,42 +300,31 @@ public class Renderer extends Module<Koru>{
 
 	public void drawGUI(){
 		//font.setUseIntegerPositions(false);
-		
-		if(Gdx.input.isKeyJustPressed(Keys.GRAVE)) consoleOpen = !consoleOpen;
-		if(Gdx.input.isKeyJustPressed(Keys.F3)) debug = !debug;
-		
+
+		if(Gdx.input.isKeyJustPressed(Keys.GRAVE))
+			consoleOpen = !consoleOpen;
+		if(Gdx.input.isKeyJustPressed(Keys.F3))
+			debug = !debug;
+
 		font.getData().setScale(1f / GUIscale);
 		font.setColor(Color.WHITE);
-		
+
 		font.draw(batch, Gdx.graphics.getFramesPerSecond() + "[WHITE] FPS", 0, uiheight());
-		
+
 		NumberFormat f = DecimalFormat.getInstance();
-		
+
 		if(debug){
-			font.draw(batch, 
-			"[CORAL]entities: " +t.engine.getEntities().size() +
-			"\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak +
-			"\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + 
-			"\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() +
-			"\n[ORANGE]render ns: " + f.format(Profiler.renderTime)+
-			"\nworld ns: " + f.format(Profiler.engineTime)+
-			"\nui ns: " + f.format(Profiler.uiTime)+ 
-			"\nnetwork ns: " + f.format(Profiler.networkTime)+ 
-			"\nengine ns: " + f.format(Profiler.worldTime)+
-			"\nmodule ns: " + f.format(Profiler.moduleTime)+
-			"\ntotal ns: " + f.format(Profiler.totalTime)
-			, 0, uiheight() - 5);
-			
-			font.draw(batch, 
-					"[SKY]" +t.engine.getEntities().toString().replace(",", "\n"),
-					 uiwidth(), uiheight(), 0, Align.topRight, false);
+			font.draw(batch, "[CORAL]entities: " + t.engine.getEntities().size() + "\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak + "\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + "\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() + "\n[ORANGE]render ns: " + f.format(Profiler.renderTime) + "\nworld ns: " + f.format(Profiler.engineTime) + "\nui ns: "
+					+ f.format(Profiler.uiTime) + "\nnetwork ns: " + f.format(Profiler.networkTime) + "\nengine ns: " + f.format(Profiler.worldTime) + "\nmodule ns: " + f.format(Profiler.moduleTime) + "\ntotal ns: " + f.format(Profiler.totalTime), 0, uiheight() - 5);
+
+			font.draw(batch, "[SKY]" + t.engine.getEntities().toString().replace(",", "\n"), uiwidth(), uiheight(), 0, Align.topRight, false);
 		}
-		
+
 		if(consoleOpen){
-			font.getData().setScale(font.getData().scaleX*0.75f);
+			font.getData().setScale(font.getData().scaleX * 0.75f);
 			font.draw(batch, "[CORAL]" + Koru.getLog(), 0, uiheight() - 35);
 		}
-		
+
 		font.getData().setScale(1f / GUIscale);
 
 		String launcher = "";
@@ -345,24 +345,17 @@ public class Renderer extends Module<Koru>{
 
 		if(debug){
 			GridPoint2 cursor = getModule(Input.class).cursorblock();
-			float cx = Gdx.input.getX() / GUIscale,
-					cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
+			float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
 			if(!world.inClientBounds(cursor.x, cursor.y)){
 				font.draw(batch, "[RED]Out of bounds.", cx, cy);
 
 				return;
 			}
-			
+
 			Tile tile = world.getTile(cursor);
 
 			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
-			font.draw(batch,
-							"[GREEN]" +cursor.x + ", " + cursor.y + " " + tile
-							+ "\n[CORAL]chunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY())
-							+ "\n[YELLOW]" + "chunk pos: " + chunk.x + ", " + chunk.y
-							+ "\n[ORANGE]pos: " + vector.x + ", " + vector.y
-							+ "\n[GREEN]time: " + world.time,
-					cx, cy);
+			font.draw(batch, "[GREEN]" + cursor.x + ", " + cursor.y + " " + tile + "\n[CORAL]chunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY()) + "\n[YELLOW]" + "chunk pos: " + chunk.x + ", " + chunk.y + "\n[ORANGE]pos: " + vector.x + ", " + vector.y + "\n[GREEN]time: " + world.time, cx, cy);
 		}
 
 	}
@@ -457,7 +450,7 @@ public class Renderer extends Module<Koru>{
 		camera.setToOrtho(false, width / scale, height / scale);
 		light.setSize(width, height);
 	}
-	
+
 	void resetProcessor(){
 		processor.dispose();
 		processor = new PostProcessor(false, true, true);

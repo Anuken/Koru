@@ -36,6 +36,11 @@ public class KoruRenderable extends SpriteRenderable{
 	public KoruRenderable dark(){
 		return (KoruRenderable) layer(Layers.dark);
 	}
+	
+	public KoruRenderable color(float r, float g, float b, float a){
+		sprite.setColor(r, g, b, a);
+		return this;
+	}
 
 	public KoruRenderable addShadow(RenderableGroup group){
 		group.add("shadow", generateShadow());

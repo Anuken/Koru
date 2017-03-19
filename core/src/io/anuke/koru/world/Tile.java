@@ -70,7 +70,7 @@ public class Tile implements Poolable{
 	}
 	
 	public boolean canAddTile(){
-		return top+1 < layers.length;
+		return top+1 < LAYER_SIZE;
 	}
 	
 	public boolean canRemoveTile(){

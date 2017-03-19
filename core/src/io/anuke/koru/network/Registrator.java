@@ -126,11 +126,11 @@ public class Registrator{
 		public Tile read(Kryo k, Input i, Class<Tile> c){
 			Tile tile = Tile.unloadedTile();
 			
-			
 			tile.layers = new int[]{k.readObject(i, int.class)};
 			tile.blockid = k.readObject(i, int.class);
 			tile.light = k.readObject(i, byte.class);
 			tile.top = k.readObject(i, byte.class);
+			
 			return tile;
 		}
 

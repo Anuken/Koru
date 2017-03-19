@@ -76,6 +76,19 @@ public class MaterialTypes{
 		}
 	};
 	
+	public static final MaterialType overlay = new MaterialType(false, false){
+		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			
+			String name = material.name() + variantString(x, y, material);
+			
+			sprite(name)
+			.set(tile(x), tile(y)).layer(-512*2).center().add(group);
+			
+			sprite(name).color(0, 0, 0, 0.1f)
+			.set(tile(x), tile(y)-1).layer(-512*2+1).center().add(group);
+		}
+	};
+	
 	public static final MaterialType tree = new MaterialType(false, true){
 		{
 			color = Hue.rgb(80, 53, 30);
