@@ -14,7 +14,7 @@ public class Cursors{
 		cursor = name;
 	}
 	
-	private static Cursor loadCursor(String name){
+	public static Cursor loadCursor(String name){
 		Cursor cursor = cursors.get(name);
 		
 		if(cursor == null){

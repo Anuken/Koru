@@ -23,7 +23,7 @@ public class PlayerRenderer extends EntityRenderer{
 				+(render.walkframe > 0 ? "-"+((int)(render.walkframe/7))%3 : ""), 
 					entity.getX() + (render.direction == 3 ? 12 : 0), entity.getY(), render.direction ==3 ? - 12 : 12, 12);
 			
-			Draw.tcolor(Color.CORAL);
+			Draw.tcolor(Color.YELLOW);
 			
 			if(!entity.get(ConnectionComponent.class).local)
 			Draw.text(entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14);

@@ -18,14 +18,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.util.CursorManager;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.VisTextField.TextFieldListener;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.ui.ChatTable;
-import io.anuke.koru.ui.InventoryMenu;
-import io.anuke.koru.ui.RecipeMenu;
+import io.anuke.koru.graphics.Cursors;
+import io.anuke.koru.ui.*;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.modules.Module;
 
@@ -49,6 +49,8 @@ public class UI extends Module<Koru> {
 		setupMenu();
 		setupChat();
 		setupUI();
+		
+		CursorManager.setDefaultCursor(Cursors.loadCursor("cursor"));
 	}
 	
 	public void loadSkin(){
@@ -147,7 +149,7 @@ public class UI extends Module<Koru> {
 		menutable = new VisTable();
 		menutable.setFillParent(true);
 		stage.addActor(menutable);
-		menutable.background("window");
+		menutable.background("window-noborder");
 		menutable.center();
 		
 		connectfail = new VisLabel("Connection Failed!");
@@ -156,7 +158,13 @@ public class UI extends Module<Koru> {
 		connectlabel = new VisLabel("Connecting...");
 
 		VisTextButton button = new VisTextButton("Connect");
+		
+		UIUtils.setCursors(button);
+		
 		VisTextField name = new VisTextField(System.getProperty("user.name"));
+		
+		UIUtils.setCursors(name);
+
 		// enter key handling
 		name.setTextFieldListener(new TextFieldListener() {
 			@Override
@@ -169,10 +177,10 @@ public class UI extends Module<Koru> {
 			}
 		});
 
-		menutable.add(connectfail).colspan(2).padBottom(20).row();
-		menutable.add(connectlabel).colspan(2).padBottom(20).row();
-		menutable.add(new VisLabel("Name: "));
-		menutable.add(name).row();
+		menutable.add(connectfail).colspan(2).padBottom(20).minHeight(100).minWidth(300).row();
+		menutable.add(connectlabel).colspan(2).row();
+		menutable.add(new VisLabel("Name: ")).padBottom(6f).align(Align.right);
+		menutable.add(name).padBottom(6f).row();
 		menutable.add(button).colspan(2).fillX().padTop(5);
 
 		button.addListener(new ClickListener() {

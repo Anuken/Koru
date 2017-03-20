@@ -78,6 +78,8 @@ public class Renderer extends Module<Koru>{
 		Shaders.loadAll();
 
 		RenderableHandler.instance().setLayerManager(this::drawRenderables);
+		Cursors.setCursor("cursor");
+		Cursors.updateCursor();
 
 		addEffects();
 		loadMaterialColors();
