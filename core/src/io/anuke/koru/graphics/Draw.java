@@ -41,6 +41,12 @@ public class Draw{
 	}
 	
 	/**Grounded rect*/
+	public static void grect(String name, float x, float y, float w, float h){
+		TextureRegion region = Resources.region(name);
+		Resources.batch().draw(region, x - region.getRegionWidth()/2, y, w, h);
+	}
+	
+	/**Grounded rect*/
 	public static void grect(String name, float x, float y, float rotation){
 		TextureRegion region = Resources.region(name);
 		Resources.batch().draw(region, x - region.getRegionWidth()/2, y, region.getRegionWidth()/2, region.getRegionHeight()/2, 

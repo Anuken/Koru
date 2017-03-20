@@ -19,7 +19,9 @@ public class PlayerRenderer extends EntityRenderer{
 		
 		draw(l->{
 			l.layer = entity.getY();
-			Draw.grect("crab", entity.getX(), entity.getY());
+			Draw.grect("crab-" + (render.direction == 1 || render.direction == 3 ? "s" : render.direction == 2 ? "b" : "f")
+				+(render.walkframe > 0 ? "-"+((int)(render.walkframe/7))%3 : ""), 
+					entity.getX() + (render.direction == 3 ? 12 : 0), entity.getY(), render.direction ==3 ? - 12 : 12, 12);
 			
 			Draw.tcolor(Color.CORAL);
 			

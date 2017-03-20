@@ -89,13 +89,9 @@ public class Input extends Module<Koru>{
 		}
 
 		vector.limit(speed);
-		float lastx = player.getX();
-		float lasty = player.getY();
-		
-		
 		player.collider().collider.applyImpulse(vector.x*delta(), vector.y*delta());
 		
-		if(Vector2.dst(lastx, lasty, player.getX(), player.getY()) > 0.05f){
+		if(player.collider().collider.getVelocity().len() > 0.05){
 			render.walkframe += delta();
 		}else{
 			render.walkframe = 0;
@@ -135,13 +131,14 @@ public class Input extends Module<Koru>{
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (button == Buttons.LEFT) {
+	public boolean touchDown(int screenX, int screenY, int pointer, int button){
+		if (button == Buttons.LEFT){
 			sendInput(InputType.leftclick_down, blockx, blocky);
 			
 			if(player.inventory().hotbarStack() == null || player.inventory().hotbarStack().item.type() == ItemType.material)
-			sendInput(InputType.interact, blockx, blocky);
-		} else if (button == Buttons.RIGHT) {
+				sendInput(InputType.interact, blockx, blocky);
+		
+		}else if (button == Buttons.RIGHT){
 			sendInput(InputType.rightclick_down);
 		}
 		
