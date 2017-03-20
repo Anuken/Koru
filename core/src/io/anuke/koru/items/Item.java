@@ -19,6 +19,6 @@ public interface Item{
 	public String name();
 	
 	public default String formalName(){
-		return name();
+		return name().substring(0, 1).toUpperCase() + name().substring(1);
 	}
 }

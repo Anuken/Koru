@@ -63,7 +63,7 @@ public class ChatTable extends VisTable{
 	public void draw(Batch batch, float alpha){
 		batch.setColor(shadowColor);
 		if(chatOpen)
-			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight());
+			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight()-1);
 		
 		font.getData().setScale(2f);
 		font.getData().down = -21.5f;

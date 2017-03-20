@@ -9,6 +9,10 @@ public enum Items implements Item{
 		public boolean breaks(Material mat){
 			return mat.getType() == MaterialTypes.tree || mat.name().contains("wood") || mat.name().contains("torch");
 		}
+		
+		public String formalName(){
+			return "Wooden Axe";
+		}
 	},
 	woodpickaxe(ItemType.tool, 1f){
 		public boolean breaks(Material mat){

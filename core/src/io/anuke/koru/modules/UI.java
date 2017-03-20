@@ -103,7 +103,7 @@ public class UI extends Module<Koru> {
 		pixelparameter.mono = true;
 		pixelparameter.size = 16;
 		pixelparameter.borderWidth = 1;
-		pixelparameter.borderColor = new Color(0,0,0,1);
+		pixelparameter.borderColor = new Color(0,0,0,1f);
 		pixelparameter.spaceX = -1;
 		
 		
