@@ -106,11 +106,29 @@ public class InventoryMenu extends VisTable{
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
 				TextureRegion region = Resources.region(stacks[x][y].item.name() + "item");
+				
+				
+				batch.setColor(0, 0, 0, 0.1f);
+				batch.draw(region, getX() + getWidth()/2 - region.getRegionWidth()/2*slotsize/16, getY() + getHeight()/2 - region.getRegionHeight()/2*slotsize/16 - 4,
+						region.getRegionWidth()*slotsize/16,
+						region.getRegionHeight()*slotsize/16);
+				
+				batch.setColor(Color.WHITE);
 				batch.draw(region, getX() + getWidth()/2 - region.getRegionWidth()/2*slotsize/16, getY() + getHeight()/2 - region.getRegionHeight()/2*slotsize/16,
 						region.getRegionWidth()*slotsize/16,
 						region.getRegionHeight()*slotsize/16);
+				
 				Resources.font2().getData().setScale(2f);
-				if(stacks[x][y].amount > 1) Resources.font2().draw(batch, stacks[x][y].amount + "", getX()+8, getY() + 54);
+				if(stacks[x][y].amount > 1){
+					
+					Resources.font2().setColor(0, 0, 0, 0.15f);
+					Resources.font2().draw(batch, stacks[x][y].amount + "", getX()+8+2, getY() + 54-2);
+					
+					Resources.font2().setColor(Color.WHITE);
+					Resources.font2().draw(batch, stacks[x][y].amount + "", getX()+8, getY() + 54);
+					
+					
+				}
 				
 			}
 		}

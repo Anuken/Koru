@@ -37,6 +37,7 @@ public class UI extends Module<Koru> {
 	VisTable uitable;
 	VisLabel connectlabel;
 	VisLabel connectfail;
+	VisTable title;
 	Network network;
 
 	public void init() {
@@ -89,6 +90,7 @@ public class UI extends Module<Koru> {
 		BitmapFont largefont = generator.generateFont(largeparameter);
 		BitmapFont borderfont = generator.generateFont(borderparameter);
 
+		
 		skin.add("default-font", font);
 		skin.add("smooth-font", font);
 		skin.add("large-font", largefont);
@@ -146,6 +148,7 @@ public class UI extends Module<Koru> {
 	}
 
 	void setupMenu() {
+		
 		menutable = new VisTable();
 		menutable.setFillParent(true);
 		stage.addActor(menutable);
@@ -181,7 +184,7 @@ public class UI extends Module<Koru> {
 		menutable.add(connectlabel).colspan(2).row();
 		menutable.add(new VisLabel("Name: ")).padBottom(6f).align(Align.right);
 		menutable.add(name).padBottom(6f).row();
-		menutable.add(button).colspan(2).fillX().padTop(5);
+		menutable.add(button).colspan(2).fillX().padTop(5).padBottom(200);
 
 		button.addListener(new ClickListener() {
 			@Override
@@ -193,6 +196,15 @@ public class UI extends Module<Koru> {
 				}
 			}
 		});
+		
+		title = new VisTable();
+		title.setFillParent(true);
+		stage.addActor(title);
+		
+		VisLabel tlabel = new VisLabel("[WHITE]< [SKY]Koru [WHITE]>");
+		tlabel.getStyle().font.getData().markupEnabled = true;
+		tlabel.setFontScale(2f);
+		title.top().add(tlabel).padTop(60f);
 	}
 	
 	void setupChat() {
@@ -207,6 +219,7 @@ public class UI extends Module<Koru> {
 		connectfail.setText(network.getError());
 		menutable.setVisible(!network.connected());
 		uitable.setVisible(network.connected());
+		title.setVisible(!network.connected());
 	}
 
 	@Override

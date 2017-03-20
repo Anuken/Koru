@@ -30,10 +30,8 @@ void main() {
 
 	empty = !empty && any;
 
-	if(!empty){
-	//	gl_FragColor = vec4(texture2D(u_texture, T));
-	}else{
-		gl_FragColor = vec4(mix(u_color.rgb, texture2D(u_texture, T).rgb, 1.0-u_color.a), 1.0);
+	if(empty){
+		gl_FragColor = u_color;
 	}
 
 }
