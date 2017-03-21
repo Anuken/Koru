@@ -4,7 +4,7 @@ import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 
 public enum Items implements Item{
-	stick, wood, pinecone, water, stone,
+	stick, wood, pinecone, water, stone, mushroom,
 	woodaxe(ItemType.tool, 1f){
 		public boolean breaks(Material mat){
 			return mat.getType() == MaterialTypes.tree || mat.name().contains("wood") || mat.name().contains("torch");

@@ -113,6 +113,8 @@ public class Materials{
 	
 	public static final Material mushy = new Material("mushy", object){{
 		variants = 8;
+		interactable = true;
+		addDrop(Items.mushroom, 1);
 	}};
 	
 	public static final Material drybush = new Material("drybush", object){{
@@ -133,6 +135,7 @@ public class Materials{
 	public static final Material oaktree = new Material("oaktree", tree){{
 		variants = 6;
 		offsets(-10, -10, -10, -4, -4, -4);
+		addDrop(Items.wood, 16);
 	}};
 	
 	public static final Material willowtree = new Material("willowtree", tree){{

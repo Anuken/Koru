@@ -233,7 +233,8 @@ public class Renderer extends Module<Koru>{
 			
 			Draw.shader(Shaders.outline, outlineColor.r, outlineColor.g, outlineColor.b, 1f);
 			
-			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), x * World.tilesize, y * World.tilesize, 12, 12);
+			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), 
+					x * World.tilesize, y * World.tilesize + (tile.block().getType() == MaterialTypes.overlay ? 0 : 6));
 
 			Draw.shader(null);
 		}
