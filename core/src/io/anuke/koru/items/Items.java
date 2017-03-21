@@ -52,7 +52,7 @@ public enum Items implements Item{
 	}
 	
 	public boolean breaks(Material mat){
-		return true;
+		return false;
 	}
 	
 	public int getMaxStackSize(){

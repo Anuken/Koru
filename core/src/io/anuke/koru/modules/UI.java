@@ -221,6 +221,10 @@ public class UI extends Module<Koru> {
 		uitable.setVisible(network.connected());
 		title.setVisible(!network.connected());
 	}
+	
+	public boolean mouseOnUI(){
+		return stage.hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true) != null;
+	}
 
 	@Override
 	public void update() {

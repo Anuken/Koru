@@ -20,6 +20,7 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.*;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
+import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.Profiler;
@@ -120,6 +121,7 @@ public class Renderer extends Module<Koru>{
 
 		new LambdaRenderable(this::drawBlockOverlay).add();
 		new LambdaRenderable(-Layers.light-1, Sorter.object, this::drawTileOverlay).add();
+		new LambdaRenderable(-Layers.light-1, Sorter.object, this::drawSelectOverlay).add();
 
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
@@ -136,7 +138,6 @@ public class Renderer extends Module<Koru>{
 		
 		if(getModule(Network.class).connected())
 			Cursors.setCursor("cursor");
-		
 
 		light.setColor(world.getAmbientColor());
 
@@ -156,7 +157,6 @@ public class Renderer extends Module<Koru>{
 	void doRender(){
 
 		processor.capture();
-
 		clearScreen();
 		batch.begin();
 		drawMap();
@@ -177,6 +177,46 @@ public class Renderer extends Module<Koru>{
 		batch.end();
 		batch.setColor(Color.WHITE);
 	}
+	
+	void drawSelectOverlay(LambdaRenderable r){
+		if(getModule(UI.class).mouseOnUI()) return;
+		
+		setCursorTile();
+
+		Tile tile = world.getTile(cursorX(), cursorY());
+		ItemStack stack = player.inventory().hotbarStack();
+		
+		if(stack != null && tile != null && playerReachesBlock()){
+			Material select = null;
+			
+			if(stack.item.breaks(tile.block())){
+				select = tile.block();
+			}else if(stack.item.breaks(tile.topTile()) && tile.canRemoveTile()){
+				select = tile.topTile();
+			}
+			
+			if(select == null) return;
+			
+			if(stack.item.name().contains("pickaxe")){
+				Cursors.setCursor("pickaxe");
+			}else if(stack.item.name().contains("axe")){
+				Cursors.setCursor("axe");
+			}
+			
+			String name = select.name() + 
+					select.getType().drawString(cursorX(), cursorY(), select);
+			
+			TextureRegion region = Resources.region(name);
+			
+			Draw.shader(Shaders.inline, outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
+			
+			Draw.grect(name, cursorX()*12 + 6, cursorY()*12 + (select.getType() == MaterialTypes.tile
+					 || select.getType() == MaterialTypes.block ? 0 : 6) + select.getType().variantOffset(cursorX(), cursorY(), select));
+			
+			Draw.shader(null);
+			
+		}
+	}
 
 	void drawTileOverlay(LambdaRenderable r){
 
@@ -187,18 +227,15 @@ public class Renderer extends Module<Koru>{
 
 		Tile tile = world.getTile(x, y);
 
-		if(tile != null && tile.block().interactable()
-				&& Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach){
+		if(tile != null && tile.block().interactable() && playerReachesBlock()){
 			
 			Cursors.setCursor("select");
-
+			
 			Draw.shader(Shaders.outline, outlineColor.r, outlineColor.g, outlineColor.b, 1f);
 			
-			Draw.crect("sticks", x * World.tilesize, y * World.tilesize, 12, 12);
+			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), x * World.tilesize, y * World.tilesize, 12, 12);
 
 			Draw.shader(null);
-			
-			//Draw.text("Q to collect", x*World.tilesize, y*World.tilesize);
 		}
 	}
 
@@ -226,15 +263,20 @@ public class Renderer extends Module<Koru>{
 			}
 
 			Material result = BlockRecipe.getRecipe(inv.recipe).result();
-
+			
+			
 			if(result.getType() == MaterialTypes.tile){
-				Draw.crect("blank", x, y, 12, 12);
+				Draw.crect("blank", x*World.tilesize, y*World.tilesize, 12, 12);
 			}else{
-				Draw.crect("block", x, y, 12, 20);
+				Draw.crect("block", x*World.tilesize, y*World.tilesize, 12, 20);
 			}
 
 			Draw.color();
 		}
+	}
+	
+	boolean playerReachesBlock(){
+		return Vector2.dst(World.world(cursorX()), World.world(cursorY()), player.getX(), player.getY()) < InputHandler.reach;
 	}
 
 	void setCursorTile(){

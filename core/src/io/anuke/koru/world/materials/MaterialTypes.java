@@ -19,7 +19,7 @@ public class MaterialTypes{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			if(tile.block().getType() == block) return;
 			
-			sprite(material.name() + variantString(x, y, material))
+			sprite(material.name() + drawString(x, y, material))
 					.set(utile(x), utile(y)).layer(-material.id() * 2 - tile.top*3).add(group);
 			
 			if(world().blends(x, y, material))
@@ -51,7 +51,7 @@ public class MaterialTypes{
 	public static final MaterialType water = new MaterialType(){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
-			sprite((material.name()  + variantString(x, y, material)))
+			sprite((material.name()  + drawString(x, y, material)))
 					.set(x * World.tilesize, y * World.tilesize).layer(-material.id() * 2).add(group);
 			
 			if(world().blends(x, y, material))
@@ -79,7 +79,7 @@ public class MaterialTypes{
 	public static final MaterialType overlay = new MaterialType(false, false){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
-			String name = material.name() + variantString(x, y, material);
+			String name = material.name() + drawString(x, y, material);
 			
 			sprite(name)
 			.set(tile(x), tile(y)).layer(-512*2).center().add(group);
@@ -97,7 +97,7 @@ public class MaterialTypes{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float offset = variantOffset(x, y, material);
 			
-			sprite((material.name() + variantString(x, y, material)))
+			sprite((material.name() + drawString(x, y, material)))
 					.set(tile(x), tile(y) + offset).layer(tile(y)).centerX()
 					.sort(Sorter.object)
 					.addShadow(group, -offset).add(group);
@@ -116,7 +116,7 @@ public class MaterialTypes{
 	
 	public static final MaterialType object = new MaterialType(false, false){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			sprite((material.name() + variantString(x, y, material)))
+			sprite((material.name() + drawString(x, y, material)))
 			.layer(tile(y))
 			.set(tile(x), tile(y) + material.offset())
 			.centerX().sort(Sorter.object)

@@ -47,7 +47,7 @@ public abstract class MaterialType{
 	}
 	
 	/**Variant string.*/
-	String variantString(int x, int y, Material material){
+	public String drawString(int x, int y, Material material){
 		return material.variants() > 1 ? (rand(x,y, material.variants()) + "") : "";
 	}
 	
@@ -57,7 +57,7 @@ public abstract class MaterialType{
 	}
 	
 	/**Offset at a certain location.*/
-	float variantOffset(int x, int y, Material material){
+	public float variantOffset(int x, int y, Material material){
 		return (material.offsets == null ? material.offset : material.offsets[variantNum(x,y, material)]);
 	}
 	
