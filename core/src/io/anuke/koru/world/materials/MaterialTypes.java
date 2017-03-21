@@ -63,16 +63,17 @@ public class MaterialTypes{
 	
 	public static final MaterialType block = new MaterialType(false, true){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
-			sprite((material.name()))
-			.utile(x, y)
-			.scale(0, 0.001f)
-			.sort(Sorter.object).add(group);
-			
 			sprite(("walldropshadow"))
 			.shadow()
 			.tile(x, y)
 			.center()
 			.sort(Sorter.tile).add(group);
+			
+			sprite((material.name()))
+			.utile(x, y)
+			.scale(0, 0.001f)
+			.sort(Sorter.object).add(group);
+			
 		}
 	};
 	

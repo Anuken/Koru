@@ -208,11 +208,14 @@ public class Renderer extends Module<Koru>{
 			
 			TextureRegion region = Resources.region(name);
 			
+			RenderableList list = getRenderable(cursorX(), cursorY());
+			
+			if(list.renderables.size == 0) return;
+			
+			KoruRenderable b = (KoruRenderable)(select.getType().tile() ? list.renderables.first() : list.renderables.peek());
+			
 			Draw.shader(Shaders.inline, outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
-			
-			Draw.grect(name, cursorX()*12 + 6, cursorY()*12 + (select.getType() == MaterialTypes.tile
-					 || select.getType() == MaterialTypes.block ? 0 : 6) + select.getType().variantOffset(cursorX(), cursorY(), select));
-			
+			b.draw(batch);
 			Draw.shader(null);
 			
 		}
@@ -303,6 +306,11 @@ public class Renderer extends Module<Koru>{
 
 		lastcamx = camx;
 		lastcamy = camy;
+	}
+	
+	RenderableList getRenderable(int worldx, int worldy){
+		int camx = world.toChunkCoords(camera.position.x), camy =world.toChunkCoords(camera.position.y);
+		return renderables[(worldx + renderables.length/2 - camx*World.chunksize)][(worldy + renderables[0].length/2 - camy*World.chunksize)];
 	}
 
 	public void updateTiles(){

@@ -74,6 +74,10 @@ public class Draw{
 		Resources.batch().draw(region, x, y);
 	}
 	
+	public static void crect(TextureRegion region, float x, float y){
+		Resources.batch().draw(region, x, y);
+	}
+	
 	public static void linerect(float x, float y, float w, float h){
 		ShapeUtils.rect(batch(), x, y, w, h, 1);
 	}
