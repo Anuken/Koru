@@ -2,7 +2,6 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
@@ -18,13 +17,17 @@ public class SyncSystem extends KoruSystem{
 	public SyncSystem(){
 		super(Family.all(PositionComponent.class, ConnectionComponent.class).get());
 	}
+	
+	public void update(float delta){
+		if(Timers.get(Network.packetFrequency))
+			super.update(delta);
+	}
 
 	@Override
 	protected void processEntity(KoruEntity player, float delta){
-		if(!Timers.get(Network.packetFrequency)) return;
-
-		WorldUpdatePacket packet = new WorldUpdatePacket();
 		
+		WorldUpdatePacket packet = new WorldUpdatePacket();
+
 		getEngine().map().getNearbySyncables(player.getX(), player.getY(), syncrange, (entity)->{
 			if(entity == player) return;
 			packet.updates.put(entity.getID(), entity.get(SyncComponent.class).type.write(entity));
@@ -81,8 +84,8 @@ public class SyncSystem extends KoruSystem{
 				float x = data.get(0);
 				float y = data.get(1);
 				
-				if(Vector2.dst(entity.getX(), entity.getY(), x, y) > 0.1f){
-					entity.get(RenderComponent.class).walkframe += Gdx.graphics.getDeltaTime()*60f*3f;
+				if(entity.collider().collider.getVelocity().len() > 0.05f){
+					entity.get(RenderComponent.class).walkframe += Gdx.graphics.getDeltaTime()*60f;
 				}else{
 					entity.get(RenderComponent.class).walkframe = 0;
 				}

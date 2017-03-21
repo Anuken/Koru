@@ -1,9 +1,11 @@
 package io.anuke.koru.renderers;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.graphics.Draw;
+import io.anuke.koru.utils.Resources;
 
 public class PlayerRenderer extends EntityRenderer{
 	AnimationType animation;
@@ -23,12 +25,15 @@ public class PlayerRenderer extends EntityRenderer{
 				+(render.walkframe > 0 ? "-"+((int)(render.walkframe/7))%3 : ""), 
 					entity.getX() + (render.direction == 3 ? 12 : 0), entity.getY(), render.direction ==3 ? - 12 : 12, 12);
 			
-			Draw.tcolor(Color.YELLOW);
+			if(!entity.get(ConnectionComponent.class).local){
+				Resources.font2().setColor(Color.YELLOW);
+				
+				Resources.font2().getData().setScale(1f/2f);
+				Resources.font2().draw(Resources.batch(), entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14, 0, Align.center, false);
 			
-			if(!entity.get(ConnectionComponent.class).local)
-			Draw.text(entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14);
+				Resources.font2().setColor(Color.WHITE);
+			}
 			
-			Draw.tcolor();
 		});
 		
 		drawShadow("crab", 1, entity);

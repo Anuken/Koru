@@ -5,7 +5,6 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.systems.KoruEngine;
-import io.anuke.koru.utils.Hitbox;
 
 @Synced
 public class ColliderComponent implements KoruComponent{
@@ -14,7 +13,6 @@ public class ColliderComponent implements KoruComponent{
 	public transient float terrainScl = 0.7f; //how much shorter the hitbox becomes when colliding with terrain
 	public transient boolean grounded = true;
 	public transient float lastx, lasty; //last collider x/y
-	public transient Hitbox terrain = new Hitbox();
 	public transient boolean init = false;
 	
 	@Override

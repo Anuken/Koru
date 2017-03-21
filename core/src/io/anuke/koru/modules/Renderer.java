@@ -212,7 +212,7 @@ public class Renderer extends Module<Koru>{
 			
 			if(list.renderables.size == 0) return;
 			
-			KoruRenderable b = (KoruRenderable)(select.getType().tile() ? list.renderables.first() : list.renderables.peek());
+			KoruRenderable b = (KoruRenderable)(list.renderables.peek());
 			
 			Draw.shader(Shaders.inline, outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
 			b.draw(batch);

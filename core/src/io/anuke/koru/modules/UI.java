@@ -118,6 +118,7 @@ public class UI extends Module<Koru> {
 		
 		BitmapFont pixelfont2 = pgenerator.generateFont(pixelparameter2);
 		pixelfont2.getData().setScale(2f);
+		pixelfont2.setUseIntegerPositions(false);
 		skin.add("pixel-font-noborder", pixelfont2);
 
 		skin.load(skinFile);

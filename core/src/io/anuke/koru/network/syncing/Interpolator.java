@@ -10,13 +10,14 @@ public class Interpolator{
 	static final float correctrange = 10f;
 	static Vector2 temp1 = new Vector2();
 	static Vector2 temp2 = new Vector2();
-	static float alpha = 0.18f;
+	static float alpha = 0.2f;
 	long lastupdate = -1;
 	float updateframes = 1f;
 	float lastx, lasty;
 
 	public void push(KoruEntity e, float x, float y){
 		if(lastupdate != -1) updateframes = ((System.currentTimeMillis() - lastupdate) / 1000f) * 60f;
+		
 		lastupdate = System.currentTimeMillis();
 		lastx = x - e.getX();
 		lasty = y - e.getY();
@@ -37,7 +38,7 @@ public class Interpolator{
 		temp1.set(entity.getX(), entity.getY());
 		temp2.set(lastx + entity.getX(),lasty + entity.getY());
 		if(entity.collider() != null){
-			temp2.add(entity.collider().collider.getVelocity());
+			//temp2.add(entity.collider().collider.getVelocity());
 		}
 		temp1.interpolate(temp2, alpha*Koru.delta(), Interpolation.linear);
 		entity.position().set(temp1.x, temp1.y);

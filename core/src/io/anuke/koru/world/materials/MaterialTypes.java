@@ -19,24 +19,20 @@ public class MaterialTypes{
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			if(tile.block().getType() == block) return;
 			
-			sprite(material.name() + drawString(x, y, material))
-					.set(utile(x), utile(y)).layer(-material.id() * 2 - tile.top*3).add(group);
-			
 			if(world().blends(x, y, material))
 				sprite((material.name() + "edge"))
 						.tile(x, y)
 						.center().layer(-material.id() * 2 + 1 - tile.top*3).add(group);
+			
+			sprite(material.name() + drawString(x, y, material))
+					.set(utile(x), utile(y)).layer(-material.id() * 2 - tile.top*3).add(group);
+			
 		}
 	};
 	
 	public static final MaterialType grass = new MaterialType(){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
-			sprite("grass" + (rand <= 8 ? rand : "1"))
-					.utile(x, y).layer(-material.id() * 2)
-					.color(grasscolor.r * material.foilageTint().x,
-							  grasscolor.g * material.foilageTint().y,
-							  grasscolor.b * material.foilageTint().z).add(group);
 			
 			if(world().blends(x, y, material))
 				sprite("grassedge")
@@ -45,6 +41,13 @@ public class MaterialTypes{
 								grasscolor.g * material.foilageTint().y,
 								grasscolor.b * material.foilageTint().z)
 						.center().layer(-material.id() * 2 + 1).add(group);
+			
+			sprite("grass" + (rand <= 8 ? rand : "1"))
+					.utile(x, y).layer(-material.id() * 2)
+					.color(grasscolor.r * material.foilageTint().x,
+							  grasscolor.g * material.foilageTint().y,
+							  grasscolor.b * material.foilageTint().z).add(group);
+			
 		}
 	};
 	

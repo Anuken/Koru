@@ -14,6 +14,7 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
+import io.anuke.koru.systems.CollisionSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
@@ -84,7 +85,9 @@ public class Network extends Module<Koru>{
 					for(Entity entity : data.entities){
 						entityQueue.add((KoruEntity) entity);
 					}
+					Koru.getEngine().getSystem(CollisionSystem.class).getColliderEngine().getAllColliders().clear();
 					getModule(World.class).time = data.time;
+					getModule(ClientData.class).player.collider().init = false;
 					getModule(ClientData.class).player.resetID(data.playerid);
 					entityQueue.add(getModule(ClientData.class).player);
 					Koru.log("Recieved data packet.");
