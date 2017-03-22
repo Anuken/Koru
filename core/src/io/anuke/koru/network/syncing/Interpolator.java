@@ -7,10 +7,10 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 
 public class Interpolator{
-	static final float correctrange = 10f;
+	static final float correctrange = 20f;
 	static Vector2 temp1 = new Vector2();
 	static Vector2 temp2 = new Vector2();
-	static float alpha = 0.2f;
+	static float alpha = 0.18f;
 	long lastupdate = -1;
 	float updateframes = 1f;
 	float lastx, lasty;
@@ -31,7 +31,6 @@ public class Interpolator{
 			lastx = 0;
 			lasty = 0;
 		}
-			
 	}
 	
 	public void update(KoruEntity entity){

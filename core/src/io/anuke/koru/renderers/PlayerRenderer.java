@@ -3,6 +3,7 @@ package io.anuke.koru.renderers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.utils.Resources;
@@ -13,7 +14,13 @@ public class PlayerRenderer extends EntityRenderer{
 	
 	@Override
 	public void render(){
-		
+		if(!entity.connection().local){
+			if(walking){
+				render.walkframe += Koru.delta();
+			}else{
+				render.walkframe = 0;
+			}
+		}
 	}
 	
 	@Override

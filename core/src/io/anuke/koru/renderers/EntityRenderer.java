@@ -12,6 +12,7 @@ public abstract class EntityRenderer{
 	protected boolean init;
 	protected KoruEntity entity;
 	protected RenderComponent render;
+	public boolean walking;
 	
 	protected void render(){}
 	abstract protected void init();

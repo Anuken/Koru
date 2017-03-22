@@ -1,7 +1,6 @@
 package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.Gdx;
 
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
@@ -84,14 +83,13 @@ public class SyncSystem extends KoruSystem{
 				float x = data.get(0);
 				float y = data.get(1);
 				
-				if(entity.collider().collider.getVelocity().len() > 0.05f){
-					entity.get(RenderComponent.class).walkframe += Gdx.graphics.getDeltaTime()*60f;
-				}else{
-					entity.get(RenderComponent.class).walkframe = 0;
-				}
+				entity.collider().collider.getVelocity().set(data.get(4));
+				
+				
+					entity.get(RenderComponent.class).renderer.walking = entity.collider().collider.getVelocity().len() > 0.01f;
+				
 				
 				entity.get(InputComponent.class).input.mouseangle = data.get(2);
-				entity.collider().collider.getVelocity().set(data.get(4));
 				SyncComponent sync = entity.get(SyncComponent.class);
 				
 				if(sync.interpolator != null){
