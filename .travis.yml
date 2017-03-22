@@ -4,6 +4,7 @@ jdk:
 
 script: ./gradlew desktop:dist
 
+
 deploy:
   provider: releases
   skip_cleanup: true
