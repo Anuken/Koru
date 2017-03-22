@@ -113,6 +113,7 @@ public class Materials{
 	
 	public static final Material mushy = new Material("mushy", object){{
 		variants = 8;
+		offsets(-1, -1, -1, -1, -1, -1, -1, -1);
 		interactable = true;
 		addDrop(Items.mushroom, 1);
 	}};

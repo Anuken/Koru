@@ -120,11 +120,13 @@ public class MaterialTypes{
 	
 	public static final MaterialType object = new MaterialType(false, false){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+			float offset = variantOffset(x, y, material);
+			
 			sprite((material.name() + drawString(x, y, material)))
 			.layer(tile(y))
-			.set(tile(x), tile(y) + material.offset())
+			.set(tile(x), tile(y) + offset)
 			.centerX().sort(Sorter.object)
-			.addShadow(group, -material.offset()).add(group);	
+			.addShadow(group, -offset).add(group);	
 		}
 	};
 	
