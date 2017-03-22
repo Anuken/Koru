@@ -64,6 +64,7 @@ public class Koru extends ModuleController<Koru>{
 			e.printStackTrace();
 			
 			//write log
+			if(!System.getProperty("user.name").equals("anuke"))
 			Gdx.files.local("korulog-" + Calendar.getInstance().getTime() + ".log").writeString(UCore.parseException(e), false);
 			//exit, nothing left to do here
 			Gdx.app.exit();
