@@ -3,8 +3,9 @@ jdk:
 - oraclejdk8
 deploy:
   provider: releases
+  skip_cleanup: true
   api_key:
     secure: ocWeaG2tG6U+SLQD+TpiL+w/onM7M5/ZJhtyQazzb94vuvZ0D3AzfljEp62OtwQWevz0WeWoN+/VoXfnUKmsXaaZPBUNuQLlvHuNw4bLr3GfDGHIDFw4/XEdNpv+ARiDkuu5sQnIQFqeuqS3WmKKe+rFW9stp2XV7WCywsqsgpQCLaNloyU9e9wdoySlzdhxTlHB5Q2dB1iUVwL1hn6FFpbPTKfIgSFPhMG8/T1GeI5diTkcYgHJ9xGuaMdqbGtKyvJm3aqBXpMRBZqPwJ65Jqu7KTrqK6s+9IJsf3JSdxOpiFt3PMBM90nw/cTfVoXThZMHRlT1lOLntfdcbtEKDDW9wfdqpH3gPq6fTkTMbUkVdaDX/RnCgq0QkG/8MrNlEyPIMO8NhXTHiutSbL5GfmC9PZXKMZauoJnVju8H583E1/MFwhZIscrSm7IB6JyBP+BqRYCSTLVzyW66SZLHFFt60LXSbuo2WwmiP+Ab6VVH4Uiiz5kCnkHc420YNXjE/1YtVQqAlIUp3geAkUaoyZWhvgL+BETkmY+caLm34jXq7YTns2gIpLHP6qcyyF0T37gQ2nopc/i9zmejIEOT+51rIiuKvPIbcbV/D7+S/H8h3Ldtz7q7MaqrC+U4nOJOpcvqsMu4LGLtxVFK2v0Th4Tpup/GOQCXKibrmgVNYio=
-  file: "/desktop/build/libs/desktop-1.0.jar"
+  file: "desktop/build/libs/desktop-1.0.jar"
   on:
     repo: Anuken/Koru
