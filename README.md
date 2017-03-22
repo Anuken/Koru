@@ -1,3 +1,5 @@
+![](https://travis-ci.org/Anuken/Koru.svg?branch=master)
+
 # Koru
 
 A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing ground for Entity Component systems, AI, world generation, biome generation and shaders.
