@@ -16,7 +16,7 @@ public class DesktopLauncher {
 		config.setMaximized(true);
 		config.setDecorated(true);
 		config.setWindowedMode(d.width, d.height-100);
-		config.setWindowIcon("sprites/icon.png");
+		config.setWindowIcon("sprites/logo.png");
 		config.setTitle("Koru");
 		config.useVsync(false);
 		
