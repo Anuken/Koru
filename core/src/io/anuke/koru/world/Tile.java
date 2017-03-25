@@ -14,6 +14,8 @@ public class Tile implements Poolable{
 	public byte light = (byte)127, top = 0;
 	public int[] layers;
 	public int blockid;
+	/**Note that this is data for the block only.*/
+	public transient TileData data;
 	
 	/**Used for deserialization.*/
 	public static Tile unloadedTile(){
@@ -101,10 +103,14 @@ public class Tile implements Poolable{
 	public void changeEvent(){
 		topTile().changeEvent(this);
 		block().changeEvent(this);
+		
+		//if(){
+			
+		//}
 	}
 
 	public String toString(){
-		return "Tile:[block=" + block() + " tile=" + topTile() + " {"+  light +"} ]";
+		return "Tile: [block=" + block() + " tile=" + topTile() + " {"+  light +"} ]";
 	}
 
 	@Override

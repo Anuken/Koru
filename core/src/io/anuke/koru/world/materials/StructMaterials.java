@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.TileData;
 
 /**Artifical materials built by the player.*/
 public class StructMaterials{
@@ -47,6 +48,7 @@ public class StructMaterials{
 	
 	public static final Material box = new Material("box", StructMaterialTypes.chest){{
 		addDrop(Items.wood, 10);
+		
 	}};
 	
 	public static final Material workbench = new Material("workbench",  StructMaterialTypes.workbench){
@@ -56,6 +58,10 @@ public class StructMaterials{
 		}
 		
 		public void onInteract(Tile tile, int x, int y, KoruEntity entity){
+			
+		}
+		
+		class Data extends TileData{
 			
 		}
 	};
