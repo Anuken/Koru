@@ -9,8 +9,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import io.anuke.koru.Koru;
 
 public class DesktopLauncher {
+	
 	public static void main (String[] arg){
-		
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		config.setMaximized(true);
@@ -21,6 +21,5 @@ public class DesktopLauncher {
 		config.useVsync(false);
 		
 		new Lwjgl3Application(new Koru(), config);
-		
 	}
 }

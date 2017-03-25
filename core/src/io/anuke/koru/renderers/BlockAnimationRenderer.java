@@ -47,7 +47,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		
 		if(material.getType() == MaterialTypes.tree){
 			
-			SpriteRenderable bot = list.renderables.get(1).sprite();
+			SpriteRenderable bot = list.renderables.peek().sprite();
 			
 			int theight = bot.sprite.getRegionHeight()/9;
 			

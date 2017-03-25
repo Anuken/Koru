@@ -82,7 +82,7 @@ public class Materials{
 	
 	//Objects,  blocks
 	
-	public static final Material sticks = new Material("sticks", overlay){{
+	public static final Material sticks = new CollectableMaterial("sticks", overlay){{
 		addDrop(Items.stick, 1);
 		interactable = true;
 	}};
@@ -111,7 +111,7 @@ public class Materials{
 		variants = 4;
 	}};
 	
-	public static final Material mushy = new Material("mushy", object){{
+	public static final Material mushy = new CollectableMaterial("mushy", object){{
 		variants = 8;
 		offsets(-1, -1, -1, -1, -1, -1, -1, -1);
 		interactable = true;

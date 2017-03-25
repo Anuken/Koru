@@ -156,10 +156,8 @@ public class InputHandler{
 		
 		if(tile.block().interactable()){
 			
-			entity.inventory().addItems(tile.block().getDrops());
-			entity.inventory().sendUpdate(entity);
+			tile.block().onInteract(tile, blockx, blocky, entity);
 			
-			tile.setBlockMaterial(Materials.air);
 			World.instance().updateTile(blockx, blocky);
 		}
 	}

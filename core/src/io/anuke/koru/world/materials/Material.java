@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
+import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.world.Tile;
@@ -109,6 +110,8 @@ public abstract class Material{
 	public int variants(){
 		return variants;
 	}
+	
+	public void onInteract(Tile tile, int x, int y, KoruEntity entity){}
 	
 	@Override
 	public String toString(){

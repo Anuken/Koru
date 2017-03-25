@@ -104,7 +104,6 @@ public class Koru extends ModuleController<Koru>{
 		if(o instanceof Exception){
 			((Exception) o).printStackTrace();
 		}
-
 	}
 		
 	public static CharSequence getLog(){
