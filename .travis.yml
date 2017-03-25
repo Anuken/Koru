@@ -16,4 +16,4 @@ deploy:
   file: "desktop/build/libs/desktop-1.0.jar"
   on:
     repo: Anuken/Koru
-	tags: true
+    tags: true
