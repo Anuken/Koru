@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
@@ -26,10 +27,12 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.graphics.Cursors;
 import io.anuke.koru.ui.*;
+import io.anuke.koru.ui.Menu;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.modules.Module;
 
 public class UI extends Module<Koru> {
+	private ObjectMap<Class<?>, Menu> menus = new ObjectMap<>();
 	Stage stage;
 	ChatTable chat;
 	VisTable menutable;
@@ -39,6 +42,7 @@ public class UI extends Module<Koru> {
 	VisLabel connectfail;
 	VisTable title;
 	Network network;
+	Menu currentMenu;
 
 	public void init() {
 		network = getModule(Network.class);
@@ -225,6 +229,32 @@ public class UI extends Module<Koru> {
 	
 	public boolean mouseOnUI(){
 		return stage.hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true) != null;
+	}
+	
+	public void openMenu(Class<? extends Menu> c){
+		Menu m = null;
+		if(menus.containsKey(c)){
+			m = menus.get(c);
+		}else{
+			try{
+				m = c.newInstance();
+			}catch(Exception e){
+				throw new RuntimeException(e);
+			}
+			menus.put(c, m);
+		}
+		
+		m.show(stage);
+		currentMenu = m;
+		m.onOpen();
+	}
+	
+	public void closeMenu(){
+		if(currentMenu != null){
+			currentMenu.hide();
+			currentMenu.onClose();
+			currentMenu = null;
+		}
 	}
 
 	@Override

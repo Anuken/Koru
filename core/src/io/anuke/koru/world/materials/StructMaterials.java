@@ -58,6 +58,7 @@ public class StructMaterials{
 		}
 		
 		public void onInteract(Tile tile, int x, int y, KoruEntity entity){
+			//Koru.module(UI.class).openMenu(CraftingMenu.class);
 			
 		}
 		

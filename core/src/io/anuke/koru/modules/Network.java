@@ -1,12 +1,12 @@
 package io.anuke.koru.modules;
 
+import java.util.function.Consumer;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.*;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
@@ -27,8 +27,11 @@ public class Network extends Module<Koru>{
 	public static final int pingInterval = 60;
 	public static final int packetFrequency = 3;
 	public static final float entityUnloadRange = 600;
+	
 	public boolean initialconnect = false;
 	public boolean connecting;
+	public Client client;
+	
 	private boolean connected;
 	private String lastError;
 	private boolean chunksAdded = false;
@@ -37,15 +40,95 @@ public class Network extends Module<Koru>{
 	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
 	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
 	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
-	public Client client;
+	private ObjectMap<Class<?>, Consumer<Object>> packetHandlers = new ObjectMap<>();
+	
 	
 	@Override
 	public void init(){
+		registerPackets();
+		
 		int buffer = (int) Math.pow(2, 6) * 8192;
 		client = new Client(buffer, buffer);
 		Registrator.register(client.getKryo());
 		client.addListener(new Listen());
 		client.start();
+	}
+	
+	private void registerPackets(){
+		
+		handle(DataPacket.class, data->{
+			Koru.log("Recieving a data packet... ");
+
+			t.engine.removeAllEntities();
+			Koru.log("Recieved " + data.entities.size() + " entities.");
+			for(Entity entity : data.entities){
+				entityQueue.add((KoruEntity) entity);
+			}
+			Koru.getEngine().getSystem(CollisionSystem.class).getColliderEngine().getAllColliders().clear();
+			getModule(World.class).time = data.time;
+			getModule(ClientData.class).player.collider().init = false;
+			getModule(ClientData.class).player.resetID(data.playerid);
+			entityQueue.add(getModule(ClientData.class).player);
+			Koru.log("Recieved data packet.");
+		});
+		
+		handle(WorldUpdatePacket.class,p->{
+			for(Long key : p.updates.keys()){
+				KoruEntity entity = t.engine.getEntity(key);
+				if(entity == null){
+					requestEntity(key);
+					continue;
+				}
+				entity.get(SyncComponent.class).type.read(p.updates.get(key), entity);
+			}
+		});
+		
+		handle(ChunkPacket.class,p->{
+			getModule(World.class).loadChunks(p);
+			chunksAdded = true;
+		});
+		
+		handle(TileUpdatePacket.class,p->{
+			if(getModule(World.class).inClientBounds(p.x, p.y))
+				getModule(World.class).setTile(p.x, p.y, p.tile);
+			chunksAdded = true;
+		});
+		
+		handle(EntityRemovePacket.class,p->{
+			entitiesToRemove.add(p.id);
+		});
+		
+		handle(MenuOpenPacket.class,p->{
+			getModule(UI.class).openMenu(p.type);
+		});
+		
+		handle(AnimationPacket.class,p->{
+			t.engine.getEntity(p.player).getComponent(RenderComponent.class).renderer.onAnimation(p.type);
+		});
+		
+		handle(ChatPacket.class,p->{
+			Gdx.app.postRunnable(() -> {
+				getModule(UI.class).chat.addMessage(p.message, p.sender);
+			});
+		});
+		
+		handle(KoruEntity.class,entity->{
+			entityQueue.add(entity);
+		});
+		
+		handle(SlotChangePacket.class,p->{
+			if(t.engine.getEntity(p.id) == null)
+				return;
+			t.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+		});
+		
+		handle(InventoryUpdatePacket.class,p->{
+			getModule(ClientData.class).player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
+		});
+	}
+	
+	private <T> void handle(Class<T> c, Consumer<T> cons){
+		packetHandlers.put(c, (Consumer<Object>)cons);
 	}
 
 	public void connect(){
@@ -76,67 +159,10 @@ public class Network extends Module<Koru>{
 		@Override
 		public void received(Connection c, Object object){
 			try{
-				if(object instanceof DataPacket){
-					Koru.log("Recieving a data packet... ");
-					DataPacket data = (DataPacket) object;
-
-					t.engine.removeAllEntities();
-					Koru.log("Recieved " + data.entities.size() + " entities.");
-					for(Entity entity : data.entities){
-						entityQueue.add((KoruEntity) entity);
-					}
-					Koru.getEngine().getSystem(CollisionSystem.class).getColliderEngine().getAllColliders().clear();
-					getModule(World.class).time = data.time;
-					getModule(ClientData.class).player.collider().init = false;
-					getModule(ClientData.class).player.resetID(data.playerid);
-					entityQueue.add(getModule(ClientData.class).player);
-					Koru.log("Recieved data packet.");
-				}else if(object instanceof WorldUpdatePacket){
-					WorldUpdatePacket packet = (WorldUpdatePacket) object;
-					for(Long key : packet.updates.keys()){
-						KoruEntity entity = t.engine.getEntity(key);
-						if(entity == null){
-							requestEntity(key);
-							continue;
-						}
-						entity.get(SyncComponent.class).type.read(packet.updates.get(key), entity);
-					}
-				}else if(object instanceof ChunkPacket){
-					ChunkPacket packet = (ChunkPacket) object;
-					getModule(World.class).loadChunks(packet);
-					chunksAdded = true;
-				}else if(object instanceof TileUpdatePacket){
-					TileUpdatePacket packet = (TileUpdatePacket) object;
-					if(getModule(World.class).inClientBounds(packet.x, packet.y))
-						getModule(World.class).setTile(packet.x, packet.y, packet.tile);
-					chunksAdded = true;
-				}else if(object instanceof EntityRemovePacket){
-					EntityRemovePacket packet = (EntityRemovePacket) object;
-					entitiesToRemove.add(packet.id);
-				}else if(object instanceof AnimationPacket){
-					AnimationPacket packet = (AnimationPacket) object;
-					t.engine.getEntity(packet.player).getComponent(RenderComponent.class).renderer.onAnimation(packet.type);
-				}else if(object instanceof SlotChangePacket){
-					SlotChangePacket packet = (SlotChangePacket) object;
-					if(t.engine.getEntity(packet.id) == null)
-						return;
-					t.engine.getEntity(packet.id).getComponent(InventoryComponent.class).inventory[0][0] = packet.stack;
-				}else if(object instanceof ChatPacket){
-					ChatPacket packet = (ChatPacket) object;
-					Gdx.app.postRunnable(() -> {
-						getModule(UI.class).chat.addMessage(packet.message, packet.sender);
-					});
-				}else if(object instanceof KoruEntity){
-					KoruEntity entity = (KoruEntity) object;
-					entityQueue.add(entity);
-				}else if(object instanceof InventoryUpdatePacket){
-					InventoryUpdatePacket packet = (InventoryUpdatePacket) object;
-					getModule(ClientData.class).player.getComponent(InventoryComponent.class).set(packet.stacks, packet.selected);
-				}else if(object instanceof BitmapDataPacket.Header){
-					BitmapDataPacket.Header packet = (BitmapDataPacket.Header) object;
-					Koru.log("Recieved bitmap header: " + packet.id + " [" + packet.width + "x" + packet.height + "]");
-					BitmapData data = new BitmapData(packet.width, packet.height, packet.colors);
-					bitmaps.put(packet.id, data);
+				if(packetHandlers.containsKey(object.getClass())){
+					packetHandlers.get(object.getClass()).accept(object);
+				}else if(!(object instanceof FrameworkMessage)){
+					Koru.log("Unhandled packet type: " + object.getClass().getSimpleName());
 				}
 			}catch(Exception e){
 				e.printStackTrace();
