@@ -31,6 +31,7 @@ import io.anuke.koru.network.syncing.SyncData;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.renderers.AnimationType;
 import io.anuke.koru.systems.SyncSystem.SyncType;
+import io.anuke.koru.ui.Menu;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
@@ -59,6 +60,7 @@ public class Registrator{
 		k.register(RecipeSelectPacket.class);
 		k.register(EntityRequestPacket.class);
 		k.register(AnimationPacket.class);
+		k.register(MenuOpenPacket.class, new MenuPacketSerializer());
 
 		k.register(EntityType.class);
 		k.register(AnimationType.class);
@@ -140,6 +142,25 @@ public class Registrator{
 			k.writeObject(o, t.blockid);
 			k.writeObject(o, t.light);
 			k.writeObject(o, t.top);
+		}
+	}
+	
+	public static class MenuPacketSerializer extends Serializer<MenuOpenPacket>{
+
+		@Override
+		public void write(Kryo kryo, Output output, MenuOpenPacket object){
+			kryo.writeObject(output, object.type.getName());
+		}
+
+		@Override
+		public MenuOpenPacket read(Kryo kryo, Input input, Class<MenuOpenPacket> type){
+			MenuOpenPacket packet = new MenuOpenPacket();
+			try{
+				packet.type = (Class<? extends Menu>) Class.forName(kryo.readObject(input, String.class));
+				return packet;
+			}catch (Exception e){
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	

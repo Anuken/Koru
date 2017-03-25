@@ -45,7 +45,7 @@ public class Input extends Module<Koru>{
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && getModule(Network.class).connected())
 			getModule(UI.class).chat.enterPressed();
 
-		if (!getModule(Network.class).connected() || getModule(UI.class).chat.chatOpen()) return;
+		if (!getModule(Network.class).connected() || getModule(UI.class).menuOpen()) return;
 		
 		
 		Vector3 vec = getModule(Renderer.class).unproject();

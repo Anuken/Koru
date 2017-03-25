@@ -179,7 +179,7 @@ public class Renderer extends Module<Koru>{
 	}
 	
 	void drawSelectOverlay(LambdaRenderable r){
-		if(getModule(UI.class).mouseOnUI()) return;
+		if(getModule(UI.class).menuOpen()) return;
 		
 		setCursorTile();
 
@@ -222,6 +222,7 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void drawTileOverlay(LambdaRenderable r){
+		if(getModule(UI.class).menuOpen()) return;
 
 		setCursorTile();
 

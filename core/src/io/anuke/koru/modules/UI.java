@@ -231,6 +231,10 @@ public class UI extends Module<Koru> {
 		return stage.hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true) != null;
 	}
 	
+	public boolean menuOpen(){
+		return mouseOnUI() || currentMenu != null || chat.chatOpen();
+	}
+	
 	public void openMenu(Class<? extends Menu> c){
 		Menu m = null;
 		if(menus.containsKey(c)){

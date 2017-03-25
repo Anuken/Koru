@@ -94,12 +94,19 @@ public class Network extends Module<Koru>{
 			chunksAdded = true;
 		});
 		
-		handle(EntityRemovePacket.class,p->{
-			entitiesToRemove.add(p.id);
+		handle(MenuOpenPacket.class,p->{
+			Koru.log("Opening menu");
+			getModule(UI.class).openMenu(p.type);
 		});
 		
-		handle(MenuOpenPacket.class,p->{
-			getModule(UI.class).openMenu(p.type);
+		handle(SlotChangePacket.class,p->{
+			if(t.engine.getEntity(p.id) == null)
+				return;
+			t.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+		});
+		
+		handle(InventoryUpdatePacket.class,p->{
+			getModule(ClientData.class).player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
 		});
 		
 		handle(AnimationPacket.class,p->{
@@ -116,15 +123,10 @@ public class Network extends Module<Koru>{
 			entityQueue.add(entity);
 		});
 		
-		handle(SlotChangePacket.class,p->{
-			if(t.engine.getEntity(p.id) == null)
-				return;
-			t.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+		handle(EntityRemovePacket.class,p->{
+			entitiesToRemove.add(p.id);
 		});
-		
-		handle(InventoryUpdatePacket.class,p->{
-			getModule(ClientData.class).player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
-		});
+
 	}
 	
 	private <T> void handle(Class<T> c, Consumer<T> cons){
@@ -153,22 +155,6 @@ public class Network extends Module<Koru>{
 
 		connecting = false;
 		initialconnect = true;
-	}
-
-	class Listen extends Listener{
-		@Override
-		public void received(Connection c, Object object){
-			try{
-				if(packetHandlers.containsKey(object.getClass())){
-					packetHandlers.get(object.getClass()).accept(object);
-				}else if(!(object instanceof FrameworkMessage)){
-					Koru.log("Unhandled packet type: " + object.getClass().getSimpleName());
-				}
-			}catch(Exception e){
-				e.printStackTrace();
-				Koru.log("Packet recieve error!");
-			}
-		}
 	}
 
 	void requestEntity(long id){
@@ -259,13 +245,15 @@ public class Network extends Module<Koru>{
 	}
 
 	private void sendUpdate(){
+		KoruEntity player = getModule(ClientData.class).player;
+		
 		PositionPacket pos = new PositionPacket();
-		pos.x = getModule(ClientData.class).player.getX();
-		pos.y = getModule(ClientData.class).player.getY();
-		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, getModule(ClientData.class).player.getX(), getModule(ClientData.class).player.getY());
+		pos.x = player.getX();
+		pos.y = player.getY();
+		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
 		getModule(ClientData.class).player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
-		pos.direction = getModule(ClientData.class).player.getComponent(RenderComponent.class).direction;
-		pos.velocity = getModule(ClientData.class).player.collider().collider.getVelocity();
+		pos.direction = player.getComponent(RenderComponent.class).direction;
+		pos.velocity = player.collider().collider.getVelocity();
 		
 		client.sendUDP(pos);
 	}
@@ -280,5 +268,21 @@ public class Network extends Module<Koru>{
 
 	public boolean initialconnect(){
 		return initialconnect;
+	}
+	
+	class Listen extends Listener{
+		@Override
+		public void received(Connection c, Object object){
+			try{
+				if(packetHandlers.containsKey(object.getClass())){
+					packetHandlers.get(object.getClass()).accept(object);
+				}else if(!(object instanceof FrameworkMessage)){
+					Koru.log("Unhandled packet type: " + object.getClass().getSimpleName());
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				Koru.log("Packet recieve error!");
+			}
+		}
 	}
 }

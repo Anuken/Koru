@@ -30,6 +30,7 @@ public abstract class Material{
 	
 	public Color color = Color.CLEAR;
 	
+	
 	public static Material getMaterial(int id){
 		return materials.get(id);
 	}
