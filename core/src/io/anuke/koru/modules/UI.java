@@ -251,6 +251,8 @@ public class UI extends Module<Koru> {
 		m.show(stage);
 		currentMenu = m;
 		m.onOpen();
+		
+		Cursors.setCursor("cursor");
 	}
 	
 	public void closeMenu(){

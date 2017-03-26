@@ -20,7 +20,7 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.graphics.Hue;
 
 public class InventoryMenu extends VisTable{
-	final int slotsize = 64;
+	public static final int slotsize = 64;
 	private ItemStack[][] stacks;
 	private InventoryComponent inventory;
 

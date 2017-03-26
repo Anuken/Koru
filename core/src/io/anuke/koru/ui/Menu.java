@@ -19,7 +19,9 @@ public abstract class Menu extends VisDialog{
 	public Menu(String title) {
 		super(title);
 		getTitleTable().padTop(-15);
+		getTitleTable().padLeft(3);
 		getTitleLabel().setColor(Color.YELLOW);
+		getContentTable().padBottom(getContentTable().getPadBottom()-2);
 		setMovable(false);
 	}
 	
@@ -29,7 +31,8 @@ public abstract class Menu extends VisDialog{
 		Table titleTable = getTitleTable();
 
 		VisImageButton closeButton = new VisImageButton("close-window");
-		titleTable.add(closeButton).padRight(-getPadRight() + 0.7f).size(40).padTop(-titleTable.getPadTop()-11);
+		UIUtils.setCursors(closeButton);
+		titleTable.add(closeButton).padRight(-getPadRight() + 3.7f).size(40).padTop(-titleTable.getPadTop()-5);
 		closeButton.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {

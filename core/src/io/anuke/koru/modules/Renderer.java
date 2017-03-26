@@ -136,7 +136,7 @@ public class Renderer extends Module<Koru>{
 
 		long start = TimeUtils.nanoTime();
 		
-		if(getModule(Network.class).connected())
+		if(getModule(Network.class).connected() && !getModule(UI.class).menuOpen())
 			Cursors.setCursor("cursor");
 
 		light.setColor(world.getAmbientColor());
