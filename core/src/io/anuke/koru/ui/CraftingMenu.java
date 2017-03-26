@@ -29,7 +29,7 @@ public class CraftingMenu extends Menu{
 		table.add(left).grow();
 		table.add(right).grow();
 		
-		left.add("[FIREBRICK]Construct").colspan(2).row();
+		left.add("Construct").colspan(2).row();
 		
 		left.add(new VisImage(Resources.region("slot"))).size(64);
 		left.add("Material").padLeft(5f).align(Align.left);
@@ -49,17 +49,17 @@ public class CraftingMenu extends Menu{
 		
 		Table desctable = new VisTable();
 		
-		table.add(desctable).colspan(2).row();
+		table.add(desctable).padTop(5).colspan(2).row();
 		
 		desctable.left();
 		
-		desctable.add("Description text line 1...");
+		desctable.add("Type: [CORAL]Pickaxe").align(Align.left);
 		desctable.row();
-		desctable.add("Description text line 2, some stats");
+		desctable.add("Specialization: [YELLOW]Chisel").align(Align.left);
 		
 		Table itemtable = new VisTable();
 		
-		table.add(itemtable).colspan(2).padTop(5).row();
+		table.add(itemtable).colspan(2).padTop(10).row();
 		
 		int slots = 8;
 		

@@ -15,7 +15,9 @@ import io.anuke.ucore.spritesystem.Sorter;
 public class MaterialTypes{
 	public static final Color grasscolor = new Color(0x62962fff);
 	
-	public static final MaterialType tile = new MaterialType(){
+	public static final MaterialType 
+	
+	tile = new MaterialType(){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			if(tile.block().getType() == block) return;
 			
@@ -28,9 +30,9 @@ public class MaterialTypes{
 					.set(utile(x), utile(y)).layer(-material.id() * 2 - tile.top*3).add(group);
 			
 		}
-	};
+	},
 	
-	public static final MaterialType grass = new MaterialType(){
+	grass = new MaterialType(){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
 			
@@ -49,9 +51,9 @@ public class MaterialTypes{
 							  grasscolor.b * material.foilageTint().z).add(group);
 			
 		}
-	};
+	},
 	
-	public static final MaterialType water = new MaterialType(){
+	water = new MaterialType(){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
 			sprite((material.name()  + drawString(x, y, material)))
@@ -62,9 +64,9 @@ public class MaterialTypes{
 						.tile(x, y)
 						.center().layer(-material.id() * 2 + 1).add(group);
 		}
-	};
+	},
 	
-	public static final MaterialType block = new MaterialType(false, true){
+	block = new MaterialType(false, true){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			sprite(("walldropshadow"))
 			.shadow()
@@ -78,9 +80,9 @@ public class MaterialTypes{
 			.sort(Sorter.object).add(group);
 			
 		}
-	};
+	},
 	
-	public static final MaterialType overlay = new MaterialType(false, false){
+	overlay = new MaterialType(false, false){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
 			String name = material.name() + drawString(x, y, material);
@@ -91,9 +93,9 @@ public class MaterialTypes{
 			sprite(name).color(0, 0, 0, 0.1f)
 			.set(tile(x), tile(y)-1).layer(-512*2+1).center().add(group);
 		}
-	};
+	},
 	
-	public static final MaterialType tree = new MaterialType(false, true){
+	tree = new MaterialType(false, true){
 		{
 			color = Hue.rgb(80, 53, 30);
 		}
@@ -116,9 +118,9 @@ public class MaterialTypes{
 			float height = 3;
 			return rectangle.set(x * World.tilesize + width / 2f, y * World.tilesize + 6 + height / 2f, width, height);
 		}
-	};
+	},
 	
-	public static final MaterialType object = new MaterialType(false, false){
+	object = new MaterialType(false, false){
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			float offset = variantOffset(x, y, material);
 			
@@ -128,9 +130,9 @@ public class MaterialTypes{
 			.centerX().sort(Sorter.object)
 			.addShadow(group, -offset).add(group);	
 		}
-	};
+	},
 	
-	public static final MaterialType tallgrassblock = new MaterialType(false, false){
+	tallgrassblock = new MaterialType(false, false){
 		static final float add = 0.94f;
 		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
@@ -172,9 +174,9 @@ public class MaterialTypes{
 		public int size(){
 			return 16;
 		}
-	};
+	},
 	
-	public static final MaterialType shortgrassblock = new MaterialType(false, false){
+	shortgrassblock = new MaterialType(false, false){
 		static final float add = 0.96f;
 		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){

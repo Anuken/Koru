@@ -13,7 +13,9 @@ import io.anuke.ucore.util.Timers;
 
 public class StructMaterialTypes{
 	
-	public static final MaterialType torch = new MaterialType(false, false){
+	public static final MaterialType
+	
+	torch = new MaterialType(false, false){
 		{
 			color = new Color(0x744a28ff);
 		}
@@ -53,9 +55,9 @@ public class StructMaterialTypes{
 		int frame(int x, int y){
 			return (int)(1+(rand(x,y,50)+Timers.time()/4)%4);
 		}
-	};
+	},
 	
-	public static final MaterialType chest = new MaterialType(false, false){
+	chest = new MaterialType(false, false){
 		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 			
@@ -65,9 +67,9 @@ public class StructMaterialTypes{
 			.addShadow(group, -material.offset())
 					.sort(Sorter.object).add(group);
 		}
-	};
+	},
 	
-	public static final MaterialType workbench = new MaterialType(false, false){
+	workbench = new MaterialType(false, false){
 		
 		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
 

@@ -3,22 +3,35 @@ package io.anuke.koru.items;
 import io.anuke.koru.input.InputHandler.ClickEvent;
 import io.anuke.koru.world.materials.Material;
 
-public interface Item{
+public class Item{
+	private final String name;
+	private final ItemType type;
+	private int stackSize = 100;
 	
-	public default void clickEvent(ClickEvent event){}
-	
-	public default int getMaxStackSize(){
-		return 100;
+	public Item(String name, ItemType type){
+		this.name = name;
+		this.type = type;
 	}
 	
-	public ItemType type();
-	public default boolean breaks(Material mat){return false;}
-	public default float power(){return 0;}
-	public default WeaponType weaponType(){return WeaponType.sword;}
+	public int getMaxStackSize(){
+		return stackSize;
+	}
 	
-	public String name();
+	public ItemType type(){
+		return type;
+	}
 	
-	public default String formalName(){
+	public boolean breaks(Material mat){
+		return false;
+	}
+	
+	public String name(){
+		return name;
+	}
+	
+	public String formalName(){
 		return name().substring(0, 1).toUpperCase() + name().substring(1);
 	}
+	
+	public void onClickEvent(ClickEvent event){}
 }
