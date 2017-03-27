@@ -4,7 +4,6 @@ import static io.anuke.koru.world.materials.MaterialTypes.*;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.network.IServer;
@@ -15,10 +14,9 @@ import io.anuke.koru.world.TileData;
 
 /**Artifical materials built by the player.*/
 public class StructMaterials{
-	
-	//Tiles
-	
 	public static final Material
+	
+	//tiles
 	
 	woodfloor = new Material("woodfloor", tile){{
 		addDrop(Items.wood, 1);
@@ -64,10 +62,10 @@ public class StructMaterials{
 		}
 		
 		public void onInteract(Tile tile, int x, int y, KoruEntity entity){
+			//TODO cleaner way to do this
 			MenuOpenPacket packet = new MenuOpenPacket();
 			packet.type = CraftingMenu.class;
 			IServer.instance().sendTCP(entity.connection().connectionID, packet);
-			Koru.log("Sent packet");
 		}
 		
 		class Data extends TileData{

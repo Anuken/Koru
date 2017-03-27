@@ -1,22 +1,15 @@
 package io.anuke.koru.input;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.components.WeaponComponent;
-import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialTypes;
-import io.anuke.koru.world.materials.Materials;
 
 //TODO make this less messy
 public class InputHandler{
@@ -33,6 +26,7 @@ public class InputHandler{
 	}
 
 	public void update(float delta){
+		/*
 		
 		//weapon updating
 		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
@@ -98,6 +92,7 @@ public class InputHandler{
 		}else{
 			blockhold = 0;
 		}
+		*/
 	}
 
 	public void inputEvent(InputType type, Object... data){
@@ -121,7 +116,8 @@ public class InputHandler{
 			return;
 
 		ItemType type = stack.item.type();
-
+		
+		/*
 		if(type == ItemType.hammer){
 
 			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
@@ -149,6 +145,7 @@ public class InputHandler{
 			}
 
 		}
+		*/
 	}
 	
 	private void onInteract(){
@@ -169,11 +166,13 @@ public class InputHandler{
 			return;
 
 		ItemType type = stack.item.type();
-
+		
+		/*
 		if(type == ItemType.weapon){
 			stack.item.weaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
 			stack.item.weaponType().clicked(left);
 		}
+		*/
 	}
 
 	private void inputKey(InputType type, Object... data){
@@ -215,7 +214,7 @@ public class InputHandler{
 		Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
 
 		ClickEvent event = Pools.get(ClickEvent.class).obtain().set(down, blockx, blocky, tile, inv);
-		stack.item.clickEvent(event);
+		stack.item.onClickEvent(event);
 		event.free();
 	}
 

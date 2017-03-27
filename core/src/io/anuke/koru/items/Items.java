@@ -17,7 +17,7 @@ public class Items{
 	
 	tool = new Item("tool", ItemType.tool){
 		public String formalName(){
-			return "Wooden Axe";
+			return "Tool";
 		}
 	};
 }

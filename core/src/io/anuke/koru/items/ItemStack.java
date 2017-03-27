@@ -3,6 +3,7 @@ package io.anuke.koru.items;
 public class ItemStack implements Cloneable{
 	public Item item;
 	public int amount;
+	public ItemData data;
 	
 	public ItemStack(Item item, int amount){
 		this.item = item;
@@ -19,6 +20,10 @@ public class ItemStack implements Cloneable{
 	
 	public ItemStack(){
 		
+	}
+	
+	public <T extends ItemData> T data(){
+		return (T)data;
 	}
 	
 	public void set(Item item, int amount){

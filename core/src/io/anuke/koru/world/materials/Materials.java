@@ -9,9 +9,9 @@ import io.anuke.koru.items.Items;
 
 /**Natural materials generated in the world.*/
 public class Materials{
-	//Tiles
-	
 	public static final Material
+	
+	//Tiles
 	
 	air = new Material("air", tile){{
 		

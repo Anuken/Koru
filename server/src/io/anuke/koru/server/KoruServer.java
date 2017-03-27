@@ -20,8 +20,6 @@ import io.anuke.koru.components.InputComponent;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.types.Player;
-import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
@@ -124,15 +122,17 @@ public class KoruServer extends IServer{
 			sendToAllExceptTCP(info.id, player);
 
 			player.add();
-
+			
+			/*
 			InventoryComponent inv = player.get(InventoryComponent.class);
-
+			
 			inv.inventory[3][0] = new ItemStack(Items.woodhammer);
 			inv.inventory[2][0] = new ItemStack(Items.woodaxe);
 			inv.inventory[1][0] = new ItemStack(Items.woodpickaxe);
 			inv.inventory[0][0] = new ItemStack(Items.woodsword);
 			inv.sendUpdate(player);
-
+			 */
+			
 			//doesn't seem to work
 			//player.getComponent(InventoryComponent.class).sendHotbarUpdate(player);
 

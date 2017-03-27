@@ -19,9 +19,7 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.*;
 import io.anuke.koru.input.InputHandler;
-import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.items.ItemType;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.RepackableAtlas;
@@ -258,7 +256,8 @@ public class Renderer extends Module<Koru>{
 		InventoryComponent inv = player.inventory();
 
 		Tile tile = world.getTile(x, y);
-
+		
+		/*
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer && inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
 
 			if(Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach && World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
@@ -278,6 +277,7 @@ public class Renderer extends Module<Koru>{
 
 			Draw.color();
 		}
+		*/
 	}
 	
 	boolean playerReachesBlock(){

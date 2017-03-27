@@ -24,6 +24,7 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.entities.types.*;
 import io.anuke.koru.input.InputType;
+import io.anuke.koru.items.ItemData;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.network.packets.*;
@@ -101,6 +102,7 @@ public class Registrator{
 		k.register(ItemStack[].class);
 		k.register(ItemStack[][].class);
 		k.register(Items.class);
+		k.register(ItemData.class);
 		
 		k.register(InputType.class);
 		k.register(SyncType.class);
