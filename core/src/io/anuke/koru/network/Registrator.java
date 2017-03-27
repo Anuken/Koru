@@ -24,9 +24,7 @@ import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.entities.types.*;
 import io.anuke.koru.input.InputType;
-import io.anuke.koru.items.ItemData;
-import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.items.Items;
+import io.anuke.koru.items.*;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
 import io.anuke.koru.network.syncing.SyncData.Synced;
@@ -98,7 +96,7 @@ public class Registrator{
 		k.register(Tile[][].class);
 		k.register(Tile[][][].class);
 		k.register(Material.class, new MaterialsSerializer());
-		k.register(ItemStack.class);
+		k.register(ItemStack.class, new ItemStackSerializer());
 		k.register(ItemStack[].class);
 		k.register(ItemStack[][].class);
 		k.register(Items.class);
@@ -123,6 +121,22 @@ public class Registrator{
 		
 
 		k.register(KoruEntity.class, new EntitySerializer());
+	}
+	
+	public static class ItemStackSerializer extends Serializer<ItemStack>{
+		@Override
+		public ItemStack read(Kryo k, Input i, Class<ItemStack> c){
+			ItemStack stack = new ItemStack();
+			stack.amount = k.readObject(i, Integer.class);
+			stack.item = Item.getItem(k.readObject(i, Integer.class));
+			return stack;
+		}
+
+		@Override
+		public void write(Kryo k, Output o, ItemStack t){
+			k.writeObject(o, t.amount);
+			k.writeObject(o, t.item.id());
+		}
 	}
 	
 	public static class TileSerializer extends Serializer<Tile>{
