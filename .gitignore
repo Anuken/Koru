@@ -6,7 +6,6 @@
 # Package Files #
 *.war
 *.ear
-
 *.gif
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
@@ -17,3 +16,4 @@ build/
 bin/
 .settings/
 .gradle/
+gradle/

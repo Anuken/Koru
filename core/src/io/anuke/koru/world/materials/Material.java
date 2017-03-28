@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.world.BreakType;
 import io.anuke.koru.world.Tile;
 				
 public abstract class Material{
@@ -27,6 +28,7 @@ public abstract class Material{
 	protected float[] offsets;
 	protected int variants = 1;
 	protected boolean interactable = false;
+	protected BreakType breaktype = BreakType.stone;
 	
 	public Color color = Color.CLEAR;
 	
@@ -98,6 +100,10 @@ public abstract class Material{
 	public Color getColor(){
 		if(type.getColor() != null) return type.getColor();
 		return color;
+	}
+	
+	public BreakType breakType(){
+		return breaktype;
 	}
 	
 	public ItemStack[] getDrops(){

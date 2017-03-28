@@ -187,9 +187,9 @@ public class Renderer extends Module<Koru>{
 		if(stack != null && tile != null && playerReachesBlock()){
 			Material select = null;
 			
-			if(stack.item.breaks(tile.block())){
+			if(stack.item.breaks(tile.block().breakType())){
 				select = tile.block();
-			}else if(stack.item.breaks(tile.topTile()) && tile.canRemoveTile()){
+			}else if(stack.item.breaks(tile.topTile().breakType()) && tile.canRemoveTile()){
 				select = tile.topTile();
 			}
 			

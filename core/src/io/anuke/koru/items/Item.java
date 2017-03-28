@@ -3,7 +3,7 @@ package io.anuke.koru.items;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.input.InputHandler.ClickEvent;
-import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.BreakType;
 
 public class Item{
 	private static int lastid;
@@ -33,10 +33,6 @@ public class Item{
 		return type;
 	}
 	
-	public boolean breaks(Material mat){
-		return false;
-	}
-	
 	public String name(){
 		return name;
 	}
@@ -47,6 +43,14 @@ public class Item{
 	
 	public int id(){
 		return id;
+	}
+	
+	public float getBreakSpeed(BreakType type){
+		return 0;
+	}
+	
+	public boolean breaks(BreakType type){
+		return getBreakSpeed(type) > 0.0001f;
 	}
 	
 	public void onClickEvent(ClickEvent event){}

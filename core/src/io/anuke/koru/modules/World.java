@@ -5,6 +5,7 @@ import static io.anuke.ucore.UCore.inBounds;
 import java.util.Collection;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,12 +15,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.components.LoadChunksComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
-import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
@@ -34,6 +35,7 @@ public class World extends Module<Koru>{
 	public static final int loadrange = 3;
 	public static final int tilesize = 12;
 	
+	private static Family chunkFamily = Family.all(LoadChunksComponent.class).get();
 	private static Color ambientColor = new Color();
 	private static final float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	public final static float timescale = 40000f*0; //temporarily disabled for testing - remove 0 to enable
@@ -131,7 +133,7 @@ public class World extends Module<Koru>{
 	
 	void checkUnloadChunks(){
 		Collection<Chunk> chunks = file.getLoadedChunks();
-		ImmutableArray<Entity> players = IServer.instance().getEngine().getEntitiesFor(IServer.instance().getEngine().getSystem(SyncSystem.class).getFamily());
+		ImmutableArray<Entity> players = IServer.instance().getEngine().getEntitiesFor(chunkFamily);
 		
 		for(Chunk chunk : chunks){
 			boolean passed = false;

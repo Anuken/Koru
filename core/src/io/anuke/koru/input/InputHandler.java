@@ -1,15 +1,20 @@
 package io.anuke.koru.input;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.Materials;
 
 //TODO make this less messy
 public class InputHandler{
@@ -26,16 +31,17 @@ public class InputHandler{
 	}
 
 	public void update(float delta){
-		/*
+		
 		
 		//weapon updating
 		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
-
+		
+		/*
 		if(stack != null && stack.item.type()== ItemType.weapon){
 			stack.item.weaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
 			stack.item.weaponType().update(delta);
 		}
-		
+		*/
 		// block breaking
 		if(key(InputType.leftclick_down)){
 			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
@@ -47,9 +53,9 @@ public class InputHandler{
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
 					&& stack != null && stack.item.type() == ItemType.tool){
 				
-				if(stack.item.breaks(block) && block.isBreakable()){
+				if(stack.item.breaks(block.breakType()) && block.isBreakable()){
 					select = block;
-				}else if (stack.item.breaks(floor) && floor.isBreakable() && tile.canRemoveTile()){
+				}else if (stack.item.breaks(floor.breakType()) && floor.isBreakable() && tile.canRemoveTile()){
 					select = floor;
 				}else{
 					blockhold = 0;
@@ -57,7 +63,7 @@ public class InputHandler{
 				}
 				
 				
-				blockhold += delta * stack.item.power();
+				blockhold += delta * stack.item.getBreakSpeed(select.breakType());
 
 				if((int) (blockhold) % 20 == 1)
 					Effects.blockParticle(World.world(blockx), select.getType() == MaterialTypes.block
@@ -92,7 +98,7 @@ public class InputHandler{
 		}else{
 			blockhold = 0;
 		}
-		*/
+		
 	}
 
 	public void inputEvent(InputType type, Object... data){

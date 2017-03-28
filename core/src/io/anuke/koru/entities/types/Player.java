@@ -14,7 +14,7 @@ public class Player extends EntityType{
 	public ComponentList components(){
 		return list(new PositionComponent(), new ConnectionComponent(),
 				new RenderComponent(new PlayerRenderer()), new ColliderComponent(), 
-				new WeaponComponent(),
+				new WeaponComponent(), new LoadChunksComponent(),
 				new SyncComponent(SyncType.player), new InputComponent(), 
 				new HealthComponent(), new InventoryComponent(4,6));
 	}
