@@ -21,6 +21,7 @@ import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.util.Angles;
 
 public class Input extends Module<Koru>{
 	private Vector2 vector = new Vector2();
@@ -77,13 +78,13 @@ public class Input extends Module<Koru>{
 		RenderComponent render = player.getComponent(RenderComponent.class);
 		
 		ItemStack stack = player.inventory().hotbarStack();
-		/*
-		if(stack != null && stack.item.type() == ItemType.weapon){
+		
+		if(stack != null && stack.isWeapon()){
 			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
 			render.direction = 2-(int)((angle-45)/90f);
 			if(render.direction == 1) render.direction = 3;
 			if(angle > 315 || angle < 45) render.direction = 1;
-		}else */if(key(KeyBindings.move_up) || key(KeyBindings.move_left) || key(KeyBindings.move_down) || key(KeyBindings.move_right)){
+		}else if(key(KeyBindings.move_up) || key(KeyBindings.move_left) || key(KeyBindings.move_down) || key(KeyBindings.move_right)){
 			render.direction = (key(KeyBindings.move_right) ? 1 : (key(KeyBindings.move_left) ? 3 : (key(KeyBindings.move_down) ? 0 : 2)));
 		}
 
@@ -134,7 +135,7 @@ public class Input extends Module<Koru>{
 		if (button == Buttons.LEFT){
 			sendInput(InputType.leftclick_down, blockx, blocky);
 			
-			if(player.inventory().hotbarStack() == null || player.inventory().hotbarStack().item.type() == ItemType.material)
+			if(player.inventory().hotbarStack() == null || player.inventory().hotbarStack().item.isType(ItemType.material))
 				sendInput(InputType.interact, blockx, blocky);
 		
 		}else if (button == Buttons.RIGHT){

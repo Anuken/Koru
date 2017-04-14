@@ -1,5 +1,7 @@
 package io.anuke.koru.items;
 
+import io.anuke.koru.world.BreakType;
+
 public class ItemStack implements Cloneable{
 	public Item item;
 	public int amount;
@@ -20,6 +22,22 @@ public class ItemStack implements Cloneable{
 	
 	public ItemStack(){
 		
+	}
+	
+	public boolean isWeapon(){
+		return item.weapon();
+	}
+	
+	public WeaponType getWeaponType(){
+		return item.weaponType();
+	}
+	
+	public float getBreakSpeed(BreakType type){
+		return item.getBreakSpeed(type);
+	}
+	
+	public boolean breaks(BreakType type){
+		return getBreakSpeed(type) > 0.0001f;
 	}
 	
 	public <T extends ItemData> T data(){

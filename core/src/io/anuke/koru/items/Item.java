@@ -1,5 +1,7 @@
 package io.anuke.koru.items;
 
+import java.util.EnumSet;
+
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.input.InputHandler.ClickEvent;
@@ -10,7 +12,7 @@ public class Item{
 	private static Array<Item> items = new Array<Item>();
 	
 	private final String name;
-	private final ItemType type;
+	private final EnumSet<ItemType> types;
 	private final int id;
 	private int stackSize = 100;
 	
@@ -18,9 +20,9 @@ public class Item{
 		return items.get(id);
 	}
 	
-	public Item(String name, ItemType type){
+	public Item(String name, ItemType... types){
 		this.name = name;
-		this.type = type;
+		this.types = EnumSet.of(ItemType.any, types);
 		id = lastid ++;
 		items.add(this);
 	}
@@ -29,8 +31,12 @@ public class Item{
 		return stackSize;
 	}
 	
-	public ItemType type(){
-		return type;
+	public EnumSet<ItemType> types(){
+		return types;
+	}
+	
+	public boolean isType(ItemType type){
+		return types.contains(type);
 	}
 	
 	public String name(){
@@ -45,12 +51,16 @@ public class Item{
 		return id;
 	}
 	
-	public float getBreakSpeed(BreakType type){
-		return 0;
+	public boolean weapon(){
+		return false;
 	}
 	
-	public boolean breaks(BreakType type){
-		return getBreakSpeed(type) > 0.0001f;
+	public WeaponType weaponType(){
+		return WeaponType.sword;
+	}
+	
+	public float getBreakSpeed(BreakType type){
+		return 0;
 	}
 	
 	public void onClickEvent(ClickEvent event){}

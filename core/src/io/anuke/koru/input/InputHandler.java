@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.items.ItemType;
+import io.anuke.koru.items.*;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
@@ -51,11 +51,11 @@ public class InputHandler{
 			Material select = null;
 			
 			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
-					&& stack != null && stack.item.type() == ItemType.tool){
+					&& stack != null && stack.item.isType(ItemType.tool)){
 				
-				if(stack.item.breaks(block.breakType()) && block.isBreakable()){
+				if(stack.breaks(block.breakType()) && block.isBreakable()){
 					select = block;
-				}else if (stack.item.breaks(floor.breakType()) && floor.isBreakable() && tile.canRemoveTile()){
+				}else if (stack.breaks(floor.breakType()) && floor.isBreakable() && tile.canRemoveTile()){
 					select = floor;
 				}else{
 					blockhold = 0;
@@ -121,12 +121,12 @@ public class InputHandler{
 		if(stack == null)
 			return;
 
-		ItemType type = stack.item.type();
+		Item item = stack.item;
 		
-		/*
-		if(type == ItemType.hammer){
+		
+		if(item.isType(ItemType.placer)){
 
-			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
+			Tile tile = World.instance().getTile(blockx, blocky);
 
 			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
 
@@ -149,9 +149,7 @@ public class InputHandler{
 				inv.removeAll(recipe.requirements());
 				inv.sendUpdate(entity);
 			}
-
 		}
-		*/
 	}
 	
 	private void onInteract(){
@@ -170,15 +168,11 @@ public class InputHandler{
 
 		if(stack == null)
 			return;
-
-		ItemType type = stack.item.type();
 		
-		/*
-		if(type == ItemType.weapon){
-			stack.item.weaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
-			stack.item.weaponType().clicked(left);
+		if(stack.isWeapon()){
+			stack.getWeaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
+			stack.getWeaponType().clicked(left);
 		}
-		*/
 	}
 
 	private void inputKey(InputType type, Object... data){

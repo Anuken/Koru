@@ -19,7 +19,9 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.*;
 import io.anuke.koru.input.InputHandler;
+import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.ItemType;
 import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.RepackableAtlas;
@@ -187,9 +189,9 @@ public class Renderer extends Module<Koru>{
 		if(stack != null && tile != null && playerReachesBlock()){
 			Material select = null;
 			
-			if(stack.item.breaks(tile.block().breakType())){
+			if(stack.breaks(tile.block().breakType())){
 				select = tile.block();
-			}else if(stack.item.breaks(tile.topTile().breakType()) && tile.canRemoveTile()){
+			}else if(stack.breaks(tile.topTile().breakType()) && tile.canRemoveTile()){
 				select = tile.topTile();
 			}
 			
@@ -257,8 +259,8 @@ public class Renderer extends Module<Koru>{
 
 		Tile tile = world.getTile(x, y);
 		
-		/*
-		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.type() == ItemType.hammer && inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
+		
+		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.isType(ItemType.placer) && inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
 
 			if(Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach && World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
 				Draw.color(0.5f, 1f, 0.5f, 0.3f);
@@ -277,7 +279,7 @@ public class Renderer extends Module<Koru>{
 
 			Draw.color();
 		}
-		*/
+		
 	}
 	
 	boolean playerReachesBlock(){

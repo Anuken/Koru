@@ -18,5 +18,9 @@ public class Items{
 	
 	tool = new Item("tool", ItemType.tool){
 		
+	},
+	
+	hammer = new Item("Hammer", ItemType.tool, ItemType.placer){
+		
 	};
 }
