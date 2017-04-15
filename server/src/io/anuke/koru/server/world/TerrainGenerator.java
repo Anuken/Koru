@@ -5,6 +5,7 @@ import static io.anuke.ucore.UCore.clamp;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.koru.world.materials.StructMaterials;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
@@ -100,6 +101,9 @@ public class TerrainGenerator implements Generator{
 				if(Math.random() < 0.01)
 					tile.setMaterial(Materials.sticks);
 				
+				if(Math.random() < 0.01)
+					tile.setMaterial(Materials.rocks);
+				
 			}else if(t < 0.8){
 				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.03)
@@ -166,6 +170,10 @@ public class TerrainGenerator implements Generator{
 					tile.setBlockMaterial(Materials.rock);
 			}
 		}
+		
+		//TODO remove this when not debugging
+		if(x == 99999 && y == 99999)
+			tile.setBlockMaterial(StructMaterials.workbench);
 
 		return tile;
 	}

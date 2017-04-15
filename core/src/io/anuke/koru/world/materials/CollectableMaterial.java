@@ -8,6 +8,7 @@ public abstract class CollectableMaterial extends Material{
 
 	protected CollectableMaterial(String name, MaterialType type) {
 		super(name, type);
+		interactable = true;
 	}
 	
 	public void onInteract(Tile tile, int x, int y, KoruEntity entity){

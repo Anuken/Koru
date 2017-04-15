@@ -86,7 +86,10 @@ public class Materials{
 	
 	sticks = new CollectableMaterial("sticks", overlay){{
 		addDrop(Items.stick, 1);
-		interactable = true;
+	}},
+	
+	rocks = new CollectableMaterial("rocks", overlay){{
+		addDrop(Items.stone, 1);
 	}},
 	
 	grassblock = new Material("grassblock",  MaterialTypes.tallgrassblock){{
@@ -116,7 +119,6 @@ public class Materials{
 	mushy = new CollectableMaterial("mushy", object){{
 		variants = 8;
 		offsets(-1, -1, -1, -1, -1, -1, -1, -1);
-		interactable = true;
 		addDrop(Items.mushroom, 1);
 	}},
 	

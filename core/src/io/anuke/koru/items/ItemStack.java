@@ -24,8 +24,8 @@ public class ItemStack implements Cloneable{
 		
 	}
 	
-	public boolean isWeapon(){
-		return item.weapon();
+	public boolean isType(ItemType type){
+		return item.isType(type);
 	}
 	
 	public WeaponType getWeaponType(){

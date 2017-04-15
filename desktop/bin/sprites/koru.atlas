@@ -328,21 +328,21 @@ objects/mossyrock2
   index: -1
 objects/mushy1
   rotate: false
-  xy: 445, 85
+  xy: 459, 107
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy2
   rotate: false
-  xy: 459, 109
+  xy: 473, 123
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy3
   rotate: false
-  xy: 473, 123
+  xy: 445, 73
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
@@ -356,28 +356,28 @@ objects/mushy4
   index: -1
 objects/mushy5
   rotate: false
-  xy: 445, 75
+  xy: 459, 97
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy6
   rotate: false
-  xy: 459, 99
+  xy: 473, 113
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy7
   rotate: false
-  xy: 473, 113
+  xy: 519, 149
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy8
   rotate: false
-  xy: 519, 149
+  xy: 459, 87
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
@@ -468,14 +468,14 @@ objects/pinetree3
   index: -1
 objects/rock1
   rotate: false
-  xy: 459, 119
+  xy: 473, 133
   size: 12, 10
   orig: 12, 10
   offset: 0, 0
   index: -1
 objects/rock2
   rotate: false
-  xy: 473, 133
+  xy: 445, 83
   size: 12, 10
   orig: 12, 10
   offset: 0, 0
@@ -494,16 +494,23 @@ objects/rock4
   orig: 12, 16
   offset: 0, 0
   index: -1
-objects/stick
+objects/rocks
   rotate: false
   xy: 995, 179
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
-objects/sticks
+objects/stick
   rotate: false
   xy: 133, 128
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+objects/sticks
+  rotate: false
+  xy: 475, 145
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -552,21 +559,21 @@ objects/torchflame1
   index: -1
 objects/torchflame2
   rotate: false
-  xy: 459, 85
+  xy: 473, 99
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame3
   rotate: false
-  xy: 473, 99
+  xy: 459, 73
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame4
   rotate: false
-  xy: 469, 85
+  xy: 985, 165
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
@@ -622,7 +629,7 @@ objects/willowtree4
   index: -1
 objects/workbench
   rotate: false
-  xy: 475, 145
+  xy: 459, 117
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

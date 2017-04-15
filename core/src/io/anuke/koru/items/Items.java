@@ -6,15 +6,15 @@ public class Items{
 	
 	public static final Item
 	
-	stick = new Item("stick", material),
+	stick = new Item("stick", ItemType.rod),
 	
 	wood = new Item("wood", material),
 	
-	pinecone = new Item("pinecone", material),
-	
 	stone = new Item("stone", material),
 	
-	mushroom = new Item("mushroom", material),
+	pinecone = new Item("pinecone"),
+	
+	mushroom = new Item("mushroom"),
 	
 	tool = new Item("tool", ItemType.tool){
 		

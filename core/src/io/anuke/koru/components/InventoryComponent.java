@@ -1,6 +1,10 @@
 package io.anuke.koru.components;
 
+import java.util.function.Consumer;
+
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
@@ -11,6 +15,9 @@ import io.anuke.koru.network.packets.SlotChangePacket;
 
 public class InventoryComponent implements KoruComponent{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
+	private static final ObjectSet<Item> tempset = new ObjectSet<Item>();
+	private static final Array<ItemStack> tempArray = new Array<ItemStack>();
+	
 	public ItemStack[][] inventory;
 	public ItemStack selected;
 	public transient int hotbar;
@@ -104,14 +111,15 @@ public class InventoryComponent implements KoruComponent{
 	 */
 	public ItemStack addItem(ItemStack item){
 		if(item.amount == 0) return item;
+		
 		ItemStack stack = new ItemStack(item);
+		
+		//attempt to stack on top first
 		for(int x = 0;x < inventory.length;x ++){
 			for(int y = 0;y < inventory[x].length;y ++){
-				if(inventory[x][y] == null){
-					inventory[x][y] = stack.clone();
-					stack.amount = 0;
-					return stack;
-				}else if(inventory[x][y].item == stack.item){
+				if(inventory[x][y] == null) continue;
+				
+				if(inventory[x][y].item == stack.item){
 					if(inventory[x][y].amount + stack.amount <= stack.item.getMaxStackSize()){
 						inventory[x][y].amount += stack.amount;
 						stack.amount = 0;
@@ -121,6 +129,17 @@ public class InventoryComponent implements KoruComponent{
 						inventory[x][y].amount = stack.item.getMaxStackSize();
 						stack.amount = overflow;
 					}
+				}
+			}
+		}
+		
+		//if that doesn't work, put it in a new slot
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				if(inventory[x][y] == null){
+					inventory[x][y] = stack.clone();
+					stack.amount = 0;
+					return stack;
 				}
 			}
 		}
@@ -273,6 +292,32 @@ public class InventoryComponent implements KoruComponent{
 			}
 		}
 		return sum;
+	}
+	
+	/**Populates the given array with itemstacks, no duplicates.*/
+	public Array<ItemStack> asArray(){
+		tempArray.clear();
+		
+		forEach(stack->{
+			for(ItemStack other : tempArray){
+				if(other.item == stack.item){
+					other.amount += stack.amount;
+					return;
+				}
+			}
+			tempArray.add(stack.clone());
+		});
+		
+		return tempArray;
+	}
+	
+	public void forEach(Consumer<ItemStack> cons){
+		for(int x = 0;x < inventory.length;x ++){
+			for(int y = 0;y < inventory[x].length;y ++){
+				if(inventory[x][y] != null)
+					cons.accept(inventory[x][y]);
+			}
+		}
 	}
 	
 	public String toString(){

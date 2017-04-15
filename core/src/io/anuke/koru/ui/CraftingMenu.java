@@ -4,14 +4,24 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisTable;
 
+import io.anuke.koru.Koru;
+import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.items.ItemType;
+import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.utils.Resources;
 
 public class CraftingMenu extends Menu{
+	final int slots = 8;
+	private final Slot[] rodslots = new Slot[slots];
+	private final Slot[] matslots = new Slot[slots];
 	
 	public CraftingMenu(){
 		super("Tool Crafting");
@@ -61,22 +71,38 @@ public class CraftingMenu extends Menu{
 		
 		table.add(itemtable).colspan(2).padTop(10).row();
 		
-		int slots = 8;
-		
 		for(int i = 0; i < slots; i ++){
-			itemtable.add(new VisImage(Resources.region("slot"))).size(64);
+			Slot slot = new Slot();
+			matslots[i] = slot;
+			itemtable.add(slot).size(64);
 		}
 		
 		itemtable.row();
 		
 		for(int i = 0; i < slots; i ++){
-			itemtable.add(new VisImage(Resources.region("slot"))).size(64);
+			Slot slot = new Slot();
+			rodslots[i] = slot;
+			itemtable.add(slot).size(64);
 		}
 	}
 
 	@Override
 	public void onOpen(){
-
+		InventoryComponent inv = Koru.module(ClientData.class).player.inventory();
+		Array<ItemStack> ar = inv.asArray();
+		
+		for(int i = 0; i < slots; i ++)
+			rodslots[i].stack = matslots[i].stack = null;
+		
+		int irod = 0, imat = 0;
+		for(ItemStack stack : ar){
+			
+			if(stack.isType(ItemType.rod))
+				rodslots[irod++].stack = stack;
+			
+			if(stack.isType(ItemType.material))
+				matslots[imat++].stack = stack;
+		}
 	}
 
 	@Override
@@ -93,11 +119,28 @@ public class CraftingMenu extends Menu{
 			
 			//VisUI.getSkin().getDrawable("border-white").draw(batch, getX(), getY(), getWidth(), getHeight());
 			
-			
 			batch.setColor(1, 1, 1, alpha);
 			batch.draw(Resources.region("tooltemplate"), getX(), getY(), getWidth(), getHeight());
 			
 			batch.setColor(Color.WHITE);
+		}
+	}
+	
+	class Slot extends Actor{
+		public final ClickListener click;
+		public ItemStack stack;
+
+		public Slot() {
+			addListener((click = new ClickListener()));
+		}
+
+		public void draw(Batch batch, float alpha){
+			batch.setColor(1, 1, 1, alpha);
+			batch.draw(Resources.region("slot"), getX(), getY(), getWidth(), getHeight());
+			
+			if(stack != null){
+				InventoryMenu.drawItem(batch, alpha, getX(), getY(), stack);
+			}
 		}
 	}
 }

@@ -51,10 +51,6 @@ public class Item{
 		return id;
 	}
 	
-	public boolean weapon(){
-		return false;
-	}
-	
 	public WeaponType weaponType(){
 		return WeaponType.sword;
 	}

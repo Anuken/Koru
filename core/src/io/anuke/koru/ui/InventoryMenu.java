@@ -62,7 +62,7 @@ public class InventoryMenu extends VisTable{
 		super.draw(batch, alpha);
 
 		if(inventory.selected != null){
-			drawSlot(batch, Gdx.input.getX() - slotsize/2, Gdx.graphics.getHeight() - Gdx.input.getY() - slotsize/2, inventory.selected);
+			drawItem(batch, alpha, Gdx.input.getX() - slotsize/2, Gdx.graphics.getHeight() - Gdx.input.getY() - slotsize/2, inventory.selected);
 		}
 
 		Actor actor = getStage().hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true);
@@ -79,25 +79,25 @@ public class InventoryMenu extends VisTable{
 		}
 	}
 	
-	private void drawSlot(Batch batch, float x, float y, ItemStack stack){
+	public static void drawItem(Batch batch, float alpha, float x, float y, ItemStack stack){
 		TextureRegion region = Resources.region(stack.item.name() + "item");
 
-		batch.setColor(0, 0, 0, 0.1f);
+		batch.setColor(0, 0, 0, 0.1f*alpha);
 		batch.draw(region, x + slotsize / 2 - region.getRegionWidth() / 2 * slotsize / 16, y + slotsize / 2 - region.getRegionHeight() / 2 * slotsize / 16 - 4, region.getRegionWidth() * slotsize / 16, region.getRegionHeight() * slotsize / 16);
 
-		batch.setColor(Color.WHITE);
+		batch.setColor(1f, 1f, 1f, alpha);
 		batch.draw(region, x + slotsize / 2 - region.getRegionWidth() / 2 * slotsize / 16, y + slotsize / 2 - region.getRegionHeight() / 2 * slotsize / 16, region.getRegionWidth() * slotsize / 16, region.getRegionHeight() * slotsize / 16);
 
 		Resources.font2().getData().setScale(2f);
 
 		if(stack.amount > 1){
 
-			Resources.font2().setColor(0, 0, 0, 0.15f);
+			Resources.font2().setColor(0, 0, 0, 0.15f*alpha);
 			Resources.font2().draw(batch, stack.amount + "", x + 8 + 2, y + 54 - 2);
 			
 			//fixes wierd crash bug?
 			if(stack != null){
-				Resources.font2().setColor(Color.WHITE);
+				Resources.font2().setColor(1, 1, 1, alpha);
 				Resources.font2().draw(batch, stack.amount + "", x + 8, y + 54);
 			}
 		}
@@ -123,7 +123,7 @@ public class InventoryMenu extends VisTable{
 			batch.draw(Resources.region((y == 0 && x == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
-				drawSlot(batch, getX(), getY(), stacks[x][y]);
+				drawItem(batch, alpha, getX(), getY(), stacks[x][y]);
 			}
 		}
 	}

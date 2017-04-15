@@ -169,7 +169,7 @@ public class InputHandler{
 		if(stack == null)
 			return;
 		
-		if(stack.isWeapon()){
+		if(stack.isType(ItemType.weapon)){
 			stack.getWeaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
 			stack.getWeaponType().clicked(left);
 		}

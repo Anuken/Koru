@@ -79,7 +79,7 @@ public class Input extends Module<Koru>{
 		
 		ItemStack stack = player.inventory().hotbarStack();
 		
-		if(stack != null && stack.isWeapon()){
+		if(stack != null && stack.isType(ItemType.weapon)){
 			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
 			render.direction = 2-(int)((angle-45)/90f);
 			if(render.direction == 1) render.direction = 3;
