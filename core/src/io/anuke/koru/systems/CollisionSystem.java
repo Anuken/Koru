@@ -66,30 +66,38 @@ public class CollisionSystem extends KoruSystem{
 		engine.updateCollisions();
 		super.update(deltaTime);
 		engine.updateForces(deltaTime / 60f);
+		updatePositions();
 	}
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
 		ColliderComponent co = entity.collider();
 
-		if(!co.init){
-			co.collider.x = entity.getX();
-			co.collider.y = entity.getY() + (co.grounded ? co.collider.h / 2 : 0);
-			co.lastx = co.collider.x;
-			co.lasty = co.collider.y;
-			co.collider.data = entity;
-			engine.addCollider(co.collider);
-			co.init = true;
-		}else{
-			entity.position().add(co.collider.x - co.lastx, co.collider.y - co.lasty);
-			co.collider.setPosition(entity.getX(), entity.getY() + (co.grounded ? co.collider.h / 2 : 0));
-			co.lastx = co.collider.x;
-			co.lasty = co.collider.y;
-
-		}
-
 		if(!co.collider.trigger)
 			checkTerrainCollisions(co.collider, co);
+	}
+	
+	void updatePositions(){
+		for (int i = 0; i < getEntities().size(); ++i) {
+			KoruEntity entity = (KoruEntity)getEntities().get(i);
+			
+			ColliderComponent co = entity.collider();
+
+			if(!co.init){
+				co.collider.x = entity.getX();
+				co.collider.y = entity.getY() + (co.grounded ? co.collider.h / 2 : 0);
+				co.lastx = co.collider.x;
+				co.lasty = co.collider.y;
+				co.collider.data = entity;
+				engine.addCollider(co.collider);
+				co.init = true;
+			}else{
+				entity.position().add(co.collider.x - co.lastx, co.collider.y - co.lasty);
+				co.collider.setPosition(entity.getX(), entity.getY() + (co.grounded ? co.collider.h / 2 : 0));
+				co.lastx = co.collider.x;
+				co.lasty = co.collider.y;
+			}
+		}
 	}
 
 	void checkTerrainCollisions(Collider collider, ColliderComponent comp){

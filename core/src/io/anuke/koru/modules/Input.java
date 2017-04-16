@@ -60,7 +60,7 @@ public class Input extends Module<Koru>{
 		
 		vector.set(0, 0);
 
-		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 2.2f);
+		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 1.6f);
 
 		if (Gdx.input.isKeyPressed(KeyBindings.move_up)) {
 			vector.y += speed;
@@ -135,7 +135,7 @@ public class Input extends Module<Koru>{
 		if (button == Buttons.LEFT){
 			sendInput(InputType.leftclick_down, blockx, blocky);
 			
-			if(player.inventory().hotbarStack() == null || player.inventory().hotbarStack().item.isType(ItemType.material))
+			if(player.inventory().hotbarStack() == null || !(player.inventory().hotbarStack().item.isType(ItemType.tool) || player.inventory().hotbarStack().item.isType(ItemType.weapon)))
 				sendInput(InputType.interact, blockx, blocky);
 		
 		}else if (button == Buttons.RIGHT){

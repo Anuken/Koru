@@ -59,7 +59,7 @@ public class Network extends Module<Koru>{
 		handle(DataPacket.class, data->{
 			Koru.log("Recieving a data packet... ");
 
-			t.engine.removeAllEntities();
+			main.engine.removeAllEntities();
 			Koru.log("Recieved " + data.entities.size() + " entities.");
 			for(Entity entity : data.entities){
 				entityQueue.add((KoruEntity) entity);
@@ -74,7 +74,7 @@ public class Network extends Module<Koru>{
 		
 		handle(WorldUpdatePacket.class,p->{
 			for(Long key : p.updates.keys()){
-				KoruEntity entity = t.engine.getEntity(key);
+				KoruEntity entity = main.engine.getEntity(key);
 				if(entity == null){
 					requestEntity(key);
 					continue;
@@ -101,9 +101,9 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(SlotChangePacket.class,p->{
-			if(t.engine.getEntity(p.id) == null)
+			if(main.engine.getEntity(p.id) == null)
 				return;
-			t.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+			main.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
 		});
 		
 		handle(InventoryUpdatePacket.class,p->{
@@ -111,7 +111,7 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(AnimationPacket.class,p->{
-			t.engine.getEntity(p.player).getComponent(RenderComponent.class).renderer.onAnimation(p.type);
+			main.engine.getEntity(p.player).getComponent(RenderComponent.class).renderer.onAnimation(p.type);
 		});
 		
 		handle(ChatPacket.class,p->{
@@ -187,7 +187,7 @@ public class Network extends Module<Koru>{
 				}
 			}
 
-			t.engine.removeAllEntities();
+			main.engine.removeAllEntities();
 		}
 		
 		while(entityQueue.size != 0){
@@ -203,7 +203,7 @@ public class Network extends Module<Koru>{
 				continue;
 			}
 
-			if(t.engine.getEntity(entity.getID()) == null)
+			if(main.engine.getEntity(entity.getID()) == null)
 				entity.add();
 		}
 
@@ -212,20 +212,20 @@ public class Network extends Module<Koru>{
 		}
 		
 		KoruEntity player = getModule(ClientData.class).player;
-		ImmutableArray<Entity> entities = t.engine.getEntities();
+		ImmutableArray<Entity> entities = main.engine.getEntities();
 
 		//unloads entities that are very far away
 		for(Entity e : entities){
 			KoruEntity entity = (KoruEntity) e;
 			if(entity.getType().unload() && entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
-				t.engine.removeEntity(e);
+				main.engine.removeEntity(e);
 			}
 		}
 
 		tempids.clear();
 		
 		for(Long id : entitiesToRemove){
-			if(t.engine.removeEntity(id)){
+			if(main.engine.removeEntity(id)){
 				tempids.add(id);
 			}
 		}

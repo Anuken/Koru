@@ -381,10 +381,10 @@ public class Renderer extends Module<Koru>{
 		NumberFormat f = DecimalFormat.getInstance();
 
 		if(debug){
-			font.draw(batch, "[CORAL]entities: " + t.engine.getEntities().size() + "\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak + "\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + "\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() + "\n[ORANGE]render ns: " + f.format(Profiler.renderTime) + "\nworld ns: " + f.format(Profiler.engineTime) + "\nui ns: "
+			font.draw(batch, "[CORAL]entities: " + main.engine.getEntities().size() + "\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak + "\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + "\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() + "\n[ORANGE]render ns: " + f.format(Profiler.renderTime) + "\nworld ns: " + f.format(Profiler.engineTime) + "\nui ns: "
 					+ f.format(Profiler.uiTime) + "\nnetwork ns: " + f.format(Profiler.networkTime) + "\nengine ns: " + f.format(Profiler.worldTime) + "\nmodule ns: " + f.format(Profiler.moduleTime) + "\ntotal ns: " + f.format(Profiler.totalTime), 0, uiheight() - 5);
 
-			font.draw(batch, "[SKY]" + t.engine.getEntities().toString().replace(",", "\n"), uiwidth(), uiheight(), 0, Align.topRight, false);
+			font.draw(batch, "[SKY]" + main.engine.getEntities().toString().replace(",", "\n"), uiwidth(), uiheight(), 0, Align.topRight, false);
 		}
 
 		if(consoleOpen){

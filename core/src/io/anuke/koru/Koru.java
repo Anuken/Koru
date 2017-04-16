@@ -46,7 +46,7 @@ public class Koru extends ModuleController<Koru>{
 		try{
 			long start = TimeUtils.nanoTime();
 			
-			engine.update(Gdx.graphics.getDeltaTime()*60f);
+			
 			
 			if(Profiler.update())
 			Profiler.engineTime = TimeUtils.timeSinceNanos(start);
@@ -54,7 +54,7 @@ public class Koru extends ModuleController<Koru>{
 			long mstart = TimeUtils.nanoTime();
 			
 			super.render();
-			
+			engine.update(Gdx.graphics.getDeltaTime()*60f);
 			if(Profiler.update()){
 				Profiler.moduleTime = TimeUtils.timeSinceNanos(mstart);
 				Profiler.totalTime = TimeUtils.timeSinceNanos(start);

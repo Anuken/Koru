@@ -1,6 +1,7 @@
 package io.anuke.koru.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -11,6 +12,19 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 import io.anuke.koru.graphics.Cursors;
 
 public class UIUtils{
+	private static final Vector2 tmp = new Vector2();
+	
+	public static float worldX(Actor actor){
+		tmp.set(0,0);
+		actor.localToStageCoordinates(tmp);
+		return tmp.x;
+	}
+	
+	public static float worldY(Actor actor){
+		tmp.set(0,0);
+		actor.localToStageCoordinates(tmp);
+		return tmp.y;
+	}
 	
 	public static void setCursors(Button button){
 		button.addListener(new ClickListener() {
