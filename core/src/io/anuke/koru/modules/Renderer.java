@@ -38,9 +38,10 @@ import io.anuke.ucore.spritesystem.*;
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 26;
-	public final float GUIscale = 5f;
-	public final int scale = 4;
-	public final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
+	public static final float GUIscale = 5f;
+	public static final int scale = 4;
+	public static final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
+	
 	public boolean debug = false, consoleOpen = false;
 	public World world;
 	public SpriteBatch batch;

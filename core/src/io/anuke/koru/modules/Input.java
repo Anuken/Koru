@@ -24,9 +24,10 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
 public class Input extends Module<Koru>{
+	private float movespeed = 1.6f, dashspeed = 18f;
 	private Vector2 vector = new Vector2();
-	KoruEntity player;
-	int blockx, blocky;
+	private KoruEntity player;
+	private int blockx, blocky;
 
 	public void init() {
 		InputMultiplexer plex = new InputMultiplexer();
@@ -60,7 +61,7 @@ public class Input extends Module<Koru>{
 		
 		vector.set(0, 0);
 
-		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 25f : 1.6f);
+		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? dashspeed : movespeed);
 
 		if (Gdx.input.isKeyPressed(KeyBindings.move_up)) {
 			vector.y += speed;
