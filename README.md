@@ -12,12 +12,12 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 - building, resource collection
 - basic combat
 - specialized tools
-- GUI made with ![uScene](https://github.com/Anuken/uScene)
+- GUI made with [uScene](https://github.com/Anuken/uScene)
 - multiplayer, made with Kryonet
 - crabs
 - lighting system
 - ingame chat
-- AABB physics
+- AABB physics with [GDX-AABB](https://github.com/Anuken/gdx-aabb)
 
 
 ### Roadmap
