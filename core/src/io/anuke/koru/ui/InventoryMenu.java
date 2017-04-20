@@ -4,11 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
@@ -17,9 +13,12 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.utils.Resources;
+import io.anuke.scene.Element;
+import io.anuke.scene.ui.layout.Table;
+import io.anuke.scene.utils.ClickListener;
 import io.anuke.ucore.graphics.Hue;
 
-public class InventoryMenu extends VisTable{
+public class InventoryMenu extends Table{
 	public static final int slotsize = 64;
 	private ItemStack[][] stacks;
 	private InventoryComponent inventory;
@@ -37,14 +36,11 @@ public class InventoryMenu extends VisTable{
 		for(int y = 0; y < stacks[0].length; y++){
 			for(int x = 0; x < stacks.length; x++){
 				Slot slot = new Slot(x, y);
-				slot.addListener(new ClickListener(){
-					public void clicked(InputEvent event, float x, float y){
-						//inventory.clickSlot(slot.x, slot.y);
-						InventoryClickPacket packet = new InventoryClickPacket();
-						packet.x = slot.x;
-						packet.y = slot.y;
-						Koru.module(Network.class).client.sendTCP(packet);
-					}
+				slot.clicked(()->{
+					InventoryClickPacket packet = new InventoryClickPacket();
+					packet.x = slot.x;
+					packet.y = slot.y;
+					Koru.module(Network.class).client.sendTCP(packet);
 				});
 				add(slot).size(slotsize);
 			}
@@ -65,7 +61,7 @@ public class InventoryMenu extends VisTable{
 			drawItem(batch, alpha, Gdx.input.getX() - slotsize/2, Gdx.graphics.getHeight() - Gdx.input.getY() - slotsize/2, inventory.selected);
 		}
 
-		Actor actor = getStage().hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true);
+		Element actor = getStage().hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true);
 
 		if(actor instanceof Slot){
 			Slot slot = (Slot) actor;
@@ -103,7 +99,7 @@ public class InventoryMenu extends VisTable{
 		}
 	}
 
-	class Slot extends Actor{
+	class Slot extends Element{
 		public final int x, y;
 		public final ClickListener click;
 

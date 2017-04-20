@@ -1,12 +1,11 @@
 package io.anuke.koru.server.world;
 
-import static io.anuke.ucore.UCore.clamp;
+import static io.anuke.ucore.core.Mathf.clamp;
 
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.StructMaterials;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoronoiNoise;
@@ -196,7 +195,7 @@ public class TerrainGenerator implements Generator{
 
 		elevation /= 0.84;
 
-		elevation = UCore.clamp(elevation);
+		elevation = clamp(elevation);
 
 		return (float) elevation;
 
@@ -235,7 +234,7 @@ public class TerrainGenerator implements Generator{
 
 		temp /= 1.05;
 
-		temp = UCore.clamp(temp);
+		temp = clamp(temp);
 
 		return (float) temp;
 	}
@@ -255,7 +254,7 @@ public class TerrainGenerator implements Generator{
 
 		out /= 1.05;
 
-		out = UCore.clamp(out);
+		out = clamp(out);
 
 		return (float) out;
 	}
@@ -275,7 +274,7 @@ public class TerrainGenerator implements Generator{
 
 		out /= 1.05;
 
-		out = UCore.clamp(out);
+		out = clamp(out);
 
 		return (float) out;
 	}

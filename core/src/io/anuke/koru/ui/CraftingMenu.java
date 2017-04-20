@@ -1,34 +1,32 @@
 package io.anuke.koru.ui;
 
 import static io.anuke.koru.ui.InventoryMenu.slotsize;
+import static io.anuke.scene.style.Styles.styles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.util.CursorManager;
-import com.kotcrab.vis.ui.widget.VisImageButton;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.graphics.Cursors;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Tools;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.UCore;
+import io.anuke.scene.Element;
+import io.anuke.scene.event.InputEvent;
+import io.anuke.scene.event.InputListener;
+import io.anuke.scene.ui.ImageButton;
+import io.anuke.scene.ui.Label;
+import io.anuke.scene.ui.layout.Table;
+import io.anuke.scene.utils.ClickListener;
+import io.anuke.scene.utils.CursorManager;
+import io.anuke.ucore.core.Mathf;
 
 public class CraftingMenu extends Menu{
 	final int slots = 8;
@@ -38,7 +36,7 @@ public class CraftingMenu extends Menu{
 	private Slot matslot;
 	private ItemStack dragged;
 	private int toolSize, toolLength;
-	private VisLabel nametext;
+	private Label nametext;
 
 	public CraftingMenu() {
 		super("Tool Crafting");
@@ -50,8 +48,8 @@ public class CraftingMenu extends Menu{
 		Table table = getContentTable();
 		table.top();
 
-		Table left = new VisTable();
-		Table right = new VisTable();
+		Table left = new Table();
+		Table right = new Table();
 
 		table.add(left).grow();
 		table.add(right).grow();
@@ -74,27 +72,27 @@ public class CraftingMenu extends Menu{
 
 		table.row();
 
-		Table desctable = new VisTable();
+		Table desctable = new Table();
 
 		table.add(desctable).padTop(5).colspan(2).row();
 
 		desctable.left();
 
-		desctable.add(nametext = new VisLabel("Type: [SKY]Dagger")).align(Align.left);
+		desctable.add(nametext = new Label("Type: [SKY]Dagger")).align(Align.left);
 		desctable.row();
 		desctable.add("Specialization: [YELLOW]Chisel").align(Align.left);
 
-		Table ctable = new VisTable();
+		Table ctable = new Table();
 
 		table.add(ctable).padTop(5).colspan(2).row();
 
 		addStatButtons(ctable);
 
-		Table itemtable = new VisTable();
+		Table itemtable = new Table();
 
 		table.add(itemtable).colspan(2).padTop(10).row();
 
-		Table matable = new VisTable();
+		Table matable = new Table();
 
 		for(int i = 0; i < slots; i++){
 			Slot slot = new Slot(true);
@@ -107,7 +105,7 @@ public class CraftingMenu extends Menu{
 		itemtable.add(matable);
 		itemtable.row();
 
-		Table rodtable = new VisTable();
+		Table rodtable = new Table();
 
 		for(int i = 0; i < slots; i++){
 			Slot slot = new Slot(true);
@@ -129,14 +127,12 @@ public class CraftingMenu extends Menu{
 			table.add(titles[j]).colspan(5);
 			table.row();
 			
-			VisImageButton l1 = new VisImageButton("gray");
-			VisImageButton l2 = new VisImageButton("gray");
+			ImageButton l1 = new ImageButton("gray");
+			ImageButton l2 = new ImageButton("gray");
 			
-			l1.getStyle().imageUp = VisUI.getSkin().getDrawable("icon-arrow-left");
-			l2.getStyle().imageUp = VisUI.getSkin().getDrawable("icon-arrow-right");
+			l1.getStyle().imageUp = styles.getDrawable("icon-arrow-left");
+			l2.getStyle().imageUp = styles.getDrawable("icon-arrow-right");
 			
-			UIUtils.setCursors(l1);
-			UIUtils.setCursors(l2);
 			
 			l1.getImageCell().size(32);
 			l2.getImageCell().size(32);
@@ -148,8 +144,8 @@ public class CraftingMenu extends Menu{
 					else
 						toolLength --;
 					
-					toolSize = UCore.clamp(toolSize, 0, 2);
-					toolLength = UCore.clamp(toolLength, 0, 2);
+					toolSize = Mathf.clamp(toolSize, 0, 2);
+					toolLength = Mathf.clamp(toolLength, 0, 2);
 					updateTool();
 				}
 			});
@@ -161,8 +157,8 @@ public class CraftingMenu extends Menu{
 					else
 						toolLength ++;
 					
-					toolSize = UCore.clamp(toolSize, 0, 2);
-					toolLength = UCore.clamp(toolLength, 0, 2);
+					toolSize = Mathf.clamp(toolSize, 0, 2);
+					toolLength = Mathf.clamp(toolLength, 0, 2);
 					updateTool();
 				}
 			});
@@ -186,7 +182,6 @@ public class CraftingMenu extends Menu{
 		nametext.setText("Type: [SKY]" + Tools.getToolName(toolLength, toolSize));
 	}
 	
-
 	@Override
 	public void onOpen(){
 		InventoryComponent inv = Koru.module(ClientData.class).player.inventory();
@@ -221,8 +216,8 @@ public class CraftingMenu extends Menu{
 			float x = Gdx.input.getX() - slotsize / 2;
 			float y = Gdx.graphics.getHeight() - Gdx.input.getY() - slotsize / 2;
 
-			float rx = slotsize / 2 + (UIUtils.worldX(dragged.isType(ItemType.rod) ? rodslot : matslot));
-			float ry = slotsize / 2 + (UIUtils.worldY(dragged.isType(ItemType.rod) ? rodslot : matslot));
+			float rx = slotsize / 2 + ((dragged.isType(ItemType.rod) ? rodslot : matslot).worldPos().x);
+			float ry = slotsize / 2 + ((dragged.isType(ItemType.rod) ? rodslot : matslot).worldPos().y);
 
 			TextureRegion region = Resources.region(dragged.item.name() + "item");
 
@@ -240,8 +235,8 @@ public class CraftingMenu extends Menu{
 		float x = Gdx.input.getX();
 		float y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-		float rx = slotsize / 2 + (UIUtils.worldX(dragged.isType(ItemType.rod) ? rodslot : matslot));
-		float ry = slotsize / 2 + (UIUtils.worldY(dragged.isType(ItemType.rod) ? rodslot : matslot));
+		float rx = slotsize / 2 + ((dragged.isType(ItemType.rod) ? rodslot : matslot).worldPos().x);
+		float ry = slotsize / 2 + ((dragged.isType(ItemType.rod) ? rodslot : matslot).worldPos().y);
 
 		if(Vector2.dst(x, y, rx, ry) < slotsize){
 			if(dragged.isType(ItemType.rod)){
@@ -252,12 +247,12 @@ public class CraftingMenu extends Menu{
 		}
 	}
 
-	class ToolView extends Actor{
+	class ToolView extends Element{
 		@Override
 		public void draw(Batch batch, float alpha){
 
 			batch.setColor(1, 1, 1, alpha);
-			VisUI.getSkin().getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
+			styles.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
 
 			batch.setColor(1, 1, 1, alpha);
 			batch.draw(Resources.region("tooltemplate"), getX(), getY(), getWidth(), getHeight());
@@ -266,7 +261,7 @@ public class CraftingMenu extends Menu{
 		}
 	}
 
-	class StatCheck extends Actor{
+	class StatCheck extends Element{
 		int i, j;
 		
 		public StatCheck(int i, int j){
@@ -276,17 +271,17 @@ public class CraftingMenu extends Menu{
 		
 		@Override
 		public void draw(Batch batch, float alpha){
-			VisUI.getSkin().getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
+			styles.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
 		
 			batch.setColor(((j == 0 && i > toolSize) || (j == 1 && i > toolLength)) ? Color.CLEAR : j == 0 ? Color.CORAL : Color.WHITE);
 			
-			VisUI.getSkin().getDrawable("bump").draw(batch, getX(), getY(), getWidth(), getHeight());
+			styles.getDrawable("bump").draw(batch, getX(), getY(), getWidth(), getHeight());
 			
 			batch.setColor(Color.WHITE);
 		}
 	}
 
-	class Slot extends Actor{
+	class Slot extends Element{
 		public ClickListener click;
 		public ItemStack stack;
 
@@ -294,19 +289,17 @@ public class CraftingMenu extends Menu{
 			if(draggable)
 				addListener(click = new ClickListener(){
 					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
+					public void enter(InputEvent event, float x, float y, int pointer, Element fromActor){
 						super.enter(event, x, y, pointer, fromActor);
 						if(stack != null){
-							Gdx.graphics.setCursor(Cursors.loadCursor("hand"));
-							Cursors.setCursor("hand");
+							CursorManager.setHand();
 						}
 					}
 
 					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor){
+					public void exit(InputEvent event, float x, float y, int pointer, Element toActor){
 						super.exit(event, x, y, pointer, toActor);
-						CursorManager.restoreDefaultCursor();
-						Cursors.setCursor("cursor");
+						CursorManager.restoreCursor();
 					}
 				});
 

@@ -141,7 +141,7 @@ public class Renderer extends Module<Koru>{
 			Cursors.setCursor("cursor");
 
 		light.setColor(world.getAmbientColor());
-
+		
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
 

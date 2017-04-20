@@ -1,6 +1,6 @@
 package io.anuke.koru.graphics;
 
-import static io.anuke.ucore.UCore.clamp;
+import static io.anuke.ucore.core.Mathf.clamp;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;

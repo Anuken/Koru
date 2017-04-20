@@ -26,7 +26,7 @@ dependencies {
 	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-	compile 'com.github.Anuken:ucore:b74189bf4e'
+	compile 'com.github.Anuken:ucore:7023da1348'
 	compile 'com.github.Anuken:gdx-aabb:770f431b33'
 	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 	compile "com.kotcrab.vis:vis-ui:$visuiVersion"

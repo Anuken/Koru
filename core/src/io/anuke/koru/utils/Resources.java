@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.kotcrab.vis.ui.VisUI;
 
 import io.anuke.koru.items.BlockRecipes;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.StructMaterials;
+import io.anuke.scene.style.Styles;
 
 public class Resources{
 	private static Json json;
@@ -55,11 +55,11 @@ public class Resources{
 	}
 	
 	public static BitmapFont font2(){
-		return VisUI.getSkin().getFont("pixel-font-noborder");
+		return Styles.styles.getFont("pixel-font-noborder");
 	}
 	
 	public static BitmapFont font3(){
-		return VisUI.getSkin().getFont("pixel-font");
+		return Styles.styles.getFont("pixel-font");
 	}
 	
 	public static Json getJson(){

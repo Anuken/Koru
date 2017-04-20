@@ -1,35 +1,34 @@
 package io.anuke.koru.ui;
 
 
+import static io.anuke.scene.style.Styles.styles;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.FocusManager;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.network.packets.ChatPacket;
+import io.anuke.scene.style.Styles;
+import io.anuke.scene.ui.Label;
+import io.anuke.scene.ui.Label.LabelStyle;
+import io.anuke.scene.ui.TextField;
+import io.anuke.scene.ui.layout.Table;
 
-public class ChatTable extends VisTable{
+public class ChatTable extends Table{
 	private final static int messagesShown = 10;
 	private Array<ChatMessage> messages = new Array<ChatMessage>();
 	private float fadetime;
 	private float lastfadetime;
 	private boolean chatOpen = false;
-	private VisTextField chatfield;
-	private VisLabel fieldlabel = new VisLabel(">");
+	private TextField chatfield;
+	private Label fieldlabel = new Label(">");
 	private BitmapFont font;
 	private GlyphLayout layout = new GlyphLayout();
 	private float offsetx = 4, offsety = 4, fontoffsetx = 2, chatspace = 50;
@@ -40,20 +39,19 @@ public class ChatTable extends VisTable{
 	
 	public ChatTable(){
 		super();
-		font = VisUI.getSkin().getFont("pixel-font");
+		font = styles.getFont("pixel-font");
 		font.getData().markupEnabled = true;
-		addListener(input);
 		fieldlabel.setStyle(new LabelStyle(fieldlabel.getStyle()));
 		fieldlabel.getStyle().font = font;
 		fieldlabel.setStyle(fieldlabel.getStyle());
 		fieldlabel.setFontScale(2);
-		chatfield = new VisTextField("", new VisTextField.VisTextFieldStyle(VisUI.getSkin().get(VisTextFieldStyle.class)));
+		chatfield = new TextField("", new TextField.TextFieldStyle(styles.get(TextField.TextFieldStyle.class)));
 		
-		chatfield.getStyle().background = VisUI.getSkin().getDrawable("blank");
+		chatfield.getStyle().background = styles.getDrawable("blank");
 		chatfield.getStyle().fontColor = Color.WHITE;
-		chatfield.getStyle().focusBorder = null;
-		chatfield.getStyle().backgroundOver = null;
-		chatfield.getStyle().font = VisUI.getSkin().getFont("pixel-font");
+		//chatfield.getStyle().focusBorder = null;
+		//chatfield.getStyle().backgroundOver = null;
+		chatfield.getStyle().font = Styles.styles.getFont("pixel-font");
 		bottom().left().padBottom(offsety).padLeft(offsetx*2).add(fieldlabel);
 		
 		add(chatfield).padBottom(offsety).padLeft(offsetx).growX().padRight(offsetx).height(28);
@@ -63,7 +61,7 @@ public class ChatTable extends VisTable{
 	public void draw(Batch batch, float alpha){
 		batch.setColor(shadowColor);
 		if(chatOpen)
-			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight()-1);
+			batch.draw(styles.getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight()-1);
 		
 		font.getData().setScale(2f);
 		font.getData().down = -21.5f;
@@ -95,7 +93,7 @@ public class ChatTable extends VisTable{
 					
 			}
 			
-			batch.draw(VisUI.getSkin().getRegion("white"), offsetx, theight-layout.height+1-4, textWidth, layout.height+textspacing);
+			batch.draw(styles.getRegion("white"), offsetx, theight-layout.height+1-4, textWidth, layout.height+textspacing);
 			batch.setColor(shadowColor);
 			
 			font.getCache().draw(batch);
@@ -120,7 +118,7 @@ public class ChatTable extends VisTable{
 	
 	public void enterPressed(){
 		if(!chatOpen && (getStage().getKeyboardFocus() == null || !getStage().getKeyboardFocus().getParent().isVisible())){
-			FocusManager.switchFocus(chatfield.getStage(), chatfield);
+			//FocusManager.switchFocus(chatfield.getStage(), chatfield);
 			chatfield.getStage().setKeyboardFocus(chatfield);
 			chatOpen = !chatOpen;
 			lastfadetime = fadetime;
@@ -143,10 +141,6 @@ public class ChatTable extends VisTable{
 		fadetime += 1f;
 		fadetime = Math.min(fadetime, messagesShown)+2f;
 	}
-	
-	InputListener input = new InputListener(){
-		
-	};
 	
 	private static class ChatMessage{
 		public final String sender;

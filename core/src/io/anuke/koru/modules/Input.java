@@ -3,7 +3,6 @@ package io.anuke.koru.modules;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -20,6 +19,7 @@ import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.ucore.core.UInput;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
@@ -30,10 +30,7 @@ public class Input extends Module<Koru>{
 	private int blockx, blocky;
 
 	public void init() {
-		InputMultiplexer plex = new InputMultiplexer();
-		plex.addProcessor(getModule(UI.class).stage);
-		plex.addProcessor(this);
-		Gdx.input.setInputProcessor(plex);
+		UInput.addProcessor(this);
 		player = getModule(ClientData.class).player;
 	}
 

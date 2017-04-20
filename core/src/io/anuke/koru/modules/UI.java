@@ -9,38 +9,35 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.util.CursorManager;
-import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.VisTextField.TextFieldListener;
 
+import io.anuke.SceneModule;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.graphics.Cursors;
 import io.anuke.koru.ui.*;
-import io.anuke.koru.ui.Menu;
 import io.anuke.koru.utils.Profiler;
-import io.anuke.ucore.modules.Module;
+import io.anuke.scene.style.Styles;
+import io.anuke.scene.ui.Label;
+import io.anuke.scene.ui.TextButton;
+import io.anuke.scene.ui.TextField;
+import io.anuke.scene.ui.layout.Stack;
+import io.anuke.scene.ui.layout.Table;
+import io.anuke.scene.utils.ClickListener;
+import io.anuke.scene.utils.CursorManager;
+import io.anuke.ucore.core.UInput;
 
-public class UI extends Module<Koru> {
+public class UI extends SceneModule<Koru> {
 	private ObjectMap<Class<?>, Menu> menus = new ObjectMap<>();
-	Stage stage;
 	ChatTable chat;
-	VisTable menutable;
-	VisTable chattable;
-	VisTable uitable;
-	VisLabel connectlabel;
-	VisLabel connectfail;
-	VisTable title;
+	Table menutable;
+	Table chattable;
+	Table uitable;
+	Label connectlabel;
+	Label connectfail;
+	Table title;
 	Network network;
 	Menu currentMenu;
 
@@ -50,30 +47,33 @@ public class UI extends Module<Koru> {
 
 	public UI() {
 		loadSkin();
-		stage = new Stage(new ScreenViewport());
 		setupMenu();
 		setupChat();
 		setupUI();
 		
-		CursorManager.setDefaultCursor(Cursors.loadCursor("cursor"));
+		UInput.flipProcessors();
+		
+		CursorManager.arrow = Cursors.loadCursor("cursor");
+		CursorManager.hand = Cursors.loadCursor("hand");
+		CursorManager.ibeam = Cursors.loadCursor("ibar");
 	}
 	
 	public void loadSkin(){
 		float s = 1f;
 		FileHandle skinFile = Gdx.files.internal("ui/uiskin.json");
-		Skin skin = new Skin();
+		styles = new Styles();
 
 		FileHandle atlasFile = skinFile.sibling(skinFile.nameWithoutExtension() + ".atlas");
 		if(atlasFile.exists()){
 			TextureAtlas atlas = new TextureAtlas(atlasFile);
 			try{
-				Field field = skin.getClass().getDeclaredField("atlas");
+				Field field = styles.getClass().getDeclaredField("atlas");
 				field.setAccessible(true);
-				field.set(skin, atlas);
+				field.set(styles, atlas);
 			}catch(Exception e){
 				throw new RuntimeException(e);
 			}
-			skin.addRegions(atlas);
+			styles.addRegions(atlas);
 		}
 		
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/smooth.ttf"));
@@ -95,10 +95,10 @@ public class UI extends Module<Koru> {
 		BitmapFont borderfont = generator.generateFont(borderparameter);
 
 		
-		skin.add("default-font", font);
-		skin.add("smooth-font", font);
-		skin.add("large-font", largefont);
-		skin.add("border-font", borderfont);
+		styles.add("default-font", font);
+		styles.add("smooth-font", font);
+		styles.add("large-font", largefont);
+		styles.add("border-font", borderfont);
 		
 		FreeTypeFontGenerator pgenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/prose.ttf"));
 		
@@ -118,95 +118,81 @@ public class UI extends Module<Koru> {
 		
 		BitmapFont pixelfont = pgenerator.generateFont(pixelparameter);
 		pixelfont.getData().setScale(2f);
-		skin.add("pixel-font", pixelfont);
+		styles.add("pixel-font", pixelfont);
 		
 		BitmapFont pixelfont2 = pgenerator.generateFont(pixelparameter2);
 		pixelfont2.getData().setScale(2f);
 		pixelfont2.setUseIntegerPositions(false);
-		skin.add("pixel-font-noborder", pixelfont2);
+		styles.add("pixel-font-noborder", pixelfont2);
 
-		skin.load(skinFile);
+		styles.load(skinFile);
 
-		VisUI.load(skin);
+		Styles.load(styles);
 
 		generator.dispose();
 		pgenerator.dispose();
 	}
 	
 	void setupUI(){
-		uitable = new VisTable();
-		uitable.setFillParent(true);
-		stage.addActor(uitable);
+		uitable = scene.table();
 		
 		Stack stack = new Stack();
 		
 		uitable.add(stack).grow();
 		
-		VisTable invTable = new VisTable();
+		Table invTable = new Table();
 		stack.add(invTable);
 		
 		invTable.bottom().right().add(new InventoryMenu()).align(Align.bottomRight);
 		
-		VisTable rtable = new VisTable();
+		Table rtable = new Table();
 		rtable.center().add(new RecipeMenu()).padBottom(300f);
 		stack.add(rtable);
 	}
 
 	void setupMenu() {
 		
-		menutable = new VisTable();
-		menutable.setFillParent(true);
-		stage.addActor(menutable);
+		menutable = scene.table();
+		
 		menutable.background("window-noborder");
 		menutable.center();
 		
-		connectfail = new VisLabel("Connection Failed!");
+		connectfail = new Label("Connection Failed!");
 		connectfail.setColor(Color.RED);
 		connectfail.setAlignment(Align.center, Align.center);
-		connectlabel = new VisLabel("Connecting...");
+		connectlabel = new Label("Connecting...");
 
-		VisTextButton button = new VisTextButton("Connect");
+		TextButton button = new TextButton("Connect");
 		
-		UIUtils.setCursors(button);
+		TextField name = new TextField(System.getProperty("user.name"));
 		
-		VisTextField name = new VisTextField(System.getProperty("user.name"));
-		
-		UIUtils.setCursors(name);
-
-		// enter key handling
-		name.setTextFieldListener(new TextFieldListener() {
-			@Override
-			public void keyTyped(VisTextField textField, char c) {
-				if (c == '\n') {
-					((ClickListener) button.getListeners().get(2)).clicked(null, 0, 0);
-				}else{
-					getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
-				}
+		//enter key handling
+		name.typed(c->{
+			if (c == '\n') {
+				((ClickListener) button.getListeners().get(2)).clicked(null, 0, 0);
+			}else{
+				getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
 			}
 		});
+
 
 		menutable.add(connectfail).colspan(2).padBottom(20).minHeight(100).minWidth(300).row();
 		menutable.add(connectlabel).colspan(2).row();
-		menutable.add(new VisLabel("Name: ")).padBottom(6f).align(Align.right);
+		menutable.add(new Label("Name: ")).padBottom(6f).align(Align.right);
 		menutable.add(name).padBottom(6f).row();
 		menutable.add(button).colspan(2).fillX().padTop(5).padBottom(200);
-
-		button.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (!network.connecting && !network.connected()){
-					getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
-					name.getStage().setKeyboardFocus(null);
-					network.connect();
-				}
+		
+		button.clicked(()->{
+			if (!network.connecting && !network.connected()){
+				getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
+				name.getStage().setKeyboardFocus(null);
+				network.connect();
 			}
 		});
 		
-		title = new VisTable();
-		title.setFillParent(true);
-		stage.addActor(title);
+		title = scene.table();
 		
-		VisLabel tlabel = new VisLabel("[WHITE]< [SKY]Koru [WHITE]>");
+		Label tlabel = new Label("[WHITE]< [SKY]Koru [WHITE]>");
 		tlabel.getStyle().font.getData().markupEnabled = true;
 		tlabel.setFontScale(2f);
 		title.top().add(tlabel).padTop(60f);
@@ -214,8 +200,8 @@ public class UI extends Module<Koru> {
 	
 	void setupChat() {
 		chat = new ChatTable();
-		stage.addActor(chat);
 		chat.setFillParent(true);
+		scene.add(chat);
 	}
 	
 	public void updateUIVisibility(){
@@ -228,7 +214,7 @@ public class UI extends Module<Koru> {
 	}
 	
 	public boolean mouseOnUI(){
-		return stage.hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true) != null;
+		return scene.hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true) != null;
 	}
 	
 	public boolean menuOpen(){
@@ -248,7 +234,7 @@ public class UI extends Module<Koru> {
 			menus.put(c, m);
 		}
 		
-		m.show(stage);
+		m.show(scene);
 		currentMenu = m;
 		m.onOpen();
 		
@@ -269,15 +255,10 @@ public class UI extends Module<Koru> {
 		
 		updateUIVisibility();
 		
-		stage.act();
-		stage.draw();
+		scene.draw();
+		scene.act();
 		
 		if(Profiler.update())
 			Profiler.uiTime = TimeUtils.timeSinceNanos(start);
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
 	}
 }

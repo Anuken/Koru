@@ -33,7 +33,7 @@ import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.ucore.UCore;
+import io.anuke.ucore.core.Mathf;
 import io.anuke.ucore.util.ColorCodes;
 
 public class KoruServer extends IServer{
@@ -125,6 +125,9 @@ public class KoruServer extends IServer{
 
 			player.add();
 			
+			//NOTE: IF THE FOLLOWING MESSAGES DO NOT SEND, YOU HAVE A CLASSPATH ERROR!
+			//UPDATED UCORE VERSION
+			
 			/*
 			InventoryComponent inv = player.get(InventoryComponent.class);
 			
@@ -160,9 +163,9 @@ public class KoruServer extends IServer{
 		try{
 			if(object instanceof PositionPacket){
 				PositionPacket packet = (PositionPacket) object;
-				if(!connections.containsKey(info.id))
+				if(!connections.containsKey(info.id) || getPlayer(info) == null)
 					return;
-
+				
 				getPlayer(info).position().set(packet.x, packet.y);
 				getPlayer(info).renderer().direction = packet.direction;
 				getPlayer(info).collider().collider.getVelocity().set(packet.velocity);
@@ -186,7 +189,7 @@ public class KoruServer extends IServer{
 			}else if(object instanceof SlotChangePacket){
 				SlotChangePacket packet = (SlotChangePacket) object;
 				InventoryComponent inv = getPlayer(info).inventory();
-				packet.slot = UCore.clamp(packet.slot, 0, 3);
+				packet.slot = Mathf.clamp(packet.slot, 0, 3);
 				inv.hotbar = packet.slot;
 				packet.id = info.playerid;
 				packet.stack = inv.inventory[inv.hotbar][0];

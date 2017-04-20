@@ -1,6 +1,6 @@
 package io.anuke.koru.modules;
 
-import static io.anuke.ucore.UCore.inBounds;
+import static io.anuke.ucore.core.Mathf.inBounds;
 
 import java.util.Collection;
 

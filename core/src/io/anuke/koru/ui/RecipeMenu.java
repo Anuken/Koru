@@ -5,11 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
@@ -21,9 +17,12 @@ import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.scene.Element;
+import io.anuke.scene.ui.layout.Table;
+import io.anuke.scene.utils.ClickListener;
 import io.anuke.ucore.graphics.Hue;
 
-public class RecipeMenu extends VisTable{
+public class RecipeMenu extends Table{
 	final int slotsize = 64;
 	float pscale = slotsize/16;
 	Requirement req = new Requirement();
@@ -54,7 +53,7 @@ public class RecipeMenu extends VisTable{
 		super.draw(batch, alpha);
 	}
 	
-	class Requirement extends Actor{
+	class Requirement extends Element{
 		ItemStack[] stacks;
 		
 		public void draw(Batch batch, float alpha){
@@ -82,7 +81,7 @@ public class RecipeMenu extends VisTable{
 		}
 	}
 	
-	class Slot extends Actor{
+	class Slot extends Element{
 		public final int x, y;
 		public final ClickListener click;
 		public final BlockRecipe recipe;
@@ -91,19 +90,18 @@ public class RecipeMenu extends VisTable{
 			this.x = x;
 			this.y = y;
 			this.recipe = recipe;
+			
+			click = clicked(()->{
+				selected = Slot.this;
+				req.set(recipe.requirements());
+					
+				Koru.module(ClientData.class).player.getComponent(InventoryComponent.class).recipe = x;
+					
+				RecipeSelectPacket packet = new RecipeSelectPacket();
+				packet.recipe = x;
+				Koru.module(Network.class).client.sendTCP(packet);
+			});
 
-			addListener((click = new ClickListener(){
-				public void clicked (InputEvent event, float x2, float y2) {
-					selected = Slot.this;
-					req.set(recipe.requirements());
-					
-					Koru.module(ClientData.class).player.getComponent(InventoryComponent.class).recipe = x;
-					
-					RecipeSelectPacket packet = new RecipeSelectPacket();
-					packet.recipe = x;
-					Koru.module(Network.class).client.sendTCP(packet);
-				}
-			}));
 		}
 
 		public String toString(){
