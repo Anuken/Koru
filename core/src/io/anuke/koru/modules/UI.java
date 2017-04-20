@@ -255,8 +255,9 @@ public class UI extends SceneModule<Koru> {
 		
 		updateUIVisibility();
 		
-		scene.draw();
 		scene.act();
+		scene.draw();
+		
 		
 		if(Profiler.update())
 			Profiler.uiTime = TimeUtils.timeSinceNanos(start);

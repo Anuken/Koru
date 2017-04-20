@@ -42,7 +42,6 @@ public class Network extends Module<Koru>{
 	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
 	private ObjectMap<Class<?>, Consumer<Object>> packetHandlers = new ObjectMap<>();
 	
-	
 	@Override
 	public void init(){
 		registerPackets();
@@ -95,6 +94,7 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(MenuOpenPacket.class,p->{
+			Koru.log("got menu open packet");
 			Gdx.app.postRunnable(() -> {
 				getModule(UI.class).openMenu(p.type);
 			});

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
@@ -153,10 +154,10 @@ public class InputHandler{
 	}
 	
 	private void onInteract(){
+		Koru.log("handled interacting");
 		Tile tile = World.instance().getTile(blockx, blocky);
 		
 		if(tile.block().interactable()){
-			
 			tile.block().onInteract(tile, blockx, blocky, entity);
 			
 			World.instance().updateTile(blockx, blocky);

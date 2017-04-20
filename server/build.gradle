@@ -29,7 +29,7 @@ dependencies {
 	compile 'com.github.Anuken:ucore:7023da1348'
 	compile 'com.github.Anuken:gdx-aabb:770f431b33'
 	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
-	compile "com.kotcrab.vis:vis-ui:$visuiVersion"
+	compile 'com.github.Anuken:uscene:489253d899'
 }
 
 test {

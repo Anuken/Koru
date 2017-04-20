@@ -31,6 +31,8 @@ io.anuke.scene.ui.ImageButton$ImageButtonStyle: {
 	default: {down: button-down, up: button },
 	blue: {down: button-blue-down, up: button-blue },
 	toggle: {checked: button-down, down: button-down, up: button }
+	gray: {down: button-down, up: button-gray, over: button-gray-over, disabled: button},
+	close-window: {up: button-window-bg, imageUp: icon-close, imageOver: icon-close-over, imageDown: icon-close-down, disabled: button }
 },
 io.anuke.scene.ui.ImageTextButton$ImageTextButtonStyle: {
 	default: {down: button-down, up: button, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey },

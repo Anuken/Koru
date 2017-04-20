@@ -271,9 +271,12 @@ public class CraftingMenu extends Menu{
 		
 		@Override
 		public void draw(Batch batch, float alpha){
+			batch.setColor(1, 1, 1, alpha);
 			styles.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
 		
 			batch.setColor(((j == 0 && i > toolSize) || (j == 1 && i > toolLength)) ? Color.CLEAR : j == 0 ? Color.CORAL : Color.WHITE);
+			Color color = batch.getColor();
+			batch.setColor(color.r, color.g, color.b, alpha*color.a);
 			
 			styles.getDrawable("bump").draw(batch, getX(), getY(), getWidth(), getHeight());
 			

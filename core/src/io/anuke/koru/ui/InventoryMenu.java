@@ -115,7 +115,7 @@ public class InventoryMenu extends Table{
 		}
 
 		public void draw(Batch batch, float alpha){
-			batch.setColor(getColor());
+			batch.setColor(1, 1, 1, alpha);
 			batch.draw(Resources.region((y == 0 && x == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
