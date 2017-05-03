@@ -53,8 +53,6 @@ public class CollisionSystem extends KoruSystem{
 			
 			return !checkCollisions(x, y, col);
 		});
-		
-		
 	}
 
 	public ColliderEngine getColliderEngine(){

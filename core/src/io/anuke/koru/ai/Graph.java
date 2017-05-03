@@ -32,5 +32,4 @@ public class Graph implements IndexedGraph<Long>{
 	public void addNode(Long node){
 		nodes.add(node);
 	}
-
 }

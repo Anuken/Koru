@@ -94,7 +94,6 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(MenuOpenPacket.class,p->{
-			Koru.log("got menu open packet");
 			Gdx.app.postRunnable(() -> {
 				getModule(UI.class).openMenu(p.type);
 			});

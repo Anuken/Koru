@@ -85,9 +85,7 @@ public class SyncSystem extends KoruSystem{
 				
 				entity.collider().collider.getVelocity().set(data.get(4));
 				
-				
-					entity.get(RenderComponent.class).renderer.walking = entity.collider().collider.getVelocity().len() > 0.01f;
-				
+				entity.get(RenderComponent.class).renderer.walking = entity.collider().collider.getVelocity().len() > 0.01f;
 				
 				entity.get(InputComponent.class).input.mouseangle = data.get(2);
 				SyncComponent sync = entity.get(SyncComponent.class);
