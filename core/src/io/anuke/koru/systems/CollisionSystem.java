@@ -46,15 +46,15 @@ public class CollisionSystem extends KoruSystem{
 		}
 		
 		//TODO
-		/*
+		
 		//prevents objects from moving into walls
 		engine.setCollisionMap((c, x, y)->{
 			Rectangle col = c.getBounds();
 			col.x = x - c.w / 2;
 			col.y = y - c.h / 2;
 			
-			return !checkCollisions(x, y, col);
-		});*/
+			return checkCollisions(x, y, col);
+		});
 	}
 
 	public CollisionEngine getColliderEngine(){
@@ -64,6 +64,7 @@ public class CollisionSystem extends KoruSystem{
 	@Override
 	public void update(float deltaTime){
 		engine.updateCollisions();
+		//engine.updateCollisionMap(deltaTime);
 		super.update(deltaTime);
 		engine.updateForces(deltaTime / 60f);
 		updatePositions();

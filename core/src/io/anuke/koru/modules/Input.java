@@ -85,9 +85,13 @@ public class Input extends Module<Koru>{
 		}else if(key(KeyBindings.move_up) || key(KeyBindings.move_left) || key(KeyBindings.move_down) || key(KeyBindings.move_right)){
 			render.direction = (key(KeyBindings.move_right) ? 1 : (key(KeyBindings.move_left) ? 3 : (key(KeyBindings.move_down) ? 0 : 2)));
 		}
+		
+		if(vector.len() < 0.001f){
+			player.collider().collider.getVelocity().set(0, 0);
+		}
 
 		vector.limit(speed);
-		player.collider().collider.applyImpulse(vector.x*delta(), vector.y*delta());
+		player.collider().collider.getVelocity().set(vector.x*delta(), vector.y*delta());
 		
 		if(player.collider().collider.getVelocity().len() > 0.05){
 			render.walkframe += delta();
