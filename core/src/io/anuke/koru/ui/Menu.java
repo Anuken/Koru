@@ -5,10 +5,12 @@ import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.UI;
-import io.anuke.scene.ui.Dialog;
-import io.anuke.scene.ui.ImageButton;
-import io.anuke.scene.ui.Label;
-import io.anuke.scene.ui.layout.Table;
+import io.anuke.ucore.scene.style.Styles;
+import io.anuke.ucore.scene.ui.Dialog;
+import io.anuke.ucore.scene.ui.ImageButton;
+import io.anuke.ucore.scene.ui.ImageButton.ImageButtonStyle;
+import io.anuke.ucore.scene.ui.Label;
+import io.anuke.ucore.scene.ui.layout.Table;
 
 public abstract class Menu extends Dialog{
 
@@ -25,7 +27,7 @@ public abstract class Menu extends Dialog{
 		Label titleLabel = getTitleLabel();
 		Table titleTable = getTitleTable();
 
-		ImageButton closeButton = new ImageButton("close-window");
+		ImageButton closeButton = new ImageButton(Styles.styles.get("close-window", ImageButtonStyle.class));
 		
 		titleTable.add(closeButton).padRight(-getPadRight() + 3.7f).size(40).padTop(-titleTable.getPadTop()-5);
 		

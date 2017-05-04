@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.aabb.Collider;
-import io.anuke.aabb.ColliderEngine;
+import io.anuke.aabb.CollisionEngine;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.components.PositionComponent;
@@ -21,14 +21,14 @@ import io.anuke.koru.world.Tile;
 public class CollisionSystem extends KoruSystem{
 	private final static float maxHitboxSize = 50;
 	private final static float stepsize = 0.1f;
-	private ColliderEngine engine;
+	private CollisionEngine engine;
 	private GridPoint2 point = new GridPoint2();
 	private Vector2 vector = new Vector2();
 	private CollisionHandler handler = new CollisionHandler();
 
 	public CollisionSystem() {
 		super(Family.all(ColliderComponent.class, PositionComponent.class).get());
-		engine = new ColliderEngine();
+		engine = new CollisionEngine();
 		
 		//setup contact listeners/filters on server
 		if(IServer.active()){
@@ -45,17 +45,19 @@ public class CollisionSystem extends KoruSystem{
 			});
 		}
 		
+		//TODO
+		/*
 		//prevents objects from moving into walls
-		engine.setPositionVerifier((c, x, y)->{
+		engine.setCollisionMap((c, x, y)->{
 			Rectangle col = c.getBounds();
 			col.x = x - c.w / 2;
 			col.y = y - c.h / 2;
 			
 			return !checkCollisions(x, y, col);
-		});
+		});*/
 	}
 
-	public ColliderEngine getColliderEngine(){
+	public CollisionEngine getColliderEngine(){
 		return engine;
 	}
 

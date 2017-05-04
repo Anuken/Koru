@@ -1,7 +1,7 @@
 package io.anuke.koru.ui;
 
 
-import static io.anuke.scene.style.Styles.styles;
+import static io.anuke.ucore.scene.style.Styles.styles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -15,11 +15,12 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.network.packets.ChatPacket;
-import io.anuke.scene.style.Styles;
-import io.anuke.scene.ui.Label;
-import io.anuke.scene.ui.Label.LabelStyle;
-import io.anuke.scene.ui.TextField;
-import io.anuke.scene.ui.layout.Table;
+import io.anuke.ucore.scene.Scene;
+import io.anuke.ucore.scene.style.Styles;
+import io.anuke.ucore.scene.ui.Label;
+import io.anuke.ucore.scene.ui.Label.LabelStyle;
+import io.anuke.ucore.scene.ui.TextField;
+import io.anuke.ucore.scene.ui.layout.Table;
 
 public class ChatTable extends Table{
 	private final static int messagesShown = 10;
@@ -117,14 +118,16 @@ public class ChatTable extends Table{
 	}
 	
 	public void enterPressed(){
-		if(!chatOpen && (getStage().getKeyboardFocus() == null || !getStage().getKeyboardFocus().getParent().isVisible())){
+		Scene scene = getScene();
+		
+		if(!chatOpen && (scene.getKeyboardFocus() == null || !scene.getKeyboardFocus().getParent().isVisible())){
 			//FocusManager.switchFocus(chatfield.getStage(), chatfield);
-			chatfield.getStage().setKeyboardFocus(chatfield);
+			scene.setKeyboardFocus(chatfield);
 			chatOpen = !chatOpen;
 			lastfadetime = fadetime;
 			fadetime = messagesShown+1;
 		}else if(chatOpen){
-			getStage().setKeyboardFocus(null);
+			scene.setKeyboardFocus(null);
 			chatOpen = !chatOpen;
 			sendMessage();
 			fadetime = lastfadetime;

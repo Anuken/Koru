@@ -17,10 +17,10 @@ import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
-import io.anuke.scene.Element;
-import io.anuke.scene.ui.layout.Table;
-import io.anuke.scene.utils.ClickListener;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.scene.Element;
+import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.scene.utils.ClickListener;
 
 public class RecipeMenu extends Table{
 	final int slotsize = 64;

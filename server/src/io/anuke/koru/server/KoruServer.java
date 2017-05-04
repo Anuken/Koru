@@ -33,8 +33,8 @@ import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.ucore.core.Mathf;
 import io.anuke.ucore.util.ColorCodes;
+import io.anuke.ucore.util.Mathf;
 
 public class KoruServer extends IServer{
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();

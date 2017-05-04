@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.IntIntMap;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
-import io.anuke.ucore.core.UGraphics;
+import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoronoiNoise;
@@ -71,7 +71,7 @@ public class MapPreview extends ApplicationAdapter{
 		if(Gdx.input.isKeyPressed(Keys.D))
 			vx += speed;
 
-		UGraphics.clearScreen(Color.BLACK);
+		Graphics.clear(Color.BLACK);
 		batch.begin();
 
 		int viewx = (int) (vx / pixsize);

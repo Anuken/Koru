@@ -31,9 +31,12 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.core.Shaders;
 import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.modules.Module;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.renderables.*;
 
 public class Renderer extends Module<Koru>{
 	public static final int viewrangex = 28;
@@ -77,16 +80,33 @@ public class Renderer extends Module<Koru>{
 		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
-		Shaders.loadAll();
+		loadShaders();
 
 		RenderableHandler.instance().setLayerManager(this::drawRenderables);
-		Cursors.setCursor("cursor");
-		Cursors.updateCursor();
+		KoruCursors.setCursor("cursor");
+		KoruCursors.updateCursor();
 
 		addEffects();
 		loadMaterialColors();
 
 		Koru.log("Loaded resources.");
+		
+		DrawContext.set(batch, camera, atlas, null);
+	}
+	
+	void loadShaders(){
+		Shaders.load("outline", "outline", "outline", (shader, params)->{
+			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
+			
+		});
+		
+		Shaders.load("inline", "inline", "outline", (shader, params)->{
+			TextureRegion region = (TextureRegion)params[4];
+			
+			shader.setUniformf("u_size", new Vector2(region.getRegionWidth(), region.getRegionHeight()));
+			shader.setUniformf("u_pos", new Vector2(region.getRegionX(), region.getRegionY()));
+			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
+		});
 	}
 
 	void loadMaterialColors(){
@@ -120,12 +140,14 @@ public class Renderer extends Module<Koru>{
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
 
-		new LambdaRenderable(this::drawBlockOverlay).add();
-		new LambdaRenderable(-Layers.light-1, Sorter.object, this::drawTileOverlay).add();
-		new LambdaRenderable(-Layers.light-1, Sorter.object, this::drawSelectOverlay).add();
+		new FuncRenderable(this::drawBlockOverlay).add();
+		new FuncRenderable(-Layers.light-1, Sorter.object, this::drawTileOverlay).add();
+		new FuncRenderable(-Layers.light-1, Sorter.object, this::drawSelectOverlay).add();
 
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
+		
+		
 	}
 
 	@Override
@@ -138,7 +160,7 @@ public class Renderer extends Module<Koru>{
 		long start = TimeUtils.nanoTime();
 		
 		if(getModule(Network.class).connected() && !getModule(UI.class).menuOpen())
-			Cursors.setCursor("cursor");
+			KoruCursors.setCursor("cursor");
 
 		light.setColor(world.getAmbientColor());
 		
@@ -149,7 +171,7 @@ public class Renderer extends Module<Koru>{
 		updateCamera();
 		
 		if(getModule(Network.class).connected())
-			Cursors.updateCursor();
+			KoruCursors.updateCursor();
 
 		if(Profiler.update())
 			Profiler.renderTime = TimeUtils.timeSinceNanos(start);
@@ -179,7 +201,7 @@ public class Renderer extends Module<Koru>{
 		batch.setColor(Color.WHITE);
 	}
 	
-	void drawSelectOverlay(LambdaRenderable r){
+	void drawSelectOverlay(FuncRenderable r){
 		if(getModule(UI.class).menuOpen()) return;
 		
 		setCursorTile();
@@ -199,9 +221,9 @@ public class Renderer extends Module<Koru>{
 			if(select == null) return;
 			
 			if(stack.item.name().contains("pickaxe")){
-				Cursors.setCursor("pickaxe");
+				KoruCursors.setCursor("pickaxe");
 			}else if(stack.item.name().contains("axe")){
-				Cursors.setCursor("axe");
+				KoruCursors.setCursor("axe");
 			}
 			
 			String name = select.name() + 
@@ -215,14 +237,14 @@ public class Renderer extends Module<Koru>{
 			
 			KoruRenderable b = (KoruRenderable)(list.renderables.peek());
 			
-			Draw.shader(Shaders.inline, outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
+			Draw.shader("inline", outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
 			b.draw(batch);
-			Draw.shader(null);
-			
+			Draw.shader();
 		}
+		
 	}
 
-	void drawTileOverlay(LambdaRenderable r){
+	void drawTileOverlay(FuncRenderable r){
 		if(getModule(UI.class).menuOpen()) return;
 
 		setCursorTile();
@@ -234,18 +256,18 @@ public class Renderer extends Module<Koru>{
 
 		if(tile != null && tile.block().interactable() && playerReachesBlock()){
 			
-			Cursors.setCursor("select");
+			KoruCursors.setCursor("select");
 			
-			Draw.shader(Shaders.outline, outlineColor.r, outlineColor.g, outlineColor.b, 1f);
+			Draw.shader("outline", outlineColor.r, outlineColor.g, outlineColor.b, 1f);
 			
 			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), 
 					x * World.tilesize, y * World.tilesize + (tile.block().getType() == MaterialTypes.overlay ? 0 : 6));
 
-			Draw.shader(null);
+			Draw.shader();
 		}
 	}
 
-	void drawBlockOverlay(LambdaRenderable r){
+	void drawBlockOverlay(FuncRenderable r){
 
 		setCursorTile();
 

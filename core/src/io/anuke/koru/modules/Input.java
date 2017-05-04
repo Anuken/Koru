@@ -19,7 +19,7 @@ import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.world.materials.Materials;
-import io.anuke.ucore.core.UInput;
+import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
@@ -30,7 +30,7 @@ public class Input extends Module<Koru>{
 	private int blockx, blocky;
 
 	public void init() {
-		UInput.addProcessor(this);
+		Inputs.addProcessor(this);
 		player = getModule(ClientData.class).player;
 	}
 

@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 
-import io.anuke.koru.Koru;
 import io.anuke.koru.modules.Renderer;
-import io.anuke.ucore.spritesystem.Renderable;
+import io.anuke.ucore.renderables.Renderable;
 
 public enum FrameBufferLayer{
 	shadow("shadow", Layers.shadow){
@@ -64,15 +63,5 @@ public enum FrameBufferLayer{
 		this.camera = camera;
 		this.renderer = renderer;
 		begin();
-	}
-
-	public static void loadShaders(){
-		Koru.log("Loading shaders...");
-		
-		Shaders.loadAll();
-		
-		for(FrameBufferLayer layer : values()){
-			layer.loadShader();
-		}
 	}
 }

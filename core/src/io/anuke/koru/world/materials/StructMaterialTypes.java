@@ -7,8 +7,8 @@ import io.anuke.koru.graphics.KoruRenderable;
 import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.Sorter;
+import io.anuke.ucore.renderables.RenderableList;
+import io.anuke.ucore.renderables.Sorter;
 import io.anuke.ucore.util.Timers;
 
 public class StructMaterialTypes{

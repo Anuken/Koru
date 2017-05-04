@@ -2,7 +2,7 @@ package io.anuke.koru.graphics;
 
 import com.badlogic.gdx.utils.Pools;
 
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.renderables.*;
 
 public class RenderPool{
 	

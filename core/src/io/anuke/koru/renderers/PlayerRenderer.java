@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.core.Draw;
 
 public class PlayerRenderer extends EntityRenderer{
 	AnimationType animation;

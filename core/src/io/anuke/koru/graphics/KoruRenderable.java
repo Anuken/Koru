@@ -2,7 +2,7 @@ package io.anuke.koru.graphics;
 
 import io.anuke.koru.modules.World;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.renderables.*;
 
 public class KoruRenderable extends SpriteRenderable{
 	

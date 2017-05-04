@@ -10,7 +10,7 @@ import io.anuke.koru.graphics.KoruRenderable;
 import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.renderables.RenderableList;
 
 public abstract class MaterialType{
 	public boolean tile, solid;

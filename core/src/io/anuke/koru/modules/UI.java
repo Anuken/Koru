@@ -13,21 +13,21 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import io.anuke.SceneModule;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.graphics.Cursors;
+import io.anuke.koru.graphics.KoruCursors;
 import io.anuke.koru.ui.*;
 import io.anuke.koru.utils.Profiler;
-import io.anuke.scene.style.Styles;
-import io.anuke.scene.ui.Label;
-import io.anuke.scene.ui.TextButton;
-import io.anuke.scene.ui.TextField;
-import io.anuke.scene.ui.layout.Stack;
-import io.anuke.scene.ui.layout.Table;
-import io.anuke.scene.utils.ClickListener;
-import io.anuke.scene.utils.CursorManager;
-import io.anuke.ucore.core.UInput;
+import io.anuke.ucore.core.Inputs;
+import io.anuke.ucore.modules.SceneModule;
+import io.anuke.ucore.scene.style.Styles;
+import io.anuke.ucore.scene.ui.Label;
+import io.anuke.ucore.scene.ui.TextButton;
+import io.anuke.ucore.scene.ui.TextField;
+import io.anuke.ucore.scene.ui.layout.Stack;
+import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.scene.utils.ClickListener;
+import io.anuke.ucore.scene.utils.Cursors;
 
 public class UI extends SceneModule<Koru> {
 	private ObjectMap<Class<?>, Menu> menus = new ObjectMap<>();
@@ -51,11 +51,11 @@ public class UI extends SceneModule<Koru> {
 		setupChat();
 		setupUI();
 		
-		UInput.flipProcessors();
+		Inputs.flipProcessors();
 		
-		CursorManager.arrow = Cursors.loadCursor("cursor");
-		CursorManager.hand = Cursors.loadCursor("hand");
-		CursorManager.ibeam = Cursors.loadCursor("ibar");
+		Cursors.arrow = KoruCursors.loadCursor("cursor");
+		Cursors.hand = KoruCursors.loadCursor("hand");
+		Cursors.ibeam = KoruCursors.loadCursor("ibar");
 	}
 	
 	public void loadSkin(){
@@ -185,7 +185,7 @@ public class UI extends SceneModule<Koru> {
 		button.clicked(()->{
 			if (!network.connecting && !network.connected()){
 				getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
-				name.getStage().setKeyboardFocus(null);
+				scene.setKeyboardFocus(null);
 				network.connect();
 			}
 		});
@@ -238,7 +238,7 @@ public class UI extends SceneModule<Koru> {
 		currentMenu = m;
 		m.onOpen();
 		
-		Cursors.setCursor("cursor");
+		KoruCursors.setCursor("cursor");
 	}
 	
 	public void closeMenu(){

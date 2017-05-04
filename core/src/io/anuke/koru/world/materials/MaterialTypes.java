@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.spritesystem.RenderableList;
-import io.anuke.ucore.spritesystem.Sorter;
+import io.anuke.ucore.renderables.RenderableList;
+import io.anuke.ucore.renderables.Sorter;
 
 public class MaterialTypes{
 	public static final Color grasscolor = new Color(0x62962fff);

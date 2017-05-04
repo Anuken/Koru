@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import io.anuke.ucore.graphics.PixmapUtils;
 
-public class Cursors{
+public class KoruCursors{
 	private static ObjectMap<String, Cursor> cursors = new ObjectMap<>();
 	private static String cursor;
 	

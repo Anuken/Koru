@@ -11,7 +11,7 @@ import io.anuke.koru.items.BlockRecipes;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.StructMaterials;
-import io.anuke.scene.style.Styles;
+import io.anuke.ucore.scene.style.Styles;
 
 public class Resources{
 	private static Json json;

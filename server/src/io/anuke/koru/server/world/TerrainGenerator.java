@@ -1,6 +1,6 @@
 package io.anuke.koru.server.world;
 
-import static io.anuke.ucore.core.Mathf.clamp;
+import static io.anuke.ucore.util.Mathf.clamp;
 
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;

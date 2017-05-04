@@ -7,7 +7,7 @@ import io.anuke.koru.components.ChildComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.TextComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.Draw;
+import io.anuke.ucore.core.Draw;
 
 public class IndicatorRenderer extends EntityRenderer{
 	

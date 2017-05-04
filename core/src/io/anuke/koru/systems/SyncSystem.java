@@ -18,7 +18,7 @@ public class SyncSystem extends KoruSystem{
 	}
 	
 	public void update(float delta){
-		if(Timers.get(Network.packetFrequency))
+		if(Timers.get("synctimer", Network.packetFrequency))
 			super.update(delta);
 	}
 

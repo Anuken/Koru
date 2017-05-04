@@ -8,7 +8,7 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
-import io.anuke.ucore.spritesystem.*;
+import io.anuke.ucore.renderables.*;
 
 public class BlockAnimationRenderer extends EntityRenderer{
 	public RenderableList list = new RenderableList();

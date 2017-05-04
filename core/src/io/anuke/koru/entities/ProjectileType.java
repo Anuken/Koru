@@ -4,8 +4,8 @@ import io.anuke.koru.components.DamageComponent;
 import io.anuke.koru.components.FadeComponent;
 import io.anuke.koru.components.ProjectileComponent;
 import io.anuke.koru.entities.types.Projectile;
-import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.renderers.EntityRenderer;
+import io.anuke.ucore.core.Draw;
 
 public enum ProjectileType{
 	bolt, 
@@ -29,7 +29,7 @@ public enum ProjectileType{
 		public void draw(KoruEntity entity, EntityRenderer render, ProjectileComponent pro){
 			render.draw(l->{
 				l.layer = entity.getY()-4;
-				Draw.color(1f-entity.get(FadeComponent.class).life/lifetime());
+				Draw.alpha(1f-entity.get(FadeComponent.class).life/lifetime());
 				Draw.rect(name(), entity.getX(), entity.getY(), rotation(entity)-45);
 				Draw.color();
 			});

@@ -1,6 +1,6 @@
 package io.anuke.koru.renderers;
 
-import io.anuke.koru.graphics.Draw;
+import io.anuke.ucore.core.Draw;
 
 public class EnemyRenderer extends EntityRenderer{
 

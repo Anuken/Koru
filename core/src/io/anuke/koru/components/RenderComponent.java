@@ -3,7 +3,7 @@ package io.anuke.koru.components;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.renderers.EntityRenderer;
-import io.anuke.ucore.spritesystem.RenderableList;
+import io.anuke.ucore.renderables.RenderableList;
 
 public class RenderComponent implements KoruComponent{
 	public final EntityRenderer renderer;

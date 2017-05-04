@@ -1,7 +1,7 @@
 package io.anuke.koru.ui;
 
 import static io.anuke.koru.ui.InventoryMenu.slotsize;
-import static io.anuke.scene.style.Styles.styles;
+import static io.anuke.ucore.scene.style.Styles.styles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -18,15 +18,16 @@ import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Tools;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.utils.Resources;
-import io.anuke.scene.Element;
-import io.anuke.scene.event.InputEvent;
-import io.anuke.scene.event.InputListener;
-import io.anuke.scene.ui.ImageButton;
-import io.anuke.scene.ui.Label;
-import io.anuke.scene.ui.layout.Table;
-import io.anuke.scene.utils.ClickListener;
-import io.anuke.scene.utils.CursorManager;
-import io.anuke.ucore.core.Mathf;
+import io.anuke.ucore.scene.Element;
+import io.anuke.ucore.scene.event.InputEvent;
+import io.anuke.ucore.scene.event.InputListener;
+import io.anuke.ucore.scene.ui.ImageButton;
+import io.anuke.ucore.scene.ui.ImageButton.ImageButtonStyle;
+import io.anuke.ucore.scene.ui.Label;
+import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.scene.utils.ClickListener;
+import io.anuke.ucore.scene.utils.Cursors;
+import io.anuke.ucore.util.Mathf;
 
 public class CraftingMenu extends Menu{
 	final int slots = 8;
@@ -41,11 +42,11 @@ public class CraftingMenu extends Menu{
 	public CraftingMenu() {
 		super("Tool Crafting");
 
-		this.setBackground("window-gray");
+		setBackground("window-gray");
 
 		addCloseButton();
 
-		Table table = getContentTable();
+		Table table = content();
 		table.top();
 
 		Table left = new Table();
@@ -127,8 +128,8 @@ public class CraftingMenu extends Menu{
 			table.add(titles[j]).colspan(5);
 			table.row();
 			
-			ImageButton l1 = new ImageButton("gray");
-			ImageButton l2 = new ImageButton("gray");
+			ImageButton l1 = new ImageButton(styles.get("gray", ImageButtonStyle.class));
+			ImageButton l2 = new ImageButton(styles.get("gray", ImageButtonStyle.class));
 			
 			l1.getStyle().imageUp = styles.getDrawable("icon-arrow-left");
 			l2.getStyle().imageUp = styles.getDrawable("icon-arrow-right");
@@ -295,14 +296,14 @@ public class CraftingMenu extends Menu{
 					public void enter(InputEvent event, float x, float y, int pointer, Element fromActor){
 						super.enter(event, x, y, pointer, fromActor);
 						if(stack != null){
-							CursorManager.setHand();
+							Cursors.setHand();
 						}
 					}
 
 					@Override
 					public void exit(InputEvent event, float x, float y, int pointer, Element toActor){
 						super.exit(event, x, y, pointer, toActor);
-						CursorManager.restoreCursor();
+						Cursors.restoreCursor();
 					}
 				});
 

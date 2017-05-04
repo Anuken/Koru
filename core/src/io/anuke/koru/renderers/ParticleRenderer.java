@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
 
 import io.anuke.koru.components.ParticleComponent;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.ParticleRenderable;
+import io.anuke.ucore.renderables.ParticleRenderable;
 
 public class ParticleRenderer extends EntityRenderer{
 	

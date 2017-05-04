@@ -1,6 +1,6 @@
 package io.anuke.koru.systems;
 
-import static io.anuke.ucore.core.Mathf.scl;
+import static io.anuke.ucore.util.Mathf.scl;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

@@ -8,10 +8,10 @@ import io.anuke.aabb.Collider;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.core.Draw;
 
 public class CollisionDebugSystem extends KoruSystem{
 

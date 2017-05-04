@@ -2,11 +2,11 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.Draw;
 import io.anuke.koru.graphics.Layers;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.spritesystem.LambdaRenderable.Drawable;
-import io.anuke.ucore.spritesystem.Sorter;
+import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.renderables.FuncRenderable.DrawFunc;
+import io.anuke.ucore.renderables.Sorter;
 
 public abstract class EntityRenderer{
 	protected boolean init;
@@ -27,7 +27,7 @@ public abstract class EntityRenderer{
 		this.render();
 	}
 	
-	public void draw(Drawable d){
+	public void draw(DrawFunc d){
 		render.list.add(0f, Sorter.object, d);
 	}
 	

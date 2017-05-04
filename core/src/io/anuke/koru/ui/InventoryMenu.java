@@ -13,10 +13,10 @@ import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.utils.Resources;
-import io.anuke.scene.Element;
-import io.anuke.scene.ui.layout.Table;
-import io.anuke.scene.utils.ClickListener;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.scene.Element;
+import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.scene.utils.ClickListener;
 
 public class InventoryMenu extends Table{
 	public static final int slotsize = 64;
@@ -61,7 +61,7 @@ public class InventoryMenu extends Table{
 			drawItem(batch, alpha, Gdx.input.getX() - slotsize/2, Gdx.graphics.getHeight() - Gdx.input.getY() - slotsize/2, inventory.selected);
 		}
 
-		Element actor = getStage().hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true);
+		Element actor = getScene().hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true);
 
 		if(actor instanceof Slot){
 			Slot slot = (Slot) actor;
