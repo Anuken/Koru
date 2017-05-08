@@ -11,7 +11,7 @@ public class ClientData extends Module<Koru>{
 	
 	public ClientData(){
 		player = new KoruEntity(Player.class);
-		player.connection().name = "you";
+		player.connection().name = "this player";
 		player.connection().local = true;
 	}
 
