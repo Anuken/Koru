@@ -24,7 +24,7 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
 public class Input extends Module<Koru>{
-	private float movespeed = 1.6f, dashspeed = 18f;
+	private float movespeed = 1.0f, dashspeed = 18f;
 	private Vector2 vector = new Vector2();
 	private KoruEntity player;
 	private int blockx, blocky;
@@ -91,7 +91,7 @@ public class Input extends Module<Koru>{
 		}
 
 		vector.limit(speed);
-		player.collider().collider.getVelocity().set(vector.x*delta(), vector.y*delta());
+		player.collider().collider.applyImpulse(vector.x*delta(), vector.y*(delta()));
 		
 		if(player.collider().collider.getVelocity().len() > 0.05){
 			render.walkframe += delta();

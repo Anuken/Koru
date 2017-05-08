@@ -62,7 +62,7 @@ public class CollisionSystem extends KoruSystem{
 	@Override
 	public void update(float deltaTime){
 		engine.updateCollisions();
-		//engine.updateCollisionMap(deltaTime);
+		engine.updateCollisionMap(deltaTime);
 		super.update(deltaTime);
 		engine.updateForces(deltaTime / 60f);
 		updatePositions();
