@@ -30,7 +30,7 @@ public class PlayerRenderer extends EntityRenderer{
 			l.layer = entity.getY();
 			Draw.grect("crab-" + (render.direction == 1 || render.direction == 3 ? "s" : render.direction == 2 ? "b" : "f")
 				+(render.walkframe > 0 ? "-"+((int)(render.walkframe/7))%3 : ""), 
-					entity.getX() + (render.direction == 3 ? 12 : 0), entity.getY(), render.direction ==3 ? - 12 : 12, 12);
+					entity.getX(), entity.getY(), render.direction ==3 ? - 12 : 12, 12);
 			
 			if(!entity.get(ConnectionComponent.class).local){
 				Resources.font2().setColor(Color.YELLOW);

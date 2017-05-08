@@ -45,8 +45,6 @@ public class CollisionSystem extends KoruSystem{
 			});
 		}
 		
-		//TODO
-		
 		//prevents objects from moving into walls
 		engine.setCollisionMap((c, x, y)->{
 			Rectangle col = c.getBounds();

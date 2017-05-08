@@ -29,8 +29,9 @@ public class Koru extends ModuleController<Koru>{
 		engine = new KoruEngine();
 
 		addModule(Network.class);
-		addModule(Renderer.class);
 		addModule(Input.class);
+		addModule(Renderer.class);
+		
 		addModule(ClientData.class);
 		addModule(World.class);
 		addModule(UI.class);
@@ -44,9 +45,8 @@ public class Koru extends ModuleController<Koru>{
 		Timers.update(delta());
 		
 		try{
+			
 			long start = TimeUtils.nanoTime();
-			
-			
 			
 			if(Profiler.update())
 			Profiler.engineTime = TimeUtils.timeSinceNanos(start);
@@ -69,7 +69,7 @@ public class Koru extends ModuleController<Koru>{
 			//exit, nothing left to do here
 			Gdx.app.exit();
 		}
-
+		
 	}
 	
 	public static float delta(){

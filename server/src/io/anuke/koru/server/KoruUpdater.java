@@ -1,5 +1,7 @@
 package io.anuke.koru.server;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -92,6 +94,14 @@ public class KoruUpdater{
 
 	public KoruUpdater(KoruServer server) {
 		this.server = server;
+		
+		try{
+			if(!Files.isDirectory(Paths.get("world")))
+				Files.createDirectory(Paths.get("world"));
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+		
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
 		world = new World(file);
 		engine = new KoruEngine();

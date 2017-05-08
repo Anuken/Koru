@@ -21,13 +21,13 @@ import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Timers;
 
 public class Network extends Module<Koru>{
-	public static final String ip = System.getProperty("user.name").equals("anuke") ? "localhost" : "107.11.42.20";
 	public static final int port = 7575;
 	public static final int ping = 0;
 	public static final int pingInterval = 60;
 	public static final int packetFrequency = 3;
 	public static final float entityUnloadRange = 600;
 	
+	public String ip = "localhost";
 	public boolean initialconnect = false;
 	public boolean connecting;
 	public Client client;

@@ -178,8 +178,14 @@ public class UI extends SceneModule<Koru> {
 
 		menutable.add(connectfail).colspan(2).padBottom(20).minHeight(100).minWidth(300).row();
 		menutable.add(connectlabel).colspan(2).row();
-		menutable.add(new Label("Name: ")).padBottom(6f).align(Align.right);
-		menutable.add(name).padBottom(6f).row();
+		menutable.add(new Label("Name: ")).padBottom(6f).right();
+		menutable.add(name).padBottom(6f);
+		menutable.row();
+		menutable.add("IP:").right();
+		menutable.addField("localhost", s->{
+			getModule(Network.class).ip = s;
+		});
+		menutable.row();
 		menutable.add(button).colspan(2).fillX().padTop(5).padBottom(200);
 		
 		button.clicked(()->{

@@ -38,7 +38,7 @@ public class WorldFile extends WorldLoader{
 	private boolean compress = false;
 
 	public WorldFile(Path file, Generator generator) {
-
+		
 		if(!Files.isDirectory(file))
 			throw new RuntimeException("World file has to be a directory!");
 
