@@ -31,6 +31,8 @@ public class Network extends Module<Koru>{
 	public boolean connecting;
 	public Client client;
 	
+	private KoruEntity player;
+	
 	private boolean connected;
 	private String lastError;
 	private boolean chunksAdded = false;
@@ -50,6 +52,8 @@ public class Network extends Module<Koru>{
 		Registrator.register(client.getKryo());
 		client.addListener(new Listen());
 		client.start();
+		
+		player = Koru.control.player;
 	}
 	
 	private void registerPackets(){
@@ -57,21 +61,21 @@ public class Network extends Module<Koru>{
 		handle(DataPacket.class, data->{
 			Koru.log("Recieving a data packet... ");
 
-			main.engine.removeAllEntities();
+			Koru.engine.removeAllEntities();
 			Koru.log("Recieved " + data.entities.size() + " entities.");
 			for(Entity entity : data.entities){
 				entityQueue.add((KoruEntity) entity);
 			}
 			
-			getModule(World.class).time = data.time;
-			getModule(ClientData.class).player.resetID(data.playerid);
-			entityQueue.add(getModule(ClientData.class).player);
+			Koru.world.time = data.time;
+			player.resetID(data.playerid);
+			entityQueue.add(Koru.control.player);
 			Koru.log("Recieved data packet.");
 		});
 		
 		handle(WorldUpdatePacket.class,p->{
 			for(Long key : p.updates.keys()){
-				KoruEntity entity = main.engine.getEntity(key);
+				KoruEntity entity = Koru.engine.getEntity(key);
 				if(entity == null){
 					requestEntity(key);
 					continue;
@@ -98,17 +102,17 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(SlotChangePacket.class,p->{
-			if(main.engine.getEntity(p.id) == null)
+			if(Koru.engine.getEntity(p.id) == null)
 				return;
-			main.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+			Koru.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
 		});
 		
 		handle(InventoryUpdatePacket.class,p->{
-			getModule(ClientData.class).player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
+			player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
 		});
 		
 		handle(AnimationPacket.class,p->{
-			main.engine.getEntity(p.player).getComponent(RenderComponent.class).renderer.onAnimation(p.type);
+			Koru.engine.getEntity(p.player).getComponent(RenderComponent.class).renderer.onAnimation(p.type);
 		});
 		
 		handle(ChatPacket.class,p->{
@@ -138,7 +142,7 @@ public class Network extends Module<Koru>{
 			client.connect(1200, ip, port, port);
 			Koru.log("Connecting to server..");
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = getModule(ClientData.class).player.connection().name;
+			packet.name =player.connection().name;
 			client.sendTCP(packet);
 			Koru.log("Sent packet.");
 
@@ -184,7 +188,7 @@ public class Network extends Module<Koru>{
 				}
 			}
 
-			main.engine.removeAllEntities();
+			Koru.engine.removeAllEntities();
 		}
 		
 		while(entityQueue.size != 0){
@@ -200,7 +204,7 @@ public class Network extends Module<Koru>{
 				continue;
 			}
 
-			if(main.engine.getEntity(entity.getID()) == null)
+			if(Koru.engine.getEntity(entity.getID()) == null)
 				entity.add();
 		}
 
@@ -208,21 +212,20 @@ public class Network extends Module<Koru>{
 			client.updateReturnTripTime();
 		}
 		
-		KoruEntity player = getModule(ClientData.class).player;
-		ImmutableArray<Entity> entities = main.engine.getEntities();
+		ImmutableArray<Entity> entities = Koru.engine.getEntities();
 
 		//unloads entities that are very far away
 		for(Entity e : entities){
 			KoruEntity entity = (KoruEntity) e;
 			if(entity.getType().unload() && entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
-				main.engine.removeEntity(e);
+				Koru.engine.removeEntity(e);
 			}
 		}
 
 		tempids.clear();
 		
 		for(Long id : entitiesToRemove){
-			if(main.engine.removeEntity(id)){
+			if(Koru.engine.removeEntity(id)){
 				tempids.add(id);
 			}
 		}
@@ -243,13 +246,11 @@ public class Network extends Module<Koru>{
 	}
 
 	private void sendUpdate(){
-		KoruEntity player = getModule(ClientData.class).player;
-		
 		PositionPacket pos = new PositionPacket();
 		pos.x = player.getX();
 		pos.y = player.getY();
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
-		getModule(ClientData.class).player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
+		player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
 		pos.direction = player.getComponent(RenderComponent.class).direction;
 		
 		client.sendUDP(pos);

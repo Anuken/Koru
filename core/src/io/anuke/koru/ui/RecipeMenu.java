@@ -9,7 +9,6 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
@@ -57,7 +56,9 @@ public class RecipeMenu extends Table{
 		
 		public void draw(Batch batch, float alpha){
 			if(stacks == null) return;
-			InventoryComponent inv = Koru.module(ClientData.class).player.get(InventoryComponent.class);
+			
+			InventoryComponent inv = Koru.control.player.get(InventoryComponent.class);
+			
 			for(int i = 0; i < stacks.length; i ++){
 				TextureRegion region = Resources.region(stacks[i].item.name() + "item");
 				float w = region.getRegionWidth()*pscale, h = region.getRegionHeight()*pscale;
@@ -94,7 +95,7 @@ public class RecipeMenu extends Table{
 				selected = Slot.this;
 				req.set(recipe.requirements());
 					
-				Koru.module(ClientData.class).player.getComponent(InventoryComponent.class).recipe = x;
+				Koru.control.player.getComponent(InventoryComponent.class).recipe = x;
 					
 				RecipeSelectPacket packet = new RecipeSelectPacket();
 				packet.recipe = x;

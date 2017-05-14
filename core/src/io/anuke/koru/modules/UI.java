@@ -171,7 +171,7 @@ public class UI extends SceneModule<Koru> {
 			if (c == '\n') {
 				((ClickListener) button.getListeners().get(2)).clicked(null, 0, 0);
 			}else{
-				getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
+				Koru.control.player.getComponent(ConnectionComponent.class).name = name.getText();
 			}
 		});
 
@@ -190,7 +190,7 @@ public class UI extends SceneModule<Koru> {
 		
 		button.clicked(()->{
 			if (!network.connecting && !network.connected()){
-				getModule(ClientData.class).player.getComponent(ConnectionComponent.class).name = name.getText();
+				Koru.control.player.getComponent(ConnectionComponent.class).name = name.getText();
 				scene.setKeyboardFocus(null);
 				network.connect();
 			}

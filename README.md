@@ -15,15 +15,14 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 - GUI made with [uCore Scene](https://github.com/Anuken/uCore)
 - multiplayer, made with Kryonet
 - crabs
-- lighting system
+- lighting system *(Might be replaced with uCore lighting)*
 - ingame chat
-- ~~AABB physics with [GDX-AABB](https://github.com/Anuken/gdx-aabb)~~ *(currently being re-coded)*
 
 
 ### Roadmap
 - proper player characters
-- machines, crafting
-- block entities or data
-- tech tree
 - crafting
+- combat
+- enemies
+- block entities or data
 - mobile support

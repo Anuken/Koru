@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Rectangle;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
@@ -26,8 +25,8 @@ public class CollisionDebugSystem extends KoruSystem{
 		super.update(deltaTime);
 
 		World world = World.instance();
-		int tilex = World.tile(Koru.module(ClientData.class).player.getX());
-		int tiley = World.tile(Koru.module(ClientData.class).player.getY());
+		int tilex = World.tile(Koru.control.player.getX());
+		int tiley = World.tile(Koru.control.player.getY());
 		int range = 10;
 		for(int rx = -range; rx <= range; rx++){
 			for(int ry = -range; ry <= range; ry++){

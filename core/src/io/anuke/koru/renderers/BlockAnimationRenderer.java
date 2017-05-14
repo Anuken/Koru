@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.MaterialComponent;
-import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
@@ -67,7 +66,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 			top.sprite.setOrigin(top.sprite.getWidth()/2, 0);
 			top.add(list);
 			
-			if(Koru.module(ClientData.class).player.getX() < entity.getX()) rspeed *= -1f;
+			if(Koru.control.player.getX() < entity.getX()) rspeed *= -1f;
 		}
 	}
 }

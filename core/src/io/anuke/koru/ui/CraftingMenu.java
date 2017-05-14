@@ -16,7 +16,6 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Tools;
-import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.event.InputEvent;
@@ -185,7 +184,7 @@ public class CraftingMenu extends Menu{
 	
 	@Override
 	public void onOpen(){
-		InventoryComponent inv = Koru.module(ClientData.class).player.inventory();
+		InventoryComponent inv = Koru.control.player.inventory();
 		Array<ItemStack> ar = inv.asArray();
 
 		rodslot.stack = matslot.stack = null;

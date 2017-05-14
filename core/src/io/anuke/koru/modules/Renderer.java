@@ -7,7 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.*;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
@@ -31,29 +33,24 @@ import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.Draw;
-import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Shaders;
-import io.anuke.ucore.graphics.FrameBufferMap;
-import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.renderables.*;
 
-public class Renderer extends Module<Koru>{
+public class Renderer extends RendererModule<Koru>{
+	//TODO why are these final?
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 26;
+	
 	public static final float GUIscale = 5f;
 	public static final int scale = 4;
 	public static final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
 	
 	public boolean debug = false, consoleOpen = false;
 	public World world;
-	public SpriteBatch batch;
-	public OrthographicCamera camera;
-	public RepackableAtlas atlas;
 	public Matrix4 matrix;
 	public GlyphLayout layout;
-	public BitmapFont font;
-	public FrameBufferMap buffers;
-	public Vector3 vector = new Vector3();
 	public PostProcessor processor;
 	public LightEffect light;
 	public KoruEntity player;
@@ -65,15 +62,14 @@ public class Renderer extends Module<Koru>{
 	private boolean init;
 
 	public Renderer() {
-		batch = new SpriteBatch();
+		cameraScale = scale;
+		
 		matrix = new Matrix4();
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
 		layout = new GlyphLayout();
-		buffers = new FrameBufferMap();
 		processor = new PostProcessor(false, true, true);
 		recorder = new GifRecorder(batch);
 		Resources.set(this);
@@ -89,8 +85,6 @@ public class Renderer extends Module<Koru>{
 		loadMaterialColors();
 
 		Koru.log("Loaded resources.");
-		
-		DrawContext.set(batch, camera, atlas, null);
 	}
 	
 	void loadShaders(){
@@ -133,7 +127,7 @@ public class Renderer extends Module<Koru>{
 	}
 
 	public void init(){
-		player = getModule(ClientData.class).player;
+		player = Koru.control.player;
 		world = getModule(World.class);
 
 		Resources.loadParticle("spark");
@@ -186,7 +180,7 @@ public class Renderer extends Module<Koru>{
 		//drawOverlay();
 
 		if(debug)
-			Koru.getEngine().getSystem(CollisionDebugSystem.class).update(0);
+			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
 
 		batch.end();
 
@@ -202,8 +196,6 @@ public class Renderer extends Module<Koru>{
 	
 	void drawSelectOverlay(FuncRenderable r){
 		if(getModule(UI.class).menuOpen()) return;
-		
-		setCursorTile();
 
 		Tile tile = world.getTile(cursorX(), cursorY());
 		ItemStack stack = player.inventory().hotbarStack();
@@ -246,8 +238,6 @@ public class Renderer extends Module<Koru>{
 	void drawTileOverlay(FuncRenderable r){
 		if(getModule(UI.class).menuOpen()) return;
 
-		setCursorTile();
-
 		int x = cursorX();
 		int y = cursorY();
 
@@ -267,8 +257,6 @@ public class Renderer extends Module<Koru>{
 	}
 
 	void drawBlockOverlay(FuncRenderable r){
-
-		setCursorTile();
 
 		int x = cursorX();
 		int y = cursorY();
@@ -308,16 +296,12 @@ public class Renderer extends Module<Koru>{
 		return Vector2.dst(World.world(cursorX()), World.world(cursorY()), player.getX(), player.getY()) < InputHandler.reach;
 	}
 
-	void setCursorTile(){
-		unproject();
-	}
-
 	int cursorX(){
-		return World.tile(vector.x);
+		return World.tile(Graphics.mouseWorld().x);
 	}
 
 	int cursorY(){
-		return World.tile(vector.y);
+		return World.tile(Graphics.mouseWorld().y);
 	}
 
 	void drawMap(){
@@ -403,10 +387,10 @@ public class Renderer extends Module<Koru>{
 		NumberFormat f = DecimalFormat.getInstance();
 
 		if(debug){
-			font.draw(batch, "[CORAL]entities: " + main.engine.getEntities().size() + "\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak + "\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + "\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() + "\n[ORANGE]render ns: " + f.format(Profiler.renderTime) + "\nworld ns: " + f.format(Profiler.engineTime) + "\nui ns: "
+			font.draw(batch, "[CORAL]entities: " + Koru.engine.getEntities().size() + "\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak + "\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + "\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() + "\n[ORANGE]render ns: " + f.format(Profiler.renderTime) + "\nworld ns: " + f.format(Profiler.engineTime) + "\nui ns: "
 					+ f.format(Profiler.uiTime) + "\nnetwork ns: " + f.format(Profiler.networkTime) + "\nengine ns: " + f.format(Profiler.worldTime) + "\nmodule ns: " + f.format(Profiler.moduleTime) + "\ntotal ns: " + f.format(Profiler.totalTime), 0, uiheight() - 5);
 
-			font.draw(batch, "[SKY]" + main.engine.getEntities().toString().replace(",", "\n"), uiwidth(), uiheight(), 0, Align.topRight, false);
+			font.draw(batch, "[SKY]" + Koru.engine.getEntities().toString().replace(",", "\n"), uiwidth(), uiheight(), 0, Align.topRight, false);
 		}
 
 		if(consoleOpen){
@@ -419,7 +403,7 @@ public class Renderer extends Module<Koru>{
 		font.setColor(Color.WHITE);
 
 		if(debug){
-			GridPoint2 cursor = getModule(Input.class).cursorblock();
+			GridPoint2 cursor = getModule(Control.class).cursorblock();
 			float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
 			if(!world.inClientBounds(cursor.x, cursor.y)){
 				font.draw(batch, "[RED]Out of bounds.", cx, cy);
@@ -519,10 +503,12 @@ public class Renderer extends Module<Koru>{
 		camera.position.set(player.getX(), (player.getY()), 0f);
 		camera.update();
 	}
-
+	
+	@Override
 	public void resize(int width, int height){
+		super.resize(width, height);
+		
 		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		camera.setToOrtho(false, width / scale, height / scale);
 		light.setSize(width, height);
 		resetProcessor();
 	}
@@ -566,9 +552,5 @@ public class Renderer extends Module<Koru>{
 
 	public BitmapFont font(){
 		return font;
-	}
-
-	public Vector3 unproject(){
-		return camera.unproject(vector.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 	}
 }

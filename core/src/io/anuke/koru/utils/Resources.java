@@ -48,7 +48,7 @@ public class Resources{
 	}
 	
 	public static RepackableAtlas atlas(){
-		return rend.atlas;
+		return (RepackableAtlas)rend.atlas;
 	}
 	
 	public static BitmapFont font(){

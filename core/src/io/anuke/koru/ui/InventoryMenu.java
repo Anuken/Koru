@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Align;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.modules.ClientData;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.utils.Resources;
@@ -24,7 +23,7 @@ public class InventoryMenu extends Table{
 	private InventoryComponent inventory;
 
 	public InventoryMenu() {
-		inventory = Koru.module(ClientData.class).player.getComponent(InventoryComponent.class);
+		inventory = Koru.control.player.getComponent(InventoryComponent.class);
 		stacks = inventory.inventory;
 		setup();
 	}

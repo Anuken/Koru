@@ -17,24 +17,29 @@ import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Timers;
 
 public class Koru extends ModuleController<Koru>{
-	private static Koru instance;
+	//TODO static context smell?
+	public static Renderer renderer;
+	public static Control control;
+	public static UI ui;
+	public static World world;
+	public static Network network;
+	
+	public static KoruEngine engine;
+	
 	private static StringBuffer log = new StringBuffer();
-	public KoruEngine engine;
 
 	@Override
 	public void init(){
 		Resources.loadMaterials();
 		
-		instance = this;
 		engine = new KoruEngine();
 
-		addModule(Network.class);
-		addModule(Input.class);
-		addModule(Renderer.class);
+		addModule(network = new Network());
+		addModule(control = new Control());
+		addModule(renderer = new Renderer());
 		
-		addModule(ClientData.class);
-		addModule(World.class);
-		addModule(UI.class);
+		addModule(world = new World());
+		addModule(ui = new UI());
 		
 		engine.addSystem(new CollisionDebugSystem());
 	}
@@ -108,9 +113,5 @@ public class Koru extends ModuleController<Koru>{
 		
 	public static CharSequence getLog(){
 		return log;
-	}
-
-	public static KoruEngine getEngine(){
-		return instance.engine;
 	}
 }

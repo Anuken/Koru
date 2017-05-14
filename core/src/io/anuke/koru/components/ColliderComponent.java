@@ -26,9 +26,9 @@ public class ColliderComponent implements KoruComponent{
 	
 	public void move(KoruEntity entity, float dx, float dy){
 		entity.position().add(dx, 0);
-		Koru.getEngine().getSystem(CollisionSystem.class).correctPosition(entity, this);
+		Koru.engine.getSystem(CollisionSystem.class).correctPosition(entity, this);
 		entity.position().add(0, dy);
-		Koru.getEngine().getSystem(CollisionSystem.class).correctPosition(entity, this);
+		Koru.engine.getSystem(CollisionSystem.class).correctPosition(entity, this);
 	}
 	
 	public Rectangle getBounds(KoruEntity entity){

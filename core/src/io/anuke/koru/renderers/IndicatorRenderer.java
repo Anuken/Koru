@@ -20,7 +20,7 @@ public class IndicatorRenderer extends EntityRenderer{
 		
 		draw((p)->{
 			ChildComponent child = entity.get(ChildComponent.class);
-			KoruEntity parent = Koru.getEngine().getEntity(child.parent);
+			KoruEntity parent = Koru.engine.getEntity(child.parent);
 			if(parent == null) return;
 			
 			p.layer = parent.getY()-1;

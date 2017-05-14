@@ -11,6 +11,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.types.Player;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
@@ -18,21 +19,25 @@ import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.world.materials.Materials;
-import io.anuke.ucore.core.Inputs;
-import io.anuke.ucore.core.KeyBinds;
-import io.anuke.ucore.core.Settings;
+import io.anuke.ucore.core.*;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
-public class Input extends Module<Koru>{
+public class Control extends Module<Koru>{
+	public final KoruEntity player;
+	
 	private float movespeed = 1.6f, dashspeed = 18f;
 	private Vector2 vector = new Vector2();
-	private KoruEntity player;
 	private int blockx, blocky;
+	
+	public Control(){
+		player = new KoruEntity(Player.class);
+		player.connection().name = "this player";
+		player.connection().local = true;
+	}
 
 	public void init() {
 		Inputs.addProcessor(this);
-		player = getModule(ClientData.class).player;
 		
 		KeyBinds.defaults(
 			"up", Keys.W, 
@@ -62,7 +67,8 @@ public class Input extends Module<Koru>{
 		if (!getModule(Network.class).connected() || getModule(UI.class).menuOpen()) return;
 		
 		
-		Vector3 vec = getModule(Renderer.class).unproject();
+		Vector2 vec = Graphics.mouseWorld();
+		
 		int nx = World.tile(vec.x), ny = World.tile(vec.y);
 		
 		if(Gdx.input.isButtonPressed(Buttons.LEFT) && (nx != blockx || ny != blocky)){
@@ -179,7 +185,7 @@ public class Input extends Module<Koru>{
 
 	@Override
 	public boolean scrolled(int amount) {
-		InventoryComponent inv = getModule(ClientData.class).player.getComponent(InventoryComponent.class);
+		InventoryComponent inv = player.getComponent(InventoryComponent.class);
 		int i = ((inv.hotbar+amount) % 4);
 		inv.hotbar = i < 0 ? i + 4 : i;
 		
