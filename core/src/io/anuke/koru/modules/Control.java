@@ -3,9 +3,7 @@ package io.anuke.koru.modules;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
@@ -29,6 +27,7 @@ public class Control extends Module<Koru>{
 	private float movespeed = 1.6f, dashspeed = 18f;
 	private Vector2 vector = new Vector2();
 	private int blockx, blocky;
+	private GameState state = GameState.title;
 	
 	public Control(){
 		player = new KoruEntity(Player.class);
@@ -36,6 +35,7 @@ public class Control extends Module<Koru>{
 		player.connection().local = true;
 	}
 
+	@Override
 	public void init() {
 		Inputs.addProcessor(this);
 		
@@ -53,6 +53,22 @@ public class Control extends Module<Koru>{
 		
 		Settings.loadAll("io.anuke.koru");
 	}
+	
+	public boolean canMove(){
+		return state == GameState.playing;
+	}
+	
+	public boolean isPlaying(){
+		return state != GameState.title;
+	}
+	
+	public boolean isState(GameState state){
+		return this.state == state;
+	}
+	
+	protected void setState(GameState state){
+		this.state = state;
+	}
 
 	@Override
 	public void update() {
@@ -60,12 +76,11 @@ public class Control extends Module<Koru>{
 			Gdx.app.exit();
 		}
 		
-		//TODO why handle chat input here?
-		if (Inputs.keyUp("chat") && getModule(Network.class).connected())
-			getModule(UI.class).chat.enterPressed();
+		if(Inputs.keyUp("chat") && isPlaying()){
+			Koru.ui.toggleChat();
+		}
 
-		if (!getModule(Network.class).connected() || getModule(UI.class).menuOpen()) return;
-		
+		if (!canMove()) return;
 		
 		Vector2 vec = Graphics.mouseWorld();
 		
@@ -85,9 +100,14 @@ public class Control extends Module<Koru>{
 		float speed = (Inputs.keyDown("dash") ? dashspeed : movespeed);
 		int direction = render.direction;
 		
-		if (Inputs.keyDown("right")) {
-			vector.x += speed;
-			direction = 1;
+		if (Inputs.keyDown("up")) {
+			vector.y += speed;
+			direction = 2;
+		}
+		
+		if (Inputs.keyDown("down")) {
+			vector.y -= speed;
+			direction = 0;
 		}
 		
 		if (Inputs.keyDown("left")) {
@@ -95,14 +115,9 @@ public class Control extends Module<Koru>{
 			direction = 3;
 		}
 		
-		if (Inputs.keyDown("down")) {
-			vector.y -= speed;
-			direction = 0;
-		}
-
-		if (Inputs.keyDown("up")) {
-			vector.y += speed;
-			direction = 2;
+		if (Inputs.keyDown("right")) {
+			vector.x += speed;
+			direction = 1;
 		}
 		
 		render.direction = direction;
@@ -195,10 +210,8 @@ public class Control extends Module<Koru>{
 		
 		return false;
 	}
-
-	public GridPoint2 cursorblock() {
-		Vector3 v = getModule(Renderer.class).camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1f));
-		return new GridPoint2(World.tile(v.x), World.tile(v.y));
+	
+	public enum GameState{
+		title, playing, menu, chatting
 	}
-
 }

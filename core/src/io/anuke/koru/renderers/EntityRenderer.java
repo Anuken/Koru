@@ -42,6 +42,7 @@ public abstract class EntityRenderer{
 	public void drawShadow(String region, float yoffset, KoruEntity e){
 		render.list.add(Layers.shadow, Sorter.tile, (l)->{
 			l.layer = Layers.shadow;
+			Draw.color();
 			Draw.rect("shadow"
 					+ (int) (Resources.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Resources.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), yoffset+e.getY());
 		});

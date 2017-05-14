@@ -11,6 +11,7 @@ import com.esotericsoftware.kryonet.*;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.modules.Control.GameState;
 import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
@@ -27,14 +28,12 @@ public class Network extends Module<Koru>{
 	public static final float entityUnloadRange = 600;
 	
 	public String ip = "localhost";
-	public boolean initialconnect = false;
 	public boolean connecting;
 	public Client client;
 	
 	private KoruEntity player;
 	
 	private boolean connected;
-	private String lastError;
 	private boolean chunksAdded = false;
 	private LongArray tempids = new LongArray();
 	private Array<KoruEntity> entityQueue = new Array<KoruEntity>();
@@ -117,7 +116,7 @@ public class Network extends Module<Koru>{
 		
 		handle(ChatPacket.class,p->{
 			Gdx.app.postRunnable(() -> {
-				getModule(UI.class).chat.addMessage(p.message, p.sender);
+				getModule(UI.class).handleChatMessage(p.message, p.sender);
 			});
 		});
 		
@@ -137,26 +136,19 @@ public class Network extends Module<Koru>{
 
 	public void connect(){
 		try{
-
 			connecting = true;
 			client.connect(1200, ip, port, port);
 			Koru.log("Connecting to server..");
-			ConnectPacket packet = new ConnectPacket();
-			packet.name =player.connection().name;
-			client.sendTCP(packet);
-			Koru.log("Sent packet.");
-
-			connected = true;
 		}catch(Exception e){
 			connecting = false;
 			connected = false;
 			e.printStackTrace();
-			lastError = "Failed to connect to server:\n" + (e.getCause() == null ? e.getMessage() : e.getCause().getMessage());
+			Koru.ui.showError("Failed to connect to server:", (e.getCause() == null ? e.getMessage() : e.getCause().getMessage()));
 			Koru.log("Connection failed!");
 		}
 
 		connecting = false;
-		initialconnect = true;
+		//initialconnect = true;
 	}
 
 	void requestEntity(long id){
@@ -168,28 +160,28 @@ public class Network extends Module<Koru>{
 			client.sendTCP(request);
 		}
 	}
+	
+	private void disconnect(){
+		connected = false;
+		connecting = false;
+		Koru.ui.showError("Connection error: Timed out.");
+
+		//reset everything.
+		
+		World world = getModule(World.class);
+
+		for(int x = 0; x < world.chunks.length; x++){
+			for(int y = 0; y < world.chunks[x].length; y++){
+				world.chunks[x][y] = null;
+			}
+		}
+
+		Koru.engine.removeAllEntities();
+	}
 
 	@Override
 	public void update(){
 		long start = TimeUtils.nanoTime();
-		
-		if(connected && !client.isConnected()){
-			connected = false;
-			connecting = false;
-			lastError = "Connection error: Timed out.";
-
-			//reset everything.
-
-			World world = getModule(World.class);
-
-			for(int x = 0; x < world.chunks.length; x++){
-				for(int y = 0; y < world.chunks[x].length; y++){
-					world.chunks[x][y] = null;
-				}
-			}
-
-			Koru.engine.removeAllEntities();
-		}
 		
 		while(entityQueue.size != 0){
 
@@ -255,20 +247,27 @@ public class Network extends Module<Koru>{
 		
 		client.sendUDP(pos);
 	}
-
-	public String getError(){
-		return lastError;
-	}
-
-	public boolean connected(){
-		return connected;
-	}
-
-	public boolean initialconnect(){
-		return initialconnect;
-	}
 	
 	class Listen extends Listener{
+		@Override
+		public void connected (Connection connection) {
+			ConnectPacket packet = new ConnectPacket();
+			packet.name = player.connection().name;
+			client.sendTCP(packet);
+			Koru.log("Sent packet.");
+
+			connected = true;
+			Koru.control.setState(GameState.playing);
+		}
+		
+		@Override
+		public void disconnected (Connection connection) {
+			disconnect();
+			Koru.ui.showError("Disconnected from server: timed out.");
+			
+			Koru.control.setState(GameState.title);
+		}
+		
 		@Override
 		public void received(Connection c, Object object){
 			try{

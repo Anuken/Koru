@@ -37,7 +37,7 @@ public class RecipeMenu extends Table{
 	}
 	
 	public void act(float delta){
-		setVisible(Inputs.keyDown("build"));
+		setVisible(Inputs.keyDown("build") && Koru.control.canMove());
 	}
 	
 	public void draw(Batch batch, float alpha){

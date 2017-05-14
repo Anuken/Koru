@@ -975,7 +975,7 @@ window
   rotate: false
   xy: 401, 65
   size: 27, 61
-  split: 5, 4, 53, 3
+  split: 9, 8, 52, 4
   orig: 27, 61
   offset: 0, 0
   index: -1

@@ -152,7 +152,7 @@ public class Renderer extends RendererModule<Koru>{
 
 		long start = TimeUtils.nanoTime();
 		
-		if(getModule(Network.class).connected() && !getModule(UI.class).menuOpen())
+		if(Koru.control.canMove())
 			KoruCursors.setCursor("cursor");
 
 		light.setColor(world.getAmbientColor());
@@ -163,7 +163,7 @@ public class Renderer extends RendererModule<Koru>{
 		doRender();
 		updateCamera();
 		
-		if(getModule(Network.class).connected())
+		if(Koru.control.canMove())
 			KoruCursors.updateCursor();
 
 		if(Profiler.update())
@@ -187,7 +187,10 @@ public class Renderer extends RendererModule<Koru>{
 		processor.render();
 
 		batch.setProjectionMatrix(matrix);
+		
+		if(Koru.control.canMove())
 		recorder.update();
+		
 		batch.begin();
 		drawGUI();
 		batch.end();
@@ -403,7 +406,8 @@ public class Renderer extends RendererModule<Koru>{
 		font.setColor(Color.WHITE);
 
 		if(debug){
-			GridPoint2 cursor = getModule(Control.class).cursorblock();
+			GridPoint2 cursor = new GridPoint2(cursorX(), cursorY());
+			
 			float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
 			if(!world.inClientBounds(cursor.x, cursor.y)){
 				font.draw(batch, "[RED]Out of bounds.", cx, cy);

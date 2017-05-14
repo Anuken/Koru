@@ -40,8 +40,14 @@ public class ChatTable extends Table{
 	
 	public ChatTable(){
 		super();
+		
+		setFillParent(true);
 		font = styles.getFont("pixel-font");
-		font.getData().markupEnabled = true;
+		
+		setup();
+	}
+	
+	private void setup(){
 		fieldlabel.setStyle(new LabelStyle(fieldlabel.getStyle()));
 		fieldlabel.getStyle().font = font;
 		fieldlabel.setStyle(fieldlabel.getStyle());
@@ -50,16 +56,16 @@ public class ChatTable extends Table{
 		
 		chatfield.getStyle().background = styles.getDrawable("blank");
 		chatfield.getStyle().fontColor = Color.WHITE;
-		//chatfield.getStyle().focusBorder = null;
-		//chatfield.getStyle().backgroundOver = null;
-		chatfield.getStyle().font = Styles.styles.getFont("pixel-font");
-		bottom().left().padBottom(offsety).padLeft(offsetx*2).add(fieldlabel);
+		chatfield.getStyle().font = Styles.styles.getFont("pixel-font-nomarkup");
+		
+		bottom().left().padBottom(offsety).padLeft(offsetx*2).add(fieldlabel).padBottom(4f);
 		
 		add(chatfield).padBottom(offsety).padLeft(offsetx).growX().padRight(offsetx).height(28);
 	}
 	
 	@Override
 	public void draw(Batch batch, float alpha){
+		
 		batch.setColor(shadowColor);
 		if(chatOpen)
 			batch.draw(styles.getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight()-1);
@@ -117,7 +123,7 @@ public class ChatTable extends Table{
 		Koru.module(Renderer.class).getModule(Network.class).client.sendTCP(packet);
 	}
 	
-	public void enterPressed(){
+	public void toggle(){
 		Scene scene = getScene();
 		
 		if(!chatOpen && (scene.getKeyboardFocus() == null || !scene.getKeyboardFocus().getParent().isVisible())){

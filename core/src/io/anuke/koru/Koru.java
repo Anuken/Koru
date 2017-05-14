@@ -11,9 +11,9 @@ import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.ModuleController;
 import io.anuke.ucore.util.ColorCodes;
+import io.anuke.ucore.util.Strings;
 import io.anuke.ucore.util.Timers;
 
 public class Koru extends ModuleController<Koru>{
@@ -70,7 +70,7 @@ public class Koru extends ModuleController<Koru>{
 			
 			//write log
 			if(!System.getProperty("user.name").equals("anuke"))
-			Gdx.files.local("korulog-" + Calendar.getInstance().getTime() + ".log").writeString(UCore.parseException(e), false);
+			Gdx.files.local("korulog-" + Calendar.getInstance().getTime() + ".log").writeString(Strings.parseException(e), false);
 			//exit, nothing left to do here
 			Gdx.app.exit();
 		}
