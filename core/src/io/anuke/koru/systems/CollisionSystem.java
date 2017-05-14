@@ -45,6 +45,9 @@ public class CollisionSystem extends KoruSystem{
 					handler.dispatchEvent(entity, other);
 				}
 			});
+			
+			//TODO server-side collision checking?
+			correctPosition(entity, entity.collider());
 		}
 	}
 

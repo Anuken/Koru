@@ -31,6 +31,10 @@ public class PositionComponent implements KoruComponent{
 		return Vector2.dst(x, y, other.x, other.y);
 	}
 	
+	public float dist(float x, float y){
+		return Vector2.dst(this.x, this.y, x, y);
+	}
+	
 	public int blockX(){
 		return World.tile(x);
 	}

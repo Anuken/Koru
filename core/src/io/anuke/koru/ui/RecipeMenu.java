@@ -1,7 +1,5 @@
 package io.anuke.koru.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +15,7 @@ import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.ui.layout.Table;
@@ -39,7 +38,7 @@ public class RecipeMenu extends Table{
 	}
 	
 	public void act(float delta){
-		setVisible(Gdx.input.isKeyPressed(Keys.F));
+		setVisible(Inputs.keyDown("build"));
 	}
 	
 	public void draw(Batch batch, float alpha){

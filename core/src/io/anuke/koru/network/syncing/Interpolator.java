@@ -10,7 +10,7 @@ public class Interpolator{
 	static final float correctrange = 20f;
 	static Vector2 temp1 = new Vector2();
 	static Vector2 temp2 = new Vector2();
-	static float alpha = 0.18f;
+	static float alpha = 0.23f;
 	long lastupdate = -1;
 	float updateframes = 1f;
 	float lastx, lasty;

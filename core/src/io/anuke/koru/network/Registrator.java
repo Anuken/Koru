@@ -28,7 +28,6 @@ import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.renderers.AnimationType;
-import io.anuke.koru.systems.SyncSystem.SyncType;
 import io.anuke.koru.ui.Menu;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;

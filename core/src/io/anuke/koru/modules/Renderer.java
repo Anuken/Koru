@@ -3,7 +3,6 @@ package io.anuke.koru.modules;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
@@ -255,13 +254,13 @@ public class Renderer extends Module<Koru>{
 		Tile tile = world.getTile(x, y);
 
 		if(tile != null && tile.block().interactable() && playerReachesBlock()){
-			
+			boolean overlay = tile.block().getType() == MaterialTypes.overlay;
 			KoruCursors.setCursor("select");
 			
 			Draw.shader("outline", outlineColor.r, outlineColor.g, outlineColor.b, 1f);
 			
 			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), 
-					x * World.tilesize, y * World.tilesize + (tile.block().getType() == MaterialTypes.overlay ? 0 : 6));
+					x * World.tilesize, y * World.tilesize + (overlay ? 0 : 6 + tile.block().getType().variantOffset(x, y, tile.block())));
 
 			Draw.shader();
 		}
@@ -416,20 +415,6 @@ public class Renderer extends Module<Koru>{
 		}
 
 		font.getData().setScale(1f / GUIscale);
-
-		String launcher = "";
-
-		if(Gdx.app.getType() != ApplicationType.WebGL){
-			launcher = System.getProperty("sun.java.command");
-			launcher = launcher.substring(launcher.lastIndexOf(".") + 1, launcher.length()).replace("Launcher", "");
-		}else{
-			launcher = "GWT";
-		}
-
-		layout.setText(font, launcher);
-
-		font.setColor(Color.CORAL);
-		font.draw(batch, launcher, gwidth() / 2 - layout.width / 2, gheight());
 
 		font.setColor(Color.WHITE);
 

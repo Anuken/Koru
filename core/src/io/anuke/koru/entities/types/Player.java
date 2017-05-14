@@ -5,8 +5,8 @@ import io.anuke.koru.entities.ComponentList;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.input.InputHandler;
+import io.anuke.koru.network.SyncType;
 import io.anuke.koru.renderers.PlayerRenderer;
-import io.anuke.koru.systems.SyncSystem.SyncType;
 
 public class Player extends EntityType{
 

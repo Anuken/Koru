@@ -38,6 +38,7 @@ public class Resources{
 		return particles.get(name).obtain();
 	}
 	
+	/**Side note: equivalent to Draw.region()*/
 	public static AtlasRegion region(String name){
 		return rend.atlas.findRegion(name);
 	}

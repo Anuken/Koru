@@ -12,7 +12,6 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.input.InputType;
-import io.anuke.koru.input.KeyBindings;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.packets.BlockInputPacket;
@@ -20,6 +19,8 @@ import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.Inputs;
+import io.anuke.ucore.core.KeyBinds;
+import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
@@ -32,15 +33,30 @@ public class Input extends Module<Koru>{
 	public void init() {
 		Inputs.addProcessor(this);
 		player = getModule(ClientData.class).player;
+		
+		KeyBinds.defaults(
+			"up", Keys.W, 
+			"down", Keys.S, 
+			"left", Keys.A, 
+			"right", Keys.D,
+			"dash", Keys.SHIFT_LEFT,
+			"chat", Keys.ENTER,
+			"interact", Keys.Q,
+			"build", Keys.F,
+			"exit", Keys.ESCAPE
+		);
+		
+		Settings.loadAll("io.anuke.koru");
 	}
 
 	@Override
 	public void update() {
-		if (Gdx.input.isKeyPressed(KeyBindings.exit)) {
+		if (Inputs.keyUp("exit")) {
 			Gdx.app.exit();
 		}
 		
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && getModule(Network.class).connected())
+		//TODO why handle chat input here?
+		if (Inputs.keyUp("chat") && getModule(Network.class).connected())
 			getModule(UI.class).chat.enterPressed();
 
 		if (!getModule(Network.class).connected() || getModule(UI.class).menuOpen()) return;
@@ -57,23 +73,33 @@ public class Input extends Module<Koru>{
 		blocky = ny;
 		
 		vector.set(0, 0);
-
-		float speed = (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? dashspeed : movespeed);
-
-		if (Gdx.input.isKeyPressed(KeyBindings.move_up)) {
-			vector.y += speed;
-		}
-		if (Gdx.input.isKeyPressed(KeyBindings.move_left)) {
-			vector.x -= speed;
-		}
-		if (Gdx.input.isKeyPressed(KeyBindings.move_down)) {
-			vector.y -= speed;
-		}
-		if (Gdx.input.isKeyPressed(KeyBindings.move_right)) {
-			vector.x += speed;
-		}
 		
 		RenderComponent render = player.getComponent(RenderComponent.class);
+
+		float speed = (Inputs.keyDown("dash") ? dashspeed : movespeed);
+		int direction = render.direction;
+		
+		if (Inputs.keyDown("right")) {
+			vector.x += speed;
+			direction = 1;
+		}
+		
+		if (Inputs.keyDown("left")) {
+			vector.x -= speed;
+			direction = 3;
+		}
+		
+		if (Inputs.keyDown("down")) {
+			vector.y -= speed;
+			direction = 0;
+		}
+
+		if (Inputs.keyDown("up")) {
+			vector.y += speed;
+			direction = 2;
+		}
+		
+		render.direction = direction;
 		
 		ItemStack stack = player.inventory().hotbarStack();
 		
@@ -82,8 +108,6 @@ public class Input extends Module<Koru>{
 			render.direction = 2-(int)((angle-45)/90f);
 			if(render.direction == 1) render.direction = 3;
 			if(angle > 315 || angle < 45) render.direction = 1;
-		}else if(key(KeyBindings.move_up) || key(KeyBindings.move_left) || key(KeyBindings.move_down) || key(KeyBindings.move_right)){
-			render.direction = (key(KeyBindings.move_right) ? 1 : (key(KeyBindings.move_left) ? 3 : (key(KeyBindings.move_down) ? 0 : 2)));
 		}
 
 		vector.limit(speed);
@@ -106,7 +130,7 @@ public class Input extends Module<Koru>{
 			SlotChangePacket packet = new SlotChangePacket();
 			packet.slot = player.inventory().hotbar;
 			getModule(Network.class).client.sendTCP(packet);
-		}else if(keycode == KeyBindings.interact){
+		}else if(keycode == KeyBinds.get("interact")){
 			sendInput(InputType.interact, blockx, blocky);
 		}
 		
@@ -164,10 +188,6 @@ public class Input extends Module<Koru>{
 		getModule(Network.class).client.sendTCP(packet);
 		
 		return false;
-	}
-	
-	boolean key(int key){
-		return Gdx.input.isKeyPressed(key);
 	}
 
 	public GridPoint2 cursorblock() {

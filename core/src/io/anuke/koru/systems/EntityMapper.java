@@ -23,19 +23,8 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
 	private GridMap<ArrayList<KoruEntity>> map = new GridMap<ArrayList<KoruEntity>>();
 	private boolean debug = false;
-	
-	//TODO remove these nasty predicates and try something cleaner
-	public static Predicate<KoruEntity> connectionPredicate = (entity) -> {
-		return entity.has(ConnectionComponent.class);
-	};
 
-	public static Predicate<KoruEntity> syncedPredicate = (entity) -> {
-		return entity.has(SyncComponent.class);
-	};
-
-	public static Predicate<KoruEntity> allPredicate = (entity) -> {
-		return true;
-	};
+	public static Predicate<KoruEntity> allPredicate = (entity) -> {return true;};
 
 	public EntityMapper() {
 		super(Family.all(PositionComponent.class).get());
@@ -79,12 +68,19 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 	/** Gets nearby entities with a connection */
 	public void getNearbyConnections(float cx, float cy, float range, Consumer<KoruEntity> con){
-		getNearbyEntities(cx, cy, range, connectionPredicate, con);
+		getNearbyEntities(cx, cy, range, ConnectionComponent.class, con);
 	}
 
 	/** Gets nearby syncables. */
 	public void getNearbySyncables(float cx, float cy, float range, Consumer<KoruEntity> con){
-		getNearbyEntities(cx, cy, range, syncedPredicate, con);
+		getNearbyEntities(cx, cy, range, SyncComponent.class, con);
+	}
+	
+	/** Gets nearby entities with a specific component. */
+	public void getNearbyEntities(float cx, float cy, float range, Class<? extends KoruComponent> component, Consumer<KoruEntity> con){
+		getNearbyEntities(cx, cy, range, e->{
+			return e.has(component);
+		}, con);
 	}
 
 	/** Just gets all nearby entities. */
@@ -96,7 +92,8 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 		int x = (int) (cx / cellsize), y = (int) (cy / cellsize);
 		return map.get(x, y);
 	}
-
+	
+	//TODO quadtree for each cell?
 	@Override
 	void processEntity(KoruEntity entity, float delta){
 		int x = (int) (entity.getX() / cellsize), y = (int) (entity.getY() / cellsize);
