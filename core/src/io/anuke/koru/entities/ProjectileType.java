@@ -62,7 +62,7 @@ public enum ProjectileType{
 	}
 	
 	public float rotation(KoruEntity entity){
-		return entity.collider().collider.getVelocity().angle();
+		return entity.velocity().angle();
 	}
 	
 	public int damage(){
@@ -77,8 +77,7 @@ public enum ProjectileType{
 		KoruEntity entity = new KoruEntity(Projectile.class);
 		entity.get(ProjectileComponent.class).type = type;
 		//TODO
-		entity.collider().collider.getVelocity().set(type.speed(), 0).rotate(rotation);
-		entity.collider().collider.drag = 0;
+		entity.velocity().velocity.set(type.speed(), 0).rotate(rotation);
 		
 		entity.get(FadeComponent.class).lifetime = type.lifetime();
 		

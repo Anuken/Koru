@@ -10,14 +10,14 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 - infinite procedurally generated world
 - biomes and cave systems
 - building, resource collection
-- ~~basic combat~~ (currently being re-coded)
-- ~~specialized tools~~ (currently being re-coded)
+- ~~basic combat~~ *(currently being re-coded)*
+- ~~specialized tools~~ *(currently being re-coded)*
 - GUI made with [uCore Scene](https://github.com/Anuken/uCore)
 - multiplayer, made with Kryonet
 - crabs
 - lighting system
 - ingame chat
-- ~~AABB physics with [GDX-AABB](https://github.com/Anuken/gdx-aabb)~~ (currently being re-coded)
+- ~~AABB physics with [GDX-AABB](https://github.com/Anuken/gdx-aabb)~~ *(currently being re-coded)*
 
 
 ### Roadmap

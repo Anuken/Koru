@@ -26,7 +26,7 @@ public class IndicatorRenderer extends EntityRenderer{
 			p.layer = parent.getY()-1;
 			
 			Draw.tcolor(1f-entity.get(FadeComponent.class).life/entity.get(FadeComponent.class).lifetime);
-			Draw.text(entity.get(TextComponent.class).text, parent.getX(), parent.getY() + parent.collider().collider.h*1.5f
+			Draw.text(entity.get(TextComponent.class).text, parent.getX(), parent.getY() + parent.collider().height*1.5f
 					+ entity.get(FadeComponent.class).life/6f, Align.center);
 			Draw.tcolor();
 		});

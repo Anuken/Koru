@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.anuke.aabb.Collider;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.entities.KoruEntity;
@@ -49,15 +48,11 @@ public class CollisionDebugSystem extends KoruSystem{
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
-		Collider col = entity.collider().collider;
-		Rectangle bounds = col.getBounds();
+		ColliderComponent col = entity.collider();
+		Rectangle bounds = col.getBounds(entity);
 
-		Draw.color(col.kinematic ? Color.CORAL : Color.YELLOW);
+		Draw.color(Color.YELLOW);
 		Draw.linerect(bounds.x, bounds.y, bounds.width, bounds.height);
-		if(col.getVelocity().len() > 0.01f){
-			Draw.color(Color.BLUE);
-			Draw.line(entity.getX(), entity.getY(), entity.getX() + col.getVelocity().x * 5, entity.getY() + col.getVelocity().y * 5);
-		}
 		Draw.color();
 	}
 }

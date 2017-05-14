@@ -17,7 +17,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import io.anuke.aabb.Collider;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
@@ -78,7 +77,6 @@ public class Registrator{
 		k.register(ColliderComponent.class);
 		k.register(HealthComponent.class);
 
-		k.register(Collider.class);
 		k.register(ProjectileType.class);
 		k.register(SyncData.class);
 		

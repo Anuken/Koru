@@ -19,8 +19,7 @@ public class TestEntity extends EntityType{
 	}
 	
 	public void init(KoruEntity entity){
-		entity.collider().collider.drag = 0.4f;
-		entity.collider().collider.setSize(7, 7);
+		entity.collider().setSize(7, 7);
 	}
 
 }

@@ -19,7 +19,6 @@ public class KoruEntity extends Entity{
 	private Class<? extends EntityType> type;
 	private transient PositionComponent pos;
 
-	
 	public static class Mappers{
 		public static HashMap<Class<?>, ComponentMapper<?>> map = new HashMap<Class<?>, ComponentMapper<?>>();
 		public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
@@ -107,6 +106,10 @@ public class KoruEntity extends Entity{
 	
 	public ColliderComponent collider(){
 		return get(ColliderComponent.class);
+	}
+	
+	public VelocityComponent velocity(){
+		return get(VelocityComponent.class);
 	}
 
 	public float getX(){

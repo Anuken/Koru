@@ -68,7 +68,6 @@ project(":core") {
 		compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 		compile 'com.github.Anuken:GDXGifRecorder:c9fa647'
 		compile 'com.github.anuken:gdx-postprocessing:8173fd4bb6'
-		compile 'com.github.anuken:gdx-aabb:4a61c5855ef569804ed7d6a939d8968c09222f83'
 		compile 'com.github.Anuken:ucore:-SNAPSHOT'
     }
 }

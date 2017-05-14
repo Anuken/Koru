@@ -54,13 +54,11 @@ public class SyncSystem extends KoruSystem{
 		},
 		physics{
 			public SyncData write(KoruEntity entity){
-				return new SyncData(entity, entity.getX(), entity.getY(), entity.collider().collider.getVelocity());
+				return new SyncData(entity, entity.getX(), entity.getY());
 			}
 
 			public void read(SyncData data, KoruEntity entity){
 				SyncComponent sync = entity.get(SyncComponent.class);
-				
-				entity.collider().collider.getVelocity().set(data.get(2));
 				
 				if(sync.interpolator != null){
 					sync.interpolator.push(entity, data.x(), data.y());
@@ -74,8 +72,7 @@ public class SyncSystem extends KoruSystem{
 				return new SyncData(entity, 
 						entity.getX(), entity.getY(), 
 						entity.get(InputComponent.class).input.mouseangle, 
-						entity.renderer().direction,
-						entity.collider().collider.getVelocity());
+						entity.renderer().direction);
 			}
 
 			public void read(SyncData data, KoruEntity entity){
@@ -83,9 +80,8 @@ public class SyncSystem extends KoruSystem{
 				float x = data.get(0);
 				float y = data.get(1);
 				
-				entity.collider().collider.getVelocity().set(data.get(4));
-				
-				entity.get(RenderComponent.class).renderer.walking = entity.collider().collider.getVelocity().len() > 0.01f;
+				//TODO
+				//entity.get(RenderComponent.class).renderer.walking = entity.collider().collider.getVelocity().len() > 0.01f;
 				
 				entity.get(InputComponent.class).input.mouseangle = data.get(2);
 				SyncComponent sync = entity.get(SyncComponent.class);

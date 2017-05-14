@@ -7,9 +7,6 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.aabb.Collider;
-import io.anuke.aabb.CollisionEngine;
-import io.anuke.koru.Koru;
 import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
@@ -17,130 +14,56 @@ import io.anuke.koru.listeners.CollisionHandler;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.util.Physics;
 
 public class CollisionSystem extends KoruSystem{
 	private final static float maxHitboxSize = 50;
 	private final static float stepsize = 0.1f;
-	private CollisionEngine engine;
 	private GridPoint2 point = new GridPoint2();
 	private Vector2 vector = new Vector2();
 	private CollisionHandler handler = new CollisionHandler();
 
 	public CollisionSystem() {
 		super(Family.all(ColliderComponent.class, PositionComponent.class).get());
-		engine = new CollisionEngine();
-		
-		//setup contact listeners/filters on server
-		if(IServer.active()){
-			engine.setContactFilter((a, b) -> {
-				KoruEntity ka = (KoruEntity) a.data;
-				KoruEntity kb = (KoruEntity) b.data;
-				return ka.getType().collide(ka, kb) && kb.getType().collide(kb, ka);
-			});
-
-			engine.setContactListener((a, b) -> {
-				KoruEntity ka = (KoruEntity) a.data;
-				KoruEntity kb = (KoruEntity) b.data;
-				handler.dispatchEvent(ka, kb);
-			});
-		}
-		
-		//prevents objects from moving into walls
-		engine.setCollisionMap((c, x, y)->{
-			Rectangle col = c.getBounds();
-			col.x = x - c.w / 2;
-			col.y = y - c.h / 2;
-			
-			return checkCollisions(x, y, col);
-		});
-	}
-
-	public CollisionEngine getColliderEngine(){
-		return engine;
 	}
 
 	@Override
 	public void update(float deltaTime){
-		engine.updateCollisions();
-		engine.updateCollisionMap(deltaTime);
 		super.update(deltaTime);
-		engine.updateForces(deltaTime / 60f);
-		updatePositions();
 	}
 
 	@Override
 	void processEntity(KoruEntity entity, float delta){
 		ColliderComponent co = entity.collider();
 
-		if(!co.collider.trigger)
-			checkTerrainCollisions(co.collider, co);
-	}
-	
-	void updatePositions(){
-		for (int i = 0; i < getEntities().size(); ++i) {
-			KoruEntity entity = (KoruEntity)getEntities().get(i);
-			
-			ColliderComponent co = entity.collider();
-
-			if(!co.init){
-				co.collider.x = entity.getX();
-				co.collider.y = entity.getY() + (co.grounded ? co.collider.h / 2 : 0);
-				co.lastx = co.collider.x;
-				co.lasty = co.collider.y;
-				co.collider.data = entity;
-				engine.addCollider(co.collider);
-				co.init = true;
-			}else{
-				entity.position().add(co.collider.x - co.lastx, co.collider.y - co.lasty);
-				co.collider.setPosition(entity.getX(), entity.getY() + (co.grounded ? co.collider.h / 2 : 0));
-				co.lastx = co.collider.x;
-				co.lasty = co.collider.y;
-			}
+		if(IServer.active()){
+			getEngine().map().getNearbyEntities(entity.getX(), entity.getY(), co.width + co.height, other -> {
+				if(other != null && other.collider() != null 
+						&& other.getType().collide(entity, other) 
+						&& entity.getType().collide(other, entity) 
+						&& entity.collider().getBounds(entity).overlaps(other.collider().getBounds(other))){
+					handler.dispatchEvent(entity, other);
+				}
+			});
 		}
 	}
 
-	void checkTerrainCollisions(Collider collider, ColliderComponent comp){
-		float x = collider.x + collider.getVelocity().x * Koru.delta();
-		float y = collider.y + collider.getVelocity().y * Koru.delta();
-		float w = collider.w;
-		float h = collider.h;
-		
-		checkTerrain(x, y, out->{
-			Rectangle col = collider.getBounds();
+	public void correctPosition(KoruEntity entity, ColliderComponent comp){
+		vector.set(0, 0);
+		Rectangle rect = comp.getTerrainBounds(entity);
 
-			col.height *= comp.terrainScl;
-
-			col.x = x - w / 2;
-
-			if(col.overlaps(out)){
-				collider.getVelocity().scl(-1f * collider.restitution, 1f);
-			}
-
-			col.x = collider.x - w / 2;
-
-			col.y = y - h / 2;
-
-			if(col.overlaps(out)){
-				collider.getVelocity().scl(1f, -1f * collider.restitution);
-			}
+		checkTerrain(entity.getX(), entity.getY(), out -> {
+			
+			Vector2 vec = Physics.overlap(rect, out);
+			vec.scl(3f);
+			rect.x += vec.x;
+			rect.y += vec.y;
+			vector.add(vec);
 		});
-		
-		Rectangle col = collider.getBounds();
-		col.height *= comp.terrainScl;
-		
-		//prevent collider from getting stuck in a block.
-		checkTerrain(x, y, out->{
-			if(col.overlaps(out)){
-				out.getCenter(vector);
-				vector.sub(collider.x, collider.y);
-				vector.setLength(1f);
-				
-				collider.x -= vector.x;
-				collider.y -= vector.y;
-			}
-		});
+
+		entity.position().add(vector.x, vector.y);
 	}
-	
+
 	void checkTerrain(float x, float y, Consumer<Rectangle> cons){
 		World world = World.instance();
 		int tilex = World.tile(x);
@@ -160,7 +83,7 @@ public class CollisionSystem extends KoruSystem{
 			}
 		}
 	}
-	
+
 	boolean checkCollisions(float x, float y, Rectangle rect){
 		World world = World.instance();
 		int tilex = World.tile(x);
@@ -176,11 +99,12 @@ public class CollisionSystem extends KoruSystem{
 					continue;
 
 				Rectangle out = tile.solidMaterial().getType().getHitbox(worldx, worldy, Rectangle.tmp2);
-				
-				if(out.overlaps(rect)) return true;
+
+				if(out.overlaps(rect))
+					return true;
 			}
 		}
-		
+
 		return false;
 	}
 }

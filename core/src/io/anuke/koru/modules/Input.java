@@ -24,7 +24,7 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
 public class Input extends Module<Koru>{
-	private float movespeed = 1.0f, dashspeed = 18f;
+	private float movespeed = 1.6f, dashspeed = 18f;
 	private Vector2 vector = new Vector2();
 	private KoruEntity player;
 	private int blockx, blocky;
@@ -85,15 +85,11 @@ public class Input extends Module<Koru>{
 		}else if(key(KeyBindings.move_up) || key(KeyBindings.move_left) || key(KeyBindings.move_down) || key(KeyBindings.move_right)){
 			render.direction = (key(KeyBindings.move_right) ? 1 : (key(KeyBindings.move_left) ? 3 : (key(KeyBindings.move_down) ? 0 : 2)));
 		}
-		
-		if(vector.len() < 0.001f){
-			player.collider().collider.getVelocity().set(0, 0);
-		}
 
 		vector.limit(speed);
-		player.collider().collider.applyImpulse(vector.x*delta(), vector.y*(delta()));
+		player.collider().move(player, vector.x*delta(), vector.y*(delta()));
 		
-		if(player.collider().collider.getVelocity().len() > 0.05){
+		if(vector.len() > 0.05){
 			render.walkframe += delta();
 		}else{
 			render.walkframe = 0;

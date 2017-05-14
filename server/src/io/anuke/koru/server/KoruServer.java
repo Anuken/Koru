@@ -168,7 +168,6 @@ public class KoruServer extends IServer{
 				
 				getPlayer(info).position().set(packet.x, packet.y);
 				getPlayer(info).renderer().direction = packet.direction;
-				getPlayer(info).collider().collider.getVelocity().set(packet.velocity);
 				getPlayer(info).get(InputComponent.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof EntityRequestPacket){
 				EntityRequestPacket packet = (EntityRequestPacket) object;

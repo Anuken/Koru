@@ -17,7 +17,7 @@ public class Projectile extends EntityType{
 	
 	@Override
 	public void init(KoruEntity entity){
-		entity.collider().collider.trigger = true;
+		entity.collider().trigger = true;
 		entity.collider().grounded = false;
 	}
 	

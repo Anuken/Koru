@@ -20,4 +20,8 @@ public class VelocityComponent implements KoruComponent{
 		this.drag = drag;
 		return this;
 	}
+	
+	public float angle(){
+		return velocity.angle();
+	}
 }
