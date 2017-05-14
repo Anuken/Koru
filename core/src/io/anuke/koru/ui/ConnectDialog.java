@@ -36,8 +36,6 @@ public class ConnectDialog extends Dialog{
 		content().row();
 		
 		new button("Connect", ()->{
-			hide();
-			getScene().setKeyboardFocus(null);
 			Koru.network.connect();
 		}).colspan(2).padTop(10).size(300, 50);
 		

@@ -143,7 +143,7 @@ public class Network extends Module<Koru>{
 			connecting = false;
 			connected = false;
 			e.printStackTrace();
-			Koru.ui.showError("Failed to connect to server:", (e.getCause() == null ? e.getMessage() : e.getCause().getMessage()));
+			Koru.ui.showError("[crimson]Failed to connect to server:", (e.getCause() == null ? e.getMessage() : e.getCause().getMessage()));
 			Koru.log("Connection failed!");
 		}
 
@@ -257,13 +257,16 @@ public class Network extends Module<Koru>{
 			Koru.log("Sent packet.");
 
 			connected = true;
+			Koru.ui.hideConnect();
 			Koru.control.setState(GameState.playing);
 		}
 		
 		@Override
 		public void disconnected (Connection connection) {
 			disconnect();
-			Koru.ui.showError("Disconnected from server: timed out.");
+			Gdx.app.postRunnable(()->{
+				Koru.ui.showError("Disconnected from server: timed out.");
+			});
 			
 			Koru.control.setState(GameState.title);
 		}

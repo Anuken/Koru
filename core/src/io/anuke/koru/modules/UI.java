@@ -45,7 +45,8 @@ public class UI extends SceneModule<Koru> {
 	
 	@Override
 	public void init(){
-		error = new TextDialog("N/A", "no error");
+		error = new TextDialog("Error", "N/A");
+		error.setDialog();
 		connect = new ConnectDialog();
 		settings = new SettingsDialog();
 		keybinds = new KeybindDialog();
@@ -122,11 +123,6 @@ public class UI extends SceneModule<Koru> {
 		build.end();
 	}
 	
-	void setupChat() {
-		chat = new ChatTable();
-		scene.add(chat);
-	}
-	
 	public void toggleChat(){
 		chat.toggle();
 		
@@ -135,6 +131,10 @@ public class UI extends SceneModule<Koru> {
 		}else{
 			Koru.control.setState(GameState.playing);
 		}
+	}
+	
+	public void hideConnect(){
+		connect.hide();
 	}
 	
 	public void handleChatMessage(String message, String sender){
@@ -146,7 +146,8 @@ public class UI extends SceneModule<Koru> {
 	}
 	
 	public void showError(String... lines){
-		error.set("Error", lines);
+		error.set("", lines);
+		
 		error.show();
 	}
 	
