@@ -22,7 +22,7 @@ public class ProcessorSurface extends CustomSurface{
 		if(light != null)
 			light.dispose();
 		light = new LightEffect(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		processor.addEffect(light);
+		//processor.addEffect(light);
 	}
 	
 	public void render(){

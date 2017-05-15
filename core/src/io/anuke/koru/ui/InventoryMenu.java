@@ -12,6 +12,7 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.ui.layout.Table;
@@ -51,7 +52,7 @@ public class InventoryMenu extends Table{
 		float pscale = slotsize / 16;
 
 		batch.setColor(Hue.lightness(95 / 255f));
-		batch.draw(Resources.region("blank"), getX() - pscale, getY() - pscale, getWidth() + pscale * 2, getHeight() + pscale * 2);
+		batch.draw(Draw.region("blank"), getX() - pscale, getY() - pscale, getWidth() + pscale * 2, getHeight() + pscale * 2);
 		batch.setColor(Color.WHITE);
 
 		super.draw(batch, alpha);
@@ -75,7 +76,7 @@ public class InventoryMenu extends Table{
 	}
 	
 	public static void drawItem(Batch batch, float alpha, float x, float y, ItemStack stack){
-		TextureRegion region = Resources.region(stack.item.name() + "item");
+		TextureRegion region = Draw.region(stack.item.name() + "item");
 
 		batch.setColor(0, 0, 0, 0.1f*alpha);
 		batch.draw(region, x + slotsize / 2 - region.getRegionWidth() / 2 * slotsize / 16, y + slotsize / 2 - region.getRegionHeight() / 2 * slotsize / 16 - 4, region.getRegionWidth() * slotsize / 16, region.getRegionHeight() * slotsize / 16);
@@ -115,7 +116,7 @@ public class InventoryMenu extends Table{
 
 		public void draw(Batch batch, float alpha){
 			batch.setColor(1, 1, 1, alpha);
-			batch.draw(Resources.region((y == 0 && x == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Draw.region((y == 0 && x == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[x][y] != null){
 				drawItem(batch, alpha, getX(), getY(), stacks[x][y]);

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.koru.graphics.KoruRenderable;
 import io.anuke.koru.graphics.RenderPool;
-import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.renderables.RenderableList;
@@ -25,7 +24,7 @@ public class StructMaterialTypes{
 			//light overlay
 			new KoruRenderable("torchflame1"){
 				public void draw(){
-					sprite.setRegion(Resources.region("torchflame" + frame(x,y)));
+					sprite.setRegion(Draw.region("torchflame" + frame(x,y)));
 					super.draw();
 				}
 			}.light().set(tile(x), tile(y)).centerX().add(group);

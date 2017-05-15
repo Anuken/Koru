@@ -1,18 +1,16 @@
 package io.anuke.koru.modules;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.bitfire.utils.ShaderLoader;
 
@@ -20,7 +18,9 @@ import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.*;
+import io.anuke.koru.graphics.KoruCursors;
+import io.anuke.koru.graphics.KoruRenderable;
+import io.anuke.koru.graphics.ProcessorSurface;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
@@ -34,9 +34,10 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
-import io.anuke.ucore.core.Draw;
-import io.anuke.ucore.core.Graphics;
-import io.anuke.ucore.core.Shaders;
+import io.anuke.ucore.core.*;
+import io.anuke.ucore.lights.Light;
+import io.anuke.ucore.lights.PointLight;
+import io.anuke.ucore.lights.RayHandler;
 import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.renderables.*;
 
@@ -45,22 +46,21 @@ public class Renderer extends RendererModule<Koru>{
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 26;
 	
-	public static final float GUIscale = 5f;
 	public static final int scale = 4;
 	public static final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
 	
-	public boolean debug = false, consoleOpen = false;
-	public World world;
-	public GlyphLayout layout;
-	//public PostProcessor processor;
-	//public LightEffect light;
-	public ProcessorSurface surface;
-	public KoruEntity player;
-	public Sprite shadowSprite;
-	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
-	public int lastcamx, lastcamy;
-	public GifRecorder recorder;
-
+	private World world;
+	private KoruEntity player;
+	private ProcessorSurface surface;
+	private RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
+	private Sprite shadowSprite;
+	private int lastcamx, lastcamy;
+	private GifRecorder recorder;
+	
+	private RayHandler rays;
+	private PointLight light;
+	private float darkness = 1f;
+	
 	public Renderer() {
 		cameraScale = scale;
 		
@@ -68,12 +68,16 @@ public class Renderer extends RendererModule<Koru>{
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
-		layout = new GlyphLayout();
 		recorder = new GifRecorder(batch);
-		Resources.set(this);
+		
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 		loadShaders();
+		
+		RayHandler.isDiffuse = true;
+		rays = new RayHandler();
+		light = new PointLight(rays, 200, Color.WHITE, 1135, 0, 0);
+		light.setNoise(1, 0, 0);
 
 		RenderableHandler.instance().setLayerManager(new DrawLayerManager());
 		KoruCursors.setCursor("cursor");
@@ -128,15 +132,14 @@ public class Renderer extends RendererModule<Koru>{
 		new FuncRenderable(-Sorter.light-1, Sorter.object, this::drawTileOverlay).add();
 		new FuncRenderable(-Sorter.light-1, Sorter.object, this::drawSelectOverlay).add();
 
-		shadowSprite = new Sprite(Resources.region("lightshadow"));
+		shadowSprite = new Sprite(Draw.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
 	}
 
 	@Override
 	public void update(){
-
 		long start = TimeUtils.nanoTime();
-		
+		updateLight();
 		if(Koru.control.canMove())
 			KoruCursors.setCursor("cursor");
 
@@ -154,6 +157,29 @@ public class Renderer extends RendererModule<Koru>{
 		if(Profiler.update())
 			Profiler.renderTime = TimeUtils.timeSinceNanos(start);
 	}
+	
+	void updateLight(){
+		//TODO more performant lights?
+		float w = screen.x*2;
+		float h = screen.y*2;
+		rays.setBounds(player.getX()-w/2, player.getY()-h/2, w, h);
+		
+		//debug controls?
+		if(Inputs.buttonUp(Buttons.LEFT) && Inputs.keyDown(Keys.CONTROL_LEFT) && Koru.control.debug){
+			Light add = new PointLight(rays, 50, Color.ORANGE, 100, Graphics.mouseWorld().x, Graphics.mouseWorld().y);
+			add.setNoise(3, 2, 1.5f);
+		}
+		
+		light.setPosition(player.getX(), player.getY()+7);
+		Tile tile = world.getWorldTile(player.getX(), player.getY());
+		
+		if(tile == null) return;
+		
+		float l = tile.light();
+		darkness = MathUtils.lerp(darkness, l, 0.005f);
+		
+		light.setColor(darkness, darkness, darkness, 1f);
+	}
 
 	void doRender(){
 
@@ -161,22 +187,17 @@ public class Renderer extends RendererModule<Koru>{
 		clearScreen();
 		drawMap();
 		RenderableHandler.instance().renderAll(batch);
-		//drawOverlay();
 
-		if(debug)
+		if(Koru.control.debug)
 			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
 		
 		Draw.surface(true);
-
-		batch.getProjectionMatrix().setToOrtho2D(0, 0, screen.x/GUIscale, screen.y/GUIscale);
+		
+		rays.setCombinedMatrix(camera);
+		rays.updateAndRender();
 		
 		if(Koru.control.canMove())
-		recorder.update();
-		
-		batch.begin();
-		drawGUI();
-		batch.end();
-		batch.setColor(Color.WHITE);
+			recorder.update();
 	}
 	
 	void drawSelectOverlay(FuncRenderable r){
@@ -205,7 +226,7 @@ public class Renderer extends RendererModule<Koru>{
 			String name = select.name() + 
 					select.getType().drawString(cursorX(), cursorY(), select);
 			
-			TextureRegion region = Resources.region(name);
+			TextureRegion region = Draw.region(name);
 			
 			RenderableList list = getRenderable(cursorX(), cursorY());
 			
@@ -308,7 +329,8 @@ public class Renderer extends RendererModule<Koru>{
 	}
 
 	public void updateTiles(){
-
+		rays.clearRects();
+		
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		for(int chunkx = 0; chunkx < World.loadrange * 2; chunkx++){
@@ -343,66 +365,27 @@ public class Renderer extends RendererModule<Koru>{
 							tile.topTile().getType().draw(renderables[rendx][rendy], tile.topTile(), tile, worldx, worldy);
 
 							if(tile.light < 127){
-								RenderPool.get("lightshadow").dark().set(worldx * 12 + 6, worldy * 12 + 12).size(52, 52).center().alpha(1f - tile.light()).add(renderables[rendx][rendy]);
+							//	RenderPool.get("lightshadow").dark().set(worldx * 12 + 6, worldy * 12 + 12).size(52, 52).center().alpha(1f - tile.light()).add(renderables[rendx][rendy]);
 							}
 						}
 
 						if(!tile.blockEmpty() && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 12 + tile.block().getType().size() && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 12 + tile.block().getType().size()){
 							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
 						}
+						
+						if(!tile.blockEmpty() && tile.block().getType() == MaterialTypes.block &&
+								world.isAccesible(worldx, worldy)){
+							
+							Rectangle rect = tile.block().getType().getHitbox(worldx, worldy, new Rectangle());
+							rect.y += World.tilesize/2;
+							rays.addRect(rect);
+						}
 					}
 				}
 			}
 		}
-	}
-
-	public void drawGUI(){
-		//font.setUseIntegerPositions(false);
-
-		if(Gdx.input.isKeyJustPressed(Keys.GRAVE))
-			consoleOpen = !consoleOpen;
-		if(Gdx.input.isKeyJustPressed(Keys.F3))
-			debug = !debug;
-
-		font.getData().setScale(1f / GUIscale);
-		font.setColor(Color.WHITE);
-
-		font.draw(batch, Gdx.graphics.getFramesPerSecond() + "[WHITE] FPS", 0, uiheight());
-
-		NumberFormat f = DecimalFormat.getInstance();
-
-		if(debug){
-			font.draw(batch, "[CORAL]entities: " + Koru.engine.getEntities().size() + "\n[BLUE]sprite pool peak: " + Pools.get(SpriteRenderable.class).peak + "\n[YELLOW]renderables: " + RenderableHandler.instance().getSize() + "\n[RED]ping: " + getModule(Network.class).client.getReturnTripTime() + "\n[ORANGE]render ns: " + f.format(Profiler.renderTime) + "\nworld ns: " + f.format(Profiler.engineTime) + "\nui ns: "
-					+ f.format(Profiler.uiTime) + "\nnetwork ns: " + f.format(Profiler.networkTime) + "\nengine ns: " + f.format(Profiler.worldTime) + "\nmodule ns: " + f.format(Profiler.moduleTime) + "\ntotal ns: " + f.format(Profiler.totalTime), 0, uiheight() - 5);
-
-			font.draw(batch, "[SKY]" + Koru.engine.getEntities().toString().replace(",", "\n"), uiwidth(), uiheight(), 0, Align.topRight, false);
-		}
-
-		if(consoleOpen){
-			font.getData().setScale(font.getData().scaleX * 0.75f);
-			font.draw(batch, "[CORAL]" + Koru.getLog(), 0, uiheight() - 35);
-		}
-
-		font.getData().setScale(1f / GUIscale);
-
-		font.setColor(Color.WHITE);
-
-		if(debug){
-			GridPoint2 cursor = new GridPoint2(cursorX(), cursorY());
-			
-			float cx = Gdx.input.getX() / GUIscale, cy = Gdx.graphics.getHeight() / GUIscale - Gdx.input.getY() / GUIscale;
-			if(!world.inClientBounds(cursor.x, cursor.y)){
-				font.draw(batch, "[RED]Out of bounds.", cx, cy);
-
-				return;
-			}
-
-			Tile tile = world.getTile(cursor);
-
-			Chunk chunk = world.getRelativeChunk(cursor.x, cursor.y);
-			font.draw(batch, "[GREEN]" + cursor.x + ", " + cursor.y + " " + tile + "\n[CORAL]chunk block pos: " + (cursor.x - chunk.worldX()) + ", " + (cursor.y - chunk.worldY()) + "\n[YELLOW]" + "chunk pos: " + chunk.x + ", " + chunk.y + "\n[ORANGE]pos: " + vector.x + ", " + vector.y + "\n[GREEN]time: " + world.time, cx, cy);
-		}
-
+		
+		rays.updateRects();
 	}
 
 	void updateCamera(){
@@ -411,42 +394,8 @@ public class Renderer extends RendererModule<Koru>{
 	}
 	
 	@Override
-	public void resize(int width, int height){
-		super.resize(width, height);
-	}
-
-	public GlyphLayout getBounds(String text){
-		layout.setText(font, text);
-		return layout;
-	}
-
-	// returns screen width / scale
-	public float uiwidth(){
-		return Gdx.graphics.getWidth() / GUIscale;
-	}
-
-	// returns screen height / scale
-	public float uiheight(){
-		return Gdx.graphics.getHeight() / GUIscale;
-	}
-
-	public TextureAtlas atlas(){
-		return atlas;
-	}
-
-	public TextureRegion getRegion(String name){
-		return atlas.findRegion(name);
-	}
-
-	public OrthographicCamera camera(){
-		return camera;
-	}
-
-	public SpriteBatch batch(){
-		return batch;
-	}
-
-	public BitmapFont font(){
-		return font;
+	public void resize(){
+		rays.resizeFBO((int)(screen.x/4), (int)(screen.y/4));
+		rays.pixelate();
 	}
 }

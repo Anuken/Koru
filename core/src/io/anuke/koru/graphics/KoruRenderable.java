@@ -1,7 +1,7 @@
 package io.anuke.koru.graphics;
 
 import io.anuke.koru.modules.World;
-import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.renderables.*;
 
 public class KoruRenderable extends SpriteRenderable{
@@ -11,11 +11,11 @@ public class KoruRenderable extends SpriteRenderable{
 	}
 	
 	public KoruRenderable(String region){
-		super(Resources.region(region));
+		super(region);
 	}
 	
 	public KoruRenderable region(String name){
-		return (KoruRenderable) super.region(Resources.region(name));
+		return (KoruRenderable) super.region(Draw.region(name));
 	}
 	
 	public KoruRenderable generateShadow(){

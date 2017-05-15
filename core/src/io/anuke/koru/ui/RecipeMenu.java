@@ -14,6 +14,7 @@ import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.scene.Element;
@@ -42,11 +43,11 @@ public class RecipeMenu extends Table{
 	
 	public void draw(Batch batch, float alpha){
 		batch.setColor(Hue.lightness(95/255f));
-		batch.draw(Resources.region("blank"), getX()-pscale, getY()-pscale + getHeight()/2, getWidth()+pscale*2, getHeight()/2+pscale*2);
-		batch.draw(Resources.region("blank"), getX() + getWidth()/2-slotsize/2 - pscale, getY() - pscale, slotsize + pscale*2, slotsize + pscale*2);
+		batch.draw(Draw.region("blank"), getX()-pscale, getY()-pscale + getHeight()/2, getWidth()+pscale*2, getHeight()/2+pscale*2);
+		batch.draw(Draw.region("blank"), getX() + getWidth()/2-slotsize/2 - pscale, getY() - pscale, slotsize + pscale*2, slotsize + pscale*2);
 		
 		batch.setColor(Color.WHITE);
-		batch.draw(Resources.region("slot2"), getX() + getWidth()/2-slotsize/2, getY(), slotsize, slotsize);
+		batch.draw(Draw.region("slot2"), getX() + getWidth()/2-slotsize/2, getY(), slotsize, slotsize);
 		
 		super.draw(batch, alpha);
 	}
@@ -60,7 +61,7 @@ public class RecipeMenu extends Table{
 			InventoryComponent inv = Koru.control.player.get(InventoryComponent.class);
 			
 			for(int i = 0; i < stacks.length; i ++){
-				TextureRegion region = Resources.region(stacks[i].item.name() + "item");
+				TextureRegion region = Draw.region(stacks[i].item.name() + "item");
 				float w = region.getRegionWidth()*pscale, h = region.getRegionHeight()*pscale;
 				float x = getX() + getWidth()/2 - region.getRegionWidth()/2*pscale - (stacks.length-1)*8*pscale + i*16*pscale, 
 						y = getY()+2*pscale;
@@ -110,10 +111,10 @@ public class RecipeMenu extends Table{
 
 		public void draw(Batch batch, float alpha){
 			batch.setColor(getColor());
-			batch.draw(Resources.region(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2")), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Draw.region(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2")), getX(), getY(), getWidth(), getHeight());
 			
 			Material result = recipe.result();
-			TextureRegion region = Resources.region(result.name());
+			TextureRegion region = Draw.region(result.name());
 			
 			float w = region.getRegionWidth()*pscale,h = region.getRegionHeight()*pscale;
 			

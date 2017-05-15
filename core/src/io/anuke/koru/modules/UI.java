@@ -2,6 +2,7 @@ package io.anuke.koru.modules;
 
 import java.util.function.BooleanSupplier;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -114,6 +115,15 @@ public class UI extends SceneModule<Koru> {
 		//recipes
 		new table(){{
 			add(recipes = new RecipeMenu()).padBottom(300);
+		}}.end().visible(playvis);
+		
+		//debug
+		new table(){{
+			atop();
+			aleft();
+			new label(()->{
+				return Gdx.graphics.getFramesPerSecond() + " FPS";
+			});
 		}}.end().visible(playvis);
 		
 		//chat

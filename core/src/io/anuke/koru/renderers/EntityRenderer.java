@@ -2,7 +2,6 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.renderables.FuncRenderable.DrawFunc;
 import io.anuke.ucore.renderables.Sorter;
@@ -34,7 +33,7 @@ public abstract class EntityRenderer{
 		render.list.add(Sorter.shadow, Sorter.tile, (l)->{
 			l.layer = Sorter.shadow;
 			Draw.rect("shadow"
-					+ (int) (Resources.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Resources.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), e.getY());
+					+ (int) (Draw.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Draw.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), e.getY());
 		});
 	}
 	
@@ -43,7 +42,7 @@ public abstract class EntityRenderer{
 			l.layer = Sorter.shadow;
 			Draw.color();
 			Draw.rect("shadow"
-					+ (int) (Resources.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Resources.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), yoffset+e.getY());
+					+ (int) (Draw.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Draw.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), yoffset+e.getY());
 		});
 	}
 	

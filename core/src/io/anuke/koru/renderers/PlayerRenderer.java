@@ -36,7 +36,7 @@ public class PlayerRenderer extends EntityRenderer{
 				Resources.font2().setColor(Color.YELLOW);
 				
 				Resources.font2().getData().setScale(1f/2f);
-				Resources.font2().draw(Resources.batch(), entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14, 0, Align.center, false);
+				Resources.font2().draw(Draw.batch(), entity.get(ConnectionComponent.class).name, entity.getX(), entity.getY() + 14, 0, Align.center, false);
 			
 				Resources.font2().setColor(Color.WHITE);
 			}

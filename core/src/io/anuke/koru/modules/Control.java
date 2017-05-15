@@ -23,6 +23,7 @@ import io.anuke.ucore.util.Angles;
 
 public class Control extends Module<Koru>{
 	public final KoruEntity player;
+	public boolean debug = false, consoleOpen = false;
 	
 	private float movespeed = 1.6f, dashspeed = 18f;
 	private Vector2 vector = new Vector2();
@@ -48,7 +49,9 @@ public class Control extends Module<Koru>{
 			"chat", Keys.ENTER,
 			"interact", Keys.Q,
 			"build", Keys.F,
-			"exit", Keys.ESCAPE
+			"exit", Keys.ESCAPE,
+			"debug", Keys.F3,
+			"log", Keys.GRAVE
 		);
 		
 		Settings.loadAll("io.anuke.koru");
@@ -78,6 +81,14 @@ public class Control extends Module<Koru>{
 		
 		if(Inputs.keyUp("chat") && isPlaying()){
 			Koru.ui.toggleChat();
+		}
+		
+		if(Inputs.keyUp("log")){
+			consoleOpen = !consoleOpen;
+		}
+		
+		if(Inputs.keyUp("debug")){
+			debug = !debug;
 		}
 
 		if (!canMove()) return;

@@ -16,7 +16,7 @@ import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Tools;
-import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.event.InputEvent;
 import io.anuke.ucore.scene.event.InputListener;
@@ -219,7 +219,7 @@ public class CraftingMenu extends Menu{
 			float rx = slotsize / 2 + ((dragged.isType(ItemType.rod) ? rodslot : matslot).worldPos().x);
 			float ry = slotsize / 2 + ((dragged.isType(ItemType.rod) ? rodslot : matslot).worldPos().y);
 
-			TextureRegion region = Resources.region(dragged.item.name() + "item");
+			TextureRegion region = Draw.region(dragged.item.name() + "item");
 
 			if(Vector2.dst(x + slotsize / 2, y + slotsize / 2, rx, ry) < slotsize){
 				batch.setColor(1, 1, 1, alpha * 0.5f);
@@ -255,7 +255,7 @@ public class CraftingMenu extends Menu{
 			styles.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
 
 			batch.setColor(1, 1, 1, alpha);
-			batch.draw(Resources.region("tooltemplate"), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Draw.region("tooltemplate"), getX(), getY(), getWidth(), getHeight());
 
 			batch.setColor(Color.WHITE);
 		}
@@ -328,7 +328,7 @@ public class CraftingMenu extends Menu{
 		public void draw(Batch batch, float alpha){
 
 			batch.setColor(1, 1, 1, alpha);
-			batch.draw(Resources.region("slot"), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Draw.region("slot"), getX(), getY(), getWidth(), getHeight());
 
 			if(stack != null){
 				InventoryMenu.drawItem(batch, alpha, getX(), getY(), stack);
