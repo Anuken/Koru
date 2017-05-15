@@ -10,9 +10,11 @@ import io.anuke.koru.systems.CollisionSystem;
 @Synced
 public class ColliderComponent implements KoruComponent{
 	private transient Rectangle bounds = new Rectangle();
-	/**If trigger is true, it doesn't collider with terrain*/
+	/**trigger- whether or not it collides with terrain.*/
 	public transient boolean trigger = false;
-	public transient float terrainScl = 0.7f; //how much smaller the hitbox becomes when colliding with terrain
+	/**how much smaller the hitbox becomes when colliding with terrain.*/
+	public transient float terrainScl = 5f/6f; 
+	/**if false, hitbox will be centered on entity's center.*/
 	public transient boolean grounded = true;
 	
 	public transient float width;

@@ -66,9 +66,10 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 		compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+		
 		compile 'com.github.Anuken:GDXGifRecorder:c9fa647'
 		compile 'com.github.anuken:gdx-postprocessing:8173fd4bb6'
-		compile 'com.github.Anuken:ucore:78a3b9db03'
+		compile 'com.github.Anuken:ucore:f1d16cf8a6'
     }
 }
 

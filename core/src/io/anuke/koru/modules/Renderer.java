@@ -5,13 +5,15 @@ import java.text.NumberFormat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.*;
-import com.bitfire.postprocessing.PostProcessor;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.gif.GifRecorder;
@@ -49,40 +51,37 @@ public class Renderer extends RendererModule<Koru>{
 	
 	public boolean debug = false, consoleOpen = false;
 	public World world;
-	public Matrix4 matrix;
 	public GlyphLayout layout;
-	public PostProcessor processor;
-	public LightEffect light;
+	//public PostProcessor processor;
+	//public LightEffect light;
+	public ProcessorSurface surface;
 	public KoruEntity player;
 	public Sprite shadowSprite;
 	public RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	public int lastcamx, lastcamy;
 	public GifRecorder recorder;
 
-	private boolean init;
-
 	public Renderer() {
 		cameraScale = scale;
 		
-		matrix = new Matrix4();
 		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
 		layout = new GlyphLayout();
-		processor = new PostProcessor(false, true, true);
 		recorder = new GifRecorder(batch);
 		Resources.set(this);
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 		loadShaders();
 
-		RenderableHandler.instance().setLayerManager(this::drawRenderables);
+		RenderableHandler.instance().setLayerManager(new DrawLayerManager());
 		KoruCursors.setCursor("cursor");
 		KoruCursors.updateCursor();
 
-		addEffects();
 		loadMaterialColors();
+		
+		Draw.addSurface(surface = new ProcessorSurface());
 
 		Koru.log("Loaded resources.");
 	}
@@ -118,14 +117,6 @@ public class Renderer extends RendererModule<Koru>{
 		}
 	}
 
-	void addEffects(){
-		if(light != null)
-			light.dispose();
-		light = new LightEffect(gwidth(), gheight());
-
-		processor.addEffect(light);
-	}
-
 	public void init(){
 		player = Koru.control.player;
 		world = getModule(World.class);
@@ -134,28 +125,22 @@ public class Renderer extends RendererModule<Koru>{
 		Resources.loadParticle("break");
 
 		new FuncRenderable(this::drawBlockOverlay).add();
-		new FuncRenderable(-Layers.light-1, Sorter.object, this::drawTileOverlay).add();
-		new FuncRenderable(-Layers.light-1, Sorter.object, this::drawSelectOverlay).add();
+		new FuncRenderable(-Sorter.light-1, Sorter.object, this::drawTileOverlay).add();
+		new FuncRenderable(-Sorter.light-1, Sorter.object, this::drawSelectOverlay).add();
 
 		shadowSprite = new Sprite(Resources.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
-		
-		
 	}
 
 	@Override
 	public void update(){
-		if(!init && processor.getCombinedBuffer().height < Gdx.graphics.getHeight()){
-			resetProcessor();
-			init = true;
-		}
 
 		long start = TimeUtils.nanoTime();
 		
 		if(Koru.control.canMove())
 			KoruCursors.setCursor("cursor");
 
-		light.setColor(world.getAmbientColor());
+		surface.setLightColor(world.getAmbientColor());
 		
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
@@ -172,21 +157,19 @@ public class Renderer extends RendererModule<Koru>{
 
 	void doRender(){
 
-		processor.capture();
+		Draw.surface("processor");
 		clearScreen();
-		batch.begin();
 		drawMap();
 		RenderableHandler.instance().renderAll(batch);
 		//drawOverlay();
 
 		if(debug)
 			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
-
+		
+		Draw.surface();
 		batch.end();
 
-		processor.render();
-
-		batch.setProjectionMatrix(matrix);
+		batch.getProjectionMatrix().setToOrtho2D(0, 0, screen.x/GUIscale, screen.y/GUIscale);
 		
 		if(Koru.control.canMove())
 		recorder.update();
@@ -232,7 +215,7 @@ public class Renderer extends RendererModule<Koru>{
 			KoruRenderable b = (KoruRenderable)(list.renderables.peek());
 			
 			Draw.shader("inline", outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
-			b.draw(batch);
+			b.draw();
 			Draw.shader();
 		}
 		
@@ -423,86 +406,6 @@ public class Renderer extends RendererModule<Koru>{
 
 	}
 
-	void drawRenderables(Array<Renderable> renderables, Batch batch){
-		batch.end();
-
-		Array<FrameBufferLayer> blayers = new Array<FrameBufferLayer>(FrameBufferLayer.values());
-
-		FrameBufferLayer selected = null;
-
-		batch.begin();
-
-		for(Renderable layer : renderables){
-
-			boolean ended = false;
-
-			if(selected != null && (!selected.layerEquals(layer))){
-				endBufferLayer(selected, blayers);
-				selected = null;
-				ended = true;
-			}
-
-			if(selected == null){
-
-				for(FrameBufferLayer fl : blayers){
-					if(fl.layerEquals(layer)){
-						if(ended)
-							layer.draw(batch);
-						selected = fl;
-						beginBufferLayer(selected);
-						break;
-					}
-				}
-			}
-
-			layer.draw(batch);
-		}
-		if(selected != null){
-			endBufferLayer(selected, blayers);
-			selected = null;
-		}
-		batch.end();
-		batch.begin();
-
-		batch.setColor(Color.WHITE);
-
-	}
-
-	private void beginBufferLayer(FrameBufferLayer selected){
-		selected.beginDraw(this, batch, camera, buffers.get(selected.name));
-
-		batch.end();
-
-		processor.captureEnd();
-
-		buffers.begin(selected.name);
-		buffers.get(selected.name).getColorBufferTexture().bind(selected.bind);
-		for(Texture t : atlas.getTextures())
-			t.bind(0);
-
-		if(selected.shader != null)
-			batch.setShader(selected.shader);
-		batch.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
-
-	private void endBufferLayer(FrameBufferLayer selected, Array<FrameBufferLayer> layers){
-		batch.end();
-		if(selected.shader != null)
-			batch.setShader(null);
-		buffers.end(selected.name);
-		buffers.get(selected.name).getColorBufferTexture().bind(0);
-
-		processor.captureNoClear();
-
-		batch.begin();
-		selected.end();
-		batch.setColor(Color.WHITE);
-		if(layers != null)
-			layers.removeValue(selected, true);
-	}
-
 	void updateCamera(){
 		camera.position.set(player.getX(), (player.getY()), 0f);
 		camera.update();
@@ -511,16 +414,6 @@ public class Renderer extends RendererModule<Koru>{
 	@Override
 	public void resize(int width, int height){
 		super.resize(width, height);
-		
-		matrix.setToOrtho2D(0, 0, width / GUIscale, height / GUIscale);
-		light.setSize(width, height);
-		resetProcessor();
-	}
-
-	void resetProcessor(){
-		processor.dispose();
-		processor = new PostProcessor(false, true, true);
-		addEffects();
 	}
 
 	public GlyphLayout getBounds(String text){

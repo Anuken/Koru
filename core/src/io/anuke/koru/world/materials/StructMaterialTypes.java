@@ -1,12 +1,12 @@
 package io.anuke.koru.world.materials;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 
 import io.anuke.koru.graphics.KoruRenderable;
 import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.renderables.RenderableList;
 import io.anuke.ucore.renderables.Sorter;
 import io.anuke.ucore.util.Timers;
@@ -24,28 +24,28 @@ public class StructMaterialTypes{
 			
 			//light overlay
 			new KoruRenderable("torchflame1"){
-				public void draw(Batch batch){
+				public void draw(){
 					sprite.setRegion(Resources.region("torchflame" + frame(x,y)));
-					super.draw(batch);
+					super.draw();
 				}
 			}.light().set(tile(x), tile(y)).centerX().add(group);
 			
 			//radius light
 			new KoruRenderable("light"){
-				public void draw(Batch batch){
+				public void draw(){
 					sprite.setOriginCenter();
 					sprite.setScale(1f + (float)Math.sin(Timers.time()/7f+rand(x,y,100)/30f)/25f + (float)Math.random()/20f);
 					
-					super.draw(batch);
+					super.draw();
 				}
 			}.light().set(tile(x), tile(y)+6).center().color(0.5f, 0.4f, 0.2f).add(group);
 			
 			//actual torch
 			new KoruRenderable(material.name()){
-				public void draw(Batch batch){
-					sprite.draw(batch);
-					batch.setColor(1,1,1,sprite.getColor().a);
-					batch.draw(Resources.region("torchflame" + frame(x,y)), sprite.getX(), sprite.getY());
+				public void draw(){
+					Draw.sprite(sprite);
+					Draw.color(1,1,1,sprite.getColor().a);
+					Draw.crect("torchflame" + frame(x,y), sprite.getX(), sprite.getY());
 				}
 			}.set(tile(x), tile(y) + material.offset()).layer(tile(y)).centerX()
 			.sort(Sorter.object)

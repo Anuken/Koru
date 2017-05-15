@@ -146,8 +146,7 @@ public class UI extends SceneModule<Koru> {
 	}
 	
 	public void showError(String... lines){
-		error.set("", lines);
-		
+		error.set("Error", lines);
 		error.show();
 	}
 	

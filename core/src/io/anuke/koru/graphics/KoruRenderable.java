@@ -26,15 +26,15 @@ public class KoruRenderable extends SpriteRenderable{
 	}
 
 	public KoruRenderable shadow(){
-		return (KoruRenderable) layer(Layers.shadow);
+		return (KoruRenderable) layer(Sorter.shadow);
 	}
 	
 	public KoruRenderable light(){
-		return (KoruRenderable) layer(Layers.light);
+		return (KoruRenderable) layer(Sorter.light);
 	}
 	
 	public KoruRenderable dark(){
-		return (KoruRenderable) layer(Layers.dark);
+		return (KoruRenderable) layer(Sorter.dark);
 	}
 	
 	public KoruRenderable color(float r, float g, float b, float a){

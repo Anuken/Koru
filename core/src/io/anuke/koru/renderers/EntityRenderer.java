@@ -2,7 +2,6 @@ package io.anuke.koru.renderers;
 
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.Layers;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.renderables.FuncRenderable.DrawFunc;
@@ -32,16 +31,16 @@ public abstract class EntityRenderer{
 	}
 	
 	public void drawShadow(String region, KoruEntity e){
-		render.list.add(Layers.shadow, Sorter.tile, (l)->{
-			l.layer = Layers.shadow;
+		render.list.add(Sorter.shadow, Sorter.tile, (l)->{
+			l.layer = Sorter.shadow;
 			Draw.rect("shadow"
 					+ (int) (Resources.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Resources.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), e.getY());
 		});
 	}
 	
 	public void drawShadow(String region, float yoffset, KoruEntity e){
-		render.list.add(Layers.shadow, Sorter.tile, (l)->{
-			l.layer = Layers.shadow;
+		render.list.add(Sorter.shadow, Sorter.tile, (l)->{
+			l.layer = Sorter.shadow;
 			Draw.color();
 			Draw.rect("shadow"
 					+ (int) (Resources.region(region).getRegionWidth() * 0.8f / 2f + Math.pow(Resources.region(region).getRegionWidth(), 1.5f) / 200f) * 2, e.getX(), yoffset+e.getY());
