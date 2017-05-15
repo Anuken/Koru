@@ -166,8 +166,7 @@ public class Renderer extends RendererModule<Koru>{
 		if(debug)
 			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
 		
-		Draw.surface();
-		batch.end();
+		Draw.surface(true);
 
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, screen.x/GUIscale, screen.y/GUIscale);
 		

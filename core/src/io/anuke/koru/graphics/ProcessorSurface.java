@@ -15,12 +15,18 @@ public class ProcessorSurface extends CustomSurface{
 	}
 	
 	public void setLightColor(Color color){
-		//TODO fix light shadow bugs
 		light.setColor(color);
 	}
 	
 	private void addEffects(){
-		
+		if(light != null)
+			light.dispose();
+		light = new LightEffect(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		processor.addEffect(light);
+	}
+	
+	public void render(){
+		processor.render();
 	}
 	
 	@Override
@@ -33,8 +39,12 @@ public class ProcessorSurface extends CustomSurface{
 	}
 	
 	@Override
-	public void end(){
-		processor.render();
+	public void end(boolean render){
+		if(render){
+			processor.render();
+		}else{
+			processor.captureEnd();
+		}
 	}
 	
 	@Override
@@ -43,10 +53,7 @@ public class ProcessorSurface extends CustomSurface{
 			processor.dispose();
 		processor = new PostProcessor(false, true, true);
 		
-		if(light != null)
-			light.dispose();
-		light = new LightEffect(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		//processor.addEffect(light);
+		addEffects();
 	}
 	
 	@Override
