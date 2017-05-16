@@ -120,7 +120,8 @@ public class Renderer extends RendererModule<Koru>{
 			material.color = new Color(pixmap.getPixel(region.getRegionX(), region.getRegionY()));
 		}
 	}
-
+	
+	@Override
 	public void init(){
 		player = Koru.control.player;
 		world = getModule(World.class);
@@ -313,6 +314,7 @@ public class Renderer extends RendererModule<Koru>{
 	void drawMap(){
 		if(Gdx.graphics.getFrameId() == 5)
 			updateTiles();
+		
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
 		if(lastcamx != camx || lastcamy != camy){
@@ -377,7 +379,7 @@ public class Renderer extends RendererModule<Koru>{
 								world.isAccesible(worldx, worldy)){
 							
 							Rectangle rect = tile.block().getType().getHitbox(worldx, worldy, new Rectangle());
-							rect.y += World.tilesize/2;
+							rect.y += World.tilesize/4;
 							rays.addRect(rect);
 						}
 					}
