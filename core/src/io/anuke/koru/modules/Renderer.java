@@ -76,8 +76,11 @@ public class Renderer extends RendererModule<Koru>{
 		
 		RayHandler.isDiffuse = true;
 		rays = new RayHandler();
-		light = new PointLight(rays, 200, Color.WHITE, 1135, 0, 0);
-		light.setNoise(1, 0, 0);
+		rays.setBlurNum(3);
+		light = new PointLight(rays, 400, Color.WHITE, 1135, 0, 0);
+		light.setSoftnessLength(40f);
+		light.setSoft(true);
+		//light.setSoftnessLength(20.5f);
 
 		RenderableHandler.instance().setLayerManager(new DrawLayerManager());
 		KoruCursors.setCursor("cursor");
@@ -365,10 +368,6 @@ public class Renderer extends RendererModule<Koru>{
 
 						if(tile.topTile() != Materials.air && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24 && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 36){
 							tile.topTile().getType().draw(renderables[rendx][rendy], tile.topTile(), tile, worldx, worldy);
-
-							if(tile.light < 127){
-							//	RenderPool.get("lightshadow").dark().set(worldx * 12 + 6, worldy * 12 + 12).size(52, 52).center().alpha(1f - tile.light()).add(renderables[rendx][rendy]);
-							}
 						}
 
 						if(!tile.blockEmpty() && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 12 + tile.block().getType().size() && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 12 + tile.block().getType().size()){
