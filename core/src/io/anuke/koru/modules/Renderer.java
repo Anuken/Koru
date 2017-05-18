@@ -77,10 +77,8 @@ public class Renderer extends RendererModule<Koru>{
 		RayHandler.isDiffuse = true;
 		rays = new RayHandler();
 		rays.setBlurNum(3);
-		light = new PointLight(rays, 400, Color.WHITE, 1135, 0, 0);
+		light = new PointLight(rays, 300, Color.WHITE, 1135, 0, 0);
 		light.setSoftnessLength(40f);
-		light.setSoft(true);
-		//light.setSoftnessLength(20.5f);
 
 		RenderableHandler.instance().setLayerManager(new DrawLayerManager());
 		KoruCursors.setCursor("cursor");
@@ -91,6 +89,8 @@ public class Renderer extends RendererModule<Koru>{
 		Draw.addSurface(surface = new ProcessorSurface());
 
 		Koru.log("Loaded resources.");
+		
+		pixelate();
 	}
 	
 	void loadShaders(){
@@ -166,7 +166,7 @@ public class Renderer extends RendererModule<Koru>{
 		//TODO more performant lights?
 		float w = screen.x*2;
 		float h = screen.y*2;
-		rays.setBounds(player.getX()-w/2, player.getY()-h/2, w, h);
+		rays.setBounds(camera.position.x-w/2, camera.position.y-h/2, w, h);
 		
 		//debug controls?
 		if(Inputs.buttonUp(Buttons.LEFT) && Inputs.keyDown(Keys.CONTROL_LEFT) && Koru.control.debug){
@@ -174,7 +174,7 @@ public class Renderer extends RendererModule<Koru>{
 			add.setNoise(3, 2, 1.5f);
 		}
 		
-		light.setPosition(player.getX(), player.getY()+7);
+		light.setPosition(camera.position.x, camera.position.y+7);
 		Tile tile = world.getWorldTile(player.getX(), player.getY());
 		
 		if(tile == null) return;
@@ -186,15 +186,16 @@ public class Renderer extends RendererModule<Koru>{
 	}
 
 	void doRender(){
-
+		
 		Draw.surface("processor");
+		if(pixelate) beginPixel();
 		clearScreen();
 		drawMap();
 		RenderableHandler.instance().renderAll(batch);
 
 		if(Koru.control.debug)
 			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
-		
+		if(pixelate) endPixel();
 		Draw.surface(true);
 		
 		rays.setCombinedMatrix(camera);
@@ -390,7 +391,11 @@ public class Renderer extends RendererModule<Koru>{
 	}
 
 	void updateCamera(){
-		camera.position.set(player.getX(), (player.getY()), 0f);
+		if(Settings.getBool("smoothcam")){
+			smoothCamera(player.getX(), player.getY(), 0.05f);
+		}else{
+			camera.position.set(player.getX(), player.getY(), 0);
+		}
 		camera.update();
 	}
 	

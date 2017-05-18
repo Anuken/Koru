@@ -16,6 +16,7 @@ import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.utils.Cursors;
+import io.anuke.ucore.util.Timers;
 
 public class UI extends SceneModule<Koru> {
 	private ObjectMap<Class<?>, Menu> menus = new ObjectMap<>();
@@ -34,7 +35,7 @@ public class UI extends SceneModule<Koru> {
 	private BooleanSupplier playvis = ()->{return Koru.control.isPlaying();};
 
 	public UI() {
-		styles = StyleLoader.loadStyles();
+		skin = StyleLoader.loadStyles();
 		Dialog.closePadR -= 1;
 		
 		Inputs.flipProcessors();
@@ -54,12 +55,16 @@ public class UI extends SceneModule<Koru> {
 		chat = new ChatTable();
 		
 		//TODO settings
-		settings.content().add("No settings yet!");
+		settings.checkPref("smoothcam", "Smooth Camera", false);
 		
 		setup();
 		
 		//TODO setting to autoshow this
-		connect.show();
+		
+		
+		Timers.run(20, ()->{
+			connect.show();
+		});
 	}
 	
 	void setup(){

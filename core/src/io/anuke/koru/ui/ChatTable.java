@@ -1,7 +1,6 @@
 package io.anuke.koru.ui;
 
-
-import static io.anuke.ucore.scene.style.Styles.styles;
+import static io.anuke.ucore.core.DrawContext.skin;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -16,7 +15,6 @@ import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.network.packets.ChatPacket;
 import io.anuke.ucore.scene.Scene;
-import io.anuke.ucore.scene.style.Styles;
 import io.anuke.ucore.scene.ui.Label;
 import io.anuke.ucore.scene.ui.Label.LabelStyle;
 import io.anuke.ucore.scene.ui.TextField;
@@ -42,7 +40,7 @@ public class ChatTable extends Table{
 		super();
 		
 		setFillParent(true);
-		font = styles.getFont("pixel-font");
+		font = skin.getFont("pixel-font");
 		
 		setup();
 	}
@@ -52,11 +50,11 @@ public class ChatTable extends Table{
 		fieldlabel.getStyle().font = font;
 		fieldlabel.setStyle(fieldlabel.getStyle());
 		fieldlabel.setFontScale(2);
-		chatfield = new TextField("", new TextField.TextFieldStyle(styles.get(TextField.TextFieldStyle.class)));
+		chatfield = new TextField("", new TextField.TextFieldStyle(skin.get(TextField.TextFieldStyle.class)));
 		
-		chatfield.getStyle().background = styles.getDrawable("blank");
+		chatfield.getStyle().background = skin.getDrawable("blank");
 		chatfield.getStyle().fontColor = Color.WHITE;
-		chatfield.getStyle().font = Styles.styles.getFont("pixel-font-nomarkup");
+		chatfield.getStyle().font = skin.getFont("pixel-font-nomarkup");
 		
 		bottom().left().padBottom(offsety).padLeft(offsetx*2).add(fieldlabel).padBottom(4f);
 		
@@ -68,7 +66,7 @@ public class ChatTable extends Table{
 		
 		batch.setColor(shadowColor);
 		if(chatOpen)
-			batch.draw(styles.getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight()-1);
+			batch.draw(skin.getRegion("white"), offsetx, chatfield.getY(), Gdx.graphics.getWidth()-offsetx*2, chatfield.getHeight()-1);
 		
 		font.getData().setScale(2f);
 		font.getData().down = -21.5f;
@@ -100,7 +98,7 @@ public class ChatTable extends Table{
 					
 			}
 			
-			batch.draw(styles.getRegion("white"), offsetx, theight-layout.height+1-4, textWidth, layout.height+textspacing);
+			batch.draw(skin.getRegion("white"), offsetx, theight-layout.height+1-4, textWidth, layout.height+textspacing);
 			batch.setColor(shadowColor);
 			
 			font.getCache().draw(batch);

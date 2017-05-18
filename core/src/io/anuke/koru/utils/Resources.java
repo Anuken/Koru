@@ -12,7 +12,6 @@ import io.anuke.koru.items.BlockRecipes;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.StructMaterials;
 import io.anuke.ucore.core.DrawContext;
-import io.anuke.ucore.scene.style.Styles;
 
 public class Resources{
 	private static Json json;
@@ -39,11 +38,11 @@ public class Resources{
 	}
 	
 	public static BitmapFont font2(){
-		return Styles.styles.getFont("pixel-font-noborder");
+		return DrawContext.skin.getFont("pixel-font-noborder");
 	}
 	
 	public static BitmapFont font3(){
-		return Styles.styles.getFont("pixel-font");
+		return DrawContext.skin.getFont("pixel-font");
 	}
 	
 	public static Json getJson(){

@@ -10,14 +10,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
-import io.anuke.ucore.scene.style.Styles;
+import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.scene.Skin;
 
 public class StyleLoader{
 	
-	public static Styles loadStyles(){
+	public static Skin loadStyles(){
 		float s = 1f;
 		FileHandle skinFile = Gdx.files.internal("ui/uiskin.json");
-		Styles styles = new Styles();
+		Skin styles = new Skin();
 
 		FileHandle atlasFile = skinFile.sibling(skinFile.nameWithoutExtension() + ".atlas");
 		if(atlasFile.exists()){
@@ -89,7 +90,7 @@ public class StyleLoader{
 
 		styles.load(skinFile);
 
-		Styles.load(styles);
+		DrawContext.skin = styles;
 
 		generator.dispose();
 		pgenerator.dispose();

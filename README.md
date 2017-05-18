@@ -15,7 +15,7 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 - GUI made with [uCore Scene](https://github.com/Anuken/uCore)
 - multiplayer, made with Kryonet
 - crabs
-- lighting system *(Might be replaced with uCore lighting)*
+- lighting system, using a modified version of box2D lights
 - ingame chat
 
 

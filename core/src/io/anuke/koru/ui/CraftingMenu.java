@@ -1,7 +1,7 @@
 package io.anuke.koru.ui;
 
 import static io.anuke.koru.ui.InventoryMenu.slotsize;
-import static io.anuke.ucore.scene.style.Styles.styles;
+import static io.anuke.ucore.core.DrawContext.skin;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -127,11 +127,11 @@ public class CraftingMenu extends Menu{
 			table.add(titles[j]).colspan(5);
 			table.row();
 			
-			ImageButton l1 = new ImageButton(styles.get("gray", ImageButtonStyle.class));
-			ImageButton l2 = new ImageButton(styles.get("gray", ImageButtonStyle.class));
+			ImageButton l1 = new ImageButton(skin.get("gray", ImageButtonStyle.class));
+			ImageButton l2 = new ImageButton(skin.get("gray", ImageButtonStyle.class));
 			
-			l1.getStyle().imageUp = styles.getDrawable("icon-arrow-left");
-			l2.getStyle().imageUp = styles.getDrawable("icon-arrow-right");
+			l1.getStyle().imageUp = skin.getDrawable("icon-arrow-left");
+			l2.getStyle().imageUp = skin.getDrawable("icon-arrow-right");
 			
 			
 			l1.getImageCell().size(32);
@@ -252,7 +252,7 @@ public class CraftingMenu extends Menu{
 		public void draw(Batch batch, float alpha){
 
 			batch.setColor(1, 1, 1, alpha);
-			styles.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
+			skin.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
 
 			batch.setColor(1, 1, 1, alpha);
 			batch.draw(Draw.region("tooltemplate"), getX(), getY(), getWidth(), getHeight());
@@ -272,13 +272,13 @@ public class CraftingMenu extends Menu{
 		@Override
 		public void draw(Batch batch, float alpha){
 			batch.setColor(1, 1, 1, alpha);
-			styles.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
+			skin.getDrawable("slot").draw(batch, getX(), getY(), getWidth(), getHeight());
 		
 			batch.setColor(((j == 0 && i > toolSize) || (j == 1 && i > toolLength)) ? Color.CLEAR : j == 0 ? Color.CORAL : Color.WHITE);
 			Color color = batch.getColor();
 			batch.setColor(color.r, color.g, color.b, alpha*color.a);
 			
-			styles.getDrawable("bump").draw(batch, getX(), getY(), getWidth(), getHeight());
+			skin.getDrawable("bump").draw(batch, getX(), getY(), getWidth(), getHeight());
 			
 			batch.setColor(Color.WHITE);
 		}
