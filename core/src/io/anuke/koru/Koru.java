@@ -8,9 +8,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.systems.CollisionDebugSystem;
-import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.modules.ModuleController;
 import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Strings;
@@ -24,7 +24,7 @@ public class Koru extends ModuleController<Koru>{
 	public static World world;
 	public static Network network;
 	
-	public static KoruEngine engine;
+	public static Basis basis;
 	
 	private static StringBuffer log = new StringBuffer();
 
@@ -32,7 +32,7 @@ public class Koru extends ModuleController<Koru>{
 	public void init(){
 		Resources.loadMaterials();
 		
-		engine = new KoruEngine();
+		basis = new Basis();
 
 		addModule(network = new Network());
 		addModule(control = new Control());
