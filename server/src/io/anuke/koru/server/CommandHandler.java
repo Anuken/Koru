@@ -48,7 +48,7 @@ public class CommandHandler{
 		cmd("spawn", ()->{
 			for(int i = 0; i < 30; i++){
 				KoruEntity entity = new KoruEntity(TestEntity.class);
-				entity.position().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
+				entity.pos().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
 				entity.add().send();
 			}
 			

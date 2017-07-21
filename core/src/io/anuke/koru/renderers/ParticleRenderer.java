@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
 
-import io.anuke.koru.components.ParticleComponent;
+import io.anuke.koru.components.ParticleTrait;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.renderables.ParticleRenderable;
 
@@ -35,8 +35,8 @@ public class ParticleRenderer extends EntityRenderer{
 
 	@Override
 	protected void init(){
-		ParticleComponent component = entity.get(ParticleComponent.class);
-		PooledEffect particle = Resources.particle(entity.get(ParticleComponent.class).name);
+		ParticleTrait component = entity.get(ParticleTrait.class);
+		PooledEffect particle = Resources.particle(entity.get(ParticleTrait.class).name);
 		setVelocity(particle, component.velocity, component.gravity);
 		float[] value = particle.getEmitters().first().getTint().getColors();
 		Color start = component.getStartColor();

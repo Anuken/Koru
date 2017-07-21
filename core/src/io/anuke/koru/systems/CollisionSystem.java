@@ -64,7 +64,7 @@ public class CollisionSystem extends KoruSystem{
 			vector.add(vec);
 		});
 
-		entity.position().add(vector.x, vector.y);
+		entity.pos().add(vector.x, vector.y);
 	}
 
 	void checkTerrain(float x, float y, Consumer<Rectangle> cons){

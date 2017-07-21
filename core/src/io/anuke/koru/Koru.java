@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.ecs.Basis;
@@ -41,7 +40,7 @@ public class Koru extends ModuleController<Koru>{
 		addModule(world = new World());
 		addModule(ui = new UI());
 		
-		engine.addSystem(new CollisionDebugSystem());
+		//engine.addSystem(new CollisionDebugSystem());
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class Koru extends ModuleController<Koru>{
 			long mstart = TimeUtils.nanoTime();
 			
 			super.render();
-			engine.update(Gdx.graphics.getDeltaTime()*60f);
+			basis.update();
 			if(Profiler.update()){
 				Profiler.moduleTime = TimeUtils.timeSinceNanos(mstart);
 				Profiler.totalTime = TimeUtils.timeSinceNanos(start);

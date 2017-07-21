@@ -12,7 +12,6 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Control.GameState;
-import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.utils.Profiler;
@@ -35,11 +34,10 @@ public class Network extends Module<Koru>{
 	
 	private boolean connected;
 	private boolean chunksAdded = false;
-	private LongArray tempids = new LongArray();
+	private IntArray tempids = new IntArray();
 	private Array<KoruEntity> entityQueue = new Array<KoruEntity>();
-	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
-	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
-	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
+	private IntSet entitiesToRemove = new IntSet();
+	private IntSet requestedEntities = new IntSet();
 	private ObjectMap<Class<?>, Consumer<Object>> packetHandlers = new ObjectMap<>();
 	
 	@Override
@@ -79,7 +77,7 @@ public class Network extends Module<Koru>{
 					requestEntity(key);
 					continue;
 				}
-				entity.get(SyncComponent.class).type.read(p.updates.get(key), entity);
+				entity.get(SyncTrait.class).type.read(p.updates.get(key), entity);
 			}
 		});
 		
@@ -103,11 +101,11 @@ public class Network extends Module<Koru>{
 		handle(SlotChangePacket.class,p->{
 			if(Koru.engine.getEntity(p.id) == null)
 				return;
-			Koru.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+			Koru.engine.getEntity(p.id).getComponent(InventoryTrait.class).inventory[0][0] = p.stack;
 		});
 		
 		handle(InventoryUpdatePacket.class,p->{
-			player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
+			player.getComponent(InventoryTrait.class).set(p.stacks, p.selected);
 		});
 		
 		handle(AnimationPacket.class,p->{
@@ -209,7 +207,7 @@ public class Network extends Module<Koru>{
 		//unloads entities that are very far away
 		for(Entity e : entities){
 			KoruEntity entity = (KoruEntity) e;
-			if(entity.getType().unload() && entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
+			if(entity.getType().unload() && entity.pos().sqdist(player.getX(), player.getY()) > entityUnloadRange){
 				Koru.engine.removeEntity(e);
 			}
 		}
@@ -242,7 +240,7 @@ public class Network extends Module<Koru>{
 		pos.x = player.getX();
 		pos.y = player.getY();
 		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
-		player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
+		player.get(InputTrait.class).input.mouseangle = pos.mouseangle;
 		pos.direction = player.getComponent(RenderComponent.class).direction;
 		
 		client.sendUDP(pos);

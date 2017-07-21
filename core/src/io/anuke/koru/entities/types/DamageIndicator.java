@@ -10,7 +10,7 @@ public class DamageIndicator extends EntityType{
 	@Override
 	public ComponentList components(){
 		return list(new PositionComponent(), new RenderComponent(new IndicatorRenderer()),
-				new ChildComponent(), new TextComponent(), new FadeComponent(20));
+				new ChildComponent(), new TextTrait(), new FadeComponent(20));
 	}
 
 }

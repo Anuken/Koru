@@ -6,14 +6,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.ecs.Trait;
 
-public class InventoryComponent implements KoruComponent{
+public class InventoryTrait extends Trait{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
 	private static final ObjectSet<Item> tempset = new ObjectSet<Item>();
 	private static final Array<ItemStack> tempArray = new Array<ItemStack>();
@@ -23,11 +24,11 @@ public class InventoryComponent implements KoruComponent{
 	public transient int hotbar;
 	public int recipe = -1;
 
-	public InventoryComponent(int width, int height){
+	public InventoryTrait(int width, int height){
 		inventory = new ItemStack[width][height];
 	}
 	
-	private InventoryComponent(){}
+	private InventoryTrait(){}
 	
 	public void clickSlot(int x, int y){
 		ItemStack stack = inventory[x][y];
@@ -65,22 +66,22 @@ public class InventoryComponent implements KoruComponent{
 	}
 
 	/**Server-side only.*/
-	public void sendUpdate(KoruEntity entity){
+	public void sendUpdate(Spark entity){
 		InventoryUpdatePacket update = new InventoryUpdatePacket();
 		update.selected = selected;
 		update.stacks = inventory;
-		IServer.instance().sendTCP(entity.connection().connectionID, update);
+		IServer.instance().sendTCP(entity.get(ConnectionTrait.class).connectionID, update);
 	}
 	
 	/**Server-side only.*/
-	public void sendHotbarUpdate(KoruEntity entity){
+	public void sendHotbarUpdate(Spark entity){
 		SlotChangePacket update = new SlotChangePacket();
 		update.stack = hotbarStack();
-		IServer.instance().sendToAllExcept(entity.connection().connectionID, update);
+		IServer.instance().sendToAllExcept(entity.get(ConnectionTrait.class).connectionID, update);
 	}
 	
 	/**Server-side only.*/
-	public void sendHotbarUpdate(KoruEntity entity, int to){
+	public void sendHotbarUpdate(Spark entity, int to){
 		SlotChangePacket update = new SlotChangePacket();
 		update.stack = hotbarStack();
 		IServer.instance().sendTCP(to, update);
@@ -185,7 +186,7 @@ public class InventoryComponent implements KoruComponent{
 		return amount;
 	}
 	
-	public ObjectMap<Item, Integer> merge(InventoryComponent component){
+	public ObjectMap<Item, Integer> merge(InventoryTrait component){
 		return merge(component.inventory);
 	}
 	

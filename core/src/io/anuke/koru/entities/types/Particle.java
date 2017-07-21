@@ -1,6 +1,6 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.ParticleComponent;
+import io.anuke.koru.components.ParticleTrait;
 import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.ComponentList;
@@ -11,7 +11,7 @@ public class Particle extends EntityType{
 
 	@Override
 	public ComponentList components(){
-		return list(new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleComponent());
+		return list(new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleTrait());
 	}
 
 }

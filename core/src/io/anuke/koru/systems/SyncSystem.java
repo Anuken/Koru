@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Family;
 
 import io.anuke.koru.components.ConnectionComponent;
 import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.SyncComponent;
+import io.anuke.koru.components.SyncTrait;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
@@ -30,7 +30,7 @@ public class SyncSystem extends KoruSystem{
 
 		getEngine().map().getNearbySyncables(player.getX(), player.getY(), syncrange, (entity)->{
 			if(entity == player) return;
-			packet.updates.put(entity.getID(), entity.get(SyncComponent.class).type.write(entity));
+			packet.updates.put(entity.getID(), entity.get(SyncTrait.class).type.write(entity));
 		});
 
 		

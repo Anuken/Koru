@@ -1,15 +1,10 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.*;
-import io.anuke.koru.entities.ComponentList;
-import io.anuke.koru.entities.EntityType;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.input.InputHandler;
-import io.anuke.koru.network.SyncType;
-import io.anuke.koru.renderers.PlayerRenderer;
+import io.anuke.ucore.ecs.Prototype;
+import io.anuke.ucore.ecs.TraitList;
 
-public class Player extends EntityType{
-
+public class Player extends Prototype{
+/*
 	@Override
 	public ComponentList components(){
 		return list(new PositionComponent(), new ConnectionComponent(),
@@ -23,13 +18,23 @@ public class Player extends EntityType{
 		entity.get(InputComponent.class).input = new InputHandler(entity);
 		entity.collider().setSize(8, 6);
 	}
+	*/
 	
+	//TODO
 	public boolean removeDeath(){
 		return false;
 	}
 	
+	//TODO
 	public boolean unload(){
 		return false;
+	}
+
+	@Override
+	public TraitList traits(){
+		return new TraitList(
+			//TODO
+		);
 	}
 
 }

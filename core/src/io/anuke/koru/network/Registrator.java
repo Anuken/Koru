@@ -67,11 +67,11 @@ public class Registrator{
 		k.register(FadeComponent.class);
 		k.register(ConnectionComponent.class);
 		k.register(ChildComponent.class);
-		k.register(TextComponent.class);
-		k.register(InventoryComponent.class);
-		k.register(ParticleComponent.class);
-		k.register(MaterialComponent.class);
-		k.register(ItemComponent.class);
+		k.register(TextTrait.class);
+		k.register(InventoryTrait.class);
+		k.register(ParticleTrait.class);
+		k.register(MaterialTrait.class);
+		k.register(ItemTrait.class);
 		k.register(VelocityComponent.class);
 		k.register(ColliderComponent.class);
 		k.register(HealthComponent.class);

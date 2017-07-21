@@ -16,8 +16,8 @@ import com.esotericsoftware.kryonet.Server;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.InputTrait;
+import io.anuke.koru.components.InventoryTrait;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.types.Player;
 import io.anuke.koru.items.ItemStack;
@@ -138,7 +138,7 @@ public class KoruServer extends IServer{
 			inv.sendUpdate(player);
 			 */
 			
-			InventoryComponent inv = player.get(InventoryComponent.class);
+			InventoryTrait inv = player.get(InventoryTrait.class);
 			inv.addItem(new ItemStack(Items.stick, 10));
 			inv.addItem(new ItemStack(Items.stone, 10));
 			inv.sendUpdate(player);
@@ -166,9 +166,9 @@ public class KoruServer extends IServer{
 				if(!connections.containsKey(info.id) || getPlayer(info) == null)
 					return;
 				
-				getPlayer(info).position().set(packet.x, packet.y);
+				getPlayer(info).pos().set(packet.x, packet.y);
 				getPlayer(info).renderer().direction = packet.direction;
-				getPlayer(info).get(InputComponent.class).input.mouseangle = packet.mouseangle;
+				getPlayer(info).get(InputTrait.class).input.mouseangle = packet.mouseangle;
 			}else if(object instanceof EntityRequestPacket){
 				EntityRequestPacket packet = (EntityRequestPacket) object;
 				KoruEntity entity = updater.engine.getEntity(packet.id);
@@ -184,10 +184,10 @@ public class KoruServer extends IServer{
 				sendTCP(info.id, updater.world.createChunkPacket(packet));
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket) object;
-				getPlayer(info).get(InputComponent.class).input.inputEvent(packet.type, packet.data);
+				getPlayer(info).get(InputTrait.class).input.inputEvent(packet.type, packet.data);
 			}else if(object instanceof SlotChangePacket){
 				SlotChangePacket packet = (SlotChangePacket) object;
-				InventoryComponent inv = getPlayer(info).inventory();
+				InventoryTrait inv = getPlayer(info).inventory();
 				packet.slot = Mathf.clamp(packet.slot, 0, 3);
 				inv.hotbar = packet.slot;
 				packet.id = info.playerid;
@@ -195,7 +195,7 @@ public class KoruServer extends IServer{
 				sendToAllExceptTCP(info.id, packet);
 			}else if(object instanceof RecipeSelectPacket){
 				RecipeSelectPacket packet = (RecipeSelectPacket) object;
-				InventoryComponent inv = getPlayer(info).inventory();
+				InventoryTrait inv = getPlayer(info).inventory();
 				inv.recipe = packet.recipe;
 			}else if(object instanceof BlockInputPacket){
 				BlockInputPacket packet = (BlockInputPacket) object;
@@ -211,7 +211,7 @@ public class KoruServer extends IServer{
 
 			}else if(object instanceof InventoryClickPacket){
 				InventoryClickPacket packet = (InventoryClickPacket) object;
-				InventoryComponent inv = getPlayer(info).inventory();
+				InventoryTrait inv = getPlayer(info).inventory();
 				inv.clickSlot(packet.x, packet.y);
 
 				inv.sendUpdate(updater.engine.getEntity(info.playerid));

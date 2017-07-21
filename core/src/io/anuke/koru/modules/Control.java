@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.InventoryTrait;
 import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.types.Player;
@@ -211,7 +211,7 @@ public class Control extends Module<Koru>{
 
 	@Override
 	public boolean scrolled(int amount) {
-		InventoryComponent inv = player.getComponent(InventoryComponent.class);
+		InventoryTrait inv = player.getComponent(InventoryTrait.class);
 		int i = ((inv.hotbar+amount) % 4);
 		inv.hotbar = i < 0 ? i + 4 : i;
 		

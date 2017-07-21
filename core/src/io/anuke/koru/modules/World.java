@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.LoadChunksComponent;
+import io.anuke.koru.components.LoadChunksTrait;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.ChunkPacket;
@@ -35,7 +35,7 @@ public class World extends Module<Koru>{
 	public static final int loadrange = 3;
 	public static final int tilesize = 12;
 	
-	private static Family chunkFamily = Family.all(LoadChunksComponent.class).get();
+	private static Family chunkFamily = Family.all(LoadChunksTrait.class).get();
 	private static Color ambientColor = new Color();
 	private static final float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	public final static float timescale = 40000f*0; //temporarily disabled for testing - remove 0 to enable
@@ -139,8 +139,8 @@ public class World extends Module<Koru>{
 			boolean passed = false;
 			for(Entity e : players){
 				KoruEntity entity = (KoruEntity)e;
-				int ecx = toChunkCoords(entity.position().x);
-				int ecy = toChunkCoords(entity.position().y);
+				int ecx = toChunkCoords(entity.pos().x);
+				int ecy = toChunkCoords(entity.pos().y);
 				
 				if(Math.abs(chunk.x - ecx) <= loadrange && Math.abs(chunk.y - ecy) <= loadrange){
 					passed = true;

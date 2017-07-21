@@ -15,7 +15,7 @@ public enum WeaponType{
 			if(weapon.cooldown <= 0){
 				KoruEntity projectile = ProjectileType.createProjectile(entity.getID(), ProjectileType.slash,
 						input.mouseangle, 10);
-				projectile.position().set(entity.position());
+				projectile.pos().set(entity.pos());
 
 				projectile.add().send();
 

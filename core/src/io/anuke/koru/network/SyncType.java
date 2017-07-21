@@ -1,8 +1,8 @@
 package io.anuke.koru.network;
 
-import io.anuke.koru.components.InputComponent;
+import io.anuke.koru.components.InputTrait;
 import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.SyncComponent;
+import io.anuke.koru.components.SyncTrait;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.syncing.SyncData;
 
@@ -13,12 +13,12 @@ public enum SyncType{
 		}
 
 		public void read(SyncData data, KoruEntity entity){
-			SyncComponent sync = entity.get(SyncComponent.class);
+			SyncTrait sync = entity.get(SyncTrait.class);
 			
 			if(sync.interpolator != null){
 				sync.interpolator.push(entity, data.x(), data.y());
 			}else{
-				entity.position().set(data.x(), data.y());
+				entity.pos().set(data.x(), data.y());
 			}
 		}
 	},
@@ -28,12 +28,12 @@ public enum SyncType{
 		}
 
 		public void read(SyncData data, KoruEntity entity){
-			SyncComponent sync = entity.get(SyncComponent.class);
+			SyncTrait sync = entity.get(SyncTrait.class);
 			
 			if(sync.interpolator != null){
 				sync.interpolator.push(entity, data.x(), data.y());
 			}else{
-				entity.position().set(data.x(), data.y());
+				entity.pos().set(data.x(), data.y());
 			}
 		}
 	},
@@ -41,7 +41,7 @@ public enum SyncType{
 		public SyncData write(KoruEntity entity){
 			return new SyncData(entity, 
 					entity.getX(), entity.getY(), 
-					entity.get(InputComponent.class).input.mouseangle, 
+					entity.get(InputTrait.class).input.mouseangle, 
 					entity.renderer().direction);
 		}
 
@@ -52,15 +52,15 @@ public enum SyncType{
 			
 			//TODO
 			entity.get(RenderComponent.class).renderer.walking = 
-					entity.position().dist(x, y) > 0.05f;
+					entity.pos().dist(x, y) > 0.05f;
 			
-			entity.get(InputComponent.class).input.mouseangle = data.get(2);
-			SyncComponent sync = entity.get(SyncComponent.class);
+			entity.get(InputTrait.class).input.mouseangle = data.get(2);
+			SyncTrait sync = entity.get(SyncTrait.class);
 			
 			if(sync.interpolator != null){
 				sync.interpolator.push(entity, x, y);
 			}else{
-				entity.position().set(x, y);
+				entity.pos().set(x, y);
 			}
 		}
 	};

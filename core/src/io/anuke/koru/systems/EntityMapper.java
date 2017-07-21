@@ -73,7 +73,7 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 	/** Gets nearby syncables. */
 	public void getNearbySyncables(float cx, float cy, float range, Consumer<KoruEntity> con){
-		getNearbyEntities(cx, cy, range, SyncComponent.class, con);
+		getNearbyEntities(cx, cy, range, SyncTrait.class, con);
 	}
 	
 	/** Gets nearby entities with a specific component. */

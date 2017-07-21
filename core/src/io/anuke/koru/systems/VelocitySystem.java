@@ -26,8 +26,8 @@ public class VelocitySystem extends KoruSystem{
 		//if(hitbox != null && IServer.active() && hitbox.collideterrain){
 			//collisions.moveWithCollisions(entity, addx, addy);
 		//}else{
-			entity.position().x += addx;
-			entity.position().y += addy;
+			entity.pos().x += addx;
+			entity.pos().y += addy;
 		//}
 		//Koru.log(velocity.velocity);
 		velocity.velocity.scl((float)Math.pow(1f - velocity.drag, delta));

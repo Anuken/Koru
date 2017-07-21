@@ -16,7 +16,7 @@ import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.InventoryTrait;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.graphics.KoruCursors;
 import io.anuke.koru.graphics.KoruRenderable;
@@ -25,7 +25,6 @@ import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
-import io.anuke.koru.systems.CollisionDebugSystem;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
@@ -192,9 +191,11 @@ public class Renderer extends RendererModule<Koru>{
 		clearScreen();
 		drawMap();
 		RenderableHandler.instance().renderAll();
-
-		if(Koru.control.debug)
-			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
+		
+		//TODO
+		//if(Koru.control.debug)
+		//	Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
+		
 		if(pixelate) endPixel();
 		Draw.surface(true);
 		
@@ -276,7 +277,7 @@ public class Renderer extends RendererModule<Koru>{
 
 		r.sort(Sorter.object);
 
-		InventoryComponent inv = player.inventory();
+		InventoryTrait inv = player.inventory();
 
 		Tile tile = world.getTile(x, y);
 		

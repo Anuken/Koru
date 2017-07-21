@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
+import io.anuke.koru.components.InventoryTrait;
 import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
 import io.anuke.koru.entities.KoruEntity;
@@ -35,7 +35,7 @@ public class InputHandler{
 		
 		
 		//weapon updating
-		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
+		ItemStack stack = entity.getComponent(InventoryTrait.class).hotbarStack();
 		
 		/*
 		if(stack != null && stack.item.type()== ItemType.weapon){
@@ -117,7 +117,7 @@ public class InputHandler{
 
 	private void tileDownEvent(){
 		// block place check
-		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
+		ItemStack stack = entity.getComponent(InventoryTrait.class).hotbarStack();
 
 		if(stack == null)
 			return;
@@ -129,7 +129,7 @@ public class InputHandler{
 
 			Tile tile = World.instance().getTile(blockx, blocky);
 
-			InventoryComponent inv = entity.getComponent(InventoryComponent.class);
+			InventoryTrait inv = entity.getComponent(InventoryTrait.class);
 
 			BlockRecipe recipe = null;
 			
@@ -165,7 +165,7 @@ public class InputHandler{
 	}
 
 	private void rawClick(boolean left){
-		ItemStack stack = entity.getComponent(InventoryComponent.class).hotbarStack();
+		ItemStack stack = entity.getComponent(InventoryTrait.class).hotbarStack();
 
 		if(stack == null)
 			return;
@@ -207,7 +207,7 @@ public class InputHandler{
 			tileDownEvent();
 
 		// fire block click event
-		InventoryComponent inv = entity.inventory();
+		InventoryTrait inv = entity.inventory();
 		int slot = inv.hotbar;
 		ItemStack stack = inv.inventory[slot][0];
 		if(stack == null)
@@ -222,11 +222,11 @@ public class InputHandler{
 	public static class ClickEvent{
 		public int x, y;
 		public Tile tile;
-		public InventoryComponent component;
+		public InventoryTrait component;
 		public ItemStack stack;
 		public boolean down;
 
-		public ClickEvent set(boolean click, int x, int y, Tile tile, InventoryComponent component){
+		public ClickEvent set(boolean click, int x, int y, Tile tile, InventoryTrait component){
 			this.down = click;
 			this.x = x;
 			this.y = y;

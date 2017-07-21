@@ -19,8 +19,8 @@ public class DamageListener extends CollisionListener{
 		
 		KoruEntity damage = new KoruEntity(DamageIndicator.class);
 		damage.get(ChildComponent.class).parent = entity.getID();
-		damage.getComponent(TextComponent.class).text = amount + "";
-		damage.position().set(other.getX(), other.getY() + other.get(ColliderComponent.class).height);
+		damage.getComponent(TextTrait.class).text = amount + "";
+		damage.pos().set(other.getX(), other.getY() + other.get(ColliderComponent.class).height);
 		
 		if(health.health <= 0){
 			entity.getType().onDeath(entity, other);

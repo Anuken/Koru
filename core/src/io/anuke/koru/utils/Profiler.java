@@ -1,6 +1,6 @@
 package io.anuke.koru.utils;
 
-import com.badlogic.gdx.Gdx;
+import io.anuke.ucore.util.Timers;
 
 public class Profiler{
 	public static long renderTime = 0;
@@ -12,6 +12,6 @@ public class Profiler{
 	public static long networkTime = 0;
 	
 	public static boolean update(){
-		return Gdx.graphics.getFrameId()%300==0;
+		return Timers.get("profiler", 40);
 	}
 }

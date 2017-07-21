@@ -20,8 +20,8 @@ public class Effects{
 			int amount = stack.amount;
 			while(amount >= 0){
 				KoruEntity item = new KoruEntity(ItemDrop.class);
-				item.get(ItemComponent.class).stack = new ItemStack(stack.item, amount > stepsize ? stepsize : amount);
-				item.position().set(x + MathUtils.random(-range,range), y + MathUtils.random(-range,range));
+				item.get(ItemTrait.class).stack = new ItemStack(stack.item, amount > stepsize ? stepsize : amount);
+				item.pos().set(x + MathUtils.random(-range,range), y + MathUtils.random(-range,range));
 				item.add().send();
 				amount -= stepsize;
 			}
@@ -34,10 +34,10 @@ public class Effects{
 
 	public static void indicator(String text, Color color, float x, float y, float lifetime){
 		KoruEntity entity = new KoruEntity(DamageIndicator.class);
-		entity.get(TextComponent.class).text = text;
-		entity.get(TextComponent.class).color = color;
+		entity.get(TextTrait.class).text = text;
+		entity.get(TextTrait.class).color = color;
 		entity.get(FadeComponent.class).lifetime = lifetime;
-		entity.position().set(x, y);
+		entity.pos().set(x, y);
 		entity.send();
 	}
 
@@ -47,8 +47,8 @@ public class Effects{
 
 	public static void indicator(String text, Color color, long parent, float lifetime){
 		KoruEntity entity = new KoruEntity(DamageIndicator.class);
-		entity.get(TextComponent.class).text = text;
-		entity.get(TextComponent.class).color = color;
+		entity.get(TextTrait.class).text = text;
+		entity.get(TextTrait.class).color = color;
 		entity.get(FadeComponent.class).lifetime = lifetime;
 		entity.get(ChildComponent.class).parent = parent;
 		entity.send();
@@ -56,22 +56,22 @@ public class Effects{
 
 	public static void particle(String name, float x, float y, Color start, Color end, float velocity, float gravity){
 		KoruEntity entity = new KoruEntity(Particle.class);
-		entity.position().set(x, y);
-		entity.get(ParticleComponent.class).set(name, start, end).setSpeed(gravity, velocity);
+		entity.pos().set(x, y);
+		entity.get(ParticleTrait.class).set(name, start, end).setSpeed(gravity, velocity);
 		entity.send();
 	}
 
 	public static void particle(Material material, float x, float y){
 		KoruEntity entity = new KoruEntity(Particle.class);
-		entity.position().set(x, y);
-		entity.get(ParticleComponent.class).set(material);
+		entity.pos().set(x, y);
+		entity.get(ParticleTrait.class).set(material);
 		entity.send();
 	}
 
 	public static void block(Material material, int x, int y){
 		KoruEntity entity = new KoruEntity(BlockAnimation.class);
-		entity.position().set(x * World.tilesize, y * World.tilesize);
-		entity.get(MaterialComponent.class).matid = material.id();
+		entity.pos().set(x * World.tilesize, y * World.tilesize);
+		entity.get(MaterialTrait.class).matid = material.id();
 		entity.send();
 	}
 

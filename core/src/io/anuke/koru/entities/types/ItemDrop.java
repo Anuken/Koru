@@ -12,8 +12,8 @@ public class ItemDrop extends EntityType{
 	public ComponentList components(){
 		return list(new PositionComponent(), 
 				new RenderComponent(new ItemRenderer()),
-				new SyncComponent(SyncType.position),
-				new ItemComponent(), new VelocityComponent());
+				new SyncTrait(SyncType.position),
+				new ItemTrait(), new VelocityComponent());
 	}
 
 }

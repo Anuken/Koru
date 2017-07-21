@@ -3,7 +3,7 @@ package io.anuke.koru.renderers;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.MaterialComponent;
+import io.anuke.koru.components.MaterialTrait;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
@@ -22,7 +22,7 @@ public class BlockAnimationRenderer extends EntityRenderer{
 		for(Renderable r : list.renderables)
 		r.sprite().alpha(1f-life/lifetime);
 		
-		if(((Material)entity.get(MaterialComponent.class).material()).getType() == MaterialTypes.tree)
+		if(((Material)entity.get(MaterialTrait.class).material()).getType() == MaterialTypes.tree)
 		list.renderables.get(2).sprite().sprite.rotate(rspeed*Koru.delta());
 		
 		if(life > lifetime){
@@ -33,11 +33,11 @@ public class BlockAnimationRenderer extends EntityRenderer{
 
 	@Override
 	protected void init(){
-		if(entity.get(MaterialComponent.class).matid == 0){
+		if(entity.get(MaterialTrait.class).matid == 0){
 			throw new RuntimeException("No material specified in the data! Did you set the renderer material?");
 		}
 		
-		Material material = (Material)entity.get(MaterialComponent.class).material();
+		Material material = (Material)entity.get(MaterialTrait.class).material();
 		
 		int x = (int)(entity.getX()/World.tilesize);
 		int y = (int)(entity.getY()/World.tilesize);
