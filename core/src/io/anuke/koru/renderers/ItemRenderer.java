@@ -1,6 +1,6 @@
 package io.anuke.koru.renderers;
 
-import io.anuke.koru.components.ItemTrait;
+import io.anuke.koru.traits.ItemTrait;
 import io.anuke.ucore.core.Draw;
 
 public class ItemRenderer extends EntityRenderer{

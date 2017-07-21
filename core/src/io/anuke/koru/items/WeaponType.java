@@ -1,6 +1,5 @@
 package io.anuke.koru.items;
 
-import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.input.InputHandler;
@@ -8,6 +7,7 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.AnimationPacket;
 import io.anuke.koru.renderers.AnimationType;
 import io.anuke.koru.systems.SyncSystem;
+import io.anuke.koru.traits.WeaponComponent;
 
 public enum WeaponType{
 	sword{

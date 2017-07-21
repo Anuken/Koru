@@ -2,8 +2,8 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 
-import io.anuke.koru.components.InputTrait;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.traits.InputTrait;
 
 public class InputSystem extends KoruSystem{
 

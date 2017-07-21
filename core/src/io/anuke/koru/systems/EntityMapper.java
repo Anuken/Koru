@@ -12,9 +12,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Predicate;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.*;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.World;
+import io.anuke.koru.traits.*;
 import io.anuke.ucore.util.GridMap;
 
 public class EntityMapper extends KoruSystem implements EntityListener{

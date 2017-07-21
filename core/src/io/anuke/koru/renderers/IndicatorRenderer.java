@@ -3,10 +3,10 @@ package io.anuke.koru.renderers;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.ChildComponent;
-import io.anuke.koru.components.FadeComponent;
-import io.anuke.koru.components.TextTrait;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.traits.ChildComponent;
+import io.anuke.koru.traits.FadeComponent;
+import io.anuke.koru.traits.TextTrait;
 import io.anuke.ucore.core.Draw;
 
 public class IndicatorRenderer extends EntityRenderer{

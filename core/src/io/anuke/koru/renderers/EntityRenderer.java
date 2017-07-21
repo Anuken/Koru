@@ -1,7 +1,7 @@
 package io.anuke.koru.renderers;
 
-import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.traits.RenderComponent;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.renderables.FuncRenderable.DrawFunc;
 import io.anuke.ucore.renderables.Sorter;

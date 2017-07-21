@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.ColliderComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.World;
+import io.anuke.koru.traits.ColliderComponent;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
 

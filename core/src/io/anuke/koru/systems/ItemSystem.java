@@ -3,9 +3,9 @@ package io.anuke.koru.systems;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.components.InventoryTrait;
-import io.anuke.koru.components.ItemTrait;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.traits.InventoryTrait;
+import io.anuke.koru.traits.ItemTrait;
 
 public class ItemSystem extends KoruSystem{
 	private final Vector2 tmp = new Vector2();

@@ -6,34 +6,36 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryTrait;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.entities.types.Player;
+import io.anuke.koru.entities.Prototypes;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
+import io.anuke.koru.traits.ConnectionTrait;
+import io.anuke.koru.traits.DirectionTrait;
+import io.anuke.koru.traits.DirectionTrait.Direction;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.ecs.extend.traits.TileCollideTrait;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
 public class Control extends Module<Koru>{
-	public final KoruEntity player;
+	public final Spark player;
 	public boolean debug = false, consoleOpen = false;
 	
 	private float movespeed = 1.6f, dashspeed = 18f;
-	private Vector2 vector = new Vector2();
 	private int blockx, blocky;
 	private GameState state = GameState.title;
 	
 	public Control(){
-		player = new KoruEntity(Player.class);
-		player.connection().name = "this player";
-		player.connection().local = true;
+		player = new Spark(Prototypes.player);
+		player.get(ConnectionTrait.class).name = "this player";
+		player.get(ConnectionTrait.class).local = true;
 	}
 
 	@Override
@@ -105,50 +107,48 @@ public class Control extends Module<Koru>{
 		blocky = ny;
 		
 		vector.set(0, 0);
-		
-		RenderComponent render = player.getComponent(RenderComponent.class);
 
 		float speed = (Inputs.keyDown("dash") ? dashspeed : movespeed);
-		int direction = render.direction;
+		DirectionTrait dc = player.get(DirectionTrait.class);
 		
 		if (Inputs.keyDown("up")) {
 			vector.y += speed;
-			direction = 2;
+			dc.direction = Direction.back;
 		}
 		
 		if (Inputs.keyDown("down")) {
 			vector.y -= speed;
-			direction = 0;
+			dc.direction = Direction.front;
 		}
 		
 		if (Inputs.keyDown("left")) {
 			vector.x -= speed;
-			direction = 3;
+			dc.direction = Direction.left;
 		}
 		
 		if (Inputs.keyDown("right")) {
 			vector.x += speed;
-			direction = 1;
+			dc.direction = Direction.right;
 		}
 		
-		render.direction = direction;
-		
-		ItemStack stack = player.inventory().hotbarStack();
+		ItemStack stack = player.get(InventoryTrait.class).hotbarStack();
 		
 		if(stack != null && stack.isType(ItemType.weapon)){
-			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
-			render.direction = 2-(int)((angle-45)/90f);
-			if(render.direction == 1) render.direction = 3;
-			if(angle > 315 || angle < 45) render.direction = 1;
+			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.pos().x, player.pos().y);
+			
+			//TODO set direction angle
+			dc.setOrdinal((int)((angle-45f)/90f));
+			if(angle > 360-45)
+				dc.direction = Direction.right;
 		}
 
 		vector.limit(speed);
-		player.collider().move(player, vector.x*delta(), vector.y*(delta()));
+		player.get(TileCollideTrait.class).move(player, vector.x*delta(), vector.y*(delta()));
 		
 		if(vector.len() > 0.05){
-			render.walkframe += delta();
+			dc.walktime += delta();
 		}else{
-			render.walkframe = 0;
+			dc.walktime = 0;
 		}
 
 		vector.set(0, 0);
@@ -158,10 +158,14 @@ public class Control extends Module<Koru>{
 		
 		//TODO keybindings for this as well
 		if(keycode >= Keys.NUM_1 && keycode < Keys.NUM_5){
-			player.inventory().hotbar = keycode - Keys.NUM_1;
+			InventoryTrait inv = player.get(InventoryTrait.class);
+			
+			inv.hotbar = keycode - Keys.NUM_1;
+			
 			SlotChangePacket packet = new SlotChangePacket();
-			packet.slot = player.inventory().hotbar;
+			packet.slot = inv.hotbar;
 			getModule(Network.class).client.sendTCP(packet);
+			
 		}else if(keycode == KeyBinds.get("interact")){
 			sendInput(InputType.interact, blockx, blocky);
 		}
@@ -187,9 +191,11 @@ public class Control extends Module<Koru>{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		if (button == Buttons.LEFT){
+			InventoryTrait inv = player.get(InventoryTrait.class);
+			
 			sendInput(InputType.leftclick_down, blockx, blocky);
 			
-			if(player.inventory().hotbarStack() == null || !(player.inventory().hotbarStack().item.isType(ItemType.tool) || player.inventory().hotbarStack().item.isType(ItemType.weapon)))
+			if(inv.hotbarStack() == null || !(inv.hotbarStack().item.isType(ItemType.tool) || inv.hotbarStack().item.isType(ItemType.weapon)))
 				sendInput(InputType.interact, blockx, blocky);
 		
 		}else if (button == Buttons.RIGHT){
@@ -211,7 +217,8 @@ public class Control extends Module<Koru>{
 
 	@Override
 	public boolean scrolled(int amount) {
-		InventoryTrait inv = player.getComponent(InventoryTrait.class);
+		InventoryTrait inv = player.get(InventoryTrait.class);
+		
 		int i = ((inv.hotbar+amount) % 4);
 		inv.hotbar = i < 0 ? i + 4 : i;
 		

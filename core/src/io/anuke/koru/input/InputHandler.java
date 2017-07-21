@@ -5,37 +5,36 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryTrait;
-import io.anuke.koru.components.WeaponComponent;
 import io.anuke.koru.entities.Effects;
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.*;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.ucore.ecs.Spark;
 
 //TODO make this less messy
 public class InputHandler{
 	public final static float reach = 75;
 	public float mouseangle;
 	private ObjectMap<InputType, Boolean> keys = new ObjectMap<InputType, Boolean>();
-	KoruEntity entity;
+	Spark spark;
 	int blockx, blocky;
 	float blockhold;
 	float cooldown = 0;
 
-	public InputHandler(KoruEntity entity) {
-		this.entity = entity;
+	public InputHandler(Spark spark) {
+		this.spark = spark;
 	}
 
 	public void update(float delta){
 		
 		
 		//weapon updating
-		ItemStack stack = entity.getComponent(InventoryTrait.class).hotbarStack();
+		ItemStack stack = spark.get(InventoryTrait.class).hotbarStack();
 		
 		/*
 		if(stack != null && stack.item.type()== ItemType.weapon){
@@ -51,7 +50,7 @@ public class InputHandler{
 			
 			Material select = null;
 			
-			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
+			if(Vector2.dst(World.world(blockx), World.world(blocky), spark.pos().x, spark.pos().y) < reach
 					&& stack != null && stack.item.isType(ItemType.tool)){
 				
 				if(stack.breaks(block.breakType()) && block.isBreakable()){
@@ -117,7 +116,7 @@ public class InputHandler{
 
 	private void tileDownEvent(){
 		// block place check
-		ItemStack stack = entity.getComponent(InventoryTrait.class).hotbarStack();
+		ItemStack stack = spark.get(InventoryTrait.class).hotbarStack();
 
 		if(stack == null)
 			return;
@@ -129,13 +128,13 @@ public class InputHandler{
 
 			Tile tile = World.instance().getTile(blockx, blocky);
 
-			InventoryTrait inv = entity.getComponent(InventoryTrait.class);
+			InventoryTrait inv = spark.get(InventoryTrait.class);
 
 			BlockRecipe recipe = null;
 			
 			if(inv.recipe != -1) recipe = BlockRecipe.getRecipe(inv.recipe);
 			
-			if(Vector2.dst(World.world(blockx), World.world(blocky), entity.getX(), entity.getY()) < reach
+			if(spark.pos().dst(World.world(blockx), World.world(blocky)) < reach
 					&& inv.recipe != -1 && inv.hasAll(recipe.requirements())
 					&& World.isPlaceable(recipe.result(), tile)){
 
@@ -148,7 +147,7 @@ public class InputHandler{
 				World.instance().updateTile(blockx, blocky);
 
 				inv.removeAll(recipe.requirements());
-				inv.sendUpdate(entity);
+				inv.sendUpdate(spark);
 			}
 		}
 	}
@@ -158,20 +157,21 @@ public class InputHandler{
 		Tile tile = World.instance().getTile(blockx, blocky);
 		
 		if(tile.block().interactable()){
-			tile.block().onInteract(tile, blockx, blocky, entity);
+			tile.block().onInteract(tile, blockx, blocky, spark);
 			
 			World.instance().updateTile(blockx, blocky);
 		}
 	}
 
 	private void rawClick(boolean left){
-		ItemStack stack = entity.getComponent(InventoryTrait.class).hotbarStack();
+		ItemStack stack = spark.get(InventoryTrait.class).hotbarStack();
 
 		if(stack == null)
 			return;
 		
 		if(stack.isType(ItemType.weapon)){
-			stack.getWeaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
+			//why did WeaponComponent even exist?
+			stack.getWeaponType().setData(spark, stack, this, spark.get(WeaponComponent.class));
 			stack.getWeaponType().clicked(left);
 		}
 	}
@@ -207,9 +207,9 @@ public class InputHandler{
 			tileDownEvent();
 
 		// fire block click event
-		InventoryTrait inv = entity.inventory();
+		InventoryTrait inv = spark.get(InventoryTrait.class);
 		int slot = inv.hotbar;
-		ItemStack stack = inv.inventory[slot][0];
+		ItemStack stack = inv.inventory[slot];
 		if(stack == null)
 			return;
 		Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);

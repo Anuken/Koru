@@ -1,9 +1,9 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.*;
 import io.anuke.koru.entities.ComponentList;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.renderers.IndicatorRenderer;
+import io.anuke.koru.traits.*;
 
 public class DamageIndicator extends EntityType{
 

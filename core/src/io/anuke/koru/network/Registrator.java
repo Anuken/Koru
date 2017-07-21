@@ -17,7 +17,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import io.anuke.koru.components.*;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.ProjectileType;
@@ -28,6 +27,7 @@ import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.renderers.AnimationType;
+import io.anuke.koru.traits.*;
 import io.anuke.koru.ui.Menu;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;

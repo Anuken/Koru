@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
 
-import io.anuke.koru.components.ParticleTrait;
+import io.anuke.koru.traits.ParticleTrait;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.renderables.ParticleRenderable;
 

@@ -1,11 +1,11 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.MaterialTrait;
 import io.anuke.koru.entities.ComponentList;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.renderers.BlockAnimationRenderer;
+import io.anuke.koru.traits.MaterialTrait;
+import io.anuke.koru.traits.PositionComponent;
+import io.anuke.koru.traits.RenderComponent;
 
 public class BlockAnimation extends EntityType{
 

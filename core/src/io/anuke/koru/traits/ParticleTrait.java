@@ -1,4 +1,4 @@
-package io.anuke.koru.components;
+package io.anuke.koru.traits;
 
 import com.badlogic.gdx.graphics.Color;
 

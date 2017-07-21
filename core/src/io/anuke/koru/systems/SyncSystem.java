@@ -2,13 +2,13 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.SyncTrait;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
+import io.anuke.koru.traits.ConnectionComponent;
+import io.anuke.koru.traits.PositionComponent;
+import io.anuke.koru.traits.SyncTrait;
 import io.anuke.ucore.util.Timers;
 
 public class SyncSystem extends KoruSystem{

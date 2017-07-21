@@ -3,14 +3,14 @@ package io.anuke.koru.network.syncing;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import io.anuke.koru.entities.KoruEntity;
+import io.anuke.ucore.ecs.Spark;
 
 public class SyncData{
 	public long id;
 	public Object[] objects;
 	
-	public SyncData(KoruEntity entity, Object... objects){
-		this.id = entity.getID();
+	public SyncData(Spark spark, Object... objects){
+		this.id = spark.getID();
 		this.objects = objects;
 	}
 	

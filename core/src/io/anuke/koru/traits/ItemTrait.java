@@ -1,4 +1,4 @@
-package io.anuke.koru.components;
+package io.anuke.koru.traits;
 
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.syncing.SyncData.Synced;

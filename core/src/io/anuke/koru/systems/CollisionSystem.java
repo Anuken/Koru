@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.components.ColliderComponent;
-import io.anuke.koru.components.PositionComponent;
 import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.listeners.CollisionHandler;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
+import io.anuke.koru.traits.ColliderComponent;
+import io.anuke.koru.traits.PositionComponent;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.util.Physics;
 

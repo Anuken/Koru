@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryTrait;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.graphics.Hue;
@@ -20,11 +20,11 @@ import io.anuke.ucore.scene.utils.ClickListener;
 
 public class InventoryMenu extends Table{
 	public static final int slotsize = 64;
-	private ItemStack[][] stacks;
+	private ItemStack[] stacks;
 	private InventoryTrait inventory;
 
 	public InventoryMenu() {
-		inventory = Koru.control.player.getComponent(InventoryTrait.class);
+		inventory = Koru.control.player.get(InventoryTrait.class);
 		stacks = inventory.inventory;
 		setup();
 	}
@@ -33,6 +33,8 @@ public class InventoryMenu extends Table{
 		padRight(3f);
 		padBottom(3f);
 
+		
+		//TODO fix
 		for(int y = 0; y < stacks[0].length; y++){
 			for(int x = 0; x < stacks.length; x++){
 				Slot slot = new Slot(x, y);

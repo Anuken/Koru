@@ -1,6 +1,6 @@
 package io.anuke.koru.renderers;
 
-import io.anuke.koru.components.ProjectileComponent;
+import io.anuke.koru.traits.ProjectileComponent;
 
 public class ProjectileRenderer extends EntityRenderer{
 

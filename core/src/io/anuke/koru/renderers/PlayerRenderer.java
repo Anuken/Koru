@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.ConnectionComponent;
+import io.anuke.koru.traits.ConnectionComponent;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.core.Draw;
 

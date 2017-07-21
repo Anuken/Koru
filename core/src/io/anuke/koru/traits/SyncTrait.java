@@ -1,4 +1,4 @@
-package io.anuke.koru.components;
+package io.anuke.koru.traits;
 
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.SyncType;

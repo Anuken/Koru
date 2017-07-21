@@ -2,9 +2,9 @@ package io.anuke.koru.systems;
 
 import com.badlogic.ashley.core.Family;
 
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.VelocityComponent;
 import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.traits.PositionComponent;
+import io.anuke.koru.traits.VelocityComponent;
 
 public class VelocitySystem extends KoruSystem{
 	private CollisionSystem collisions;

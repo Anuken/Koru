@@ -1,4 +1,4 @@
-package io.anuke.koru.components;
+package io.anuke.koru.traits;
 
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.world.materials.Material;

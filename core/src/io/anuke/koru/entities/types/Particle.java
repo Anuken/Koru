@@ -1,11 +1,11 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.ParticleTrait;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.RenderComponent;
 import io.anuke.koru.entities.ComponentList;
 import io.anuke.koru.entities.EntityType;
 import io.anuke.koru.renderers.ParticleRenderer;
+import io.anuke.koru.traits.ParticleTrait;
+import io.anuke.koru.traits.PositionComponent;
+import io.anuke.koru.traits.RenderComponent;
 
 public class Particle extends EntityType{
 

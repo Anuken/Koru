@@ -2,10 +2,10 @@ package io.anuke.koru.network.packets;
 
 import java.util.ArrayList;
 
-import com.badlogic.ashley.core.Entity;
+import io.anuke.ucore.ecs.Spark;
 
 public class DataPacket{
-	public ArrayList<Entity> entities;
-	public long playerid;
+	public ArrayList<Spark> sparks;
+	public int playerid;
 	public float time;
 }

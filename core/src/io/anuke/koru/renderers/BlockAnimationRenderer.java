@@ -3,8 +3,8 @@ package io.anuke.koru.renderers;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.MaterialTrait;
 import io.anuke.koru.modules.World;
+import io.anuke.koru.traits.MaterialTrait;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.ucore.renderables.*;

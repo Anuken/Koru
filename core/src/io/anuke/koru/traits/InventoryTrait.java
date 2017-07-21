@@ -1,4 +1,4 @@
-package io.anuke.koru.components;
+package io.anuke.koru.traits;
 
 import java.util.function.Consumer;
 
@@ -14,18 +14,19 @@ import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.Trait;
 
+//TODO fix
 public class InventoryTrait extends Trait{
 	private static final ObjectMap<Item, Integer> temp = new ObjectMap<Item, Integer>();
 	private static final ObjectSet<Item> tempset = new ObjectSet<Item>();
 	private static final Array<ItemStack> tempArray = new Array<ItemStack>();
 	
-	public ItemStack[][] inventory;
+	public ItemStack[] inventory;
 	public ItemStack selected;
 	public transient int hotbar;
 	public int recipe = -1;
 
-	public InventoryTrait(int width, int height){
-		inventory = new ItemStack[width][height];
+	public InventoryTrait(int size){
+		inventory = new ItemStack[size];
 	}
 	
 	private InventoryTrait(){}
