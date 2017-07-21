@@ -191,7 +191,7 @@ public class Renderer extends RendererModule<Koru>{
 		if(pixelate) beginPixel();
 		clearScreen();
 		drawMap();
-		RenderableHandler.instance().renderAll(batch);
+		RenderableHandler.instance().renderAll();
 
 		if(Koru.control.debug)
 			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);

@@ -1,7 +1,5 @@
 package io.anuke.koru.modules;
 
-import java.util.function.BooleanSupplier;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -12,6 +10,7 @@ import io.anuke.koru.modules.Control.GameState;
 import io.anuke.koru.ui.*;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.core.Inputs;
+import io.anuke.ucore.function.VisibilityProvider;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
@@ -31,8 +30,8 @@ public class UI extends SceneModule<Koru> {
 	private InventoryMenu inventory;
 	private RecipeMenu recipes;
 	
-	private BooleanSupplier titlevis = ()->{return Koru.control.isState(GameState.title);};
-	private BooleanSupplier playvis = ()->{return Koru.control.isPlaying();};
+	private VisibilityProvider titlevis = ()->{return Koru.control.isState(GameState.title);};
+	private VisibilityProvider playvis = ()->{return Koru.control.isPlaying();};
 
 	public UI() {
 		skin = StyleLoader.loadStyles();
@@ -60,7 +59,6 @@ public class UI extends SceneModule<Koru> {
 		setup();
 		
 		//TODO setting to autoshow this
-		
 		
 		Timers.run(20, ()->{
 			connect.show();

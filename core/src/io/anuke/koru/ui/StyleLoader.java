@@ -6,11 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.scene.Skin;
 
 public class StyleLoader{
@@ -22,7 +22,7 @@ public class StyleLoader{
 
 		FileHandle atlasFile = skinFile.sibling(skinFile.nameWithoutExtension() + ".atlas");
 		if(atlasFile.exists()){
-			TextureAtlas atlas = new TextureAtlas(atlasFile);
+			Atlas atlas = new Atlas(atlasFile);
 			try{
 				Field field = styles.getClass().getDeclaredField("atlas");
 				field.setAccessible(true);

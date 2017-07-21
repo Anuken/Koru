@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.ObjectMap;
 
+//TODO remove?
 public class BitmapData{
 	final public byte[] data;
 	final public int width, height;
