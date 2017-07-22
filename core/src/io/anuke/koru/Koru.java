@@ -9,11 +9,10 @@ import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.modules.ModuleController;
-import io.anuke.ucore.util.ColorCodes;
-import io.anuke.ucore.util.Strings;
-import io.anuke.ucore.util.Timers;
+import io.anuke.ucore.util.*;
 
 public class Koru extends ModuleController<Koru>{
 	//TODO static context smell?
@@ -32,6 +31,10 @@ public class Koru extends ModuleController<Koru>{
 		Resources.loadMaterials();
 		
 		basis = new Basis();
+		
+		Effects.setEffectProvider((name, color, x, y)->{
+			throw new IllegalArgumentException("Effects cannot be created clientside!");
+		});
 
 		addModule(network = new Network());
 		addModule(control = new Control());
@@ -46,7 +49,7 @@ public class Koru extends ModuleController<Koru>{
 	@Override
 	public void render(){
 		
-		Timers.update(delta());
+		Timers.update(Mathf.delta());
 		
 		try{
 			
@@ -74,10 +77,6 @@ public class Koru extends ModuleController<Koru>{
 			Gdx.app.exit();
 		}
 		
-	}
-	
-	public static float delta(){
-		return IServer.active() ? IServer.instance().getDelta() : Gdx.graphics.getDeltaTime()*60f;
 	}
 
 	public static void log(Object o){

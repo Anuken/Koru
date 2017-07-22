@@ -19,7 +19,6 @@ import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.*;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
-import io.anuke.koru.renderers.AnimationType;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.ui.Menu;
 import io.anuke.koru.world.Chunk;
@@ -55,9 +54,6 @@ public class Registrator{
 			SlotChangePacket.class,
 			RecipeSelectPacket.class,
 			SparkRequestPacket.class,
-			AnimationPacket.class,
-	
-			AnimationType.class,
 			
 			TextTrait.class,
 			InventoryTrait.class,

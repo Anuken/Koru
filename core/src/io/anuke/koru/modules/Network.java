@@ -115,11 +115,6 @@ public class Network extends Module<Koru>{
 			player.get(InventoryTrait.class).set(p.stacks, p.selected);
 		});
 		
-		handle(AnimationPacket.class,p->{
-			//TODO
-			//Koru.basis.getSpark(p.player).get(RenderComponent.class).renderer.onAnimation(p.type);
-		});
-		
 		handle(ChatPacket.class,p->{
 			Gdx.app.postRunnable(() -> {
 				getModule(UI.class).handleChatMessage(p.message, p.sender);

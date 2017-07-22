@@ -3,8 +3,8 @@ package io.anuke.koru.network.syncing;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.Koru;
 import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.util.Mathf;
 
 public class Interpolator{
 	static final float correctrange = 20f;
@@ -36,7 +36,7 @@ public class Interpolator{
 	public void update(Spark entity){
 		temp1.set(entity.pos().x, entity.pos().y);
 		temp2.set(lastx + entity.pos().x,lasty + entity.pos().y);
-		temp1.interpolate(temp2, alpha*Koru.delta(), Interpolation.linear);
+		temp1.interpolate(temp2, alpha*Mathf.delta(), Interpolation.linear);
 		entity.pos().set(temp1.x, temp1.y);
 	}
 	

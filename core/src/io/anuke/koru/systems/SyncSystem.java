@@ -33,7 +33,7 @@ public class SyncSystem extends TraitProcessor{
 		});
 		
 		if(packet.updates.size != 0) 
-			IServer.instance().sendTCP(spark.get(ConnectionTrait.class).connectionID, packet);
+			IServer.instance().send(spark.get(ConnectionTrait.class).connectionID, packet, false);
 	}
 	
 }

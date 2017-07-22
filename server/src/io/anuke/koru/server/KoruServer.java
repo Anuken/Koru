@@ -15,6 +15,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
+import io.anuke.koru.entities.types.Effect;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.modules.Network;
@@ -28,11 +29,11 @@ import io.anuke.koru.traits.*;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
+import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Mathf;
-import io.anuke.ucore.util.Timers;
 
 public class KoruServer extends IServer{
 	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
@@ -45,6 +46,11 @@ public class KoruServer extends IServer{
 
 	void setup(){
 		Resources.loadMaterials();
+		
+		Effects.setEffectProvider((name, color, x, y)->{
+			Spark spark = Effect.create(name, color, x, y);
+			addSpark(spark);
+		});
 		
 		commands = new CommandHandler(this);
 
@@ -111,13 +117,13 @@ public class KoruServer extends IServer{
 
 			ArrayList<Spark> sparks = new ArrayList<Spark>();
 
-			updater.basis.map().getNearbyEntities(player.pos().x, player.pos().y, SyncSystem.syncrange, (spark) -> {
-				entities.add(spark);
+			updater.mapper.getNearbyEntities(player.pos().x, player.pos().y, SyncSystem.syncrange, spark -> {
+				sparks.add(spark);
 			});
 
 			data.sparks = sparks;
 
-			sendTCP(info.id, data);
+			send(info.id, data, false);
 
 			sendToAllExceptTCP(info.id, player);
 
@@ -179,7 +185,7 @@ public class KoruServer extends IServer{
 				sendToAll(packet);
 			}else if(object instanceof ChunkRequestPacket){
 				ChunkRequestPacket packet = (ChunkRequestPacket) object;
-				sendTCP(info.id, updater.world.createChunkPacket(packet));
+				send(info.id, updater.world.createChunkPacket(packet), false);
 			}else if(object instanceof InputPacket){
 				InputPacket packet = (InputPacket) object;
 				getPlayer(info).get(InputTrait.class).input.inputEvent(packet.type, packet.data);
@@ -275,41 +281,53 @@ public class KoruServer extends IServer{
 		connections.put(info.id, info);
 		kryomap.put(info.connection, info);
 	}
-
+	
 	public void removeConnection(ConnectionInfo info){
 		connections.remove(info.id);
 		kryomap.remove(info.connection);
 	}
-
+	
+	@Override
 	public void removeSpark(Spark spark){
 		SparkRemovePacket remove = new SparkRemovePacket();
 		remove.id = spark.getID();
 		server.sendToAllTCP(remove);
 		updater.basis.removeSpark(spark);
 	}
-
+	
+	@Override
 	public void sendSpark(Spark spark){
 		sendToAllIn(spark, spark.pos().x, spark.pos().y, SyncSystem.syncrange);
 	}
-
+	
+	@Override
 	public void sendToAllIn(Object object, float x, float y, float range){
-		updater.basis.map().getNearbyConnections(x, y, range, (spark) -> {
-			sendTCP(spark.get(ConnectionTrait.class).connectionID, object);
+		updater.mapper.getNearbyConnections(x, y, range, (spark) -> {
+			send(spark.get(ConnectionTrait.class).connectionID, object, false);
 		});
 	}
-
-	public void sendLater(Object object){
-		Timers.run(1, ()->{
-			sendToAll(object);
-		});
-	}
-
+	
+	@Override
 	public void sendToAll(Object object){
 		for(ConnectionInfo info : connections.values()){
 			send(info, object, false);
 		}
 	}
-
+	
+	@Override
+	public void sendToAllExcept(int id, Object object){
+		sendToAllExceptTCP(id, object);
+	}
+	
+	@Override
+	public void send(int id, Object object, boolean udp){
+		send(connections.get(id), object, udp);
+	}
+	
+	public void addSpark(Spark spark){
+		sendSpark(spark.add());
+	}
+	
 	public Spark getPlayer(ConnectionInfo info){
 		return updater.basis.getSpark(info.playerid);
 	}
@@ -330,35 +348,11 @@ public class KoruServer extends IServer{
 		}
 	}
 
-	public void sendToAllExcept(int id, Object object){
-		sendToAllExceptTCP(id, object);
-	}
-
 	public void sendToAllExceptUDP(int id, Object object){
 		for(ConnectionInfo info : connections.values()){
 			if(info.id != id)
 				send(info, object, true);
 		}
-	}
-
-	@Override
-	public void sendTCP(int id, Object object){
-		send(connections.get(id), object, false);
-	}
-
-	@Override
-	public void sendUDP(int id, Object object){
-		send(connections.get(id), object, true);
-	}
-
-	@Override
-	public long getFrameID(){
-		return updater.frameid;
-	}
-
-	@Override
-	public float getDelta(){
-		return updater.delta;
 	}
 
 	@Override

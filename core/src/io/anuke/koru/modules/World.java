@@ -4,7 +4,6 @@ import static io.anuke.ucore.util.Mathf.inBounds;
 
 import java.util.Collection;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
@@ -27,6 +26,8 @@ import io.anuke.koru.world.materials.StructMaterialTypes;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.util.Timers;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
@@ -82,9 +83,9 @@ public class World extends Module<Koru>{
 	public void update(){
 		long start = TimeUtils.nanoTime();
 		
-		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
+		if(IServer.active() && Timers.get("checkunload", 80)) checkUnloadChunks();
 	
-		time += !IServer.active() ? Gdx.graphics.getDeltaTime()*60f/timescale : IServer.instance().getDelta()/timescale;
+		time += Mathf.delta()/timescale;
 		if(time >= 1f) time = 0f;
 		
 		updated = false;
@@ -267,7 +268,9 @@ public class World extends Module<Koru>{
 	public void updateLater(int x, int y){
 		updated = true;
 		getTile(x, y).changeEvent();
-		IServer.instance().sendLater(new TileUpdatePacket(x, y, getTile(x, y)));
+		Timers.run(2f, ()->{
+			IServer.instance().sendToAll(new TileUpdatePacket(x, y, getTile(x, y)));
+		});
 	}
 
 	public Tile getTile(int x, int y){

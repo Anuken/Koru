@@ -66,7 +66,7 @@ public class StructMaterials{
 			//TODO cleaner way to do this
 			MenuOpenPacket packet = new MenuOpenPacket();
 			packet.type = CraftingMenu.class;
-			IServer.instance().sendTCP(spark.get(ConnectionTrait.class).connectionID, packet);
+			IServer.instance().send(spark.get(ConnectionTrait.class).connectionID, packet, false);
 		}
 		
 		class Data extends TileData{

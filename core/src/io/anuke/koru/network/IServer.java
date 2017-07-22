@@ -20,14 +20,12 @@ public abstract class IServer{
 	abstract public void sendToAll(Object object);
 	abstract public void sendToAllExcept(int id, Object object);
 	abstract public void sendToAllIn(Object object, float x, float y, float range);
-	abstract public void sendTCP(int id, Object object);
-	abstract public void sendUDP(int id, Object object);
+	
+	abstract public void send(int id, Object object, boolean udp);
+	
 	abstract public void sendSpark(Spark spark);
-	abstract public void sendLater(Object object);
 	abstract public void removeSpark(Spark spark);
 	
-	abstract public long getFrameID();
-	abstract public float getDelta();
 	abstract public Basis getBasis();
 	abstract public World getWorld();
 }

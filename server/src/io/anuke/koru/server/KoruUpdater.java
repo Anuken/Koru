@@ -12,6 +12,8 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.server.world.TerrainGenerator;
 import io.anuke.koru.server.world.WorldFile;
+import io.anuke.koru.systems.EntityMapper;
+import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
 import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.util.ColorCodes;
@@ -19,21 +21,23 @@ import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timers;
 
 public class KoruUpdater{
-	KoruServer server;
-	public Basis basis;
-	public World world;
+	private static final int maxfps = 60;
+	
+	public final Basis basis;
+	public final World world;
 	public final WorldFile file;
+	public final EntityMapper mapper;
+	
+	private final KoruServer server;
 	
 	private boolean isRunning = true;
-	
-	final int maxfps = 60;
-	long frameid;
-	float delta = 1f;
-	long lastFpsTime;
-	final int blockupdatetime = 60 * 6;
-	CountDownLatch latch = new CountDownLatch(1);
-	int threads = 0;
-	int totalchunks = 0;
+	private long frameid;
+	private float delta = 1f;
+	private long lastFpsTime;
+	private final int blockupdatetime = 60 * 6;
+	private CountDownLatch latch = new CountDownLatch(1);
+	private int threads = 0;
+	private int totalchunks = 0;
 	boolean skipSave = true;
 
 	void loop(){
@@ -90,9 +94,8 @@ public class KoruUpdater{
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
 		world = new World(file);
 		basis = new Basis();
-		//TODO
-		//basis.addSystem(new SyncSystem());
-		//basis.addSystem(new InputSystem());
+		basis.addProcessor((mapper = new EntityMapper()));
+		basis.addProcessor(new SyncSystem());
 
 		Runtime.getRuntime().addShutdownHook(new Thread(()->{
 			saveAll();

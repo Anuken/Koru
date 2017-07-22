@@ -72,7 +72,7 @@ public class InventoryTrait extends Trait{
 		InventoryUpdatePacket update = new InventoryUpdatePacket();
 		update.selected = selected;
 		update.stacks = inventory;
-		IServer.instance().sendTCP(entity.get(ConnectionTrait.class).connectionID, update);
+		IServer.instance().send(entity.get(ConnectionTrait.class).connectionID, update, false);
 	}
 
 	/** Server-side only. */
@@ -86,7 +86,7 @@ public class InventoryTrait extends Trait{
 	public void sendHotbarUpdate(Spark entity, int to){
 		SlotChangePacket update = new SlotChangePacket();
 		update.stack = hotbarStack();
-		IServer.instance().sendTCP(to, update);
+		IServer.instance().send(to, update, false);
 	}
 
 	public void set(ItemStack[] stacks, ItemStack selected){

@@ -16,9 +16,7 @@ import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
-import io.anuke.koru.graphics.KoruCursors;
-import io.anuke.koru.graphics.KoruRenderable;
-import io.anuke.koru.graphics.ProcessorSurface;
+import io.anuke.koru.graphics.*;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
@@ -72,6 +70,8 @@ public class Renderer extends RendererModule<Koru>{
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 		loadShaders();
+		
+		EffectLoader.load();
 		
 		RayHandler.isDiffuse = true;
 		rays = new RayHandler();

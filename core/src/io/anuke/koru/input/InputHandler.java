@@ -5,6 +5,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.entities.types.BlockAnimation;
+import io.anuke.koru.entities.types.ItemDrop;
 import io.anuke.koru.items.*;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
@@ -66,19 +68,19 @@ public class InputHandler{
 				blockhold += delta * stack.item.getBreakSpeed(select.breakType());
 
 				if((int) (blockhold) % 20 == 1)
-					Effects.blockParticle(World.world(blockx), select.getType() == MaterialTypes.block
-							? World.world(blocky) - 6 : World.world(blocky), select);
+					Effects.effect("blockparticle", select.color, World.world(blockx), select.getType() == MaterialTypes.block
+							? World.world(blocky) - 6 : World.world(blocky));
 
 				if(blockhold >= select.breaktime()){
-					Effects.blockBreakParticle(World.world(blockx), World.world(blocky) - 1, select);
+					Effects.effect("blockbreak", select.color, World.world(blockx), World.world(blocky) - 1);
 
 					if(select.getType() == MaterialTypes.tree)
-						Effects.block(select, blockx, blocky);
+						BlockAnimation.create(select, World.world(blockx), World.world(blocky) - 1);
 
 					// entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
 					// entity.getComponent(InventoryComponent.class).sendUpdate(entity);
 
-					Effects.drops(World.world(blockx), World.world(blocky), select.getDrops());
+					ItemDrop.create(World.world(blockx), World.world(blocky), select.getDrops());
 					
 					if(select == floor)
 						tile.removeTile();
