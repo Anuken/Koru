@@ -207,8 +207,24 @@ public class Registrator{
 			int typeid = k.readObject(input, int.class);
 			int id = k.readObject(input, int.class);
 			
-			while(!input.eof()){
-				traits.add((Trait)k.readClassAndObject(input));
+			Prototype type = Prototype.getAllTypes().get(typeid);
+			
+			Array<Trait> typetraits = type.traits().asArray();
+			
+			int serialized = 0;
+			
+			for(Trait trait : typetraits){
+				if(!serialize(trait)){
+					traits.add(trait);
+				}else{
+					serialized ++;
+				}
+			}
+			
+			for(int i = 0; i < serialized; i ++){
+				Trait trait = (Trait)k.readClassAndObject(input);
+				if(trait != null)
+					traits.add(trait);
 			}
 			
 			Spark spark = Spark.createCustom(Prototype.getAllTypes().get(typeid), traits);
@@ -224,7 +240,7 @@ public class Registrator{
 			
 			for(Trait trait : entity.getTraits()){
 				if(serialize(trait)){
-					k.writeObject(output, trait);
+					k.writeClassAndObject(output, trait);
 				}
 			}
 		}
