@@ -28,10 +28,6 @@ public class ItemStack implements Cloneable{
 		return item.isType(type);
 	}
 	
-	public WeaponType getWeaponType(){
-		return item.weaponType();
-	}
-	
 	public float getBreakSpeed(BreakType type){
 		return item.getBreakSpeed(type);
 	}

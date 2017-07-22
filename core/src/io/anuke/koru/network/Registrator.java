@@ -4,120 +4,118 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import io.anuke.koru.entities.EntityType;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.entities.ProjectileType;
 import io.anuke.koru.entities.types.*;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.*;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
-import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.renderers.AnimationType;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.ui.Menu;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
+import io.anuke.ucore.ecs.Prototype;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.ecs.Trait;
+import io.anuke.ucore.ecs.extend.traits.LifetimeTrait;
+import io.anuke.ucore.ecs.extend.traits.PosTrait;
 
 public class Registrator{
 	
 	public static void register(Kryo k){
-		k.register(ConnectPacket.class);
-		k.register(PositionPacket.class);
-		k.register(DataPacket.class);
-		k.register(WorldUpdatePacket.class);
-		k.register(EntityRemovePacket.class);
-		k.register(ChunkRequestPacket.class);
-		k.register(ChunkPacket.class);
-		k.register(InputPacket.class);
-		k.register(TileUpdatePacket.class);
-		k.register(BlockInputPacket.class);
-		k.register(StoreItemPacket.class);
-		k.register(ChatPacket.class);
-		k.register(BitmapDataPacket.class);
-		k.register(BitmapDataPacket.Header.class);
-		k.register(MaterialRequestPacket.class);
-		k.register(InventoryUpdatePacket.class);
-		k.register(InventoryClickPacket.class);
-		k.register(SlotChangePacket.class);
-		k.register(RecipeSelectPacket.class);
-		k.register(EntityRequestPacket.class);
-		k.register(AnimationPacket.class);
+		register(k, 
+			ConnectPacket.class,
+			PositionPacket.class,
+			DataPacket.class,
+			WorldUpdatePacket.class,
+			SparkRemovePacket.class,
+			ChunkRequestPacket.class,
+			ChunkPacket.class,
+			InputPacket.class,
+			TileUpdatePacket.class,
+			BlockInputPacket.class,
+			StoreItemPacket.class,
+			ChatPacket.class,
+			BitmapDataPacket.class,
+			BitmapDataPacket.Header.class,
+			MaterialRequestPacket.class,
+			InventoryUpdatePacket.class,
+			InventoryClickPacket.class,
+			SlotChangePacket.class,
+			RecipeSelectPacket.class,
+			SparkRequestPacket.class,
+			AnimationPacket.class,
+	
+			AnimationType.class,
+			
+			TextTrait.class,
+			InventoryTrait.class,
+			ParticleTrait.class,
+			MaterialTrait.class,
+			ItemTrait.class,
+			DirectionTrait.class,
+			PosTrait.class,
+			LifetimeTrait.class,
+	
+			SyncData.class,
+			
+			Player.class,
+			ItemDrop.class,
+			Particle.class,
+			Projectile.class,
+			TestEntity.class,
+			DamageIndicator.class,
+			BlockAnimation.class,
+			
+			Chunk.class,
+			Tile.class,
+			Tile[].class,
+			Tile[][].class,
+			Tile[][][].class,
+			ItemStack[].class,
+			ItemStack[][].class,
+			Items.class,
+			ItemData.class,
+			
+			InputType.class,
+			SyncType.class,
+			Object[].class,
+			Bits.class,
+			Color.class,
+			Vector2.class,
+			ArrayList.class,
+			ObjectMap.class,
+			ConcurrentHashMap.class,
+			ObjectMap.Keys.class,
+			HashMap.class,
+			byte[].class,
+			int[].class,
+			Class.class
+		);
+		
+		k.register(Spark.class, new SparkSerializer());
 		k.register(MenuOpenPacket.class, new MenuPacketSerializer());
-
-		k.register(EntityType.class);
-		k.register(AnimationType.class);
-		k.register(EntityWrapper.class);
-		k.register(PositionComponent.class);
-		k.register(ProjectileComponent.class);
-		k.register(FadeComponent.class);
-		k.register(ConnectionComponent.class);
-		k.register(ChildComponent.class);
-		k.register(TextTrait.class);
-		k.register(InventoryTrait.class);
-		k.register(ParticleTrait.class);
-		k.register(MaterialTrait.class);
-		k.register(ItemTrait.class);
-		k.register(VelocityComponent.class);
-		k.register(ColliderComponent.class);
-		k.register(HealthComponent.class);
-
-		k.register(ProjectileType.class);
-		k.register(SyncData.class);
 		
-		k.register(Player.class);
-		k.register(ItemDrop.class);
-		k.register(Particle.class);
-		k.register(Projectile.class);
-		k.register(TestEntity.class);
-		k.register(DamageIndicator.class);
-		k.register(BlockAnimation.class);
-		
-		k.register(Chunk.class);
-		k.register(Tile.class, new TileSerializer());
-		k.register(Tile[].class);
-		k.register(Tile[][].class);
-		k.register(Tile[][][].class);
 		k.register(Material.class, new MaterialsSerializer());
 		k.register(ItemStack.class, new ItemStackSerializer());
-		k.register(ItemStack[].class);
-		k.register(ItemStack[][].class);
-		k.register(Items.class);
-		k.register(ItemData.class);
-		
-		k.register(InputType.class);
-		k.register(SyncType.class);
-		k.register(Component.class);
-		k.register(Component[].class);
-		k.register(Object[].class);
-		k.register(Bits.class);
-		k.register(Color.class);
-		k.register(Vector2.class);
-		k.register(ArrayList.class);
-		k.register(ObjectMap.class);
-		k.register(ConcurrentHashMap.class);
-		k.register(ObjectMap.Keys.class);
-		k.register(HashMap.class);
-		k.register(byte[].class);
-		k.register(int[].class);
-		k.register(Class.class);
-		
-
-		k.register(KoruEntity.class, new EntitySerializer());
+		k.register(Tile.class, new TileSerializer());
+	}
+	
+	private static void register(Kryo k, Class<?>...classes){
+		for(Class<?> c : classes){
+			k.register(c);
+		}
 	}
 	
 	public static class ItemStackSerializer extends Serializer<ItemStack>{
@@ -188,62 +186,47 @@ public class Registrator{
 			k.writeObject(o, m.id());
 		}
 	}
-
-	static class EntitySerializer extends Serializer<KoruEntity>{
-
-		@Override
-		public KoruEntity read(Kryo k, Input input, Class<KoruEntity> c){
-			return k.readObject(input, EntityWrapper.class).getEntity();
-		}
-
-		@Override
-		public void write(Kryo k, Output output, KoruEntity entity){
-			k.writeObject(output, new EntityWrapper(entity));
-		}
-
-	}
 	
-	static Array<Component> toadd = new Array<Component>();
+	/**
+	 * Format:
+	 * 1) type ID
+	 * 2) entity ID
+	 * 3) all the components, in no particular order
+	 */
+	static class SparkSerializer extends Serializer<Spark>{
 
-	static class EntityWrapper{
-		HashMap<Class<?>, Component> components = new HashMap<Class<?>, Component>();
-		long id;
-		Class<? extends EntityType> type;
-
-		private EntityWrapper(){}
-
-		public EntityWrapper(KoruEntity entity){
+		@Override
+		public Spark read(Kryo k, Input input, Class<Spark> c){
+			Array<Trait> traits = new Array<Trait>();
+			int typeid = k.readObject(input, int.class);
+			int id = k.readObject(input, int.class);
 			
-			this.id = entity.getID();
-			this.type = entity.getTypeClass();
-			for(Component component : entity.getComponents()){
+			while(!input.eof()){
+				traits.add((Trait)k.readClassAndObject(input));
+			}
 			
-				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
-					components.put(component.getClass(), component);
+			Spark spark = Spark.createCustom(Prototype.getAllTypes().get(typeid), traits);
+			spark.resetID(id);
+			
+			return spark;
+		}
+
+		@Override
+		public void write(Kryo k, Output output, Spark entity){
+			k.writeObject(output, entity.getType().getTypeID());
+			k.writeObject(output, entity.getID());
+			
+			for(Trait trait : entity.getTraits()){
+				if(serialize(trait)){
+					k.writeObject(output, trait);
 				}
 			}
 		}
-
-		public KoruEntity getEntity(){
-			KoruEntity entity = KoruEntity.loadedEntity(type, id);
-			ImmutableArray<Component> icomponents = entity.getComponents();
-			
-			for(Component component : icomponents){
-				
-				if(ClassReflection.getAnnotation(component.getClass(), Synced.class) != null){
-					toadd.add(components.get(component.getClass()));
-				}
-			}
-			
-			for(Component component : toadd){
-				entity.add(component);
-			}
-			
-			entity.getType().init(entity);
-			
-			toadd.clear();
-			return entity;
-
+		
+		//TODO!!!
+		boolean serialize(Trait trait){
+			return true;
 		}
+
 	}
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.IntSet.IntSetIterator;
 import com.esotericsoftware.kryonet.*;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.entities.KoruEvents.Unload;
 import io.anuke.koru.modules.Control.GameState;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
@@ -129,7 +130,7 @@ public class Network extends Module<Koru>{
 			sparkQueue.add(spark);
 		});
 		
-		handle(EntityRemovePacket.class,p->{
+		handle(SparkRemovePacket.class,p->{
 			sparksToRemove.add(p.id);
 		});
 
@@ -160,7 +161,7 @@ public class Network extends Module<Koru>{
 		if(!requestedEntities.contains(id) && !sparksToRemove.contains(id)){
 			requestedEntities.add(id);
 
-			EntityRequestPacket request = new EntityRequestPacket();
+			SparkRequestPacket request = new SparkRequestPacket();
 			request.id = id;
 			client.sendTCP(request);
 		}
@@ -214,8 +215,7 @@ public class Network extends Module<Koru>{
 		//unloads sparks that are very far away
 		for(Spark e : sparks){
 			Spark spark = (Spark) e;
-			//TODO
-			if(spark.getType().unload() && spark.pos().rdist(player.pos().x, player.pos().y) > sparkUnloadRange){
+			if(spark.getType().callEvent(true, Unload.class) && spark.pos().rdist(player.pos().x, player.pos().y) > sparkUnloadRange){
 				Koru.basis.removeSpark(e);
 			}
 		}

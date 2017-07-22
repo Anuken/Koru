@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.entities.Effects;
 import io.anuke.koru.items.*;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
@@ -14,6 +13,7 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Spark;
 
 //TODO make this less messy
@@ -171,8 +171,8 @@ public class InputHandler{
 		
 		if(stack.isType(ItemType.weapon)){
 			//why did WeaponComponent even exist?
-			stack.getWeaponType().setData(spark, stack, this, spark.get(WeaponComponent.class));
-			stack.getWeaponType().clicked(left);
+			//stack.getWeaponType().setData(spark, stack, this, spark.get(WeaponComponent.class));
+			//stack.getWeaponType().clicked(left);
 		}
 	}
 

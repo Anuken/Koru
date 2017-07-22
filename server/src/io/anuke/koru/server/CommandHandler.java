@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.MathUtils;
 
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.entities.types.TestEntity;
+import io.anuke.ucore.ecs.Spark;
 
 
 public class CommandHandler{
@@ -47,7 +46,7 @@ public class CommandHandler{
 		
 		cmd("spawn", ()->{
 			for(int i = 0; i < 30; i++){
-				KoruEntity entity = new KoruEntity(TestEntity.class);
+				Spark entity = new Spark(TestEntity.class);
 				entity.pos().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
 				entity.add().send();
 			}

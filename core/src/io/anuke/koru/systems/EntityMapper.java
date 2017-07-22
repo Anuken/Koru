@@ -5,30 +5,26 @@ import static io.anuke.ucore.util.Mathf.scl;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Predicate;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.traits.*;
+import io.anuke.koru.traits.ConnectionTrait;
+import io.anuke.koru.traits.SyncTrait;
+import io.anuke.ucore.ecs.Processor;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.ecs.Trait;
 import io.anuke.ucore.util.GridMap;
 
-public class EntityMapper extends KoruSystem implements EntityListener{
+public class EntityMapper extends Processor{
 	public static final float cellsize = World.tilesize * World.chunksize / 2;
 	public static final int maxCells = 3000;
-	protected ObjectMap<Long, KoruEntity> entities = new ObjectMap<Long, KoruEntity>();
-	private GridMap<ArrayList<KoruEntity>> map = new GridMap<ArrayList<KoruEntity>>();
+	
+	private GridMap<ArrayList<Spark>> map = new GridMap<>();
 	private boolean debug = false;
 
-	public static Predicate<KoruEntity> allPredicate = (entity) -> {return true;};
-
-	public EntityMapper() {
-		super(Family.all(PositionComponent.class).get());
-	}
+	public static Predicate<Spark> allPredicate = (entity) -> true;
 
 	public int getCellAmount(){
 		return map.size();
@@ -37,8 +33,8 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	/**
 	 * Returns all the entities near a specific location (within range).
 	 **/
-	public synchronized void getNearbyEntities(float cx, float cy, float range, Predicate<KoruEntity> pred,
-			Consumer<KoruEntity> con){
+	public synchronized void getNearbyEntities(float cx, float cy, float range, Predicate<Spark> pred,
+			Consumer<Spark> con){
 
 		if(range < 1 || range < 1)
 			throw new IllegalArgumentException("rangex and rangey cannot be negative.");
@@ -54,10 +50,10 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 
 		for(int x = minx; x < maxx + 1; x++){
 			for(int y = miny; y < maxy + 1; y++){
-				ArrayList<KoruEntity> set = map.get(x, y);
+				ArrayList<Spark> set = map.get(x, y);
 				if(set != null){
-					for(KoruEntity e : set){
-						if(pred.evaluate(e) && Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range){
+					for(Spark e : set){
+						if(pred.evaluate(e) && Math.abs(e.pos().x - cx) < range && Math.abs(e.pos().y - cy) < range){
 							con.accept(e);
 						}
 					}
@@ -67,74 +63,60 @@ public class EntityMapper extends KoruSystem implements EntityListener{
 	}
 
 	/** Gets nearby entities with a connection */
-	public void getNearbyConnections(float cx, float cy, float range, Consumer<KoruEntity> con){
-		getNearbyEntities(cx, cy, range, ConnectionComponent.class, con);
+	public void getNearbyConnections(float cx, float cy, float range, Consumer<Spark> con){
+		getNearbyEntities(cx, cy, range, ConnectionTrait.class, con);
 	}
 
 	/** Gets nearby syncables. */
-	public void getNearbySyncables(float cx, float cy, float range, Consumer<KoruEntity> con){
+	public void getNearbySyncables(float cx, float cy, float range, Consumer<Spark> con){
 		getNearbyEntities(cx, cy, range, SyncTrait.class, con);
 	}
 	
 	/** Gets nearby entities with a specific component. */
-	public void getNearbyEntities(float cx, float cy, float range, Class<? extends KoruComponent> component, Consumer<KoruEntity> con){
-		getNearbyEntities(cx, cy, range, e->{
-			return e.has(component);
-		}, con);
+	public void getNearbyEntities(float cx, float cy, float range, Class<? extends Trait> component, Consumer<Spark> con){
+		getNearbyEntities(cx, cy, range, e -> e.has(component), con);
 	}
 
 	/** Just gets all nearby entities. */
-	public void getNearbyEntities(float cx, float cy, float range, Consumer<KoruEntity> con){
+	public void getNearbyEntities(float cx, float cy, float range, Consumer<Spark> con){
 		getNearbyEntities(cx, cy, range, allPredicate, con);
 	}
 
-	public ArrayList<KoruEntity> getEntitiesIn(float cx, float cy){
+	public ArrayList<Spark> getEntitiesIn(float cx, float cy){
 		int x = (int) (cx / cellsize), y = (int) (cy / cellsize);
 		return map.get(x, y);
 	}
 	
 	//TODO quadtree for each cell?
-	@Override
-	void processEntity(KoruEntity entity, float delta){
-		int x = (int) (entity.getX() / cellsize), y = (int) (entity.getY() / cellsize);
+	void processEntity(Spark entity){
+		int x = (int) (entity.pos().x / cellsize), y = (int) (entity.pos().y / cellsize);
 
-		ArrayList<KoruEntity> set = map.get(x, y);
+		ArrayList<Spark> set = map.get(x, y);
 
 		if(set == null){
-			map.put(x, y, (set = new ArrayList<KoruEntity>()));
+			map.put(x, y, (set = new ArrayList<Spark>()));
 		}
 
 		set.add(entity);
 	}
 
 	@Override
-	public synchronized void update(float deltaTime){
+	public synchronized void update(Array<Spark> sparks){
 
 		// clear cells just in case
 		if(map.size() > maxCells){
 			Koru.log("Too many mapper cells (" + map.size() + "). Clearing and calling System#gc().");
 			map.clear();
-			// might as well try to clean up
+			// might as well try to clean up - bad design, maybe?
 			System.gc();
 		}
 
-		for(ArrayList<KoruEntity> set : map.values()){
+		for(ArrayList<Spark> set : map.values()){
 			set.clear();
 		}
-
-		super.update(deltaTime);
-	}
-
-	@Override
-	public void entityAdded(Entity entity){
-		entities.put(((KoruEntity) entity).getID(), (KoruEntity) entity);
-	}
-
-	@Override
-	public void entityRemoved(Entity entity){
-		for(int i = 0; i < entity.getComponents().size(); i ++){
-			((KoruComponent)entity.getComponents().get(i)).onRemove((KoruEntity)entity);
+		
+		for(Spark spark : sparks){
+			processEntity(spark);
 		}
-		entities.remove(((KoruEntity) entity).getID());
 	}
 }
