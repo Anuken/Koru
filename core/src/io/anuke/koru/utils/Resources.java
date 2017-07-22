@@ -45,6 +45,10 @@ public class Resources{
 		return DrawContext.skin.getFont("pixel-font");
 	}
 	
+	public static BitmapFont font(String name){
+		return DrawContext.skin.getFont(name);
+	}
+	
 	public static Json getJson(){
 		if(json == null) json = new Json();
 		return json;

@@ -1,9 +1,9 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	default-font: {
-	file: prose.fnt,
-	markupEnabled: true,
-	scale: 1
+		file: prose.fnt,
+		markupEnabled: true,
+		scale: 1
 	}
 },
 com.badlogic.gdx.graphics.Color: {

@@ -72,6 +72,7 @@ public class Registrator{
 			DirectionTrait.class,
 			PosTrait.class,
 			LifetimeTrait.class,
+			ConnectionTrait.class,
 	
 			SyncData.class,
 			

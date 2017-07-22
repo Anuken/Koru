@@ -63,11 +63,12 @@ public class Player extends Prototype{
 						+(dir.walktime > 0 ? "-"+((int)(dir.walktime/7))%3 : ""), 
 							spark.pos().x, spark.pos().y, dir.direction == Direction.left ? - 12 : 12, 12);
 					
-					if(!spark.get(ConnectionTrait.class).local){
+					//TODO fix ugly font size
+					if(spark.get(ConnectionTrait.class).local){
 						Resources.font2().setColor(Color.YELLOW);
 						
-						Resources.font2().getData().setScale(1f/2f);
-						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, spark.pos().x, spark.pos().y + 14, 0, Align.center, false);
+						Resources.font2().getData().setScale(1f);
+						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, (int)spark.pos().x, (int)spark.pos().y + 18, 0, Align.center, false);
 					
 						Resources.font2().setColor(Color.WHITE);
 						
