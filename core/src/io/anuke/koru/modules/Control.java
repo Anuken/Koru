@@ -93,7 +93,7 @@ public class Control extends Module<Koru>{
 			debug = !debug;
 		}
 
-		if (!canMove()) return;
+		if (!canMove() || player.getBasis() == null) return;
 		
 		Vector2 vec = Graphics.mouseWorld();
 		

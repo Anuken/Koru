@@ -293,6 +293,7 @@ public class KoruServer extends IServer{
 		remove.id = spark.getID();
 		server.sendToAllTCP(remove);
 		updater.basis.removeSpark(spark);
+		spark.remove();
 	}
 	
 	@Override
@@ -333,12 +334,10 @@ public class KoruServer extends IServer{
 	}
 
 	public void send(ConnectionInfo info, Object object, boolean udp){
-
 		if(udp)
 			info.connection.sendUDP(object);
 		else
 			info.connection.sendTCP(object);
-
 	}
 
 	public void sendToAllExceptTCP(int id, Object object){

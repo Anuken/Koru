@@ -9,8 +9,10 @@ import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
+import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Basis;
+import io.anuke.ucore.ecs.extend.processors.TileCollisionProcessor;
 import io.anuke.ucore.modules.ModuleController;
 import io.anuke.ucore.util.*;
 
@@ -31,6 +33,14 @@ public class Koru extends ModuleController<Koru>{
 		Resources.loadMaterials();
 		
 		basis = new Basis();
+		
+		basis.addProcessor(new TileCollisionProcessor(World.tilesize, (x, y)->{
+			Tile tile = world.getTile(x, y);
+			return tile != null && tile.solid();
+		}, (x, y, out)->{
+			Tile tile = world.getTile(x, y);
+			tile.block().getType().getHitbox(x, y, out);
+		}));
 		
 		Effects.setEffectProvider((name, color, x, y)->{
 			throw new IllegalArgumentException("Effects cannot be created clientside!");

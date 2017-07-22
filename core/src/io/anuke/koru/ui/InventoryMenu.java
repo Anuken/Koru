@@ -33,7 +33,7 @@ public class InventoryMenu extends Table{
 		padRight(3f);
 		padBottom(3f);
 
-		int width = 6;
+		int width = 4;
 
 		//TODO fix
 		for(int i = 0; i < stacks.length; i++){

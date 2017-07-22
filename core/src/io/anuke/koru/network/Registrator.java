@@ -6,9 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Bits;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -20,6 +18,7 @@ import io.anuke.koru.items.*;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
 import io.anuke.koru.traits.*;
+import io.anuke.koru.traits.DirectionTrait.Direction;
 import io.anuke.koru.ui.Menu;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
@@ -31,6 +30,16 @@ import io.anuke.ucore.ecs.extend.traits.LifetimeTrait;
 import io.anuke.ucore.ecs.extend.traits.PosTrait;
 
 public class Registrator{
+	private static ObjectSet<Class<? extends Trait>> synced = ObjectSet.with(
+		PosTrait.class,
+		ConnectionTrait.class,
+		TextTrait.class,
+		EffectTrait.class,
+		DirectionTrait.class,
+		ChildTrait.class,
+		ItemTrait.class,
+		DirectionTrait.class
+	);
 	
 	public static void register(Kryo k){
 		register(k, 
@@ -66,7 +75,8 @@ public class Registrator{
 	
 			SyncData.class,
 			
-			Player.class,
+			Direction.class,
+			
 			ItemDrop.class,
 			Particle.class,
 			Projectile.class,
@@ -221,7 +231,7 @@ public class Registrator{
 		
 		//TODO!!!
 		boolean serialize(Trait trait){
-			return true;
+			return synced.contains(trait.getClass());
 		}
 
 	}

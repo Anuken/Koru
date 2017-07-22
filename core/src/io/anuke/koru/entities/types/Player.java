@@ -80,16 +80,17 @@ public class Player extends Prototype{
 					
 				});
 				
-				trait.drawShadow(spark, 8, 1);
+				trait.drawShadow(spark, 14, 1);
 			}),
 			new ColliderTrait(8, 6),
-			//TODO
-			//new WeaponTrait(),
 			new ChunkLoadTrait(),
 			new SyncTrait(SyncType.player),
 			new InputTrait(),
 			new HealthTrait(),
-			new InventoryTrait(24)
+			new InventoryTrait(24),
+			new DirectionTrait(),
+			new EquipTrait(),
+			new TileCollideTrait(0, 2, 4, 3)
 		);
 	}
 

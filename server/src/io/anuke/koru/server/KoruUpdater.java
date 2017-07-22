@@ -15,7 +15,9 @@ import io.anuke.koru.server.world.WorldFile;
 import io.anuke.koru.systems.EntityMapper;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Tile;
 import io.anuke.ucore.ecs.Basis;
+import io.anuke.ucore.ecs.extend.processors.TileCollisionProcessor;
 import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timers;
@@ -92,10 +94,20 @@ public class KoruUpdater{
 		Mathf.setDeltaProvider(()->delta);
 		
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
+		
 		world = new World(file);
+		
 		basis = new Basis();
 		basis.addProcessor((mapper = new EntityMapper()));
 		basis.addProcessor(new SyncSystem());
+		
+		basis.addProcessor(new TileCollisionProcessor(World.tilesize, (x, y)->{
+			Tile tile = world.getTile(x, y);
+			return tile != null && tile.solid();
+		}, (x, y, out)->{
+			Tile tile = world.getTile(x, y);
+			tile.block().getType().getHitbox(x, y, out);
+		}));
 
 		Runtime.getRuntime().addShutdownHook(new Thread(()->{
 			saveAll();

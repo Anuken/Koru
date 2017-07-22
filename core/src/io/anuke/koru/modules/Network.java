@@ -240,6 +240,8 @@ public class Network extends Module<Koru>{
 	}
 
 	private void sendUpdate(){
+		if(player.get(InputTrait.class).input == null) return;
+		
 		PositionPacket pos = new PositionPacket();
 		pos.x = player.pos().x;
 		pos.y = player.pos().y;
