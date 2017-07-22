@@ -4,38 +4,36 @@ import static io.anuke.ucore.util.Mathf.inBounds;
 
 import java.util.Collection;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.LoadChunksComponent;
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
+import io.anuke.koru.traits.ChunkLoadTrait;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.StructMaterialTypes;
+import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.util.Timers;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
 	public static final int loadrange = 3;
 	public static final int tilesize = 12;
 	
-	private static Family chunkFamily = Family.all(LoadChunksComponent.class).get();
 	private static Color ambientColor = new Color();
 	private static final float[] colors = new float[]{1, 1, 0.9f, 0.5f, 0.2f, 0, 0, 0.5f, 0.9f, 1};
 	public final static float timescale = 40000f*0; //temporarily disabled for testing - remove 0 to enable
@@ -85,9 +83,9 @@ public class World extends Module<Koru>{
 	public void update(){
 		long start = TimeUtils.nanoTime();
 		
-		if(IServer.active() && IServer.instance().getFrameID() % 60 == 0) checkUnloadChunks();
+		if(IServer.active() && Timers.get("checkunload", 80)) checkUnloadChunks();
 	
-		time += !IServer.active() ? Gdx.graphics.getDeltaTime()*60f/timescale : IServer.instance().getDelta()/timescale;
+		time += Mathf.delta()/timescale;
 		if(time >= 1f) time = 0f;
 		
 		updated = false;
@@ -133,14 +131,16 @@ public class World extends Module<Koru>{
 	
 	void checkUnloadChunks(){
 		Collection<Chunk> chunks = file.getLoadedChunks();
-		ImmutableArray<Entity> players = IServer.instance().getEngine().getEntitiesFor(chunkFamily);
+		Array<Spark> players = IServer.instance().getBasis().getSparks();
 		
 		for(Chunk chunk : chunks){
 			boolean passed = false;
-			for(Entity e : players){
-				KoruEntity entity = (KoruEntity)e;
-				int ecx = toChunkCoords(entity.position().x);
-				int ecy = toChunkCoords(entity.position().y);
+			
+			for(Spark s : players){
+				if(!s.has(ChunkLoadTrait.class)) continue;
+				
+				int ecx = toChunkCoords(s.pos().x);
+				int ecy = toChunkCoords(s.pos().y);
 				
 				if(Math.abs(chunk.x - ecx) <= loadrange && Math.abs(chunk.y - ecy) <= loadrange){
 					passed = true;
@@ -268,7 +268,9 @@ public class World extends Module<Koru>{
 	public void updateLater(int x, int y){
 		updated = true;
 		getTile(x, y).changeEvent();
-		IServer.instance().sendLater(new TileUpdatePacket(x, y, getTile(x, y)));
+		Timers.run(2f, ()->{
+			IServer.instance().sendToAll(new TileUpdatePacket(x, y, getTile(x, y)));
+		});
 	}
 
 	public Tile getTile(int x, int y){

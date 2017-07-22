@@ -2,20 +2,19 @@ package io.anuke.koru.modules;
 
 import java.util.function.Consumer;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.IntSet.IntSetIterator;
 import com.esotericsoftware.kryonet.*;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.*;
-import io.anuke.koru.entities.KoruEntity;
+import io.anuke.koru.entities.KoruEvents.Unload;
 import io.anuke.koru.modules.Control.GameState;
-import io.anuke.koru.network.BitmapData;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
+import io.anuke.koru.traits.*;
 import io.anuke.koru.utils.Profiler;
+import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Timers;
@@ -25,21 +24,20 @@ public class Network extends Module<Koru>{
 	public static final int ping = 0;
 	public static final int pingInterval = 60;
 	public static final int packetFrequency = 3;
-	public static final float entityUnloadRange = 600;
+	public static final float sparkUnloadRange = 600;
 	
 	public String ip = "localhost";
 	public boolean connecting;
 	public Client client;
 	
-	private KoruEntity player;
+	private Spark player;
 	
 	private boolean connected;
 	private boolean chunksAdded = false;
-	private LongArray tempids = new LongArray();
-	private Array<KoruEntity> entityQueue = new Array<KoruEntity>();
-	private ObjectSet<Long> entitiesToRemove = new ObjectSet<Long>();
-	private ObjectSet<Long> requestedEntities = new ObjectSet<Long>();
-	private ObjectMap<Integer, BitmapData> bitmaps = new ObjectMap<Integer, BitmapData>();
+	private IntArray tempids = new IntArray();
+	private Array<Spark> sparkQueue = new Array<>();
+	private IntSet sparksToRemove = new IntSet();
+	private IntSet requestedEntities = new IntSet();
 	private ObjectMap<Class<?>, Consumer<Object>> packetHandlers = new ObjectMap<>();
 	
 	@Override
@@ -58,28 +56,34 @@ public class Network extends Module<Koru>{
 	private void registerPackets(){
 		
 		handle(DataPacket.class, data->{
-			Koru.log("Recieving a data packet... ");
-
-			Koru.engine.removeAllEntities();
-			Koru.log("Recieved " + data.entities.size() + " entities.");
-			for(Entity entity : data.entities){
-				entityQueue.add((KoruEntity) entity);
-			}
 			
-			Koru.world.time = data.time;
-			player.resetID(data.playerid);
-			entityQueue.add(Koru.control.player);
-			Koru.log("Recieved data packet.");
+			Gdx.app.postRunnable(()->{
+				Koru.log("Recieving a data packet... ");
+				
+				//TODO thread safety?
+				Koru.basis.clearSparks();
+				Koru.log("Recieved " + data.sparks.size() + " sparks.");
+				
+				for(Spark spark : data.sparks){
+					Koru.basis.addSpark(spark);
+				}
+				
+				Koru.world.time = data.time;
+				Koru.control.player.resetID(data.playerid);
+				
+				Koru.basis.addSpark(Koru.control.player);
+				Koru.log("Recieved data packet.");
+			});
 		});
 		
 		handle(WorldUpdatePacket.class,p->{
-			for(Long key : p.updates.keys()){
-				KoruEntity entity = Koru.engine.getEntity(key);
-				if(entity == null){
+			for(Integer key : p.updates.keys()){
+				Spark spark = Koru.basis.getSpark(key);
+				if(spark == null){
 					requestEntity(key);
 					continue;
 				}
-				entity.get(SyncComponent.class).type.read(p.updates.get(key), entity);
+				spark.get(SyncTrait.class).type.read(p.updates.get(key), spark);
 			}
 		});
 		
@@ -101,17 +105,14 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(SlotChangePacket.class,p->{
-			if(Koru.engine.getEntity(p.id) == null)
+			if(Koru.basis.getSpark(p.id) == null)
 				return;
-			Koru.engine.getEntity(p.id).getComponent(InventoryComponent.class).inventory[0][0] = p.stack;
+			
+			Koru.basis.getSpark(p.id).get(InventoryTrait.class).inventory[0] = p.stack;
 		});
 		
 		handle(InventoryUpdatePacket.class,p->{
-			player.getComponent(InventoryComponent.class).set(p.stacks, p.selected);
-		});
-		
-		handle(AnimationPacket.class,p->{
-			Koru.engine.getEntity(p.player).getComponent(RenderComponent.class).renderer.onAnimation(p.type);
+			player.get(InventoryTrait.class).set(p.stacks, p.selected);
 		});
 		
 		handle(ChatPacket.class,p->{
@@ -120,12 +121,12 @@ public class Network extends Module<Koru>{
 			});
 		});
 		
-		handle(KoruEntity.class,entity->{
-			entityQueue.add(entity);
+		handle(Spark.class,spark->{
+			sparkQueue.add(spark);
 		});
 		
-		handle(EntityRemovePacket.class,p->{
-			entitiesToRemove.add(p.id);
+		handle(SparkRemovePacket.class,p->{
+			sparksToRemove.add(p.id);
 		});
 
 	}
@@ -151,11 +152,11 @@ public class Network extends Module<Koru>{
 		//initialconnect = true;
 	}
 
-	void requestEntity(long id){
-		if(!requestedEntities.contains(id) && !entitiesToRemove.contains(id)){
+	void requestEntity(int id){
+		if(!requestedEntities.contains(id) && !sparksToRemove.contains(id)){
 			requestedEntities.add(id);
 
-			EntityRequestPacket request = new EntityRequestPacket();
+			SparkRequestPacket request = new SparkRequestPacket();
 			request.id = id;
 			client.sendTCP(request);
 		}
@@ -176,54 +177,55 @@ public class Network extends Module<Koru>{
 			}
 		}
 
-		Koru.engine.removeAllEntities();
+		Koru.basis.clearSparks();;
 	}
 
 	@Override
 	public void update(){
 		long start = TimeUtils.nanoTime();
 		
-		while(entityQueue.size != 0){
+		while(sparkQueue.size != 0){
 
-			KoruEntity entity = entityQueue.pop();
-			if(entity == null)
+			Spark spark = sparkQueue.pop();
+			if(spark == null)
 				continue;
 
-			requestedEntities.remove(entity.getID());
+			requestedEntities.remove(spark.getID());
 
-			if(entitiesToRemove.contains(entity.getID())){
-				entitiesToRemove.remove(entity.getID());
+			if(sparksToRemove.contains(spark.getID())){
+				sparksToRemove.remove(spark.getID());
 				continue;
 			}
 
-			if(Koru.engine.getEntity(entity.getID()) == null)
-				entity.add();
+			if(Koru.basis.getSpark(spark.getID()) == null)
+				spark.add();
 		}
 
 		if(connected && Timers.get("ping", pingInterval)){
 			client.updateReturnTripTime();
 		}
 		
-		ImmutableArray<Entity> entities = Koru.engine.getEntities();
+		Array<Spark> sparks = Koru.basis.getSparks();
 
-		//unloads entities that are very far away
-		for(Entity e : entities){
-			KoruEntity entity = (KoruEntity) e;
-			if(entity.getType().unload() && entity.position().sqdist(player.getX(), player.getY()) > entityUnloadRange){
-				Koru.engine.removeEntity(e);
+		//unloads sparks that are very far away
+		for(Spark e : sparks){
+			Spark spark = (Spark) e;
+			if(spark.getType().callEvent(true, Unload.class) && spark.pos().rdist(player.pos().x, player.pos().y) > sparkUnloadRange){
+				Koru.basis.removeSpark(e);
 			}
 		}
 
 		tempids.clear();
 		
-		for(Long id : entitiesToRemove){
-			if(Koru.engine.removeEntity(id)){
+		int id = -1;
+		for(IntSetIterator rit = sparksToRemove.iterator(); rit.hasNext; id = rit.next()){
+			if(Koru.basis.removeSpark(id)){
 				tempids.add(id);
 			}
 		}
 		
 		for(int i = 0; i < tempids.size; i ++)
-			entitiesToRemove.remove(tempids.get(i));
+			sparksToRemove.remove(tempids.get(i));
 		
 		if(chunksAdded){
 			getModule(Renderer.class).updateTiles();
@@ -238,12 +240,14 @@ public class Network extends Module<Koru>{
 	}
 
 	private void sendUpdate(){
+		if(player.get(InputTrait.class).input == null) return;
+		
 		PositionPacket pos = new PositionPacket();
-		pos.x = player.getX();
-		pos.y = player.getY();
-		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, player.getX(), player.getY());
-		player.get(InputComponent.class).input.mouseangle = pos.mouseangle;
-		pos.direction = player.getComponent(RenderComponent.class).direction;
+		pos.x = player.pos().x;
+		pos.y = player.pos().y;
+		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, player.pos().x, player.pos().y);
+		player.get(InputTrait.class).input.mouseangle = pos.mouseangle;
+		pos.direction = player.get(DirectionTrait.class).direction;
 		
 		client.sendUDP(pos);
 	}
@@ -252,7 +256,7 @@ public class Network extends Module<Koru>{
 		@Override
 		public void connected (Connection connection) {
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = player.connection().name;
+			packet.name = player.get(ConnectionTrait.class).name;
 			client.sendTCP(packet);
 			Koru.log("Sent packet.");
 

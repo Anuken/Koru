@@ -1,8 +1,8 @@
 package io.anuke.koru.network;
 
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.systems.KoruEngine;
+import io.anuke.ucore.ecs.Basis;
+import io.anuke.ucore.ecs.Spark;
 
 public abstract class IServer{
 	private static IServer instance;
@@ -20,14 +20,12 @@ public abstract class IServer{
 	abstract public void sendToAll(Object object);
 	abstract public void sendToAllExcept(int id, Object object);
 	abstract public void sendToAllIn(Object object, float x, float y, float range);
-	abstract public void sendTCP(int id, Object object);
-	abstract public void sendUDP(int id, Object object);
-	abstract public void sendEntity(KoruEntity entity);
-	abstract public void sendLater(Object object);
-	abstract public void removeEntity(KoruEntity entity);
 	
-	abstract public long getFrameID();
-	abstract public float getDelta();
-	abstract public KoruEngine getEngine();
+	abstract public void send(int id, Object object, boolean udp);
+	
+	abstract public void sendSpark(Spark spark);
+	abstract public void removeSpark(Spark spark);
+	
+	abstract public Basis getBasis();
 	abstract public World getWorld();
 }

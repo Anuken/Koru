@@ -1,6 +1,7 @@
 package io.anuke.koru.ui;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.traits.ConnectionTrait;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.Dialog;
 import io.anuke.ucore.scene.ui.TextDialog;
@@ -22,7 +23,7 @@ public class ConnectDialog extends Dialog{
 		new label("Name:");
 		
 		new field(System.getProperty("user.name"), s->{
-			Koru.control.player.connection().name = s;
+			Koru.control.player.get(ConnectionTrait.class).name = s;
 		}){{get().change();}};
 		
 		content().row();

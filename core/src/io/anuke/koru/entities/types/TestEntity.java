@@ -1,25 +1,34 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.*;
-import io.anuke.koru.entities.ComponentList;
-import io.anuke.koru.entities.EntityType;
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.SyncType;
-import io.anuke.koru.renderers.EnemyRenderer;
+import io.anuke.koru.traits.SyncTrait;
+import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.ecs.Prototype;
+import io.anuke.ucore.ecs.TraitList;
+import io.anuke.ucore.ecs.extend.traits.*;
 
-public class TestEntity extends EntityType{
+public class TestEntity extends Prototype{
 
 	@Override
-	public ComponentList components(){
-		return list(new PositionComponent(),
-				new RenderComponent(new EnemyRenderer()), 
-				new ColliderComponent(),
-				new SyncComponent(SyncType.physics),
-				new HealthComponent());
-	}
-	
-	public void init(KoruEntity entity){
-		entity.collider().setSize(7, 7);
+	public TraitList traits(){
+		return new TraitList(
+			new PosTrait(),
+			//TODO
+			//new RenderComponent(new EnemyRenderer()), 
+			new RenderableTrait((trait, spark)->{
+				trait.draw(d->{
+					d.layer = spark.pos().y;
+					
+					Draw.grect("player", spark.pos().x, spark.pos().y);
+				});
+				
+				trait.drawShadow(spark, 8, 0);
+				
+			}),
+			new ColliderTrait(7, 7),
+			new SyncTrait(SyncType.physics),
+			new HealthTrait()
+		);
 	}
 
 }

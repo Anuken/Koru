@@ -12,10 +12,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.items.Tools;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.event.InputEvent;
@@ -184,7 +184,7 @@ public class CraftingMenu extends Menu{
 	
 	@Override
 	public void onOpen(){
-		InventoryComponent inv = Koru.control.player.inventory();
+		InventoryTrait inv = Koru.control.player.get(InventoryTrait.class);
 		Array<ItemStack> ar = inv.asArray();
 
 		rodslot.stack = matslot.stack = null;

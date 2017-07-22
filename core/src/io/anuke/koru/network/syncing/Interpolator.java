@@ -3,8 +3,8 @@ package io.anuke.koru.network.syncing;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.Koru;
-import io.anuke.koru.entities.KoruEntity;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.util.Mathf;
 
 public class Interpolator{
 	static final float correctrange = 20f;
@@ -15,32 +15,29 @@ public class Interpolator{
 	float updateframes = 1f;
 	float lastx, lasty;
 
-	public void push(KoruEntity e, float x, float y){
+	public void push(Spark e, float x, float y){
 		if(lastupdate != -1) updateframes = ((System.currentTimeMillis() - lastupdate) / 1000f) * 60f;
 		
 		lastupdate = System.currentTimeMillis();
-		lastx = x - e.getX();
-		lasty = y - e.getY();
+		lastx = x - e.pos().x;
+		lasty = y - e.pos().y;
 		
-		if(Math.abs(e.getX() - x) > correctrange || Math.abs(e.getY() - y) > correctrange){
-			e.position().set(x, y);
+		if(Math.abs(e.pos().x - x) > correctrange || Math.abs(e.pos().y - y) > correctrange){
+			e.pos().set(x, y);
 			lastx = 0;
 			lasty = 0;
-		}else if(Vector2.dst(e.getX(), e.getY(), x, y) < 0.15f){
-			e.position().set(x, y);
+		}else if(Vector2.dst(e.pos().x, e.pos().y, x, y) < 0.15f){
+			e.pos().set(x, y);
 			lastx = 0;
 			lasty = 0;
 		}
 	}
 	
-	public void update(KoruEntity entity){
-		temp1.set(entity.getX(), entity.getY());
-		temp2.set(lastx + entity.getX(),lasty + entity.getY());
-		if(entity.collider() != null){
-			//temp2.add(entity.collider().collider.getVelocity());
-		}
-		temp1.interpolate(temp2, alpha*Koru.delta(), Interpolation.linear);
-		entity.position().set(temp1.x, temp1.y);
+	public void update(Spark entity){
+		temp1.set(entity.pos().x, entity.pos().y);
+		temp2.set(lastx + entity.pos().x,lasty + entity.pos().y);
+		temp1.interpolate(temp2, alpha*Mathf.delta(), Interpolation.linear);
+		entity.pos().set(temp1.x, temp1.y);
 	}
 	
 	public float elapsed(){

@@ -1,72 +1,71 @@
 package io.anuke.koru.network;
 
-import io.anuke.koru.components.InputComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.components.SyncComponent;
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.network.syncing.SyncData;
+import io.anuke.koru.traits.DirectionTrait;
+import io.anuke.koru.traits.InputTrait;
+import io.anuke.koru.traits.SyncTrait;
+import io.anuke.ucore.ecs.Spark;
 
 public enum SyncType{
 	position{
-		public SyncData write(KoruEntity entity){
-			return new SyncData(entity, entity.getX(), entity.getY());
+		public SyncData write(Spark spark){
+			return new SyncData(spark, spark.pos().x, spark.pos().y);
 		}
 
-		public void read(SyncData data, KoruEntity entity){
-			SyncComponent sync = entity.get(SyncComponent.class);
+		public void read(SyncData data, Spark spark){
+			SyncTrait sync = spark.get(SyncTrait.class);
 			
 			if(sync.interpolator != null){
-				sync.interpolator.push(entity, data.x(), data.y());
+				sync.interpolator.push(spark, data.x(), data.y());
 			}else{
-				entity.position().set(data.x(), data.y());
+				spark.pos().set(data.x(), data.y());
 			}
 		}
 	},
 	physics{
-		public SyncData write(KoruEntity entity){
-			return new SyncData(entity, entity.getX(), entity.getY());
+		public SyncData write(Spark spark){
+			return new SyncData(spark, spark.pos().x, spark.pos().y);
 		}
 
-		public void read(SyncData data, KoruEntity entity){
-			SyncComponent sync = entity.get(SyncComponent.class);
+		public void read(SyncData data, Spark spark){
+			SyncTrait sync = spark.get(SyncTrait.class);
 			
 			if(sync.interpolator != null){
-				sync.interpolator.push(entity, data.x(), data.y());
+				sync.interpolator.push(spark, data.x(), data.y());
 			}else{
-				entity.position().set(data.x(), data.y());
+				spark.pos().set(data.x(), data.y());
 			}
 		}
 	},
 	player{
-		public SyncData write(KoruEntity entity){
-			return new SyncData(entity, 
-					entity.getX(), entity.getY(), 
-					entity.get(InputComponent.class).input.mouseangle, 
-					entity.renderer().direction);
+		public SyncData write(Spark spark){
+			return new SyncData(spark, 
+					spark.pos().x, spark.pos().y, 
+					spark.get(InputTrait.class).input.mouseangle, 
+					spark.get(DirectionTrait.class).direction);
 		}
 
-		public void read(SyncData data, KoruEntity entity){
-			entity.get(RenderComponent.class).direction = data.get(3);
+		public void read(SyncData data, Spark spark){
+			spark.get(DirectionTrait.class).direction = data.get(3);
 			float x = data.get(0);
 			float y = data.get(1);
 			
-			//TODO
-			entity.get(RenderComponent.class).renderer.walking = 
-					entity.position().dist(x, y) > 0.05f;
+			spark.get(DirectionTrait.class).walking = 
+					spark.pos().dst(x, y) > 0.05f;
 			
-			entity.get(InputComponent.class).input.mouseangle = data.get(2);
-			SyncComponent sync = entity.get(SyncComponent.class);
+			spark.get(InputTrait.class).input.mouseangle = data.get(2);
+			SyncTrait sync = spark.get(SyncTrait.class);
 			
 			if(sync.interpolator != null){
-				sync.interpolator.push(entity, x, y);
+				sync.interpolator.push(spark, x, y);
 			}else{
-				entity.position().set(x, y);
+				spark.pos().set(x, y);
 			}
 		}
 	};
 
-	public abstract SyncData write(KoruEntity entity);
+	public abstract SyncData write(Spark spark);
 
-	public abstract void read(SyncData buffer, KoruEntity entity);
+	public abstract void read(SyncData buffer, Spark spark);
 
 }

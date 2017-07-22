@@ -87,6 +87,9 @@ public class StyleLoader{
 		pixelfont2.getData().setScale(2f);
 		pixelfont2.setUseIntegerPositions(false);
 		styles.add("pixel-font-noborder", pixelfont2);
+		
+		BitmapFont pixelfontsm = new BitmapFont(Gdx.files.internal("fonts/pixel-small.fnt"));
+		styles.add("pixel-font-small", pixelfontsm);
 
 		styles.load(skinFile);
 

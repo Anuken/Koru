@@ -1,17 +1,20 @@
 package io.anuke.koru.entities.types;
 
-import io.anuke.koru.components.ParticleComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.RenderComponent;
-import io.anuke.koru.entities.ComponentList;
-import io.anuke.koru.entities.EntityType;
-import io.anuke.koru.renderers.ParticleRenderer;
+import io.anuke.koru.traits.ParticleTrait;
+import io.anuke.ucore.ecs.Prototype;
+import io.anuke.ucore.ecs.TraitList;
+import io.anuke.ucore.ecs.extend.traits.PosTrait;
 
-public class Particle extends EntityType{
+public class Particle extends Prototype{
 
 	@Override
-	public ComponentList components(){
-		return list(new PositionComponent(), new RenderComponent(new ParticleRenderer()), new ParticleComponent());
+	public TraitList traits(){
+		return new TraitList(
+			new PosTrait(), 
+			//TODO
+			//new RenderComponent(new ParticleRenderer()), 
+			new ParticleTrait()
+		);
 	}
 
 }

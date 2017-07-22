@@ -1,40 +1,39 @@
 package io.anuke.koru.systems;
 
-import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.utils.Array;
 
-import io.anuke.koru.components.ConnectionComponent;
-import io.anuke.koru.components.PositionComponent;
-import io.anuke.koru.components.SyncComponent;
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
+import io.anuke.koru.traits.ConnectionTrait;
+import io.anuke.koru.traits.SyncTrait;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.ecs.TraitProcessor;
 import io.anuke.ucore.util.Timers;
 
-public class SyncSystem extends KoruSystem{
+public class SyncSystem extends TraitProcessor{
 	static public float syncrange = 150;
 	
 	public SyncSystem(){
-		super(Family.all(PositionComponent.class, ConnectionComponent.class).get());
+		super(ConnectionTrait.class);
 	}
 	
-	public void update(float delta){
+	public void update(Array<Spark> sparks){
 		if(Timers.get("synctimer", Network.packetFrequency))
-			super.update(delta);
+			super.update(sparks);
 	}
-
-	@Override
-	protected void processEntity(KoruEntity player, float delta){
+	
+	public void update(Spark spark){
 		
 		WorldUpdatePacket packet = new WorldUpdatePacket();
 
-		getEngine().map().getNearbySyncables(player.getX(), player.getY(), syncrange, (entity)->{
-			if(entity == player) return;
-			packet.updates.put(entity.getID(), entity.get(SyncComponent.class).type.write(entity));
+		spark.getBasis().getProcessor(EntityMapper.class).getNearbySyncables(spark.pos().x, spark.pos().y, syncrange, (entity)->{
+			if(entity == spark) return;
+			packet.updates.put(entity.getID(), entity.get(SyncTrait.class).type.write(entity));
 		});
-
 		
-		if(packet.updates.size != 0) IServer.instance().sendTCP(player.get(ConnectionComponent.class).connectionID, packet);
+		if(packet.updates.size != 0) 
+			IServer.instance().send(spark.get(ConnectionTrait.class).connectionID, packet, false);
 	}
 	
 }

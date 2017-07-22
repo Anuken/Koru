@@ -7,14 +7,14 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.IServer;
-import io.anuke.koru.systems.CollisionDebugSystem;
-import io.anuke.koru.systems.KoruEngine;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
+import io.anuke.koru.world.Tile;
+import io.anuke.ucore.core.Effects;
+import io.anuke.ucore.ecs.Basis;
+import io.anuke.ucore.ecs.extend.processors.TileCollisionProcessor;
 import io.anuke.ucore.modules.ModuleController;
-import io.anuke.ucore.util.ColorCodes;
-import io.anuke.ucore.util.Strings;
-import io.anuke.ucore.util.Timers;
+import io.anuke.ucore.util.*;
 
 public class Koru extends ModuleController<Koru>{
 	//TODO static context smell?
@@ -24,7 +24,7 @@ public class Koru extends ModuleController<Koru>{
 	public static World world;
 	public static Network network;
 	
-	public static KoruEngine engine;
+	public static Basis basis;
 	
 	private static StringBuffer log = new StringBuffer();
 
@@ -32,7 +32,19 @@ public class Koru extends ModuleController<Koru>{
 	public void init(){
 		Resources.loadMaterials();
 		
-		engine = new KoruEngine();
+		basis = new Basis();
+		
+		basis.addProcessor(new TileCollisionProcessor(World.tilesize, (x, y)->{
+			Tile tile = world.getTile(x, y);
+			return tile != null && tile.solid();
+		}, (x, y, out)->{
+			Tile tile = world.getTile(x, y);
+			tile.block().getType().getHitbox(x, y, out);
+		}));
+		
+		Effects.setEffectProvider((name, color, x, y)->{
+			throw new IllegalArgumentException("Effects cannot be created clientside!");
+		});
 
 		addModule(network = new Network());
 		addModule(control = new Control());
@@ -41,13 +53,13 @@ public class Koru extends ModuleController<Koru>{
 		addModule(world = new World());
 		addModule(ui = new UI());
 		
-		engine.addSystem(new CollisionDebugSystem());
+		//engine.addSystem(new CollisionDebugSystem());
 	}
 
 	@Override
 	public void render(){
 		
-		Timers.update(delta());
+		Timers.update(Mathf.delta());
 		
 		try{
 			
@@ -59,7 +71,7 @@ public class Koru extends ModuleController<Koru>{
 			long mstart = TimeUtils.nanoTime();
 			
 			super.render();
-			engine.update(Gdx.graphics.getDeltaTime()*60f);
+			basis.update();
 			if(Profiler.update()){
 				Profiler.moduleTime = TimeUtils.timeSinceNanos(mstart);
 				Profiler.totalTime = TimeUtils.timeSinceNanos(start);
@@ -75,10 +87,6 @@ public class Koru extends ModuleController<Koru>{
 			Gdx.app.exit();
 		}
 		
-	}
-	
-	public static float delta(){
-		return IServer.active() ? IServer.instance().getDelta() : Gdx.graphics.getDeltaTime()*60f;
 	}
 
 	public static void log(Object o){

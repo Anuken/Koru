@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.world.BreakType;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.ecs.Spark;
 				
 public abstract class Material{
 	private static ArrayList<Material> materials = new ArrayList<Material>();
@@ -118,7 +118,7 @@ public abstract class Material{
 		return variants;
 	}
 	
-	public void onInteract(Tile tile, int x, int y, KoruEntity entity){}
+	public void onInteract(Tile tile, int x, int y, Spark spark){}
 	
 	@Override
 	public String toString(){

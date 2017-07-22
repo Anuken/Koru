@@ -51,10 +51,6 @@ public class Item{
 		return id;
 	}
 	
-	public WeaponType weaponType(){
-		return WeaponType.sword;
-	}
-	
 	public float getBreakSpeed(BreakType type){
 		return 0;
 	}

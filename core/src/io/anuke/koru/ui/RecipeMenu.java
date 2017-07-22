@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
@@ -58,7 +58,7 @@ public class RecipeMenu extends Table{
 		public void draw(Batch batch, float alpha){
 			if(stacks == null) return;
 			
-			InventoryComponent inv = Koru.control.player.get(InventoryComponent.class);
+			InventoryTrait inv = Koru.control.player.get(InventoryTrait.class);
 			
 			for(int i = 0; i < stacks.length; i ++){
 				TextureRegion region = Draw.region(stacks[i].item.name() + "item");
@@ -96,7 +96,7 @@ public class RecipeMenu extends Table{
 				selected = Slot.this;
 				req.set(recipe.requirements());
 					
-				Koru.control.player.getComponent(InventoryComponent.class).recipe = x;
+				Koru.control.player.get(InventoryTrait.class).recipe = x;
 					
 				RecipeSelectPacket packet = new RecipeSelectPacket();
 				packet.recipe = x;

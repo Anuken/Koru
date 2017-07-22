@@ -6,63 +6,52 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.server.world.TerrainGenerator;
 import io.anuke.koru.server.world.WorldFile;
-import io.anuke.koru.systems.InputSystem;
-import io.anuke.koru.systems.KoruEngine;
+import io.anuke.koru.systems.EntityMapper;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
+import io.anuke.koru.world.Tile;
+import io.anuke.ucore.ecs.Basis;
+import io.anuke.ucore.ecs.extend.processors.TileCollisionProcessor;
 import io.anuke.ucore.util.ColorCodes;
+import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timers;
 
 public class KoruUpdater{
-	KoruServer server;
-	public KoruEngine engine;
-	public World world;
+	private static final int maxfps = 60;
+	
+	public final Basis basis;
+	public final World world;
 	public final WorldFile file;
+	public final EntityMapper mapper;
+	
+	private final KoruServer server;
+	
 	private boolean isRunning = true;
-	private CopyOnWriteArrayList<SendRequest> sendQueue = new CopyOnWriteArrayList<SendRequest>(); //TODO remove this
-	final int maxfps = 60;
-	long frameid;
-	float delta = 1f;
-	long lastFpsTime;
-	final int blockupdatetime = 60 * 6;
-	CountDownLatch latch = new CountDownLatch(1);
-	int threads = 0;
-	int totalchunks = 0;
+	private long frameid;
+	private float delta = 1f;
+	private long lastFpsTime;
+	private final int blockupdatetime = 60 * 6;
+	private CountDownLatch latch = new CountDownLatch(1);
+	private int threads = 0;
+	private int totalchunks = 0;
 	boolean skipSave = true;
 
 	void loop(){
 		try{
 			Timers.update(delta);
-			engine.update(delta);
+			basis.update();
 			world.update();
-			checkQueue();
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Entity update loop error!");
 			System.exit(1);
 		}
-	}
-	
-	//this is pretty terrible
-	void checkQueue(){
-		for(SendRequest r : sendQueue){
-			r.life -= delta;
-			if(r.life <= 0){
-				server.sendToAll(r.object);
-				sendQueue.remove(r);
-			}
-		}
-	}
-	
-	public void addToSendQueue(Object object){
-		sendQueue.add(new SendRequest(object));
 	}
 
 	void stop(){
@@ -102,11 +91,23 @@ public class KoruUpdater{
 			throw new RuntimeException(e);
 		}
 		
+		Mathf.setDeltaProvider(()->delta);
+		
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
+		
 		world = new World(file);
-		engine = new KoruEngine();
-		engine.addSystem(new SyncSystem());
-		engine.addSystem(new InputSystem());
+		
+		basis = new Basis();
+		basis.addProcessor((mapper = new EntityMapper()));
+		basis.addProcessor(new SyncSystem());
+		
+		basis.addProcessor(new TileCollisionProcessor(World.tilesize, (x, y)->{
+			Tile tile = world.getTile(x, y);
+			return tile != null && tile.solid();
+		}, (x, y, out)->{
+			Tile tile = world.getTile(x, y);
+			tile.block().getType().getHitbox(x, y, out);
+		}));
 
 		Runtime.getRuntime().addShutdownHook(new Thread(()->{
 			saveAll();
@@ -165,14 +166,5 @@ public class KoruUpdater{
 			
 			if(--threads == 0) latch.countDown();
 		}).start();
-	}
-	
-	class SendRequest{
-		Object object;
-		float life = 4;
-		
-		public SendRequest(Object object){
-			this.object = object;
-		}
 	}
 }

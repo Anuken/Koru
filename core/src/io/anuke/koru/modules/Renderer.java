@@ -16,16 +16,12 @@ import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
-import io.anuke.koru.components.InventoryComponent;
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.graphics.KoruCursors;
-import io.anuke.koru.graphics.KoruRenderable;
-import io.anuke.koru.graphics.ProcessorSurface;
+import io.anuke.koru.graphics.*;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
-import io.anuke.koru.systems.CollisionDebugSystem;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
@@ -35,6 +31,7 @@ import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
+import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.lights.Light;
 import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
@@ -50,7 +47,7 @@ public class Renderer extends RendererModule<Koru>{
 	public static final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
 	
 	private World world;
-	private KoruEntity player;
+	private Spark player;
 	private ProcessorSurface surface;
 	private RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	private Sprite shadowSprite;
@@ -73,6 +70,8 @@ public class Renderer extends RendererModule<Koru>{
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
 		loadShaders();
+		
+		EffectLoader.load();
 		
 		RayHandler.isDiffuse = true;
 		rays = new RayHandler();
@@ -175,7 +174,7 @@ public class Renderer extends RendererModule<Koru>{
 		}
 		
 		light.setPosition(camera.position.x, camera.position.y+7);
-		Tile tile = world.getWorldTile(player.getX(), player.getY());
+		Tile tile = world.getWorldTile(player.pos().x, player.pos().y);
 		
 		if(tile == null) return;
 		
@@ -192,9 +191,11 @@ public class Renderer extends RendererModule<Koru>{
 		clearScreen();
 		drawMap();
 		RenderableHandler.instance().renderAll();
-
-		if(Koru.control.debug)
-			Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
+		
+		//TODO
+		//if(Koru.control.debug)
+		//	Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
+		
 		if(pixelate) endPixel();
 		Draw.surface(true);
 		
@@ -209,7 +210,7 @@ public class Renderer extends RendererModule<Koru>{
 		if(getModule(UI.class).menuOpen()) return;
 
 		Tile tile = world.getTile(cursorX(), cursorY());
-		ItemStack stack = player.inventory().hotbarStack();
+		ItemStack stack = player.get(InventoryTrait.class).hotbarStack();
 		
 		if(stack != null && tile != null && playerReachesBlock()){
 			Material select = null;
@@ -276,14 +277,14 @@ public class Renderer extends RendererModule<Koru>{
 
 		r.sort(Sorter.object);
 
-		InventoryComponent inv = player.inventory();
+		InventoryTrait inv = player.get(InventoryTrait.class);
 
 		Tile tile = world.getTile(x, y);
 		
 		
 		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.isType(ItemType.placer) && inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
 
-			if(Vector2.dst(World.world(x), World.world(y), player.getX(), player.getY()) < InputHandler.reach && World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
+			if(Vector2.dst(World.world(x), World.world(y), player.pos().x, player.pos().y) < InputHandler.reach && World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
 				Draw.color(0.5f, 1f, 0.5f, 0.3f);
 			}else{
 				Draw.color(1f, 0.5f, 0.5f, 0.3f);
@@ -304,7 +305,7 @@ public class Renderer extends RendererModule<Koru>{
 	}
 	
 	boolean playerReachesBlock(){
-		return Vector2.dst(World.world(cursorX()), World.world(cursorY()), player.getX(), player.getY()) < InputHandler.reach;
+		return Vector2.dst(World.world(cursorX()), World.world(cursorY()), player.pos().x, player.pos().y) < InputHandler.reach;
 	}
 
 	int cursorX(){
@@ -392,9 +393,9 @@ public class Renderer extends RendererModule<Koru>{
 
 	void updateCamera(){
 		if(Settings.getBool("smoothcam")){
-			smoothCamera(player.getX(), player.getY(), 0.05f);
+			smoothCamera(player.pos().x, player.pos().y, 0.05f);
 		}else{
-			camera.position.set(player.getX(), player.getY(), 0);
+			camera.position.set(player.pos().x, player.pos().y, 0);
 		}
 		camera.update();
 	}

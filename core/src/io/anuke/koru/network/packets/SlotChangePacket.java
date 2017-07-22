@@ -4,6 +4,6 @@ import io.anuke.koru.items.ItemStack;
 
 public class SlotChangePacket{
 	public int slot;
-	public long id;
+	public int id;
 	public ItemStack stack;
 }

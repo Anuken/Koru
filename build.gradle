@@ -62,14 +62,13 @@ project(":core") {
     dependencies {
 		compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 		compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 		
 		compile 'com.github.Anuken:GDXGifRecorder:c9fa647'
 		compile 'com.github.anuken:gdx-postprocessing:8173fd4bb6'
-		compile 'com.github.Anuken:ucore:-SNAPSHOT'
+		compile 'com.github.anuken:ucore:633a63c4c3'
     }
 }
 

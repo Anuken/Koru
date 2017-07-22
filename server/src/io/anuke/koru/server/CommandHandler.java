@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.MathUtils;
 
-import io.anuke.koru.entities.KoruEntity;
-import io.anuke.koru.entities.types.TestEntity;
+import io.anuke.koru.entities.Prototypes;
+import io.anuke.koru.systems.EntityMapper;
+import io.anuke.ucore.ecs.Processor;
+import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.util.Mathf;
 
 
 public class CommandHandler{
@@ -47,38 +49,38 @@ public class CommandHandler{
 		
 		cmd("spawn", ()->{
 			for(int i = 0; i < 30; i++){
-				KoruEntity entity = new KoruEntity(TestEntity.class);
-				entity.position().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
-				entity.add().send();
+				Spark entity = new Spark(Prototypes.testEntity);
+				entity.pos().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
+				server.addSpark(entity);
 			}
 			
-			print("spawning 30 entities. (now "+PURPLE+server.updater.engine.getEntities().size()+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(server.updater.delta/60f)+LIGHT_CYAN +" FPS.)");
+			print("spawning 30 entities. (now "+PURPLE+server.updater.basis.getSparks().size+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(Mathf.delta()/60f)+LIGHT_CYAN +" FPS.)");
 		});
 		
 		cmd("systems", ()->{
-			for(EntitySystem system : server.updater.engine.getSystems()){
-				print(YELLOW + "- " + system.getClass().getSimpleName()  + (system.checkProcessing() ? GREEN + " [Enabled]" : RED  +" [Disabled]"));
+			for(Processor system : server.updater.basis.getProcessors()){
+				print(YELLOW + "- " + system.getClass().getSimpleName()  + (system.isEnabled() ? GREEN + " [Enabled]" : RED  +" [Disabled]"));
 			}
 		});
 		
 		cmd("entities", ()->{
-			print(YELLOW + server.updater.engine.getEntities().size());
+			print(YELLOW + server.updater.basis.getSparks().size);
 		});
 		
 		cmd("fps", ()->{
-			print(YELLOW + 1f/(server.updater.delta/60f));
+			print(YELLOW + 1f/(Mathf.delta()/60f));
 		});
 		
 		cmd("cells", ()->{
-			print(YELLOW + server.updater.engine.map().getCellAmount());
+			print(YELLOW + server.updater.basis.getProcessor(EntityMapper.class).getCellAmount());
 		});
 		
 		cmd("sysdisable", "<name>", (args)->{
 			String name = args[0];
 			
-			for(EntitySystem system : server.updater.engine.getSystems()){
+			for(Processor system : server.updater.basis.getProcessors()){
 				if(name.equals(system.getClass().getSimpleName().toLowerCase())){
-					system.setProcessing(false);
+					system.setEnabled(false);
 					print(YELLOW + "System '"+name+"' disabled.");
 					return;
 				}
@@ -90,9 +92,9 @@ public class CommandHandler{
 		cmd("sysenable", "<name>", (args)->{
 			String name = args[0];
 			
-			for(EntitySystem system : server.updater.engine.getSystems()){
+			for(Processor system : server.updater.basis.getProcessors()){
 				if(name.equals(system.getClass().getSimpleName().toLowerCase())){
-					system.setProcessing(true);
+					system.setEnabled(true);;
 					print(YELLOW + "System '"+name+"' enabled.");
 					return;
 				}

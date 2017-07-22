@@ -4,13 +4,14 @@ import static io.anuke.koru.world.materials.MaterialTypes.*;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.koru.entities.KoruEntity;
 import io.anuke.koru.items.Items;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.MenuOpenPacket;
+import io.anuke.koru.traits.ConnectionTrait;
 import io.anuke.koru.ui.CraftingMenu;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.TileData;
+import io.anuke.ucore.ecs.Spark;
 
 /**Artifical materials built by the player.*/
 public class StructMaterials{
@@ -61,11 +62,11 @@ public class StructMaterials{
 			interactable = true;
 		}
 		
-		public void onInteract(Tile tile, int x, int y, KoruEntity entity){
+		public void onInteract(Tile tile, int x, int y, Spark spark){
 			//TODO cleaner way to do this
 			MenuOpenPacket packet = new MenuOpenPacket();
 			packet.type = CraftingMenu.class;
-			IServer.instance().sendTCP(entity.connection().connectionID, packet);
+			IServer.instance().send(spark.get(ConnectionTrait.class).connectionID, packet, false);
 		}
 		
 		class Data extends TileData{
