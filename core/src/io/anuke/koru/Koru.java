@@ -30,28 +30,35 @@ public class Koru extends ModuleController<Koru>{
 
 	@Override
 	public void init(){
-		Resources.loadMaterials();
 		
-		basis = new Basis();
-		
-		basis.addProcessor(new TileCollisionProcessor(World.tilesize, (x, y)->{
-			Tile tile = world.getTile(x, y);
-			return tile != null && tile.solid();
-		}, (x, y, out)->{
-			Tile tile = world.getTile(x, y);
-			tile.block().getType().getHitbox(x, y, out);
-		}));
-		
-		Effects.setEffectProvider((name, color, x, y)->{
-			throw new IllegalArgumentException("Effects cannot be created clientside!");
-		});
-
-		addModule(network = new Network());
-		addModule(control = new Control());
-		addModule(renderer = new Renderer());
-		
-		addModule(world = new World());
-		addModule(ui = new UI());
+		try{
+			
+			Resources.loadMaterials();
+			
+			basis = new Basis();
+			
+			basis.addProcessor(new TileCollisionProcessor(World.tilesize, (x, y)->{
+				Tile tile = world.getTile(x, y);
+				return tile != null && tile.solid();
+			}, (x, y, out)->{
+				Tile tile = world.getTile(x, y);
+				tile.block().getType().getHitbox(x, y, out);
+			}));
+			
+			Effects.setEffectProvider((name, color, x, y)->{
+				throw new IllegalArgumentException("Effects cannot be created clientside!");
+			});
+	
+			addModule(network = new Network());
+			addModule(control = new Control());
+			addModule(renderer = new Renderer());
+			
+			addModule(world = new World());
+			addModule(ui = new UI());
+			
+		}catch (Exception e){
+			handleException(e);
+		}
 		
 		//engine.addSystem(new CollisionDebugSystem());
 	}
@@ -78,15 +85,20 @@ public class Koru extends ModuleController<Koru>{
 			}
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			
-			//write log
-			if(!System.getProperty("user.name").equals("anuke"))
-			Gdx.files.local("korulog-" + Calendar.getInstance().getTime() + ".log").writeString(Strings.parseException(e), false);
-			//exit, nothing left to do here
-			Gdx.app.exit();
+			handleException(e);
 		}
 		
+	}
+	
+	static void handleException(Exception e){
+		e.printStackTrace();
+		
+		//write log - useless for me, since I can just see the stack trace
+		if(!System.getProperty("user.name").equals("anuke")){
+			Gdx.files.local("korulog-" + Calendar.getInstance().getTime() + ".log").writeString(Strings.parseException(e), false);
+		}
+		//exit, nothing left to do here
+		Gdx.app.exit();
 	}
 
 	public static void log(Object o){

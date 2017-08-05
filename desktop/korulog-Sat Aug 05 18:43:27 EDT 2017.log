@@ -1,0 +1,17 @@
+java.lang.RuntimeException: Fragment shader:
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : error C7531: global function textureSize2D requires "#extension GL_EXT_gpu_shader4 : enable" before use
+0(35) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+io.anuke.ucore.graphics.Shader.<init>(Shader.java:14)
+io.anuke.ucore.core.Shaders.load(Shaders.java:17)
+io.anuke.koru.modules.Renderer.loadShaders(Renderer.java:96)
+io.anuke.koru.modules.Renderer.<init>(Renderer.java:72)
+io.anuke.koru.Koru.init(Koru.java:53)
+io.anuke.ucore.modules.ModuleController.create(ModuleController.java:98)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.initializeListener(Lwjgl3Window.java:416)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:364)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:136)
+com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:110)
+io.anuke.koru.desktop.DesktopLauncher.main(DesktopLauncher.java:23)
