@@ -1,0 +1,6 @@
+{
+    paddingX: 2,
+    paddingY: 2,
+    edgePadding: true,
+	duplicatePadding: true
+}

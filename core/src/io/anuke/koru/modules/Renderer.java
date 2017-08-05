@@ -61,7 +61,7 @@ public class Renderer extends RendererModule<Koru>{
 	public Renderer() {
 		cameraScale = scale;
 		
-		atlas = new RepackableAtlas(Gdx.files.internal("sprites/koru.atlas"));
+		atlas = new RepackableAtlas(Gdx.files.internal("sprites/sprites.atlas"));
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
