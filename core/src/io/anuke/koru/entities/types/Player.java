@@ -64,7 +64,7 @@ public class Player extends Prototype{
 							spark.pos().x, spark.pos().y, dir.direction == Direction.left ? - 12 : 12, 12);
 					
 					//TODO fix ugly font size
-					if(spark.get(ConnectionTrait.class).local){
+					if(!spark.get(ConnectionTrait.class).local){
 						Resources.font2().setColor(Color.YELLOW);
 						
 						Resources.font2().getData().setScale(1f);

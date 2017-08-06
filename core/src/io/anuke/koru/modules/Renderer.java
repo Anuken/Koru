@@ -23,7 +23,6 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Profiler;
-import io.anuke.koru.utils.RepackableAtlas;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
@@ -32,11 +31,13 @@ import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.lights.Light;
 import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
 import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.renderables.*;
+import io.anuke.ucore.util.Tmp;
 
 public class Renderer extends RendererModule<Koru>{
 	//TODO why are these final?
@@ -61,7 +62,7 @@ public class Renderer extends RendererModule<Koru>{
 	public Renderer() {
 		cameraScale = scale;
 		
-		atlas = new RepackableAtlas(Gdx.files.internal("sprites/sprites.atlas"));
+		atlas = new Atlas("sprites.atlas");
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
@@ -94,15 +95,16 @@ public class Renderer extends RendererModule<Koru>{
 	
 	void loadShaders(){
 		Shaders.load("outline", "outline", "outline", (shader, params)->{
+			shader.setUniformf("u_texsize", Tmp.v1.set(atlas.getTextures().first().getWidth(), atlas.getTextures().first().getHeight()));
 			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
-			
 		});
 		
 		Shaders.load("inline", "inline", "outline", (shader, params)->{
 			TextureRegion region = (TextureRegion)params[4];
 			
-			shader.setUniformf("u_size", new Vector2(region.getRegionWidth(), region.getRegionHeight()));
-			shader.setUniformf("u_pos", new Vector2(region.getRegionX(), region.getRegionY()));
+			shader.setUniformf("u_texsize", Tmp.v1.set(region.getTexture().getWidth(), region.getTexture().getHeight()));
+			shader.setUniformf("u_size", Tmp.v1.set(region.getRegionWidth(), region.getRegionHeight()));
+			shader.setUniformf("u_pos", Tmp.v1.set(region.getRegionX(), region.getRegionY()));
 			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
 		});
 	}

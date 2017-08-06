@@ -1,6 +1,3 @@
-#version 130
-#extension GL_EXT_gpu_shader4 : enable
-
 #ifdef GL_ES
 precision mediump float;
 precision mediump int;
@@ -9,17 +6,16 @@ precision mediump int;
 uniform sampler2D u_texture;
 
 uniform vec4 u_color;
+uniform vec2 u_texsize;
 
 varying vec4 v_color;
 varying vec2 v_texCoord;
 
 void main() {
 
-	ivec2 size = textureSize2D(u_texture, 0);
-
 	vec2 T = v_texCoord.xy;
 
-	vec2 v = vec2(1.0/size.x, 1.0/size.y);
+	vec2 v = vec2(1.0/u_texsize.x, 1.0/u_texsize.y);
 
 	bool any = false;
 
