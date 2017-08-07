@@ -37,6 +37,7 @@ import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
 import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.renderables.*;
+import io.anuke.ucore.util.Timers;
 import io.anuke.ucore.util.Tmp;
 
 public class Renderer extends RendererModule<Koru>{
@@ -60,6 +61,8 @@ public class Renderer extends RendererModule<Koru>{
 	private float darkness = 1f;
 	
 	public Renderer() {
+		Timers.mark();
+		
 		cameraScale = scale;
 		
 		atlas = new Atlas("sprites.atlas");
@@ -88,7 +91,7 @@ public class Renderer extends RendererModule<Koru>{
 		
 		Draw.addSurface(surface = new ProcessorSurface());
 
-		Koru.log("Loaded resources.");
+		Koru.log("Loaded resources. Time taken: " + Timers.elapsed() + " ms.");
 		
 		pixelate();
 	}

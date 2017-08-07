@@ -6,7 +6,7 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "io.anuke.koru.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
-def PACKR_DIR = "/home/anuke/Documents/Packr/"
+def PACKR_DIR = "$System.env.PACKR_DIR"
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -63,6 +63,8 @@ ext.getPlatform = {
 
 //note: call desktop:dist beforehand
 task packrCmd(type: Exec) {
+
+	if(!project.hasProperty('platform')) return;
 
 	copy{
 		into PACKR_DIR
