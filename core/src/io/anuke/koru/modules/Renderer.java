@@ -214,10 +214,10 @@ public class Renderer extends RendererModule<Koru>{
 	void drawSelectOverlay(FuncRenderable r){
 		if(getModule(UI.class).menuOpen()) return;
 
-		Tile tile = world.getTile(cursorX(), cursorY());
+		Tile tile = world.getTile(Koru.control.cursorX(), Koru.control.cursorY());
 		ItemStack stack = player.get(InventoryTrait.class).hotbarStack();
 		
-		if(stack != null && tile != null && playerReachesBlock()){
+		if(stack != null && tile != null && Koru.control.playerReachesBlock()){
 			Material select = null;
 			
 			if(stack.breaks(tile.block().breakType())){
@@ -235,11 +235,11 @@ public class Renderer extends RendererModule<Koru>{
 			}
 			
 			String name = select.name() + 
-					select.getType().drawString(cursorX(), cursorY(), select);
+					select.getType().drawString(Koru.control.cursorX(), Koru.control.cursorY(), select);
 			
 			TextureRegion region = Draw.region(name);
 			
-			RenderableList list = getRenderable(cursorX(), cursorY());
+			RenderableList list = getRenderable(Koru.control.cursorX(), Koru.control.cursorY());
 			
 			if(list.renderables.size == 0) return;
 			
@@ -255,12 +255,12 @@ public class Renderer extends RendererModule<Koru>{
 	void drawTileOverlay(FuncRenderable r){
 		if(getModule(UI.class).menuOpen()) return;
 
-		int x = cursorX();
-		int y = cursorY();
+		int x =Koru.control. cursorX();
+		int y = Koru.control.cursorY();
 
 		Tile tile = world.getTile(x, y);
 
-		if(tile != null && tile.block().interactable() && playerReachesBlock()){
+		if(tile != null && tile.block().interactable() && Koru.control.playerReachesBlock()){
 			boolean overlay = tile.block().getType() == MaterialTypes.overlay;
 			KoruCursors.setCursor("select");
 			
@@ -275,8 +275,8 @@ public class Renderer extends RendererModule<Koru>{
 
 	void drawBlockOverlay(FuncRenderable r){
 
-		int x = cursorX();
-		int y = cursorY();
+		int x = Koru.control.cursorX();
+		int y = Koru.control.cursorY();
 
 		r.layer = y * World.tilesize;
 
@@ -307,18 +307,6 @@ public class Renderer extends RendererModule<Koru>{
 			Draw.color();
 		}
 		
-	}
-	
-	boolean playerReachesBlock(){
-		return Vector2.dst(World.world(cursorX()), World.world(cursorY()), player.pos().x, player.pos().y) < InputHandler.reach;
-	}
-
-	int cursorX(){
-		return World.tile(Graphics.mouseWorld().x);
-	}
-
-	int cursorY(){
-		return World.tile(Graphics.mouseWorld().y);
 	}
 
 	void drawMap(){

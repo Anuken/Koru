@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
+import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
@@ -186,6 +187,18 @@ public class Control extends Module<Koru>{
 		p.y = blocky;
 		p.material = Materials.grassblock.id();
 		getModule(Network.class).client.sendTCP(p);
+	}
+	
+	boolean playerReachesBlock(){
+		return Vector2.dst(World.world(cursorX()), World.world(cursorY()), player.pos().x, player.pos().y) < InputHandler.reach;
+	}
+
+	int cursorX(){
+		return World.tile(Graphics.mouseWorld().x);
+	}
+
+	int cursorY(){
+		return World.tile(Graphics.mouseWorld().y);
 	}
 
 	@Override
