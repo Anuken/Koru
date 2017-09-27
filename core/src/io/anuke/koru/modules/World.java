@@ -23,11 +23,11 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.StructMaterialTypes;
+import io.anuke.ucore.core.Core;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
-import io.anuke.ucore.util.Mathf;
-import io.anuke.ucore.util.Timers;
 
 public class World extends Module<Koru>{
 	public static final int chunksize = 16;
@@ -41,8 +41,6 @@ public class World extends Module<Koru>{
 	private boolean updated;
 	private GridPoint2 point = new GridPoint2();
 	private WorldLoader file;
-	private Renderer renderer;
-	private Network network;
 	private boolean[][] chunkloaded;
 	
 	public int lastchunkx, lastchunky;
@@ -65,8 +63,7 @@ public class World extends Module<Koru>{
 	}
 	
 	public void init(){
-		network = getModule(Network.class);
-		renderer = getModule(Renderer.class);
+		
 	}
 	
 	//TODO move time and color related function to a different class?
@@ -85,15 +82,15 @@ public class World extends Module<Koru>{
 		
 		if(IServer.active() && Timers.get("checkunload", 80)) checkUnloadChunks();
 	
-		time += Mathf.delta()/timescale;
+		time += Timers.delta()/timescale;
 		if(time >= 1f) time = 0f;
 		
 		updated = false;
 		
 		if(IServer.active()) return;
 
-		int newx = toChunkCoords(renderer.camera.position.x);
-		int newy = toChunkCoords(renderer.camera.position.y);
+		int newx = toChunkCoords(Core.camera.position.x);
+		int newy = toChunkCoords(Core.camera.position.y);
 
 		//camera moved, update chunks
 		if(newx != lastchunkx || newy != lastchunky){
@@ -173,7 +170,7 @@ public class World extends Module<Koru>{
 					ChunkRequestPacket packet = new ChunkRequestPacket();
 					packet.x = lastchunkx + x - loadrange;
 					packet.y = lastchunky + y - loadrange;
-					network.client.sendTCP(packet);
+					Koru.network.client.sendTCP(packet);
 				}
 			}
 		}
@@ -238,8 +235,8 @@ public class World extends Module<Koru>{
 
 	public boolean inClientBounds(int x, int y){
 		if(IServer.active()) return true;
-		int tx = tile(renderer.camera.position.x);
-		int ty = tile(renderer.camera.position.y);
+		int tx = tile(Core.camera.position.x);
+		int ty = tile(Core.camera.position.y);
 		if(Math.abs(tx - x) >= loadrange * chunksize - 1 || Math.abs(ty - y) >= loadrange * chunksize - 1) return false;
 		int ax = x / chunksize - tx / chunksize + loadrange;
 		int ay = y / chunksize - ty / chunksize + loadrange;

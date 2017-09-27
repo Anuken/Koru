@@ -9,16 +9,16 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.traits.MaterialTrait;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Prototype;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.TraitList;
 import io.anuke.ucore.ecs.extend.traits.LifetimeTrait;
 import io.anuke.ucore.ecs.extend.traits.PosTrait;
-import io.anuke.ucore.ecs.extend.traits.RenderableTrait;
-import io.anuke.ucore.renderables.Renderable;
-import io.anuke.ucore.renderables.Sorter;
-import io.anuke.ucore.renderables.SpriteRenderable;
-import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.ecs.extend.traits.FacetTrait;
+import io.anuke.ucore.facet.Facet;
+import io.anuke.ucore.facet.Sorter;
+import io.anuke.ucore.facet.SpriteFacet;
 
 public class BlockAnimation extends Prototype{
 	//rotation speed
@@ -28,7 +28,7 @@ public class BlockAnimation extends Prototype{
 	public TraitList traits(){
 		return new TraitList(
 			new PosTrait(), 
-			new RenderableTrait((trait, spark)->{
+			new FacetTrait((trait, spark)->{
 				final float rspeed = Koru.control.player.pos().x < spark.pos().x ? 
 					-BlockAnimation.rspeed : BlockAnimation.rspeed;
 				
@@ -45,7 +45,7 @@ public class BlockAnimation extends Prototype{
 				
 				if(material.getType() == MaterialTypes.tree){
 					
-					SpriteRenderable bot = trait.list.renderables.peek().sprite();
+					SpriteFacet bot = trait.list.renderables.peek().sprite();
 					
 					int theight = bot.sprite.getRegionHeight()/9;
 					
@@ -60,18 +60,18 @@ public class BlockAnimation extends Prototype{
 					
 					bot.sprite.setSize(region.getRegionWidth(), theight);
 					
-					SpriteRenderable top = new SpriteRenderable(tr);
+					SpriteFacet top = new SpriteFacet(tr);
 					top.set(bot.sprite.getX(), bot.sprite.getY() + theight).layer(bot.getLayer()).sort(Sorter.object);
 					top.sprite.setOrigin(top.sprite.getWidth()/2, 0);
 					top.add(trait.list);
 				}
 				
 				trait.draw(d->{
-					for(Renderable r : trait.list.renderables)
+					for(Facet r : trait.list.renderables)
 						r.sprite().alpha(spark.life().ifract());
 					
 					if(spark.get(MaterialTrait.class).material().getType() == MaterialTypes.tree)
-						trait.list.renderables.get(2).sprite().sprite.rotate(rspeed*Mathf.delta());
+						trait.list.renderables.get(2).sprite().sprite.rotate(rspeed*Timers.delta());
 				});
 			}),
 			new LifetimeTrait(50),

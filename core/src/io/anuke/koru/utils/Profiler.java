@@ -1,6 +1,6 @@
 package io.anuke.koru.utils;
 
-import io.anuke.ucore.util.Timers;
+import io.anuke.ucore.core.Timers;
 
 public class Profiler{
 	public static long renderTime = 0;

@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import io.anuke.koru.items.BlockRecipes;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.koru.world.materials.StructMaterials;
-import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.core.Core;
 
 public class Resources{
 	private static Json json;
@@ -25,7 +25,7 @@ public class Resources{
 	
 	public static void loadParticle(String name){
 		ParticleEffect effect = new ParticleEffect();
-		effect.load(Gdx.files.internal("particles/" + name), DrawContext.atlas);
+		effect.load(Gdx.files.internal("particles/" + name), Core.atlas);
 		particles.put(name, new ParticleEffectPool(effect, 5, 30));
 	}
 	
@@ -34,19 +34,19 @@ public class Resources{
 	}
 	
 	public static BitmapFont font(){
-		return DrawContext.font;
+		return Core.font;
 	}
 	
 	public static BitmapFont font2(){
-		return DrawContext.skin.getFont("pixel-font-noborder");
+		return Core.skin.getFont("pixel-font-noborder");
 	}
 	
 	public static BitmapFont font3(){
-		return DrawContext.skin.getFont("pixel-font");
+		return Core.skin.getFont("pixel-font");
 	}
 	
 	public static BitmapFont font(String name){
-		return DrawContext.skin.getFont(name);
+		return Core.skin.getFont(name);
 	}
 	
 	public static Json getJson(){

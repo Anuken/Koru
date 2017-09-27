@@ -1,6 +1,6 @@
 package io.anuke.koru.ui;
 
-import static io.anuke.ucore.core.DrawContext.skin;
+import static io.anuke.ucore.core.Core.skin;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;

@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.MathUtils;
 
 import io.anuke.koru.entities.Prototypes;
 import io.anuke.koru.systems.EntityMapper;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Processor;
 import io.anuke.ucore.ecs.Spark;
-import io.anuke.ucore.util.Mathf;
 
 
 public class CommandHandler{
@@ -54,7 +54,7 @@ public class CommandHandler{
 				server.addSpark(entity);
 			}
 			
-			print("spawning 30 entities. (now "+PURPLE+server.updater.basis.getSparks().size+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(Mathf.delta()/60f)+LIGHT_CYAN +" FPS.)");
+			print("spawning 30 entities. (now "+PURPLE+server.updater.basis.getSparks().size+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(Timers.delta()/60f)+LIGHT_CYAN +" FPS.)");
 		});
 		
 		cmd("systems", ()->{
@@ -68,7 +68,7 @@ public class CommandHandler{
 		});
 		
 		cmd("fps", ()->{
-			print(YELLOW + 1f/(Mathf.delta()/60f));
+			print(YELLOW + 1f/(Timers.delta()/60f));
 		});
 		
 		cmd("cells", ()->{

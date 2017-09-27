@@ -2,9 +2,9 @@ package io.anuke.koru.graphics;
 
 import io.anuke.koru.modules.World;
 import io.anuke.ucore.core.Draw;
-import io.anuke.ucore.renderables.*;
+import io.anuke.ucore.facet.*;
 
-public class KoruRenderable extends SpriteRenderable{
+public class KoruRenderable extends SpriteFacet{
 	
 	public KoruRenderable(){
 		
@@ -42,22 +42,22 @@ public class KoruRenderable extends SpriteRenderable{
 		return this;
 	}
 
-	public KoruRenderable addShadow(RenderableGroup group){
+	public KoruRenderable addShadow(FacetMap group){
 		group.add("shadow", generateShadow());
 		return this;
 	}
 
-	public KoruRenderable addShadow(RenderableList list){
+	public KoruRenderable addShadow(FacetList list){
 		list.add(generateShadow());
 		return this;
 	}
 
-	public KoruRenderable addShadow(RenderableList list, float offset){
+	public KoruRenderable addShadow(FacetList list, float offset){
 		list.add(generateShadow().add(0, offset));
 		return this;
 	}
 	
-	public KoruRenderable addShadow(RenderableGroup list, float offset){
+	public KoruRenderable addShadow(FacetMap list, float offset){
 		list.add("shadow", generateShadow().add(0, offset));
 		return this;
 	}

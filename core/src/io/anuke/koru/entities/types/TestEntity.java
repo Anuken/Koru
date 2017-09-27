@@ -15,7 +15,7 @@ public class TestEntity extends Prototype{
 			new PosTrait(),
 			//TODO
 			//new RenderComponent(new EnemyRenderer()), 
-			new RenderableTrait((trait, spark)->{
+			new FacetTrait((trait, spark)->{
 				trait.draw(d->{
 					d.layer = spark.pos().y;
 					

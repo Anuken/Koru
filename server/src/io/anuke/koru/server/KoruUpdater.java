@@ -16,11 +16,10 @@ import io.anuke.koru.systems.EntityMapper;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.ecs.extend.processors.TileCollisionProcessor;
 import io.anuke.ucore.util.ColorCodes;
-import io.anuke.ucore.util.Mathf;
-import io.anuke.ucore.util.Timers;
 
 public class KoruUpdater{
 	private static final int maxfps = 60;
@@ -44,7 +43,7 @@ public class KoruUpdater{
 
 	void loop(){
 		try{
-			Timers.update(delta);
+			Timers.update();
 			basis.update();
 			world.update();
 		}catch(Exception e){
@@ -56,10 +55,6 @@ public class KoruUpdater{
 
 	void stop(){
 		isRunning = false;
-	}
-
-	public float delta(){
-		return delta;
 	}
 
 	public void run(){
@@ -91,7 +86,7 @@ public class KoruUpdater{
 			throw new RuntimeException(e);
 		}
 		
-		Mathf.setDeltaProvider(()->delta);
+		Timers.setDeltaProvider(()->delta);
 		
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
 		

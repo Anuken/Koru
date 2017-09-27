@@ -14,10 +14,11 @@ import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.utils.Profiler;
+import io.anuke.ucore.core.Core;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
-import io.anuke.ucore.util.Timers;
 
 public class Network extends Module<Koru>{
 	public static final int port = 7575;
@@ -245,7 +246,7 @@ public class Network extends Module<Koru>{
 		PositionPacket pos = new PositionPacket();
 		pos.x = player.pos().x;
 		pos.y = player.pos().y;
-		pos.mouseangle = Angles.mouseAngle(getModule(Renderer.class).camera, player.pos().x, player.pos().y);
+		pos.mouseangle = Angles.mouseAngle(Core.camera, player.pos().x, player.pos().y);
 		player.get(InputTrait.class).input.mouseangle = pos.mouseangle;
 		pos.direction = player.get(DirectionTrait.class).direction;
 		

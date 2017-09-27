@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.facet.FacetList;
+import io.anuke.ucore.facet.Sorter;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.renderables.RenderableList;
-import io.anuke.ucore.renderables.Sorter;
 
 public class MaterialTypes{
 	public static final Color grasscolor = new Color(0x62962fff);
@@ -18,7 +18,7 @@ public class MaterialTypes{
 	public static final MaterialType 
 	
 	tile = new MaterialType(){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			if(tile.block().getType() == block) return;
 			
 			if(world().blends(x, y, material))
@@ -33,7 +33,7 @@ public class MaterialTypes{
 	},
 	
 	grass = new MaterialType(){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			int rand = rand(x,y,16);
 			
 			if(world().blends(x, y, material))
@@ -54,7 +54,7 @@ public class MaterialTypes{
 	},
 	
 	water = new MaterialType(){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			
 			sprite((material.name()  + drawString(x, y, material)))
 					.set(x * World.tilesize, y * World.tilesize).layer(-material.id() * 2).add(group);
@@ -67,7 +67,7 @@ public class MaterialTypes{
 	},
 	
 	block = new MaterialType(false, true){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			sprite(("walldropshadow"))
 			.shadow()
 			.tile(x, y)
@@ -83,7 +83,7 @@ public class MaterialTypes{
 	},
 	
 	overlay = new MaterialType(false, false){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			
 			String name = material.name() + drawString(x, y, material);
 			
@@ -100,7 +100,7 @@ public class MaterialTypes{
 			color = Hue.rgb(80, 53, 30);
 		}
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			float offset = variantOffset(x, y, material);
 			
 			sprite((material.name() + drawString(x, y, material)))
@@ -121,7 +121,7 @@ public class MaterialTypes{
 	},
 	
 	object = new MaterialType(false, false){
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			float offset = variantOffset(x, y, material);
 			
 			sprite((material.name() + drawString(x, y, material)))
@@ -135,7 +135,7 @@ public class MaterialTypes{
 	tallgrassblock = new MaterialType(false, false){
 		static final float add = 0.94f;
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			float yadd = 0;
 			
 			Vector3 tint = tile.topTile().foilageTint();
@@ -179,7 +179,7 @@ public class MaterialTypes{
 	shortgrassblock = new MaterialType(false, false){
 		static final float add = 0.96f;
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			float xadd = 0;
 			
 			Vector3 tint = tile.topTile().foilageTint();

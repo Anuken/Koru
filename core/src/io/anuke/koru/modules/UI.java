@@ -10,12 +10,12 @@ import io.anuke.koru.modules.Control.GameState;
 import io.anuke.koru.ui.*;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.core.Inputs;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.function.VisibilityProvider;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.utils.Cursors;
-import io.anuke.ucore.util.Timers;
 
 public class UI extends SceneModule<Koru> {
 	private ObjectMap<Class<?>, Menu> menus = new ObjectMap<>();

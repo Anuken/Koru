@@ -10,7 +10,7 @@ import io.anuke.koru.graphics.KoruRenderable;
 import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.world.Tile;
-import io.anuke.ucore.renderables.RenderableList;
+import io.anuke.ucore.facet.FacetList;
 
 public abstract class MaterialType{
 	public boolean tile, solid;
@@ -78,7 +78,7 @@ public abstract class MaterialType{
 		return solid;
 	}
 	
-	public abstract void draw(RenderableList group, Material material, Tile tile, int x, int y);
+	public abstract void draw(FacetList group, Material material, Tile tile, int x, int y);
 	
 	public int size(){
 		return 24;

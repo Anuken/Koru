@@ -9,10 +9,10 @@ import io.anuke.koru.traits.*;
 import io.anuke.koru.traits.DirectionTrait.Direction;
 import io.anuke.koru.utils.Resources;
 import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Prototype;
 import io.anuke.ucore.ecs.TraitList;
 import io.anuke.ucore.ecs.extend.traits.*;
-import io.anuke.ucore.util.Mathf;
 
 public class Player extends Prototype{
 	
@@ -52,7 +52,7 @@ public class Player extends Prototype{
 		return new TraitList(
 			new PosTrait(),
 			new ConnectionTrait(),
-			new RenderableTrait((trait, spark)->{
+			new FacetTrait((trait, spark)->{
 				
 				trait.draw(l->{
 					l.layer = spark.pos().y;
@@ -73,7 +73,7 @@ public class Player extends Prototype{
 						Resources.font2().setColor(Color.WHITE);
 						
 						if(dir.walking){
-							dir.walktime += Mathf.delta();
+							dir.walktime += Timers.delta();
 						}else{
 							dir.walktime = 0;
 						}

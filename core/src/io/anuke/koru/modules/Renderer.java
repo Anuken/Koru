@@ -1,5 +1,7 @@
 package io.anuke.koru.modules;
 
+import static io.anuke.ucore.core.Core.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -14,9 +16,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.bitfire.utils.ShaderLoader;
 
-import io.anuke.gif.GifRecorder;
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.*;
+import io.anuke.koru.graphics.Shaders.Inline;
+import io.anuke.koru.graphics.Shaders.Outline;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
@@ -31,14 +34,12 @@ import io.anuke.koru.world.materials.MaterialTypes;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.facet.*;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.lights.Light;
 import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
 import io.anuke.ucore.modules.RendererModule;
-import io.anuke.ucore.renderables.*;
-import io.anuke.ucore.util.Timers;
-import io.anuke.ucore.util.Tmp;
 
 public class Renderer extends RendererModule<Koru>{
 	//TODO why are these final?
@@ -51,11 +52,11 @@ public class Renderer extends RendererModule<Koru>{
 	private World world;
 	private Spark player;
 	private ProcessorSurface surface;
-	private RenderableList[][] renderables = new RenderableList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
+	private FacetList[][] renderables = new FacetList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	private Sprite shadowSprite;
 	private int lastcamx, lastcamy;
-	private GifRecorder recorder;
 	
+	//TODO round alpha, but not colors
 	private RayHandler rays;
 	private PointLight light;
 	private float darkness = 1f;
@@ -63,17 +64,16 @@ public class Renderer extends RendererModule<Koru>{
 	public Renderer() {
 		Timers.mark();
 		
-		cameraScale = scale;
+		Core.cameraScale = scale;
 		
 		atlas = new Atlas("sprites.atlas");
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
-		recorder = new GifRecorder(batch);
 		
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
-		loadShaders();
+		Shaders.create();
 		
 		EffectLoader.load();
 		
@@ -83,7 +83,7 @@ public class Renderer extends RendererModule<Koru>{
 		light = new PointLight(rays, 300, Color.WHITE, 1135, 0, 0);
 		light.setSoftnessLength(40f);
 
-		RenderableHandler.instance().setLayerManager(new DrawLayerManager());
+		Facets.instance().setLayerManager(new FacetLayerHandler());
 		KoruCursors.setCursor("cursor");
 		KoruCursors.updateCursor();
 
@@ -94,22 +94,6 @@ public class Renderer extends RendererModule<Koru>{
 		Koru.log("Loaded resources. Time taken: " + Timers.elapsed() + " ms.");
 		
 		pixelate();
-	}
-	
-	void loadShaders(){
-		Shaders.load("outline", "outline", "outline", (shader, params)->{
-			shader.setUniformf("u_texsize", Tmp.v1.set(atlas.getTextures().first().getWidth(), atlas.getTextures().first().getHeight()));
-			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
-		});
-		
-		Shaders.load("inline", "inline", "outline", (shader, params)->{
-			TextureRegion region = (TextureRegion)params[4];
-			
-			shader.setUniformf("u_texsize", Tmp.v1.set(region.getTexture().getWidth(), region.getTexture().getHeight()));
-			shader.setUniformf("u_size", Tmp.v1.set(region.getRegionWidth(), region.getRegionHeight()));
-			shader.setUniformf("u_pos", Tmp.v1.set(region.getRegionX(), region.getRegionY()));
-			shader.setUniformf("u_color", new Color((float)params[0], (float)params[1], (float)params[2], (float)params[3]));
-		});
 	}
 
 	void loadMaterialColors(){
@@ -136,9 +120,9 @@ public class Renderer extends RendererModule<Koru>{
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
 
-		new FuncRenderable(this::drawBlockOverlay).add();
-		new FuncRenderable(-Sorter.light-1, Sorter.object, this::drawTileOverlay).add();
-		new FuncRenderable(-Sorter.light-1, Sorter.object, this::drawSelectOverlay).add();
+		new BaseFacet(this::drawBlockOverlay).add();
+		new BaseFacet(-Sorter.light-1, Sorter.object, this::drawTileOverlay).add();
+		new BaseFacet(-Sorter.light-1, Sorter.object, this::drawSelectOverlay).add();
 
 		shadowSprite = new Sprite(Draw.region("lightshadow"));
 		shadowSprite.setSize(52, 52);
@@ -195,7 +179,7 @@ public class Renderer extends RendererModule<Koru>{
 		if(pixelate) beginPixel();
 		clearScreen();
 		drawMap();
-		RenderableHandler.instance().renderAll();
+		Facets.instance().renderAll();
 		
 		//TODO
 		//if(Koru.control.debug)
@@ -208,10 +192,10 @@ public class Renderer extends RendererModule<Koru>{
 		rays.updateAndRender();
 		
 		if(Koru.control.canMove())
-			recorder.update();
+			record();
 	}
 	
-	void drawSelectOverlay(FuncRenderable r){
+	void drawSelectOverlay(BaseFacet r){
 		if(getModule(UI.class).menuOpen()) return;
 
 		Tile tile = world.getTile(Koru.control.cursorX(), Koru.control.cursorY());
@@ -239,32 +223,36 @@ public class Renderer extends RendererModule<Koru>{
 			
 			TextureRegion region = Draw.region(name);
 			
-			RenderableList list = getRenderable(Koru.control.cursorX(), Koru.control.cursorY());
+			FacetList list = getRenderable(Koru.control.cursorX(), Koru.control.cursorY());
 			
 			if(list.renderables.size == 0) return;
 			
 			KoruRenderable b = (KoruRenderable)(list.renderables.peek());
 			
-			Draw.shader("inline", outlineColor.r, outlineColor.g, outlineColor.b, 1f, region);
+			Draw.getShader(Inline.class).region = region;
+			Draw.getShader(Inline.class).color = outlineColor;
+			Draw.shader(Inline.class);
 			b.draw();
 			Draw.shader();
 		}
 		
 	}
 
-	void drawTileOverlay(FuncRenderable r){
+	void drawTileOverlay(BaseFacet r){
 		if(getModule(UI.class).menuOpen()) return;
 
-		int x =Koru.control. cursorX();
+		int x = Koru.control. cursorX();
 		int y = Koru.control.cursorY();
 
 		Tile tile = world.getTile(x, y);
-
+		
+		//TODO
 		if(tile != null && tile.block().interactable() && Koru.control.playerReachesBlock()){
 			boolean overlay = tile.block().getType() == MaterialTypes.overlay;
 			KoruCursors.setCursor("select");
 			
-			Draw.shader("outline", outlineColor.r, outlineColor.g, outlineColor.b, 1f);
+			Draw.getShader(Outline.class).color = outlineColor;
+			Draw.shader(Outline.class);
 			
 			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), 
 					x * World.tilesize, y * World.tilesize + (overlay ? 0 : 6 + tile.block().getType().variantOffset(x, y, tile.block())));
@@ -273,7 +261,7 @@ public class Renderer extends RendererModule<Koru>{
 		}
 	}
 
-	void drawBlockOverlay(FuncRenderable r){
+	void drawBlockOverlay(BaseFacet r){
 
 		int x = Koru.control.cursorX();
 		int y = Koru.control.cursorY();
@@ -323,7 +311,7 @@ public class Renderer extends RendererModule<Koru>{
 		lastcamy = camy;
 	}
 	
-	RenderableList getRenderable(int worldx, int worldy){
+	FacetList getRenderable(int worldx, int worldy){
 		int camx = world.toChunkCoords(camera.position.x), camy =world.toChunkCoords(camera.position.y);
 		return renderables[(worldx + renderables.length/2 - camx*World.chunksize)][(worldy + renderables[0].length/2 - camy*World.chunksize)];
 	}
@@ -358,7 +346,7 @@ public class Renderer extends RendererModule<Koru>{
 						if(renderables[rendx][rendy] != null){
 							renderables[rendx][rendy].free();
 						}else{
-							renderables[rendx][rendy] = new RenderableList();
+							renderables[rendx][rendy] = new FacetList();
 						}
 
 						if(tile.topTile() != Materials.air && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24 && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 36){

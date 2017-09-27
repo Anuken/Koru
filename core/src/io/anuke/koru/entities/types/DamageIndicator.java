@@ -17,7 +17,7 @@ public class DamageIndicator extends Prototype{
 	public TraitList traits(){
 		return new TraitList(
 			new PosTrait(), 
-			new RenderableTrait((trait, spark)->{
+			new FacetTrait((trait, spark)->{
 				trait.draw(p->{
 					ChildTrait child = spark.get(ChildTrait.class);
 					Spark parent = Koru.basis.getSpark(child.parent);

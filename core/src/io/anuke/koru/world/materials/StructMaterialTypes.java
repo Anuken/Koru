@@ -6,9 +6,9 @@ import io.anuke.koru.graphics.KoruRenderable;
 import io.anuke.koru.graphics.RenderPool;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
-import io.anuke.ucore.renderables.RenderableList;
-import io.anuke.ucore.renderables.Sorter;
-import io.anuke.ucore.util.Timers;
+import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.facet.FacetList;
+import io.anuke.ucore.facet.Sorter;
 
 public class StructMaterialTypes{
 	
@@ -19,7 +19,7 @@ public class StructMaterialTypes{
 			color = new Color(0x744a28ff);
 		}
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			
 			//light overlay
 			new KoruRenderable("torchflame1"){
@@ -58,7 +58,7 @@ public class StructMaterialTypes{
 	
 	chest = new MaterialType(false, false){
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 			
 			RenderPool.get(material.name())
 			.set(tile(x), tile(y) + material.offset())
@@ -70,7 +70,7 @@ public class StructMaterialTypes{
 	
 	workbench = new MaterialType(false, false){
 		
-		public void draw(RenderableList group, Material material, Tile tile, int x, int y){
+		public void draw(FacetList group, Material material, Tile tile, int x, int y){
 
 			RenderPool.get(material.name())
 			.set(tile(x), tile(y) + material.offset())

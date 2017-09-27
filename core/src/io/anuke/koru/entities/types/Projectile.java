@@ -12,7 +12,7 @@ import io.anuke.ucore.ecs.extend.traits.ProjectileTrait.ProjectileType;
 public class Projectile extends Prototype{
 	
 	public Projectile(){
-		event(TileCollision.class, spark->{
+		event(TileCollision.class, (spark, x, y)->{
 			spark.get(ProjectileTrait.class).type.removed(spark);
 			spark.remove();
 		});

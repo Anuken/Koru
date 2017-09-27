@@ -2,7 +2,7 @@ package io.anuke.koru.graphics;
 
 import com.badlogic.gdx.utils.Pools;
 
-import io.anuke.ucore.renderables.*;
+import io.anuke.ucore.facet.*;
 
 public class RenderPool{
 	
@@ -14,19 +14,19 @@ public class RenderPool{
 		return Pools.obtain(KoruRenderable.class).region(region).shadow();
 	}
 	
-	public static TextRenderable text(){
-		return Pools.obtain(TextRenderable.class);
+	public static TextFacet text(){
+		return Pools.obtain(TextFacet.class);
 	}
 
-	public static SpriteRenderable light(){
+	public static SpriteFacet light(){
 		return Pools.obtain(KoruRenderable.class);
 	}
 	
-	public static ParticleRenderable particle(){
-		return Pools.obtain(ParticleRenderable.class);
+	public static ParticleFacet particle(){
+		return Pools.obtain(ParticleFacet.class);
 	}
 	
-	public static void free(Renderable r){
+	public static void free(Facet r){
 		if(r.getClass().isAnonymousClass()) return;
 		
 		Pools.free(r);

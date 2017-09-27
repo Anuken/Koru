@@ -7,9 +7,9 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.traits.ConnectionTrait;
 import io.anuke.koru.traits.SyncTrait;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.TraitProcessor;
-import io.anuke.ucore.util.Timers;
 
 public class SyncSystem extends TraitProcessor{
 	static public float syncrange = 150;

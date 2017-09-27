@@ -10,7 +10,7 @@ import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.TraitList;
 import io.anuke.ucore.ecs.extend.traits.LifetimeTrait;
 import io.anuke.ucore.ecs.extend.traits.PosTrait;
-import io.anuke.ucore.ecs.extend.traits.RenderableTrait;
+import io.anuke.ucore.ecs.extend.traits.FacetTrait;
 
 public class Effect extends Prototype{
 
@@ -20,12 +20,12 @@ public class Effect extends Prototype{
 			new PosTrait(),
 			new EffectTrait(),
 			new LifetimeTrait(),
-			new RenderableTrait((trait, spark)->{
+			new FacetTrait((trait, spark)->{
 				trait.draw(d->{
 					d.layer = spark.pos().y;
 					
 					EffectTrait effect = spark.get(EffectTrait.class);
-					Effects.renderEffect(Effects.getEffect(effect.name), effect.color, spark.life().life, spark.pos().x, spark.pos().y);
+					Effects.renderEffect(spark.getID(), Effects.getEffect(effect.name), effect.color, spark.life().life, spark.pos().x, spark.pos().y);
 				});
 			})
 		);

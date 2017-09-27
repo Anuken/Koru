@@ -11,12 +11,14 @@ import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Effects;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.ecs.extend.processors.TileCollisionProcessor;
-import io.anuke.ucore.modules.ModuleController;
-import io.anuke.ucore.util.*;
+import io.anuke.ucore.modules.ModuleCore;
+import io.anuke.ucore.util.ColorCodes;
+import io.anuke.ucore.util.Strings;
 
-public class Koru extends ModuleController<Koru>{
+public class Koru extends ModuleCore<Koru>{
 	//TODO static context smell?
 	public static Renderer renderer;
 	public static Control control;
@@ -66,7 +68,7 @@ public class Koru extends ModuleController<Koru>{
 	@Override
 	public void render(){
 		
-		Timers.update(Mathf.delta());
+		Timers.update();
 		
 		try{
 			

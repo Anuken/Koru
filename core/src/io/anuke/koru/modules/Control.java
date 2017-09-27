@@ -135,7 +135,7 @@ public class Control extends Module<Koru>{
 		ItemStack stack = player.get(InventoryTrait.class).hotbarStack();
 		
 		if(stack != null && stack.isType(ItemType.weapon)){
-			float angle = Angles.mouseAngle(getModule(Renderer.class).camera, player.pos().x, player.pos().y);
+			float angle = Angles.mouseAngle(Core.camera, player.pos().x, player.pos().y);
 			
 			//TODO set direction angle
 			dc.setOrdinal((int)((angle-45f)/90f));
