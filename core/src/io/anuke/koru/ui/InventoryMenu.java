@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
@@ -44,7 +43,7 @@ public class InventoryMenu extends Table{
 			slot.clicked(() -> {
 				InventoryClickPacket packet = new InventoryClickPacket();
 				packet.index = slot.index;
-				Koru.module(Network.class).client.sendTCP(packet);
+				Koru.network.client.sendTCP(packet);
 			});
 			add(slot).size(slotsize);
 

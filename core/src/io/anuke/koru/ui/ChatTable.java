@@ -11,8 +11,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.modules.Network;
-import io.anuke.koru.modules.Renderer;
 import io.anuke.koru.network.packets.ChatPacket;
 import io.anuke.ucore.scene.Scene;
 import io.anuke.ucore.scene.ui.Label;
@@ -118,7 +116,7 @@ public class ChatTable extends Table{
 		
 		ChatPacket packet = new ChatPacket();
 		packet.message = message;
-		Koru.module(Renderer.class).getModule(Network.class).client.sendTCP(packet);
+		Koru.network.client.sendTCP(packet);
 	}
 	
 	public void toggle(){

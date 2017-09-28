@@ -1,5 +1,7 @@
 package io.anuke.koru.modules;
 
+import static io.anuke.koru.Koru.*;
+
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.Gdx;
@@ -20,7 +22,7 @@ import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
-public class Network extends Module<Koru>{
+public class Network extends Module{
 	public static final int port = 7575;
 	public static final int ping = 0;
 	public static final int pingInterval = 60;
@@ -89,19 +91,19 @@ public class Network extends Module<Koru>{
 		});
 		
 		handle(ChunkPacket.class,p->{
-			getModule(World.class).loadChunks(p);
+			world.loadChunks(p);
 			chunksAdded = true;
 		});
 		
 		handle(TileUpdatePacket.class,p->{
-			if(getModule(World.class).inClientBounds(p.x, p.y))
-				getModule(World.class).setTile(p.x, p.y, p.tile);
+			if(world.inClientBounds(p.x, p.y))
+				world.setTile(p.x, p.y, p.tile);
 			chunksAdded = true;
 		});
 		
 		handle(MenuOpenPacket.class,p->{
 			Gdx.app.postRunnable(() -> {
-				getModule(UI.class).openMenu(p.type);
+				ui.openMenu(p.type);
 			});
 		});
 		
@@ -118,7 +120,7 @@ public class Network extends Module<Koru>{
 		
 		handle(ChatPacket.class,p->{
 			Gdx.app.postRunnable(() -> {
-				getModule(UI.class).handleChatMessage(p.message, p.sender);
+				ui.handleChatMessage(p.message, p.sender);
 			});
 		});
 		
@@ -169,8 +171,6 @@ public class Network extends Module<Koru>{
 		Koru.ui.showError("Connection error: Timed out.");
 
 		//reset everything.
-		
-		World world = getModule(World.class);
 
 		for(int x = 0; x < world.chunks.length; x++){
 			for(int y = 0; y < world.chunks[x].length; y++){
@@ -229,7 +229,7 @@ public class Network extends Module<Koru>{
 			sparksToRemove.remove(tempids.get(i));
 		
 		if(chunksAdded){
-			getModule(Renderer.class).updateTiles();
+			renderer.updateTiles();
 			chunksAdded = false;
 		}
 

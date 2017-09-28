@@ -13,9 +13,9 @@ import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Prototype;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.TraitList;
+import io.anuke.ucore.ecs.extend.traits.FacetTrait;
 import io.anuke.ucore.ecs.extend.traits.LifetimeTrait;
 import io.anuke.ucore.ecs.extend.traits.PosTrait;
-import io.anuke.ucore.ecs.extend.traits.FacetTrait;
 import io.anuke.ucore.facet.Facet;
 import io.anuke.ucore.facet.Sorter;
 import io.anuke.ucore.facet.SpriteFacet;
@@ -41,7 +41,7 @@ public class BlockAnimation extends Prototype{
 				int x = (int)(spark.pos().x/World.tilesize);
 				int y = (int)(spark.pos().y/World.tilesize);
 				
-				material.getType().draw(trait.list, material, Koru.module(World.class).getWorldTile(x, y), x, y);
+				material.getType().draw(trait.list, material, Koru.world.getWorldTile(x, y), x, y);
 				
 				if(material.getType() == MaterialTypes.tree){
 					

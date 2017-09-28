@@ -17,7 +17,7 @@ import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.utils.Cursors;
 
-public class UI extends SceneModule<Koru> {
+public class UI extends SceneModule{
 	private ObjectMap<Class<?>, Menu> menus = new ObjectMap<>();
 	private Menu currentMenu;
 	
@@ -30,10 +30,10 @@ public class UI extends SceneModule<Koru> {
 	private InventoryMenu inventory;
 	private RecipeMenu recipes;
 	
-	private VisibilityProvider titlevis = ()->{return Koru.control.isState(GameState.title);};
-	private VisibilityProvider playvis = ()->{return Koru.control.isPlaying();};
+	private VisibilityProvider titlevis = ()->Koru.control.isState(GameState.title);
+	private VisibilityProvider playvis = ()->Koru.control.isPlaying();
 
-	public UI() {
+	public UI(){
 		skin = StyleLoader.loadStyles();
 		Dialog.closePadR -= 1;
 		
@@ -60,7 +60,7 @@ public class UI extends SceneModule<Koru> {
 		
 		//TODO setting to autoshow this
 		
-		Timers.run(20, ()->{
+		Timers.run(10, ()->{
 			connect.show();
 		});
 	}

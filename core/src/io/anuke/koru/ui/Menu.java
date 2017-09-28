@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.modules.UI;
 import io.anuke.ucore.scene.ui.Dialog;
 import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.ImageButton.ImageButtonStyle;
@@ -33,7 +32,7 @@ public abstract class Menu extends Dialog{
 		titleTable.add(closeButton).padRight(-getPadRight() + 3.7f).size(40).padTop(-titleTable.getPadTop()-5);
 		
 		closeButton.changed(()->{
-			Koru.module(UI.class).closeMenu();
+			Koru.ui.closeMenu();
 		});
 
 		if (titleLabel.getLabelAlign() == Align.center && titleTable.getChildren().size == 2)

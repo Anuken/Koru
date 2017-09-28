@@ -21,31 +21,6 @@ public class Player extends Prototype{
 			return false;
 		});
 	}
-/*
-	@Override
-	public ComponentList components(){
-		return list(new PositionComponent(), new ConnectionComponent(),
-				new RenderComponent(new PlayerRenderer()), new ColliderComponent(), 
-				new WeaponComponent(), new LoadChunksComponent(),
-				new SyncComponent(SyncType.player), new InputComponent(), 
-				new HealthComponent(), new InventoryComponent(4,6));
-	}
-	
-	public void init(KoruEntity entity){
-		entity.get(InputComponent.class).input = new InputHandler(entity);
-		entity.collider().setSize(8, 6);
-	}
-	*/
-	
-	//TODO
-	public boolean removeDeath(){
-		return false;
-	}
-	
-	//TODO
-	public boolean unload(){
-		return false;
-	}
 
 	@Override
 	public TraitList traits(){
@@ -56,6 +31,12 @@ public class Player extends Prototype{
 				
 				trait.draw(l->{
 					l.layer = spark.pos().y;
+					
+					float x = spark.pos().x;
+					float y = spark.pos().y;
+					
+					spark.pos().x = (int)spark.pos().x;
+					spark.pos().y = (int)spark.pos().y;
 					
 					DirectionTrait dir = spark.get(DirectionTrait.class);
 					
@@ -68,7 +49,8 @@ public class Player extends Prototype{
 						Resources.font2().setColor(Color.YELLOW);
 						
 						Resources.font2().getData().setScale(1f);
-						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, (int)spark.pos().x, (int)spark.pos().y + 18, 0, Align.center, false);
+						Resources.font2().setUseIntegerPositions(false);
+						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, spark.pos().x, spark.pos().y + 18, 0, Align.center, false);
 					
 						Resources.font2().setColor(Color.WHITE);
 						
@@ -79,9 +61,11 @@ public class Player extends Prototype{
 						}
 					}
 					
+					spark.pos().x = x;
+					spark.pos().y = y;
 				});
 				
-				trait.drawShadow(spark, 14, 1);
+				trait.drawShadow(spark, 14, 1, true);
 			}),
 			new ColliderTrait(8, 6),
 			new ChunkLoadTrait(),

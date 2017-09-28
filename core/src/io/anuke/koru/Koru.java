@@ -18,8 +18,7 @@ import io.anuke.ucore.modules.ModuleCore;
 import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Strings;
 
-public class Koru extends ModuleCore<Koru>{
-	//TODO static context smell?
+public class Koru extends ModuleCore{
 	public static Renderer renderer;
 	public static Control control;
 	public static UI ui;
@@ -51,12 +50,12 @@ public class Koru extends ModuleCore<Koru>{
 				throw new IllegalArgumentException("Effects cannot be created clientside!");
 			});
 	
-			addModule(network = new Network());
-			addModule(control = new Control());
-			addModule(renderer = new Renderer());
+			module(network = new Network());
+			module(control = new Control());
+			module(renderer = new Renderer());
 			
-			addModule(world = new World());
-			addModule(ui = new UI());
+			module(world = new World());
+			module(ui = new UI());
 			
 		}catch (Exception e){
 			handleException(e);

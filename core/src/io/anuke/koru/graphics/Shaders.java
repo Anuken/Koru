@@ -21,7 +21,7 @@ public class Shaders{
 
 		@Override
 		public void apply(){
-			shader.setUniformf("u_texsize", Tmp.v1.set(region.getRegionWidth(), region.getRegionHeight()));
+			shader.setUniformf("u_texsize", Tmp.v1.set(region.getTexture().getWidth(), region.getTexture().getHeight()));
 			shader.setUniformf("u_color", color);
 		}
 	}

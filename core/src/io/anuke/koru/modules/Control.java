@@ -25,7 +25,7 @@ import io.anuke.ucore.ecs.extend.traits.TileCollideTrait;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
-public class Control extends Module<Koru>{
+public class Control extends Module{
 	public final Spark player;
 	public boolean debug = false, consoleOpen = false;
 	
@@ -137,10 +137,11 @@ public class Control extends Module<Koru>{
 		if(stack != null && stack.isType(ItemType.weapon)){
 			float angle = Angles.mouseAngle(Core.camera, player.pos().x, player.pos().y);
 			
-			//TODO set direction angle
 			dc.setOrdinal((int)((angle-45f)/90f));
-			if(angle > 360-45)
+			
+			if(angle > 360-45){
 				dc.direction = Direction.right;
+			}
 		}
 
 		vector.limit(speed);
@@ -165,7 +166,7 @@ public class Control extends Module<Koru>{
 			
 			SlotChangePacket packet = new SlotChangePacket();
 			packet.slot = inv.hotbar;
-			getModule(Network.class).client.sendTCP(packet);
+			Koru.network.client.sendTCP(packet);
 			
 		}else if(keycode == KeyBinds.get("interact")){
 			sendInput(InputType.interact, blockx, blocky);
@@ -178,7 +179,7 @@ public class Control extends Module<Koru>{
 		InputPacket packet = new InputPacket();
 		packet.data = params;
 		packet.type = type;
-		getModule(Network.class).client.sendTCP(packet);
+		Koru.network.client.sendTCP(packet);
 	}
 	
 	void sendBlock(){
@@ -186,7 +187,7 @@ public class Control extends Module<Koru>{
 		p.x = blockx;
 		p.y = blocky;
 		p.material = Materials.grassblock.id();
-		getModule(Network.class).client.sendTCP(p);
+		Koru.network.client.sendTCP(p);
 	}
 	
 	boolean playerReachesBlock(){
@@ -237,7 +238,7 @@ public class Control extends Module<Koru>{
 		
 		SlotChangePacket packet = new SlotChangePacket();
 		packet.slot = inv.hotbar;
-		getModule(Network.class).client.sendTCP(packet);
+		Koru.network.client.sendTCP(packet);
 		
 		return false;
 	}

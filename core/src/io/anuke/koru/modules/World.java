@@ -29,7 +29,7 @@ import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.modules.Module;
 
-public class World extends Module<Koru>{
+public class World extends Module{
 	public static final int chunksize = 16;
 	public static final int loadrange = 3;
 	public static final int tilesize = 12;
@@ -183,7 +183,7 @@ public class World extends Module<Koru>{
 	}
 
 	public static World instance(){
-		return IServer.active() ? IServer.instance().getWorld() : Koru.module(World.class);
+		return IServer.active() ? IServer.instance().getWorld() : Koru.world;
 	}
 
 	public boolean positionSolid(float x, float y){

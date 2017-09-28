@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
-import io.anuke.koru.Koru;
 import io.anuke.koru.entities.types.BlockAnimation;
 import io.anuke.koru.entities.types.ItemDrop;
 import io.anuke.koru.items.*;
@@ -38,12 +37,6 @@ public class InputHandler{
 		//weapon updating
 		ItemStack stack = spark.get(InventoryTrait.class).hotbarStack();
 		
-		/*
-		if(stack != null && stack.item.type()== ItemType.weapon){
-			stack.item.weaponType().setData(entity, stack, this, entity.get(WeaponComponent.class));
-			stack.item.weaponType().update(delta);
-		}
-		*/
 		// block breaking
 		if(key(InputType.leftclick_down)){
 			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
@@ -155,7 +148,6 @@ public class InputHandler{
 	}
 	
 	private void onInteract(){
-		Koru.log("handled interacting");
 		Tile tile = World.instance().getTile(blockx, blocky);
 		
 		if(tile.block().interactable()){
@@ -170,12 +162,6 @@ public class InputHandler{
 
 		if(stack == null)
 			return;
-		
-		if(stack.isType(ItemType.weapon)){
-			//why did WeaponComponent even exist?
-			//stack.getWeaponType().setData(spark, stack, this, spark.get(WeaponComponent.class));
-			//stack.getWeaponType().clicked(left);
-		}
 	}
 
 	private void inputKey(InputType type, Object... data){

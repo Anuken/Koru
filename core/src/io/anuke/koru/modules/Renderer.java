@@ -1,5 +1,6 @@
 package io.anuke.koru.modules;
 
+import static io.anuke.koru.Koru.*;
 import static io.anuke.ucore.core.Core.*;
 
 import com.badlogic.gdx.Gdx;
@@ -40,8 +41,9 @@ import io.anuke.ucore.lights.Light;
 import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
 import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.util.Mathf;
 
-public class Renderer extends RendererModule<Koru>{
+public class Renderer extends RendererModule{
 	//TODO why are these final?
 	public static final int viewrangex = 28;
 	public static final int viewrangey = 26;
@@ -49,7 +51,6 @@ public class Renderer extends RendererModule<Koru>{
 	public static final int scale = 4;
 	public static final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
 	
-	private World world;
 	private Spark player;
 	private ProcessorSurface surface;
 	private FacetList[][] renderables = new FacetList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
@@ -81,7 +82,7 @@ public class Renderer extends RendererModule<Koru>{
 		rays = new RayHandler();
 		rays.setBlurNum(3);
 		light = new PointLight(rays, 300, Color.WHITE, 1135, 0, 0);
-		light.setSoftnessLength(40f);
+		light.setSoftnessLength(20f);
 
 		Facets.instance().setLayerManager(new FacetLayerHandler());
 		KoruCursors.setCursor("cursor");
@@ -115,7 +116,6 @@ public class Renderer extends RendererModule<Koru>{
 	@Override
 	public void init(){
 		player = Koru.control.player;
-		world = getModule(World.class);
 
 		Resources.loadParticle("spark");
 		Resources.loadParticle("break");
@@ -132,22 +132,70 @@ public class Renderer extends RendererModule<Koru>{
 	public void update(){
 		long start = TimeUtils.nanoTime();
 		updateLight();
-		if(Koru.control.canMove())
+		
+		if(Koru.control.canMove()){
 			KoruCursors.setCursor("cursor");
+		}
 
 		surface.setLightColor(world.getAmbientColor());
 		
-		updateCamera();
-		batch.setProjectionMatrix(camera.combined);
+		float add = (int)(Graphics.size().y/Core.cameraScale * 2f) %2 == 1 ? 0.5f : 0;
+		
+		if(Settings.getBool("smoothcam")){
+			smoothCamera(player.pos().x, player.pos().y + add, 0.08f);
+		}else{
+			camera.position.set(player.pos().x, player.pos().y + add, 0);
+		}
+		
+		float lim = 7;
+		
+		if(Math.abs(player.pos().x - camera.position.x) > lim){
+			camera.position.x = player.pos().x - Mathf.clamp(player.pos().x - camera.position.x, -lim, lim);
+		}
+		
+		if(Math.abs(player.pos().y - camera.position.y) > lim){
+			camera.position.y = player.pos().y - Mathf.clamp(player.pos().y - camera.position.y, -lim, lim);
+		}
+		
+		float lastx = camera.position.x;
+		float lasty = camera.position.y;
+		
+		camera.position.set((int)lastx, (int)lasty + add, 0);
 
-		doRender();
-		updateCamera();
+		draw();
+		
+		camera.position.set(lastx, lasty, 0);
 		
 		if(Koru.control.canMove())
 			KoruCursors.updateCursor();
 
 		if(Profiler.update())
 			Profiler.renderTime = TimeUtils.timeSinceNanos(start);
+	}
+	
+	@Override
+	public void draw(){
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+
+		Draw.surface("processor");
+		if(pixelate) beginPixel();
+		
+		clearScreen();
+		
+		drawMap();
+		Facets.instance().renderAll();
+		
+		if(pixelate) endPixel();
+		
+		Draw.surface(true);
+		
+		rays.setCombinedMatrix(camera);
+		rays.updateAndRender();
+		
+		if(Koru.control.canMove()){
+			record();
+		}
 	}
 	
 	void updateLight(){
@@ -172,31 +220,9 @@ public class Renderer extends RendererModule<Koru>{
 		
 		light.setColor(darkness, darkness, darkness, 1f);
 	}
-
-	void doRender(){
-		
-		Draw.surface("processor");
-		if(pixelate) beginPixel();
-		clearScreen();
-		drawMap();
-		Facets.instance().renderAll();
-		
-		//TODO
-		//if(Koru.control.debug)
-		//	Koru.engine.getSystem(CollisionDebugSystem.class).update(0);
-		
-		if(pixelate) endPixel();
-		Draw.surface(true);
-		
-		rays.setCombinedMatrix(camera);
-		rays.updateAndRender();
-		
-		if(Koru.control.canMove())
-			record();
-	}
 	
 	void drawSelectOverlay(BaseFacet r){
-		if(getModule(UI.class).menuOpen()) return;
+		if(ui.menuOpen()) return;
 
 		Tile tile = world.getTile(Koru.control.cursorX(), Koru.control.cursorY());
 		ItemStack stack = player.get(InventoryTrait.class).hotbarStack();
@@ -231,6 +257,7 @@ public class Renderer extends RendererModule<Koru>{
 			
 			Draw.getShader(Inline.class).region = region;
 			Draw.getShader(Inline.class).color = outlineColor;
+			
 			Draw.shader(Inline.class);
 			b.draw();
 			Draw.shader();
@@ -239,7 +266,7 @@ public class Renderer extends RendererModule<Koru>{
 	}
 
 	void drawTileOverlay(BaseFacet r){
-		if(getModule(UI.class).menuOpen()) return;
+		if(ui.menuOpen()) return;
 
 		int x = Koru.control. cursorX();
 		int y = Koru.control.cursorY();
@@ -251,10 +278,14 @@ public class Renderer extends RendererModule<Koru>{
 			boolean overlay = tile.block().getType() == MaterialTypes.overlay;
 			KoruCursors.setCursor("select");
 			
+			String name = tile.block().name() + tile.block().getType().drawString(x, y, tile.block());
+			
 			Draw.getShader(Outline.class).color = outlineColor;
+			Draw.getShader(Outline.class).region = Draw.region(name);
+			
 			Draw.shader(Outline.class);
 			
-			Draw.crect(tile.block().name() + tile.block().getType().drawString(x, y, tile.block()), 
+			Draw.crect(name, 
 					x * World.tilesize, y * World.tilesize + (overlay ? 0 : 6 + tile.block().getType().variantOffset(x, y, tile.block())));
 
 			Draw.shader();
@@ -370,15 +401,6 @@ public class Renderer extends RendererModule<Koru>{
 		}
 		
 		rays.updateRects();
-	}
-
-	void updateCamera(){
-		if(Settings.getBool("smoothcam")){
-			smoothCamera(player.pos().x, player.pos().y, 0.05f);
-		}else{
-			camera.position.set(player.pos().x, player.pos().y, 0);
-		}
-		camera.update();
 	}
 	
 	@Override

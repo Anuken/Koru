@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 import io.anuke.koru.Koru;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.modules.Network;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
@@ -100,7 +99,7 @@ public class RecipeMenu extends Table{
 					
 				RecipeSelectPacket packet = new RecipeSelectPacket();
 				packet.recipe = x;
-				Koru.module(Network.class).client.sendTCP(packet);
+				Koru.network.client.sendTCP(packet);
 			});
 
 		}
