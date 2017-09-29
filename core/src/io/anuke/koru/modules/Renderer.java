@@ -139,12 +139,14 @@ public class Renderer extends RendererModule{
 
 		surface.setLightColor(world.getAmbientColor());
 		
-		float add = (int)(Graphics.size().y/Core.cameraScale * 2f) %2 == 1 ? 0.5f : 0;
+		float addx = 1f-(Graphics.size().x/Core.cameraScale) % 1f;
+		float addy = 1f-(Graphics.size().y/Core.cameraScale) % 1f;
 		
 		if(Settings.getBool("smoothcam")){
-			smoothCamera(player.pos().x, player.pos().y + add, 0.08f);
+			smoothCamera(player.pos().x + addx, player.pos().y + addy, 0.08f);
 		}else{
-			camera.position.set(player.pos().x, player.pos().y + add, 0);
+			addx = addy = 0;
+			camera.position.set(player.pos().x + addx, player.pos().y + addy, 0);
 		}
 		
 		float lim = 7;
@@ -160,7 +162,7 @@ public class Renderer extends RendererModule{
 		float lastx = camera.position.x;
 		float lasty = camera.position.y;
 		
-		camera.position.set((int)lastx, (int)lasty + add, 0);
+		camera.position.set((int)lastx + addx, (int)lasty + addy, 0);
 
 		draw();
 		

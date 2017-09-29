@@ -10,7 +10,7 @@ public class Interpolator{
 	static final float correctrange = 20f;
 	static Vector2 temp1 = new Vector2();
 	static Vector2 temp2 = new Vector2();
-	static float alpha = 0.23f;
+	static float alpha = 0.2f;
 	long lastupdate = -1;
 	float updateframes = 1f;
 	float lastx, lasty;
@@ -27,9 +27,9 @@ public class Interpolator{
 			lastx = 0;
 			lasty = 0;
 		}else if(Vector2.dst(e.pos().x, e.pos().y, x, y) < 0.15f){
-			e.pos().set(x, y);
-			lastx = 0;
-			lasty = 0;
+			//e.pos().set(x, y);
+			//lastx = 0;
+			//lasty = 0;
 		}
 	}
 	
