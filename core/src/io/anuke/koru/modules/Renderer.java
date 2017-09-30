@@ -219,7 +219,7 @@ public class Renderer extends RendererModule{
 		if(tile == null) return;
 		
 		float l = tile.light();
-		darkness = MathUtils.lerp(darkness, l, 0.005f);
+		darkness = MathUtils.lerp(darkness, l, 0.01f * Timers.delta());
 		
 		light.setColor(darkness, darkness, darkness, 1f);
 	}
@@ -233,9 +233,9 @@ public class Renderer extends RendererModule{
 		if(stack != null && tile != null && Koru.control.playerReachesBlock()){
 			Material select = null;
 			
-			if(stack.breaks(tile.wall().breakType())){
+			if(stack.breaks(tile.wall().breakType()) && tile.wall().isBreakable()){
 				select = tile.wall();
-			}else if(stack.breaks(tile.topFloor().breakType()) && tile.canRemoveTile()){
+			}else if(stack.breaks(tile.topFloor().breakType()) && tile.canRemoveTile() && tile.topFloor().isBreakable()){
 				select = tile.topFloor();
 			}
 			
@@ -279,14 +279,14 @@ public class Renderer extends RendererModule{
 			SpriteFacet facet = null;
 			
 			for(Facet check : list.facets){
-				if(check instanceof SpriteFacet &&
-						check.provider == Sorter.tile && check.getLayer() < -512 &&
+				if(check instanceof SpriteFacet && !(check.provider == Sorter.tile && check.getLayer() > -10) &&
 						!MathUtils.isEqual(check.getLayer(), Sorter.shadow)){
-					
 					facet = (SpriteFacet)check;
 					break;
 				}
 			}
+			
+			if(facet == null) return;
 			
 			Draw.getShader(Outline.class).color = outlineColor;
 			Draw.getShader(Outline.class).region = facet.sprite;
@@ -312,8 +312,8 @@ public class Renderer extends RendererModule{
 
 		Tile tile = world.getTile(x, y);
 		
-		
-		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.isType(ItemType.placer) && inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
+		if(inv.recipe != -1 && inv.hotbarStack() != null && inv.hotbarStack().item.isType(ItemType.placer) 
+				&& inv.hasAll(BlockRecipe.getRecipe(inv.recipe).requirements())){
 
 			if(Vector2.dst(World.world(x), World.world(y), player.pos().x, player.pos().y) < InputHandler.reach && World.isPlaceable(BlockRecipe.getRecipe(inv.recipe).result(), tile)){
 				Draw.color(0.5f, 1f, 0.5f, 0.3f);
@@ -325,9 +325,9 @@ public class Renderer extends RendererModule{
 			
 			
 			if(result.isLayer(MaterialLayer.floor)){
-				Draw.crect("blank", x*World.tilesize, y*World.tilesize, 12, 12);
+				Draw.rect("blank", x*World.tilesize, y*World.tilesize, 12, 12);
 			}else{
-				Draw.crect("block", x*World.tilesize, y*World.tilesize, 12, 20);
+				Draw.grect("block", x*World.tilesize, y*World.tilesize- World.tilesize/2, 12, 20);
 			}
 
 			Draw.color();

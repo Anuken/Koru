@@ -65,7 +65,7 @@ public class InputHandler{
 
 				if((int) (blockhold) % 20 == 1)
 					Effects.effect("blockparticle", select.getColor(), World.world(blockx), 
-							select instanceof Wall ? World.world(blocky) - 6 : World.world(blocky));
+							select instanceof Wall ? World.world(blocky) - 6.5f : World.world(blocky) - 1f);
 
 				if(blockhold >= select.breaktime()){
 					Effects.effect("blockbreak", select.getColor(), World.world(blockx), World.world(blocky) - 1);

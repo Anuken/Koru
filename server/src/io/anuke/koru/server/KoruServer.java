@@ -46,12 +46,12 @@ public class KoruServer extends IServer{
 
 	void setup(){
 		Resources.loadMaterials();
-		
-		Effects.setEffectProvider((name, color, x, y)->{
+
+		Effects.setEffectProvider((name, color, x, y) -> {
 			Spark spark = Effect.create(name, color, x, y);
-			addSpark(spark);
+			sendSpark(spark);
 		});
-		
+
 		commands = new CommandHandler(this);
 
 		try{
@@ -105,7 +105,7 @@ public class KoruServer extends IServer{
 			Koru.log("Connect packet recieved...");
 			Spark player = new Spark(Prototypes.player);
 			ConnectionInfo info = new ConnectionInfo(player.getID(), connection);
-			
+
 			registerConnection(info);
 
 			player.get(ConnectionTrait.class).connectionID = info.id;
@@ -128,25 +128,18 @@ public class KoruServer extends IServer{
 			sendToAllExceptTCP(info.id, player);
 
 			player.add();
-			
+
 			//NOTE: IF THE FOLLOWING MESSAGES DO NOT SEND, YOU HAVE A CLASSPATH ERROR!
 			//UPDATE the UCORE VERSION
-			
-			/*
-			InventoryComponent inv = player.get(InventoryComponent.class);
-			
-			inv.inventory[3][0] = new ItemStack(Items.woodhammer);
-			inv.inventory[2][0] = new ItemStack(Items.woodaxe);
-			inv.inventory[1][0] = new ItemStack(Items.woodpickaxe);
-			inv.inventory[0][0] = new ItemStack(Items.woodsword);
-			inv.sendUpdate(player);
-			 */
-			
+
 			InventoryTrait inv = player.get(InventoryTrait.class);
+
+			inv.addItem(new ItemStack(Items.tool));
+			inv.addItem(new ItemStack(Items.hammer));
 			inv.addItem(new ItemStack(Items.stick, 10));
 			inv.addItem(new ItemStack(Items.stone, 10));
 			inv.sendUpdate(player);
-			
+
 			//doesn't seem to work
 			//player.get(InventoryComponent.class).sendHotbarUpdate(player);
 
@@ -169,7 +162,7 @@ public class KoruServer extends IServer{
 				PositionPacket packet = (PositionPacket) object;
 				if(!connections.containsKey(info.id) || getPlayer(info) == null)
 					return;
-				
+
 				getPlayer(info).pos().set(packet.x, packet.y);
 				getPlayer(info).get(DirectionTrait.class).direction = packet.direction;
 				getPlayer(info).get(InputTrait.class).input.mouseangle = packet.mouseangle;
@@ -205,9 +198,9 @@ public class KoruServer extends IServer{
 				BlockInputPacket packet = (BlockInputPacket) object;
 				Material mat = Material.getMaterial(packet.material);
 				Tile tile = updater.world.getTile(packet.x, packet.y);
-				
+
 				tile.addMaterial(mat);
-				
+
 				updater.world.updateTile(tile);
 
 			}else if(object instanceof InventoryClickPacket){
@@ -254,7 +247,7 @@ public class KoruServer extends IServer{
 
 		@Override
 		public void received(Connection con, Object object){
-			
+
 			if(object instanceof ConnectPacket){
 				Koru.log("recieved a connect packet from " + con.getID());
 				ConnectPacket packet = (ConnectPacket) object;
@@ -278,12 +271,12 @@ public class KoruServer extends IServer{
 		connections.put(info.id, info);
 		kryomap.put(info.connection, info);
 	}
-	
+
 	public void removeConnection(ConnectionInfo info){
 		connections.remove(info.id);
 		kryomap.remove(info.connection);
 	}
-	
+
 	@Override
 	public void removeSpark(Spark spark){
 		SparkRemovePacket remove = new SparkRemovePacket();
@@ -292,40 +285,40 @@ public class KoruServer extends IServer{
 		updater.basis.removeSpark(spark);
 		spark.remove();
 	}
-	
+
 	@Override
 	public void sendSpark(Spark spark){
 		sendToAllIn(spark, spark.pos().x, spark.pos().y, SyncSystem.syncrange);
 	}
-	
+
 	@Override
 	public void sendToAllIn(Object object, float x, float y, float range){
 		updater.mapper.getNearbyConnections(x, y, range, (spark) -> {
 			send(spark.get(ConnectionTrait.class).connectionID, object, false);
 		});
 	}
-	
+
 	@Override
 	public void sendToAll(Object object){
 		for(ConnectionInfo info : connections.values()){
 			send(info, object, false);
 		}
 	}
-	
+
 	@Override
 	public void sendToAllExcept(int id, Object object){
 		sendToAllExceptTCP(id, object);
 	}
-	
+
 	@Override
 	public void send(int id, Object object, boolean udp){
 		send(connections.get(id), object, udp);
 	}
-	
+
 	public void addSpark(Spark spark){
 		sendSpark(spark.add());
 	}
-	
+
 	public Spark getPlayer(ConnectionInfo info){
 		return updater.basis.getSpark(info.playerid);
 	}

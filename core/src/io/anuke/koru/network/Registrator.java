@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.reflect.Annotation;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -17,6 +19,7 @@ import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.*;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
+import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.traits.DirectionTrait.Direction;
 import io.anuke.koru.ui.Menu;
@@ -32,14 +35,10 @@ import io.anuke.ucore.ecs.extend.traits.PosTrait;
 public class Registrator{
 	private static ObjectSet<Class<? extends Trait>> synced = ObjectSet.with(
 		PosTrait.class,
-		ConnectionTrait.class,
-		TextTrait.class,
-		EffectTrait.class,
-		DirectionTrait.class,
-		ChildTrait.class,
-		ItemTrait.class,
-		DirectionTrait.class
+		ChildTrait.class
 	);
+	
+	private static ObjectSet<Class<? extends Trait>> notSynced = ObjectSet.with();
 	
 	public static void register(Kryo k){
 		register(k, 
@@ -73,6 +72,7 @@ public class Registrator{
 			PosTrait.class,
 			LifetimeTrait.class,
 			ConnectionTrait.class,
+			EffectTrait.class,
 	
 			SyncData.class,
 			
@@ -248,7 +248,22 @@ public class Registrator{
 		
 		//TODO!!!
 		boolean serialize(Trait trait){
-			return synced.contains(trait.getClass());
+			if(notSynced.contains(trait.getClass())){
+				return false;
+			}else{
+				if(!synced.contains(trait.getClass())){
+					Annotation a = ClassReflection.getAnnotation(trait.getClass(), Synced.class);
+					if(a == null){
+						notSynced.add(trait.getClass());
+						return false;
+					}else{
+						synced.add(trait.getClass());
+						return true;
+					}
+				}else{
+					return true;
+				}
+			}
 		}
 
 	}

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
-import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.traits.MaterialTrait;
 import io.anuke.koru.world.materials.Material;
@@ -38,10 +37,7 @@ public class BlockAnimation extends Prototype{
 				
 				Material material = (Material)spark.get(MaterialTrait.class).material();
 				
-				int x = (int)(spark.pos().x/World.tilesize);
-				int y = (int)(spark.pos().y/World.tilesize);
-				
-				material.draw(Koru.world.getWorldTile(x, y), trait.list);
+				material.draw(Koru.world.getWorldTile(spark.pos().x, spark.pos().y), trait.list);
 				
 				if(material instanceof Tree){
 					
@@ -67,8 +63,10 @@ public class BlockAnimation extends Prototype{
 				}
 				
 				trait.draw(d->{
-					for(Facet r : trait.list.facets)
-						r.sprite().alpha(spark.life().ifract());
+					for(Facet r : trait.list.facets){
+						if(r instanceof SpriteFacet)
+							r.sprite().alpha(spark.life().fract());	
+					}
 					
 					if(spark.get(MaterialTrait.class).material() instanceof Tree)
 						trait.list.facets.get(2).sprite().sprite.rotate(rspeed*Timers.delta());
@@ -79,6 +77,7 @@ public class BlockAnimation extends Prototype{
 		);
 	}
 	
+	/**This sends the animation as well.*/
 	public static void create(Material material, float x, float y){
 		Spark entity = new Spark(Prototypes.blockAnimation);
 		entity.pos().set(x, y);

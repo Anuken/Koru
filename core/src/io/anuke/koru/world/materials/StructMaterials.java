@@ -18,11 +18,13 @@ public class StructMaterials{
 		addDrop(Items.wood, 1);
 		color = new Color(0x744a28ff);
 		breaktime = 20;
+		variants = 0;
 	}},
 	
 	stonefloor = new Floor("stonefloor"){{
 		addDrop(Items.stone, 1);
 		color = new Color(0x717171ff);
+		variants = 0;
 		breaktime = 20;
 	}},
 	

@@ -90,8 +90,8 @@ public class InventoryMenu extends Table{
 
 		if(stack.amount > 1){
 
-			Resources.font2().setColor(0, 0, 0, 0.15f * alpha);
-			Resources.font2().draw(batch, stack.amount + "", x + 8 + 2, y + 54 - 2);
+			Resources.font2().setColor(0, 0, 0, 0.18f * alpha);
+			Resources.font2().draw(batch, stack.amount + "", x + 8 + 2, y + 54 - 3);
 
 			//fixes wierd crash bug?
 			if(stack != null){
@@ -111,13 +111,9 @@ public class InventoryMenu extends Table{
 			addListener((click = new ClickListener()));
 		}
 
-		public String toString(){
-			return "Slot " + x + ", " + y;
-		}
-
 		public void draw(Batch batch, float alpha){
 			batch.setColor(1, 1, 1, alpha);
-			batch.draw(Draw.region((y == 0 && x == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
+			batch.draw(Draw.region((index == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[index] != null){
 				drawItem(batch, alpha, getX(), getY(), stacks[index]);

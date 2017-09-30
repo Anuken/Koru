@@ -2,6 +2,8 @@ package io.anuke.koru.items;
 
 import static io.anuke.koru.items.ItemType.material;
 
+import io.anuke.koru.world.BreakType;
+
 public class Items{
 	
 	public static final Item
@@ -17,10 +19,16 @@ public class Items{
 	mushroom = new Item("mushroom"),
 	
 	tool = new Item("tool", ItemType.tool){
+		{
+			
+		}
 		
+		public float getBreakSpeed(BreakType type){
+			return 1;
+		}
 	},
 	
-	hammer = new Item("Hammer", ItemType.tool, ItemType.placer){
+	hammer = new Item("hammer", ItemType.tool, ItemType.placer){
 		
 	};
 }

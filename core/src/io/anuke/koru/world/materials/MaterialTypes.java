@@ -78,6 +78,7 @@ public class MaterialTypes{
 
 		protected Wall(String name) {
 			super(name, MaterialLayer.wall);
+			solid = true;
 		}
 
 		@Override
@@ -89,7 +90,8 @@ public class MaterialTypes{
 			.sort(Sorter.tile).add(list);
 			
 			get(name)
-			.set(tile.worldx(), tile.worldy() - World.tilesize/2, true, false)
+			.set(tile.worldx(), tile.worldy() - World.tilesize/2)
+			.centerX()
 			.sort(Sorter.object).add(list);
 		}
 		
@@ -133,7 +135,7 @@ public class MaterialTypes{
 		protected Tree(String name) {
 			super(name, MaterialLayer.wall);
 			cullSize = 180;
-			color = Hue.rgb(80, 53, 30);
+			color = Hue.rgb(80, 53, 30).mul(1.5f);
 			hitbox.width = 7;
 			hitbox.height = 3;
 			solid = true;
@@ -210,7 +212,7 @@ public class MaterialTypes{
 
 			if(!isGrass(tile.x, tile.y + 1)){
 				get("grassblock2" +blendn).shadow()
-				.set(tile.x + 1, tile.y + 1 + yadd - tilesize/2)
+				.set(tile.worldx() + 1, tile.worldy() + 1 + yadd - tilesize/2)
 				.centerX()
 				.add(list);
 			}
@@ -247,7 +249,7 @@ public class MaterialTypes{
 
 			if(!isGrass(tile.x, tile.y + 1)){
 				get("grassf1").shadow()
-				.set(tile.worldx() + 1, tile.worldy() + 2 + xadd - tilesize/2)
+				.set(tile.worldx() + 1, tile.worldy() + 4 + xadd - tilesize/2)
 				.centerX()
 				.add(list);
 			}

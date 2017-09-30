@@ -12,8 +12,8 @@ import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.ecs.Prototype;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.TraitList;
-import io.anuke.ucore.ecs.extend.traits.PosTrait;
 import io.anuke.ucore.ecs.extend.traits.FacetTrait;
+import io.anuke.ucore.ecs.extend.traits.PosTrait;
 import io.anuke.ucore.ecs.extend.traits.VelocityTrait;
 
 public class ItemDrop extends Prototype{
@@ -23,6 +23,8 @@ public class ItemDrop extends Prototype{
 		return new TraitList(
 			new PosTrait(), 
 			new FacetTrait((trait, spark)->{
+				if(IServer.active()) return;
+				
 				String itemname = spark.get(ItemTrait.class).stack.item.name();
 				String region = Draw.hasRegion(itemname + "chunk") ? itemname + "chunk" : itemname + "item";
 				
@@ -36,7 +38,7 @@ public class ItemDrop extends Prototype{
 			}),
 			new SyncTrait(SyncType.position),
 			new ItemTrait(), 
-			new VelocityTrait()
+			new VelocityTrait(0.1f)
 		);
 	}
 	

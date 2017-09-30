@@ -44,11 +44,15 @@ public class Materials{
 	}},
 	
 	water = new Floor("water"){{
-		
+		variants = 0;
+		solid = true;
+		hitbox.setSize(10, 10);
 	}},
 	
 	deepwater = new Floor("deepwater"){{
-		
+		variants = 0;
+		solid = true;
+		hitbox.setSize(10, 10);
 	}},
 	
 	darkrock = new Floor("darkrock"){{

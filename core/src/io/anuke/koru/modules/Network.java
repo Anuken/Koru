@@ -221,14 +221,16 @@ public class Network extends Module{
 		tempids.clear();
 		
 		int id = -1;
-		for(IntSetIterator rit = sparksToRemove.iterator(); rit.hasNext; id = rit.next()){
+		for(IntSetIterator rit = sparksToRemove.iterator(); rit.hasNext;){
+			id = rit.next();
 			if(Koru.basis.removeSpark(id)){
 				tempids.add(id);
 			}
 		}
 		
-		for(int i = 0; i < tempids.size; i ++)
+		for(int i = 0; i < tempids.size; i ++){
 			sparksToRemove.remove(tempids.get(i));
+		}
 		
 		if(chunksAdded){
 			renderer.updateTiles();

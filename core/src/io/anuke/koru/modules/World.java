@@ -262,6 +262,7 @@ public class World extends Module{
 	}
 
 	public void updateTile(Tile tile){
+		Koru.log("Sending tile update for tile " + tile);
 		updated = true;
 		tile.changeEvent();
 		IServer.instance().sendToAllIn(new TileUpdatePacket(tile.x, tile.y, tile), world(tile.x), world(tile.y),
@@ -330,7 +331,7 @@ public class World extends Module{
 	}
 	
 	public static float world(int i){
-		return tilesize * i + tilesize / 2;
+		return tilesize * i;
 	}
 	
 	static int nint(float b){

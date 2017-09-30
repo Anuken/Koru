@@ -142,7 +142,7 @@ public class Tile implements Poolable{
 	}
 
 	public String toString(){
-		return "Tile: [block=" + wall() + " tile=" + topFloor() + " {"+  light +"} ]";
+		return "Tile: [" + x + ", " + y + ", block=" + wall() + " tile=" + topFloor() + " {"+  light +"}]";
 	}
 
 	@Override

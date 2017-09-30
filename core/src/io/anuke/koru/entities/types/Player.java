@@ -50,7 +50,7 @@ public class Player extends Prototype{
 						
 						Resources.font2().getData().setScale(1f);
 						Resources.font2().setUseIntegerPositions(false);
-						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, spark.pos().x, spark.pos().y + 18, 0, Align.center, false);
+						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, spark.pos().x + 0.5f, spark.pos().y + 18, 0, Align.center, false);
 					
 						Resources.font2().setColor(Color.WHITE);
 						
