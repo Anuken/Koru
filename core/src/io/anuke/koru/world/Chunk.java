@@ -1,13 +1,13 @@
 package io.anuke.koru.world;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.utils.Pools;
 
 import io.anuke.koru.modules.World;
 
-import com.badlogic.gdx.utils.Pools;
-
 public class Chunk implements Poolable{
 	public Tile[][] tiles = new Tile[World.chunksize][World.chunksize];
+	/**Chunk coordinates, not world coordinates.*/
 	public int x,y;
 	
 	public Chunk(){
@@ -27,6 +27,8 @@ public class Chunk implements Poolable{
 	public void setWorldTile(int worldx, int worldy, Tile tile){
 		int tx = worldx - worldX(), ty = worldy -worldY();
 		tiles[tx][ty] = tile;
+		tile.x = worldx;
+		tile.y = worldy;
 	}
 	
 	public int worldX(){

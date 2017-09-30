@@ -17,6 +17,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.modules.World;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Generator;
@@ -113,6 +114,13 @@ public class WorldFile extends WorldLoader{
 					input = new Input(file);
 				}
 				Chunk chunk = kryo.readObject(input, Chunk.class);
+				
+				for(int cx = 0; cx < World.chunksize; cx ++){
+					for(int cy = 0; cy < World.chunksize; cy ++){
+						chunk.tiles[cx][cy].x = cx + chunk.worldX();
+						chunk.tiles[cx][cy].y = cy + chunk.worldY();
+					}
+				}
 
 				input.close();
 				file.close();

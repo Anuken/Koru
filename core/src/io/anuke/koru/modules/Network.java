@@ -96,8 +96,10 @@ public class Network extends Module{
 		});
 		
 		handle(TileUpdatePacket.class,p->{
-			if(world.inClientBounds(p.x, p.y))
+			if(world.inClientBounds(p.x, p.y)){
 				world.setTile(p.x, p.y, p.tile);
+			}
+			
 			chunksAdded = true;
 		});
 		

@@ -8,7 +8,7 @@ import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.traits.MaterialTrait;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.MaterialTypes.Tree;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Prototype;
 import io.anuke.ucore.ecs.Spark;
@@ -41,11 +41,11 @@ public class BlockAnimation extends Prototype{
 				int x = (int)(spark.pos().x/World.tilesize);
 				int y = (int)(spark.pos().y/World.tilesize);
 				
-				material.getType().draw(trait.list, material, Koru.world.getWorldTile(x, y), x, y);
+				material.draw(Koru.world.getWorldTile(x, y), trait.list);
 				
-				if(material.getType() == MaterialTypes.tree){
+				if(material instanceof Tree){
 					
-					SpriteFacet bot = trait.list.renderables.peek().sprite();
+					SpriteFacet bot = trait.list.facets.peek().sprite();
 					
 					int theight = bot.sprite.getRegionHeight()/9;
 					
@@ -67,11 +67,11 @@ public class BlockAnimation extends Prototype{
 				}
 				
 				trait.draw(d->{
-					for(Facet r : trait.list.renderables)
+					for(Facet r : trait.list.facets)
 						r.sprite().alpha(spark.life().ifract());
 					
-					if(spark.get(MaterialTrait.class).material().getType() == MaterialTypes.tree)
-						trait.list.renderables.get(2).sprite().sprite.rotate(rspeed*Timers.delta());
+					if(spark.get(MaterialTrait.class).material() instanceof Tree)
+						trait.list.facets.get(2).sprite().sprite.rotate(rspeed*Timers.delta());
 				});
 			}),
 			new LifetimeTrait(50),

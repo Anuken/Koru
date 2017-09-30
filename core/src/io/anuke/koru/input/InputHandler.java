@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.entities.types.BlockAnimation;
 import io.anuke.koru.entities.types.ItemDrop;
 import io.anuke.koru.items.*;
@@ -12,7 +13,9 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.MaterialLayer;
+import io.anuke.koru.world.materials.MaterialTypes.Tree;
+import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Spark;
@@ -40,8 +43,8 @@ public class InputHandler{
 		// block breaking
 		if(key(InputType.leftclick_down)){
 			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
-			Material block = tile.block();
-			Material floor = tile.topTile();
+			Material block = tile.wall();
+			Material floor = tile.topFloor();
 			
 			Material select = null;
 			
@@ -61,24 +64,25 @@ public class InputHandler{
 				blockhold += delta * stack.item.getBreakSpeed(select.breakType());
 
 				if((int) (blockhold) % 20 == 1)
-					Effects.effect("blockparticle", select.color, World.world(blockx), select.getType() == MaterialTypes.block
-							? World.world(blocky) - 6 : World.world(blocky));
+					Effects.effect("blockparticle", select.getColor(), World.world(blockx), 
+							select instanceof Wall ? World.world(blocky) - 6 : World.world(blocky));
 
 				if(blockhold >= select.breaktime()){
-					Effects.effect("blockbreak", select.color, World.world(blockx), World.world(blocky) - 1);
+					Effects.effect("blockbreak", select.getColor(), World.world(blockx), World.world(blocky) - 1);
 
-					if(select.getType() == MaterialTypes.tree)
+					if(select instanceof Tree){
 						BlockAnimation.create(select, World.world(blockx), World.world(blocky) - 1);
+					}
 
-					// entity.getComponent(InventoryComponent.class).addItems(tile.block().getDrops());
-					// entity.getComponent(InventoryComponent.class).sendUpdate(entity);
+					spark.get(InventoryTrait.class).addItems(tile.wall().getDrops());
+					spark.get(InventoryTrait.class).sendUpdate(spark);
 
 					ItemDrop.create(World.world(blockx), World.world(blocky), select.getDrops());
 					
 					if(select == floor)
 						tile.removeTile();
 					else
-						tile.setBlockMaterial(Materials.air);
+						tile.setWall(Materials.air);
 
 					// schedule this later.
 
@@ -121,7 +125,7 @@ public class InputHandler{
 		
 		if(item.isType(ItemType.placer)){
 
-			Tile tile = World.instance().getTile(blockx, blocky);
+			Tile tile = Koru.world.getTile(blockx, blocky);
 
 			InventoryTrait inv = spark.get(InventoryTrait.class);
 
@@ -132,14 +136,14 @@ public class InputHandler{
 			if(spark.pos().dst(World.world(blockx), World.world(blocky)) < reach
 					&& inv.recipe != -1 && inv.hasAll(recipe.requirements())
 					&& World.isPlaceable(recipe.result(), tile)){
-
-				if(recipe.result().getType().tile()){
-					tile.addTile(recipe.result());
+				
+				if(recipe.result().isLayer(MaterialLayer.floor)){
+					tile.addFloor(recipe.result());
 				}else{
-					tile.setBlockMaterial(recipe.result());
+					tile.setWall(recipe.result());
 				}
 				
-				World.instance().updateTile(blockx, blocky);
+				Koru.world.updateTile(tile);
 
 				inv.removeAll(recipe.requirements());
 				inv.sendUpdate(spark);
@@ -148,12 +152,12 @@ public class InputHandler{
 	}
 	
 	private void onInteract(){
-		Tile tile = World.instance().getTile(blockx, blocky);
+		Tile tile = Koru.world.getTile(blockx, blocky);
 		
-		if(tile.block().interactable()){
-			tile.block().onInteract(tile, blockx, blocky, spark);
+		if(tile.wall().interactable()){
+			tile.wall().onInteract(tile, spark);
 			
-			World.instance().updateTile(blockx, blocky);
+			Koru.world.updateTile(tile);
 		}
 	}
 

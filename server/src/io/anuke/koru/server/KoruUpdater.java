@@ -101,7 +101,7 @@ public class KoruUpdater{
 			return tile != null && tile.solid();
 		}, (x, y, out)->{
 			Tile tile = world.getTile(x, y);
-			tile.block().getType().getHitbox(x, y, out);
+			tile.wall().getHitbox(x, y, out);
 		}));
 
 		Runtime.getRuntime().addShutdownHook(new Thread(()->{

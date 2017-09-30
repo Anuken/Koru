@@ -12,7 +12,7 @@ import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.graphics.Hue;
@@ -117,7 +117,7 @@ public class RecipeMenu extends Table{
 			
 			float w = region.getRegionWidth()*pscale,h = region.getRegionHeight()*pscale;
 			
-			if(result.getType() == MaterialTypes.tile){
+			if(result.layer() == MaterialLayer.floor){
 				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);
 			}else{
 				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, 4*pscale+ getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);

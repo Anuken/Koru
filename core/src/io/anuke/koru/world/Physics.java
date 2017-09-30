@@ -2,7 +2,7 @@ package io.anuke.koru.world;
 
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.koru.modules.World;
+import io.anuke.koru.Koru;
 
 //TODO add funcionality
 public class Physics{
@@ -76,6 +76,6 @@ public class Physics{
 	}
 	
 	public static boolean solid(float x, float y){
-		return World.instance().positionSolid(x, y);
+		return Koru.world.positionSolid(x, y);
 	}
 }

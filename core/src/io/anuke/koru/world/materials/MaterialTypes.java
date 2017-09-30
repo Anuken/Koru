@@ -1,13 +1,16 @@
 package io.anuke.koru.world.materials;
 
+import static io.anuke.koru.graphics.RenderPool.get;
 import static io.anuke.koru.modules.World.tilesize;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.facet.FacetList;
 import io.anuke.ucore.facet.Sorter;
 import io.anuke.ucore.graphics.Hue;
@@ -15,132 +18,173 @@ import io.anuke.ucore.graphics.Hue;
 public class MaterialTypes{
 	public static final Color grasscolor = new Color(0x62962fff);
 	
-	public static final MaterialType 
-	
-	tile = new MaterialType(){
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			if(tile.block().getType() == block) return;
-			
-			if(world().blends(x, y, material))
-				sprite((material.name() + "edge"))
-						.tile(x, y)
-						.center().layer(-material.id() * 2 + 1 - tile.top*3).add(group);
-			
-			sprite(material.name() + drawString(x, y, material))
-					.set(utile(x), utile(y)).layer(-material.id() * 2 - tile.top*3).add(group);
-			
+	public static class Floor extends Material{
+		
+		protected Floor(String name) {
+			super(name, MaterialLayer.floor);
 		}
-	},
-	
-	grass = new MaterialType(){
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			int rand = rand(x,y,16);
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			if(tile.wall() instanceof Wall){
+				return;
+			}
 			
-			if(world().blends(x, y, material))
-				sprite("grassedge")
-						.tile(x, y)
-						.color(grasscolor.r * material.foilageTint().x,
-								grasscolor.g * material.foilageTint().y,
-								grasscolor.b * material.foilageTint().z)
-						.center().layer(-material.id() * 2 + 1).add(group);
+			if(Koru.world.blends(tile.x, tile.y, this)){
+				get(name + "edge")
+				.tile(tile)
+				.center().layer(-id() * 2 + 1 - tile.top*3).add(list);
+			}
 			
-			sprite("grass" + (rand <= 8 ? rand : "1"))
-					.utile(x, y).layer(-material.id() * 2)
-					.color(grasscolor.r * material.foilageTint().x,
-							  grasscolor.g * material.foilageTint().y,
-							  grasscolor.b * material.foilageTint().z).add(group);
-			
+			get(name + variantString(tile))
+			.tile(tile).center().layer(-id() * 2 - tile.top*3).add(list);
 		}
-	},
+	}
 	
-	water = new MaterialType(){
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			
-			sprite((material.name()  + drawString(x, y, material)))
-					.set(x * World.tilesize, y * World.tilesize).layer(-material.id() * 2).add(group);
-			
-			if(world().blends(x, y, material))
-				sprite((material.name() + "edge"))
-						.tile(x, y)
-						.center().layer(-material.id() * 2 + 1).add(group);
+	public static class Grass extends Material{
+		
+		protected Grass(String name) {
+			super(name, MaterialLayer.floor);
+			variants = 16;
 		}
-	},
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			int rand = tile.rand(variants);
+			
+			if(tile.wall() instanceof Wall){
+				return;
+			}
+			
+			if(Koru.world.blends(tile.x, tile.y, this)){
+				get("grassedge")
+				.tile(tile)
+				.color(grasscolor.r * foilageTint().x,
+						grasscolor.g * foilageTint().y,
+						grasscolor.b * foilageTint().z)
+				.center().layer(-id() * 2 + 1).add(list);
+			}
+			
+			get("grass" + (rand <= 8 ? rand : "1"))
+			.tile(tile).center().layer(-id() * 2)
+			.color(grasscolor.r * foilageTint().x,
+					  grasscolor.g * foilageTint().y,
+					  grasscolor.b * foilageTint().z)
+			.add(list);
+		}
+	}
 	
-	block = new MaterialType(false, true){
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			sprite(("walldropshadow"))
+	public static class Wall extends Material{
+
+		protected Wall(String name) {
+			super(name, MaterialLayer.wall);
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			get("walldropshadow")
 			.shadow()
-			.tile(x, y)
+			.tile(tile)
 			.center()
-			.sort(Sorter.tile).add(group);
+			.sort(Sorter.tile).add(list);
 			
-			sprite((material.name()))
-			.utile(x, y)
-			.scale(0, 0.001f)
-			.sort(Sorter.object).add(group);
-			
+			get(name)
+			.set(tile.worldx(), tile.worldy() - World.tilesize/2, true, false)
+			.sort(Sorter.object).add(list);
 		}
-	},
+		
+	}
 	
-	overlay = new MaterialType(false, false){
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			
-			String name = material.name() + drawString(x, y, material);
-			
-			sprite(name)
-			.set(tile(x), tile(y)).layer(-512*2).center().add(group);
-			
-			sprite(name).color(0, 0, 0, 0.1f)
-			.set(tile(x), tile(y)-1).layer(-512*2+1).center().add(group);
+	public static class Overlay extends Material{
+
+		protected Overlay(String name) {
+			super(name, MaterialLayer.wall);
 		}
-	},
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			get(name)
+			.tile(tile).layer(-512*2).center().add(list);
+			
+			get(name).color(0, 0, 0, 0.1f)
+			.set(tile.worldx(), tile.worldy()-1).layer(-512*2+1).center().add(list);
+		}
+		
+	}
 	
-	tree = new MaterialType(false, true){
-		{
+	public static class FloorItem extends Overlay{
+
+		protected FloorItem(String name) {
+			super(name);
+			interactable = true;
+		}
+		
+		@Override
+		public void onInteract(Tile tile, Spark entity){
+			entity.get(InventoryTrait.class).addItems(getDrops());
+			entity.get(InventoryTrait.class).sendUpdate(entity);
+				
+			tile.setWall(Materials.air);
+		}
+	}
+	
+	public static class Tree extends Material{
+
+		protected Tree(String name) {
+			super(name, MaterialLayer.wall);
+			cullSize = 180;
 			color = Hue.rgb(80, 53, 30);
+			hitbox.width = 7;
+			hitbox.height = 3;
+			solid = true;
 		}
-		
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			float offset = variantOffset(x, y, material);
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			float offset = variantOffset(tile);
 			
-			sprite((material.name() + drawString(x, y, material)))
-					.set(tile(x), tile(y) + offset).layer(tile(y)).centerX()
-					.sort(Sorter.object)
-					.addShadow(group, -offset).add(group);
+			get(name + variantString(tile))
+			.set(tile.worldx(), tile.worldy() + offset).layer(tile.worldy()).centerX()
+			.sort(Sorter.object)
+			.addShadow(list, -offset).add(list);
 		}
 		
-		public int size(){
-			return 180;
-		}
-		
-		public Rectangle getHitbox(int x, int y, Rectangle rectangle){
-			float width = 7;
-			float height = 3;
-			return rectangle.set(x * World.tilesize + width / 2f, y * World.tilesize + 6 + height / 2f, width, height);
-		}
-	},
+	}
 	
-	object = new MaterialType(false, false){
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
-			float offset = variantOffset(x, y, material);
+	public static class Prop extends Material{
+
+		protected Prop(String name) {
+			super(name, MaterialLayer.wall);
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			float offset = variantOffset(tile);
 			
-			sprite((material.name() + drawString(x, y, material)))
-			.layer(tile(y))
-			.set(tile(x), tile(y) + offset)
+			get(name + variantString(tile))
+			.layer(tile.worldy())
+			.set(tile.worldx(), tile.worldy() + offset)
 			.centerX().sort(Sorter.object)
-			.addShadow(group, -offset).add(group);	
+			.addShadow(list, -offset).add(list);
 		}
-	},
-	
-	tallgrassblock = new MaterialType(false, false){
-		static final float add = 0.94f;
 		
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
+	}
+	
+	public static class TallGrassWall extends Material{
+		static final float add = 0.94f;
+
+		protected TallGrassWall(String name) {
+			super(name, MaterialLayer.wall);
+			cullSize = 16;
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
 			float yadd = 0;
 			
-			Vector3 tint = tile.topTile().foilageTint();
+			Vector3 tint = tile.topFloor().foilageTint();
 			
-			int blend = blendStage(x, y);
+			int blend = blendStage(tile.x, tile.y);
 			
 			String blendn = "";
 			if(blend == 0)
@@ -149,65 +193,66 @@ public class MaterialTypes{
 				blendn = "left";
 			if(blend == 2)
 				blendn = "right";
-			if(!isGrass(x, y - 1)){
+			if(!isGrass(tile.x, tile.y - 1)){
 				yadd = 2;
 			}
 
-			for(int i = 0; i < 2; i++){
-				
+			for(int i = 0; i < 2; i ++){
 				float gadd = i == 1 ? 1f : add;
 				
-				sprite("grassblock2" + blendn)
+				get("grassblock2" + blendn)
 				.sort(Sorter.object)
 				.color(grasscolor.r * gadd * tint.x, grasscolor.g * gadd * tint.y, grasscolor.b * gadd * tint.z)
-				.set(utile(x), utile(y) + yadd + i * 6)
-				.add(group);
+				.set(tile.x * tilesize, tile.y * tilesize + yadd + i * 6 - tilesize/2)
+				.centerX()
+				.add(list);
 			}
 
-			if(!isGrass(x, y + 1)){
-				sprite(("grassblock2" +blendn)).shadow()
-						.set(utile(x) + 1, tile(y) + 1 + yadd).add(group);
-				
+			if(!isGrass(tile.x, tile.y + 1)){
+				get("grassblock2" +blendn).shadow()
+				.set(tile.x + 1, tile.y + 1 + yadd - tilesize/2)
+				.centerX()
+				.add(list);
 			}
 		}
-		
-		public int size(){
-			return 16;
-		}
-	},
+	}
 	
-	shortgrassblock = new MaterialType(false, false){
+	public static class ShortGrassWall extends Material{
 		static final float add = 0.96f;
-		
-		public void draw(FacetList group, Material material, Tile tile, int x, int y){
+
+		protected ShortGrassWall(String name) {
+			super(name, MaterialLayer.wall);
+			cullSize = 16;
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
 			float xadd = 0;
 			
-			Vector3 tint = tile.topTile().foilageTint();
+			Vector3 tint = tile.topFloor().foilageTint();
 			
 			int iter = 4;
 
 			for(int i = 0; i < iter; i++){
-				if(i == 0 && !isGrass(x, y - 1)) continue;
-				float gadd = (i %2== 0 ? 1f : add);
+				if(i == 0 && !isGrass(tile.x, tile.y - 1)) continue;
+				float gadd = (i % 2 == 0 ? 1f : add);
 				
-				sprite("grassf1")
+				get("grassf1")
 				.sort(Sorter.object)
 				.color(grasscolor.r * gadd*tint.x, grasscolor.g * gadd*tint.y, grasscolor.b * gadd*tint.z)
-				.set(utile(x), utile(y) + i * (tilesize / iter) + xadd)
-				.add(group);
+				.set(tile.worldx(), tile.worldy() + i * (tilesize / iter) + xadd - tilesize/2)
+				.centerX()
+				.add(list);
 			}
 
-			if(!isGrass(x, y + 1)){
-				sprite(("grassf1")).shadow()
-				.set(utile(x)+1, tile(y)+2+ xadd)
-				.add(group);
+			if(!isGrass(tile.x, tile.y + 1)){
+				get("grassf1").shadow()
+				.set(tile.worldx() + 1, tile.worldy() + 2 + xadd - tilesize/2)
+				.centerX()
+				.add(list);
 			}
 		}
-		
-		public int size(){
-			return 16;
-		}
-	};
+	}
 	
 	static int blendStage(int x, int y){
 		if(!isGrass(x + 1, y) && !isGrass(x - 1, y))
@@ -220,6 +265,7 @@ public class MaterialTypes{
 	}
 
 	static boolean isGrass(int x, int y){
-		return World.instance().isType(x, y, Materials.grassblock) || World.instance().isType(x, y, Materials.shortgrassblock);
+		return Koru.world.isType(x, y, Materials.grassblock) || 
+				Koru.world.isType(x, y, Materials.shortgrassblock);
 	}
 }

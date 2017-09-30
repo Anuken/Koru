@@ -206,12 +206,9 @@ public class KoruServer extends IServer{
 				Material mat = Material.getMaterial(packet.material);
 				Tile tile = updater.world.getTile(packet.x, packet.y);
 				
-				if(mat.getType().tile()){
-					tile.addTile(mat);
-				}else{
-					tile.setBlockMaterial(mat);
-				}
-				updater.world.updateTile(packet.x, packet.y);
+				tile.addMaterial(mat);
+				
+				updater.world.updateTile(tile);
 
 			}else if(object instanceof InventoryClickPacket){
 				InventoryClickPacket packet = (InventoryClickPacket) object;

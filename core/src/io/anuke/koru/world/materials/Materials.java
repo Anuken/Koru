@@ -1,11 +1,12 @@
 package io.anuke.koru.world.materials;
 
-import static io.anuke.koru.world.materials.MaterialTypes.*;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.items.Items;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.materials.MaterialTypes.*;
+import io.anuke.ucore.facet.FacetList;
 
 /**Natural materials generated in the world.*/
 public class Materials{
@@ -13,98 +14,99 @@ public class Materials{
 	
 	//Tiles
 	
-	air = new Material("air", tile){{
+	air = new Floor("air"){
+		@Override
+		public void draw(Tile tile, FacetList list){}
+	},
+	
+	forestgrass = new Grass("grass"){{
 		
 	}},
 	
-	forestgrass = new Material("grass", grass){{
-		
-	}},
-	
-	darkgrass = new Material("grass", grass){{
+	darkgrass = new Grass("grass"){{
 		foilageTint = new Vector3(0.8f, 0.92f, 0.86f);
 	}},
 	
-	swampgrass = new Material("grass", grass){{
+	swampgrass = new Grass("grass"){{
 		
 	}},
 	
-	drygrass = new Material("grass", grass){{
+	drygrass = new Grass("grass"){{
 		foilageTint = new Vector3(1.3f, 1.1f, 0.98f);
 	}},
 	
-	burntgrass = new Material("grass", grass){{
+	burntgrass = new Grass("grass"){{
 		foilageTint = new Vector3(1.6f, 1.2f, 0.94f);
 	}},
 	
-	bluegrass = new Material("grass", grass){{
+	bluegrass = new Grass("grass"){{
 		
 	}},
 	
-	water = new Material("water",  MaterialTypes.water){{
+	water = new Floor("water"){{
 		
 	}},
 	
-	deepwater = new Material("deepwater",  MaterialTypes.water){{
+	deepwater = new Floor("deepwater"){{
 		
 	}},
 	
-	darkrock = new Material("darkrock", tile){{
+	darkrock = new Floor("darkrock"){{
 		
 	}},
 	
-	magmarock = new Material("magmarock", tile){{
+	magmarock = new Floor("magmarock"){{
 		
 	}},
 	
-	cobblestone = new Material("cobblestone", tile){{
+	cobblestone = new Floor("cobblestone"){{
 		
 	}},
 	
-	sand = new Material("sand", tile){{
+	sand = new Floor("sand"){{
 		variants = 7;
 	}},
 	
-	gravel = new Material("gravel", tile){{
+	gravel = new Floor("gravel"){{
 		
 	}},
 	
-	ice = new Material("ice", tile){{
+	ice = new Floor("ice"){{
 		variants = 7;
 	}},
 	
-	riveredge = new Material("riveredge", tile){{
+	riveredge = new Floor("riveredge"){{
 		
 	}},
 	
-	stone = new Material("stone", tile){{
+	stone = new Floor("stone"){{
 		variants = 7;
 	}},
 	
 	
 	//Objects,  blocks
 	
-	sticks = new CollectableMaterial("sticks", overlay){{
+	sticks = new FloorItem("sticks"){{
 		addDrop(Items.stick, 1);
 	}},
 	
-	rocks = new CollectableMaterial("rocks", overlay){{
+	rocks = new FloorItem("rocks"){{
 		addDrop(Items.stone, 1);
 	}},
 	
-	grassblock = new Material("grassblock",  MaterialTypes.tallgrassblock){{
+	grassblock = new TallGrassWall("grassblock"){{
 		
 	}},
 	
-	shortgrassblock = new Material("shortgrassblock",  MaterialTypes.shortgrassblock){{
+	shortgrassblock = new ShortGrassWall("shortgrassblock"){{
 		
 	}},
 	
-	mossyrock = new Material("mossyrock", object){{
+	mossyrock = new Prop("mossyrock"){{
 		
 	}},
 	
-	rock = new Material("rock", object){{
+	rock = new Prop("rock"){{
 		breaktime = 50; 
 		addDrop(Items.stone, 2); 
 		color = new Color(0x717171ff);
@@ -112,61 +114,62 @@ public class Materials{
 		variants = 4;
 	}},
 	
-	blackrock = new Material("blackrock", object){{
+	blackrock = new Prop("blackrock"){{
 		variants = 4;
 	}},
 	
-	mushy = new CollectableMaterial("mushy", object){{
+	mushy = new Prop("mushy"){{
 		variants = 8;
+		interactable = true;
 		offsets(-1, -1, -1, -1, -1, -1, -1, -1);
 		addDrop(Items.mushroom, 1);
 	}},
 	
-	drybush = new Material("drybush", object){{
+	drybush = new Prop("drybush"){{
 		offset = -1f;
 		variants = 3;
 	}},
 	
-	bush = new Material("bush", object){{
+	bush = new Prop("bush"){{
 		offset = -1f;
 		variants = 3;
 	}},
 	
-	deadtree = new Material("deadtree", tree){{
+	deadtree = new Tree("deadtree"){{
 		variants = 4;
 		offsets(-4, -3, -4, -1);
 	}},
 	
-	oaktree = new Material("oaktree", tree){{
+	oaktree = new Tree("oaktree"){{
 		variants = 6;
 		offsets(-10, -10, -10, -4, -4, -4);
 		addDrop(Items.wood, 16);
 	}},
 	
-	willowtree = new Material("willowtree", tree){{
+	willowtree = new Tree("willowtree"){{
 		variants = 4;
 		offsets(-4, -3, -4, -3);
 	}},
 	
-	burnedtree = new Material("burnedtree", tree){{
+	burnedtree = new Tree("burnedtree"){{
 		variants = 4;
 		offsets(-4, -3, -4, -1);
 	}},
 	
-	pinetree = new Material("pinetree", tree){{
+	pinetree = new Tree("pinetree"){{
 		addDrop(Items.wood, 10);
 		breaktime = 90;
 		variants = 4;
 		offsets(-5f, -3f, -3f, -5f);
 	}},
 	
-	pinesapling = new Material("pinesapling", object){{
+	pinesapling = new Prop("pinesapling"){{
 		addDrop(Items.pinecone, 1);
-		collisions = false;
+		solid = false;
 		breaktime = 1;
 	}},
 	
-	stoneblock = new Material("stoneblock", block){{
+	stoneblock = new Wall("stoneblock"){{
 		addDrop(Items.stone, 5); 
 		color = new Color(0x717171ff);
 		breaktime = 50;

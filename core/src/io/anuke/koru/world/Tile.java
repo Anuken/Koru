@@ -2,20 +2,31 @@ package io.anuke.koru.world;
 
 import java.util.Arrays;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.materials.Material;
+import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.koru.world.materials.Materials;
 
 public class Tile implements Poolable{
 	public static final int LAYER_SIZE = 10;
 	
-	public byte light = (byte)127, top = 0;
-	public int[] layers;
-	public int blockid;
+	/**block light level; used for caves*/
+	public byte light = (byte)127;
+	/**top floor id*/
+	public byte top = 0;
+	/**floor ID array*/
+	public short[] floors;
+	/**wall block ID*/
+	public short wallid;
 	/**Note that this is data for the block only.*/
 	public transient TileData data;
+	/**Position data. Transient, so it doesn't get sent over the network or serialized.
+	 * MAKE SURE TO INITIALIZE AFTER DESERALIZATION! */
+	public transient int x, y;
 	
 	/**Used for deserialization.*/
 	public static Tile unloadedTile(){
@@ -24,10 +35,18 @@ public class Tile implements Poolable{
 	
 	private Tile(){}
 	
-	public Tile(Material tile, Material block){
-		layers = new int[LAYER_SIZE];
-		layers[top] = tile.id();
-		blockid = block.id();
+	public Tile(Material floor, Material block){
+		floors = new short[LAYER_SIZE];
+		floors[top] = (short)floor.id();
+		wallid = (short)block.id();
+	}
+	
+	public float worldx(){
+		return x * World.tilesize;
+	}
+	
+	public float worldy(){
+		return y * World.tilesize;
 	}
 	
 	public float light(){
@@ -38,37 +57,36 @@ public class Tile implements Poolable{
 		light = (byte)(f*127);
 	}
 	
-	public int tileid(){
-		return layers[top];
+	public short tileid(){
+		return floors[top];
 	}
 	
-	public Material topTile(){
-		return !IServer.active() ? Material.getMaterial(layers[0]) : Material.getMaterial(layers[top]);
+	public Material topFloor(){
+		return !IServer.active() ? Material.getMaterial(floors[0]) : Material.getMaterial(floors[top]);
 	}
 	
-	public Material block(){
-		
-		return Material.getMaterial(blockid);
+	public Material wall(){
+		return Material.getMaterial(wallid);
 	}
 	
-	public boolean blockEmpty(){
-		return blockid == 0;
+	public boolean isWallEmpty(){
+		return wallid == 0;
 	}
 
-	public void setBlockMaterial(Material m){
-		blockid = m.id();
+	public void setWall(Material m){
+		wallid = (short)m.id();
 	}
 	
-	public void addTile(Material m){
+	public void addFloor(Material m){
 		if(!canAddTile()) throw new RuntimeException("Too many tiles added!");
 		
-		layers[++top] = m.id();
+		floors[++top] = (short)m.id();
 	}
 	
 	public void removeTile(){
 		if(!canRemoveTile()) throw new RuntimeException("Too many tiles removed!");
 		
-		layers[top--] = 0;
+		floors[top--] = 0;
 	}
 	
 	public boolean canAddTile(){
@@ -82,39 +100,53 @@ public class Tile implements Poolable{
 	/**Sets either the top block or tile. Used mostly for generation.*/
 	public void setMaterial(Material m){
 		if(m == Materials.air){
-			blockid = Materials.air.id();
-		}else if(m.getType().tile()){
-			layers[top] = m.id();
+			wallid = (short)Materials.air.id();
+		}else if(m.layer() == MaterialLayer.floor){
+			floors[top] = (short)m.id();
 		}else{
-			blockid = m.id();
+			wallid = (short)m.id();
+		}
+	}
+	
+	/**Adds a material on top instead of setting it.*/
+	public void addMaterial(Material m){
+		if(m == Materials.air){
+			wallid = (short)Materials.air.id();
+		}else if(m.layer() == MaterialLayer.floor){
+			addFloor(m);
+		}else{
+			wallid = (short)m.id();
 		}
 	}
 
 	public boolean solid(){
-		return topTile().getType().solid() || block().getType().solid();
+		return topFloor().solid() || wall().solid();
 	}
 
 	public Material solidMaterial(){
-		if(block().getType().solid()) return block();
-		if(topTile().getType().solid()) return topTile();
+		if(wall().solid()) return wall();
+		if(topFloor().solid()) return topFloor();
 		return null;
+	}
+	
+	/**Random number, generated based on coordinates.*/
+	public int rand(int max){
+		int i = (x+y*x);
+		MathUtils.random.setSeed(i);
+	    return MathUtils.random(1, max);
 	}
 
 	public void changeEvent(){
-		topTile().changeEvent(this);
-		block().changeEvent(this);
-		
-		//if(){
-			
-		//}
+		topFloor().changeEvent(this);
+		wall().changeEvent(this);
 	}
 
 	public String toString(){
-		return "Tile: [block=" + block() + " tile=" + topTile() + " {"+  light +"} ]";
+		return "Tile: [block=" + wall() + " tile=" + topFloor() + " {"+  light +"} ]";
 	}
 
 	@Override
 	public void reset(){
-		Arrays.fill(layers, 0);
+		Arrays.fill(floors, (short)0);
 	}
 }

@@ -1,6 +1,6 @@
 package io.anuke.koru.graphics;
 
-import io.anuke.koru.modules.World;
+import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.facet.*;
 
@@ -62,13 +62,8 @@ public class KoruRenderable extends SpriteFacet{
 		return this;
 	}
 	
-	public KoruRenderable tile(int x, int y){
-		super.set(x*World.tilesize+World.tilesize/2, y*World.tilesize+World.tilesize/2);
-		return this;
-	}
-	
-	public KoruRenderable utile(int x, int y){
-		super.set(x*World.tilesize, y*World.tilesize);
+	public KoruRenderable tile(Tile tile){
+		super.set(tile.worldx(), tile.worldy());
 		return this;
 	}
 	

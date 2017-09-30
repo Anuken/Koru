@@ -7,15 +7,16 @@ import io.anuke.ucore.ecs.Spark;
 /**A material that is collected on interaction*/
 public abstract class CollectableMaterial extends Material{
 
-	protected CollectableMaterial(String name, MaterialType type) {
+	protected CollectableMaterial(String name, MaterialLayer type) {
 		super(name, type);
 		interactable = true;
 	}
 	
-	public void onInteract(Tile tile, int x, int y, Spark entity){
-		entity.get(InventoryTrait.class).addItems(tile.block().getDrops());
+	@Override
+	public void onInteract(Tile tile, Spark entity){
+		entity.get(InventoryTrait.class).addItems(getDrops());
 		entity.get(InventoryTrait.class).sendUpdate(entity);
 			
-		tile.setBlockMaterial(Materials.air);
+		tile.setWall(Materials.air);
 	}
 }

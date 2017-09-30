@@ -22,7 +22,7 @@ import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.StructMaterialTypes;
+import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
@@ -51,6 +51,7 @@ public class World extends Module{
 	public World(WorldLoader loader){
 		this();
 		file = loader;
+		Koru.world = this;
 	}
 
 	public World(){
@@ -160,6 +161,13 @@ public class World extends Module{
 			return;
 		}
 		
+		for(int x = 0; x < chunksize; x ++){
+			for(int y = 0; y < chunksize; y ++){
+				packet.chunk.tiles[x][y].x = x + packet.chunk.worldX();
+				packet.chunk.tiles[x][y].y = y + packet.chunk.worldY();
+			}
+		}
+		
 		chunks[relativex][relativey] = packet.chunk;
 	}
 
@@ -182,15 +190,12 @@ public class World extends Module{
 		return packet;
 	}
 
-	public static World instance(){
-		return IServer.active() ? IServer.instance().getWorld() : Koru.world;
-	}
-
 	public boolean positionSolid(float x, float y){
 		Tile tile = getWorldTile(x, y);
-		Material block = tile.block();
-		Material tilem = tile.topTile();
-		return (block.getType().solid() && block.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y)) || (tilem.getType().solid() && tilem.getType().getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
+		Material block = tile.wall();
+		Material tilem = tile.topFloor();
+		return (block.solid()) && block.getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y) 
+			|| (tilem.solid() && tilem.getHitbox(tile(x), tile(y), Rectangle.tmp).contains(x, y));
 	}
 
 	public boolean blockSolid(int x, int y){
@@ -209,7 +214,7 @@ public class World extends Module{
 		if( !inClientBounds(x, y)){
 			return true;
 		}
-		return getTile(x, y).block() == material || getTile(x, y).topTile() == material;
+		return getTile(x, y).wall() == material || getTile(x, y).topFloor() == material;
 	}
 
 	public GridPoint2 search(Material material, int x, int y, int range){
@@ -218,7 +223,7 @@ public class World extends Module{
 			for(int cy = -range;cy <= range;cy ++){
 				int worldx = x + cx;
 				int worldy = y + cy;
-				if(getTile(worldx, worldy).block() == material || getTile(worldx, worldy).topTile() == material){
+				if(getTile(worldx, worldy).wall() == material || getTile(worldx, worldy).topFloor() == material){
 					float dist = Vector2.dst(x, y, worldx, worldy);
 					if(dist < nearest){
 						point.set(worldx, worldy);
@@ -256,10 +261,11 @@ public class World extends Module{
 		return chunks[ax][ay];
 	}
 
-	public void updateTile(int x, int y){
+	public void updateTile(Tile tile){
 		updated = true;
-		getTile(x, y).changeEvent();
-		IServer.instance().sendToAllIn(new TileUpdatePacket(x, y, getTile(x, y)), world(x), world(y), tilesize*chunksize*(1+loadrange));
+		tile.changeEvent();
+		IServer.instance().sendToAllIn(new TileUpdatePacket(tile.x, tile.y, tile), world(tile.x), world(tile.y),
+				tilesize*chunksize*(1+loadrange));
 	}
 
 	public void updateLater(int x, int y){
@@ -320,7 +326,7 @@ public class World extends Module{
 	}
 
 	public static int tile(float i){
-		return nint(i/tilesize);
+		return nint(i/tilesize + 0.5f);
 	}
 	
 	public static float world(int i){
@@ -346,11 +352,10 @@ public class World extends Module{
 	//TODO make this work with transparency instead of specific types
 	public static boolean isPlaceable(Material material, Tile tile){
 		
-		if(!material.getType().tile()){
-			return (tile.blockEmpty());
+		if(!material.isLayer(MaterialLayer.floor)){
+			return tile.isWallEmpty();
 		}else{
-			return tile.topTile() != material && 
-				(tile.blockEmpty() || tile.block().getType() == StructMaterialTypes.torch) && tile.canAddTile();
+			return tile.topFloor() != material && !tile.wall().solid() && tile.canAddTile();
 		}		
 	}
 }

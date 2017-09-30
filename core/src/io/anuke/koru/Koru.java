@@ -31,7 +31,6 @@ public class Koru extends ModuleCore{
 
 	@Override
 	public void init(){
-		
 		try{
 			
 			Resources.loadMaterials();
@@ -43,7 +42,7 @@ public class Koru extends ModuleCore{
 				return tile != null && tile.solid();
 			}, (x, y, out)->{
 				Tile tile = world.getTile(x, y);
-				tile.block().getType().getHitbox(x, y, out);
+				tile.solidMaterial().getHitbox(x, y, out);
 			}));
 			
 			Effects.setEffectProvider((name, color, x, y)->{

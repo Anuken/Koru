@@ -31,7 +31,8 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.MaterialLayer;
+import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.ecs.Spark;
@@ -100,7 +101,7 @@ public class Renderer extends RendererModule{
 	void loadMaterialColors(){
 
 		for(Material material : Material.getAll()){
-			if(material.getType().tile())
+			if(material.isLayer(MaterialLayer.floor))
 				continue;
 
 			TextureRegion region = atlas.findRegion(material.name());
@@ -109,7 +110,7 @@ public class Renderer extends RendererModule{
 
 			Pixmap pixmap = atlas.getPixmapOf(region);
 
-			material.color = new Color(pixmap.getPixel(region.getRegionX(), region.getRegionY()));
+			material.setColor(new Color(pixmap.getPixel(region.getRegionX(), region.getRegionY())));
 		}
 	}
 	
@@ -232,10 +233,10 @@ public class Renderer extends RendererModule{
 		if(stack != null && tile != null && Koru.control.playerReachesBlock()){
 			Material select = null;
 			
-			if(stack.breaks(tile.block().breakType())){
-				select = tile.block();
-			}else if(stack.breaks(tile.topTile().breakType()) && tile.canRemoveTile()){
-				select = tile.topTile();
+			if(stack.breaks(tile.wall().breakType())){
+				select = tile.wall();
+			}else if(stack.breaks(tile.topFloor().breakType()) && tile.canRemoveTile()){
+				select = tile.topFloor();
 			}
 			
 			if(select == null) return;
@@ -246,18 +247,13 @@ public class Renderer extends RendererModule{
 				KoruCursors.setCursor("axe");
 			}
 			
-			String name = select.name() + 
-					select.getType().drawString(Koru.control.cursorX(), Koru.control.cursorY(), select);
-			
-			TextureRegion region = Draw.region(name);
-			
 			FacetList list = getRenderable(Koru.control.cursorX(), Koru.control.cursorY());
 			
-			if(list.renderables.size == 0) return;
+			if(list.facets.size == 0) return;
 			
-			KoruRenderable b = (KoruRenderable)(list.renderables.peek());
+			KoruRenderable b = (KoruRenderable)(list.facets.peek());
 			
-			Draw.getShader(Inline.class).region = region;
+			Draw.getShader(Inline.class).region = b.sprite;
 			Draw.getShader(Inline.class).color = outlineColor;
 			
 			Draw.shader(Inline.class);
@@ -270,26 +266,35 @@ public class Renderer extends RendererModule{
 	void drawTileOverlay(BaseFacet r){
 		if(ui.menuOpen()) return;
 
-		int x = Koru.control. cursorX();
+		int x = Koru.control.cursorX();
 		int y = Koru.control.cursorY();
 
 		Tile tile = world.getTile(x, y);
 		
 		//TODO
-		if(tile != null && tile.block().interactable() && Koru.control.playerReachesBlock()){
-			boolean overlay = tile.block().getType() == MaterialTypes.overlay;
+		if(tile != null && tile.wall().interactable() && Koru.control.playerReachesBlock()){
 			KoruCursors.setCursor("select");
 			
-			String name = tile.block().name() + tile.block().getType().drawString(x, y, tile.block());
+			FacetList list = getRenderable(Koru.control.cursorX(), Koru.control.cursorY());
+			SpriteFacet facet = null;
+			
+			for(Facet check : list.facets){
+				if(check instanceof SpriteFacet &&
+						check.provider == Sorter.tile && check.getLayer() < -512 &&
+						!MathUtils.isEqual(check.getLayer(), Sorter.shadow)){
+					
+					facet = (SpriteFacet)check;
+					break;
+				}
+			}
 			
 			Draw.getShader(Outline.class).color = outlineColor;
-			Draw.getShader(Outline.class).region = Draw.region(name);
+			Draw.getShader(Outline.class).region = facet.sprite;
 			
 			Draw.shader(Outline.class);
 			
-			Draw.crect(name, 
-					x * World.tilesize, y * World.tilesize + (overlay ? 0 : 6 + tile.block().getType().variantOffset(x, y, tile.block())));
-
+			facet.draw();
+			
 			Draw.shader();
 		}
 	}
@@ -319,7 +324,7 @@ public class Renderer extends RendererModule{
 			Material result = BlockRecipe.getRecipe(inv.recipe).result();
 			
 			
-			if(result.getType() == MaterialTypes.tile){
+			if(result.isLayer(MaterialLayer.floor)){
 				Draw.crect("blank", x*World.tilesize, y*World.tilesize, 12, 12);
 			}else{
 				Draw.crect("block", x*World.tilesize, y*World.tilesize, 12, 20);
@@ -382,18 +387,21 @@ public class Renderer extends RendererModule{
 							renderables[rendx][rendy] = new FacetList();
 						}
 
-						if(tile.topTile() != Materials.air && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24 && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 36){
-							tile.topTile().getType().draw(renderables[rendx][rendy], tile.topTile(), tile, worldx, worldy);
+						if(tile.topFloor() != Materials.air && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 24 && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 36){
+							tile.topFloor().draw(tile, renderables[rendx][rendy]);
 						}
 
-						if(!tile.blockEmpty() && Math.abs(worldx * 12 - camera.position.x + 6) < camera.viewportWidth / 2 * camera.zoom + 12 + tile.block().getType().size() && Math.abs(worldy * 12 - camera.position.y + 6) < camera.viewportHeight / 2 * camera.zoom + 12 + tile.block().getType().size()){
-							tile.block().getType().draw(renderables[rendx][rendy], tile.block(), tile, worldx, worldy);
+						if(!tile.isWallEmpty() && Math.abs(worldx * 12 - camera.position.x + 6) < 
+								camera.viewportWidth / 2 * camera.zoom + 12 + tile.wall().cullSize()
+								&& Math.abs(worldy * 12 - camera.position.y + 6) < 
+								camera.viewportHeight / 2 * camera.zoom + 12 + tile.wall().cullSize()){
+							tile.wall().draw(tile, renderables[rendx][rendy]);
 						}
 						
-						if(!tile.blockEmpty() && tile.block().getType() == MaterialTypes.block &&
+						if(!tile.isWallEmpty() && tile.wall() instanceof Wall &&
 								world.isAccesible(worldx, worldy)){
 							
-							Rectangle rect = tile.block().getType().getHitbox(worldx, worldy, new Rectangle());
+							Rectangle rect = tile.wall().getHitbox(worldx, worldy, new Rectangle());
 							rect.y += World.tilesize/4;
 							rays.addRect(rect);
 						}

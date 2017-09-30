@@ -146,8 +146,8 @@ public class Registrator{
 		public Tile read(Kryo k, Input i, Class<Tile> c){
 			Tile tile = Tile.unloadedTile();
 			
-			tile.layers = new int[]{k.readObject(i, int.class)};
-			tile.blockid = k.readObject(i, int.class);
+			tile.floors = new short[]{k.readObject(i, short.class)};
+			tile.wallid = k.readObject(i, short.class);
 			tile.light = k.readObject(i, byte.class);
 			tile.top = k.readObject(i, byte.class);
 			
@@ -157,7 +157,7 @@ public class Registrator{
 		@Override
 		public void write(Kryo k, Output o, Tile t){
 			k.writeObject(o, t.tileid());
-			k.writeObject(o, t.blockid);
+			k.writeObject(o, t.wallid);
 			k.writeObject(o, t.light);
 			k.writeObject(o, t.top);
 		}

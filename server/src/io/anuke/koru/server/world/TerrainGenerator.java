@@ -5,7 +5,6 @@ import static io.anuke.ucore.util.Mathf.clamp;
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Materials;
-import io.anuke.koru.world.materials.StructMaterials;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoronoiNoise;
@@ -52,19 +51,19 @@ public class TerrainGenerator implements Generator{
 			tile.setMaterial(Materials.ice);
 
 			if(Math.random() < 0.03)
-				tile.setBlockMaterial(Materials.rock);
+				tile.setWall(Materials.rock);
 
 		}else if(elev > 0.76){
 			tile.setMaterial(Materials.stone);
 
 			if(Math.random() < 0.05)
-				tile.setBlockMaterial(Materials.rock);
+				tile.setWall(Materials.rock);
 
 		}else if(se > 0.078){
 			if(t < 0.62){
 				if(Math.random() < 1){
 					if(Math.random() < 0.02 && elev < 0.35f && elev > 0.12f)
-						tile.setBlockMaterial(Materials.bush);
+						tile.setWall(Materials.bush);
 				}
 				if(elev < 0.4 && elev > 0.1 && t < 0.6 && t > 0.41){
 					if(Noise.snoise(x, y, 120, 13) + Noise.snoise(x, y, 5, 4) > 4)
@@ -88,7 +87,7 @@ public class TerrainGenerator implements Generator{
 						tile.setMaterial(Materials.rock);
 
 					if(Math.random() < 0.002)
-						tile.setBlockMaterial(Materials.pinesapling);
+						tile.setWall(Materials.pinesapling);
 				}
 
 				if(t < 0.4){
@@ -106,23 +105,23 @@ public class TerrainGenerator implements Generator{
 			}else if(t < 0.8){
 				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.03)
-					tile.setBlockMaterial(Materials.drybush);
+					tile.setWall(Materials.drybush);
 				if(Math.random() < 0.003)
-					tile.setBlockMaterial(Materials.deadtree);
+					tile.setWall(Materials.deadtree);
 
 				if(Math.random() < 0.01)
-					tile.setBlockMaterial(Materials.rock);
+					tile.setWall(Materials.rock);
 
 			}else if(t < 0.83){
 				tile.setMaterial(Materials.burntgrass);
 				if(Math.random() < 0.001)
-					tile.setBlockMaterial(Materials.deadtree);
+					tile.setWall(Materials.deadtree);
 				if(Math.random() < 0.001)
-					tile.setBlockMaterial(Materials.burnedtree);
+					tile.setWall(Materials.burnedtree);
 			}else{
 				tile.setMaterial(Materials.sand);
 				if(Math.random() < 0.02)
-					tile.setBlockMaterial(Materials.rock);
+					tile.setWall(Materials.rock);
 
 			}
 
@@ -166,13 +165,9 @@ public class TerrainGenerator implements Generator{
 				tile.setMaterial(Materials.air);
 
 				if(Math.random() < 0.05)
-					tile.setBlockMaterial(Materials.rock);
+					tile.setWall(Materials.rock);
 			}
 		}
-		
-		//TODO remove this when not debugging
-		if(x == 99999 && y == 99999)
-			tile.setBlockMaterial(StructMaterials.workbench);
 
 		return tile;
 	}

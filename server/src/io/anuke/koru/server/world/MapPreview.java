@@ -13,7 +13,8 @@ import com.badlogic.gdx.utils.IntIntMap;
 
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.MaterialLayer;
+import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
@@ -43,7 +44,7 @@ public class MapPreview extends ApplicationAdapter{
 		Pixmap pixmap = atlas.getPixmapOf(atlas.findRegion("grass"));
 
 		for(Material material : Material.getAll()){
-			if(!material.getType().tile() && material.getType() != MaterialTypes.block)
+			if(!material.isLayer(MaterialLayer.floor) && !(material instanceof Wall))
 				continue;
 			AtlasRegion region = atlas.findRegion(material.name());
 			colors.put(material.id(), pixmap.getPixel(region.getRegionX(), region.getRegionY()));
@@ -107,19 +108,19 @@ public class MapPreview extends ApplicationAdapter{
 		Tile tile = gen.generate(x, y);
 		float light = tile.light();
 		
-		if(tile.block().getType() == MaterialTypes.block){
-			temp.set(colors.get(tile.blockid, 0));
+		if(tile.wall() instanceof Wall){
+			temp.set(colors.get(tile.wallid, 0));
 			temp.mul(light, light, light, 1f);
 			return Color.rgba8888(temp);
 		}
 		
-		if(!tile.blockEmpty()){
-			temp.set(colors.get(tile.topTile().id(), 0)+1000);
+		if(!tile.isWallEmpty()){
+			temp.set(colors.get(tile.topFloor().id(), 0)+1000);
 			temp.mul(light, light, light, 1f);
 			return Color.rgba8888(temp);
 		}
 		
-		temp.set(colors.get(tile.topTile().id(), 0));
+		temp.set(colors.get(tile.topFloor().id(), 0));
 		temp.mul(light, light, light, 1f);
 		
 		return Color.rgba8888(temp);

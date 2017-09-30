@@ -12,7 +12,6 @@ public class BlockRecipes{
 		recipe(StructMaterials.woodfloor);
 		recipe(StructMaterials.stonefloor);
 		recipe(StructMaterials.torch);
-		recipe(StructMaterials.workbench);
 	}
 
 	public static void load(){}
