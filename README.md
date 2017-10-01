@@ -6,12 +6,13 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 
 ![axe-wielding crabs](http://i.imgur.com/6bft2gp.png)
 
+![reflections](https://i.imgur.com/cMqFB6c.gif)
+
 ### Current Features
 - infinite procedurally generated world
 - biomes and cave systems
-- building, resource collection
-- ~~basic combat~~ *(currently being re-coded)*
-- ~~specialized tools~~ *(currently being re-coded)*
+- basic building, resource collection
+- reflective water shaders
 - GUI made with [uCore Scene](https://github.com/Anuken/uCore)
 - multiplayer, made with Kryonet
 - crabs
@@ -22,7 +23,8 @@ A 2D sandbox game, written using libGDX and Java 8. Partially made as a testing 
 ### Roadmap
 - proper player characters
 - crafting
-- combat
+- more blocks
+- passive creatures
 - enemies
-- block entities or data
-- mobile support
+- saving entities in chunks
+- block entities and data
