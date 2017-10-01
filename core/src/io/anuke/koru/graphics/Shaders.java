@@ -14,6 +14,7 @@ public class Shaders{
 		new Outline();
 		new Inline();
 		new Water();
+		new Mix();
 	}
 	
 	public static class Water extends Shader{
@@ -27,6 +28,21 @@ public class Shaders{
 			shader.setUniformf("camerapos", Core.camera.position.x, Core.camera.position.y);
 			shader.setUniformf("screensize", Gdx.graphics.getWidth() / Core.cameraScale, Gdx.graphics.getHeight() / Core.cameraScale);
 			shader.setUniformf("time", Timers.time());
+		}
+	}
+	
+	public static class Mix extends Shader{
+		public Color color = new Color();
+		public float amount = 0.5f;
+		
+		public Mix(){
+			super("mix", "default");
+		}
+
+		@Override
+		public void apply(){
+			shader.setUniformf("tint", color);
+			shader.setUniformf("amount", amount);
 		}
 	}
 	

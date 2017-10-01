@@ -85,9 +85,6 @@ public class MaterialTypes{
 
 		@Override
 		public void draw(Tile tile, FacetList list){
-			if(tile.wall() instanceof Wall){
-				return;
-			}
 			
 			if(Koru.world.blends(tile.x, tile.y, this)){
 				get(name + "edge")

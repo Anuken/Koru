@@ -3,6 +3,7 @@ package io.anuke.koru.graphics;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
+import io.anuke.koru.graphics.Shaders.Mix;
 import io.anuke.koru.graphics.Shaders.Water;
 import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Core;
@@ -33,6 +34,9 @@ public class KoruFacetLayers{
 		@Override
 		public void end(){
 			Draw.color();
+			
+			Draw.getShader(Mix.class).color.set(0x29619bff);
+			Draw.shader(Mix.class);
 			
 			Array<Facet> facets = Facets.instance().getFacetArray();
 			for(int i = 0; i < facets.size; i ++){
@@ -65,11 +69,12 @@ public class KoruFacetLayers{
 				
 				Draw.end();
 				
-				//TODO layer lags behind?
-				float close = 0f;
-				Draw.batch().getTransformMatrix().setToTranslation(0, facet.getLayer() + close, 0);
+				
+				//TODO facet lags behind in Y axis while moving?
+				
+				Draw.batch().getTransformMatrix().setToTranslation(0, facet.getLayer(), 0);
 				Draw.batch().getTransformMatrix().scale(1f, -1f, 0);
-				Draw.batch().getTransformMatrix().translate(0, -facet.getLayer() - close, 0);
+				Draw.batch().getTransformMatrix().translate(0, -facet.getLayer(), 0);
 				Draw.begin();
 				facet.draw();
 				
@@ -83,6 +88,8 @@ public class KoruFacetLayers{
 			}
 			
 			Draw.end();
+			Draw.shader();
+			
 			Draw.batch().getTransformMatrix().setToTranslation(0, 0, 0);
 			Draw.begin();
 			
