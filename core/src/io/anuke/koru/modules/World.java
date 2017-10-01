@@ -262,7 +262,6 @@ public class World extends Module{
 	}
 
 	public void updateTile(Tile tile){
-		Koru.log("Sending tile update for tile " + tile);
 		updated = true;
 		tile.changeEvent();
 		IServer.instance().sendToAllIn(new TileUpdatePacket(tile.x, tile.y, tile), world(tile.x), world(tile.y),

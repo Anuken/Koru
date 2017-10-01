@@ -1,7 +1,10 @@
 package io.anuke.koru.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
+import io.anuke.ucore.core.Core;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Shader;
 import io.anuke.ucore.util.Tmp;
 
@@ -10,6 +13,21 @@ public class Shaders{
 	public static void create(){
 		new Outline();
 		new Inline();
+		new Water();
+	}
+	
+	public static class Water extends Shader{
+		
+		public Water(){
+			super("water", "default");
+		}
+
+		@Override
+		public void apply(){
+			shader.setUniformf("camerapos", Core.camera.position.x, Core.camera.position.y);
+			shader.setUniformf("screensize", Gdx.graphics.getWidth() / Core.cameraScale, Gdx.graphics.getHeight() / Core.cameraScale);
+			shader.setUniformf("time", Timers.time());
+		}
 	}
 	
 	public static class Outline extends Shader{

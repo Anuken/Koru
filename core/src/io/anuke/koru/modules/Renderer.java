@@ -85,7 +85,10 @@ public class Renderer extends RendererModule{
 		light = new PointLight(rays, 300, Color.WHITE, 1135, 0, 0);
 		light.setSoftnessLength(20f);
 
-		Facets.instance().setLayerManager(new FacetLayerHandler());
+		Facets.instance().setLayerManager(new FacetLayerHandler(){{
+			allDrawLayers.add(KoruFacetLayers.water);
+		}});
+		
 		KoruCursors.setCursor("cursor");
 		KoruCursors.updateCursor();
 
@@ -219,7 +222,7 @@ public class Renderer extends RendererModule{
 		if(tile == null) return;
 		
 		float l = tile.light();
-		darkness = MathUtils.lerp(darkness, l, 0.01f * Timers.delta());
+		darkness = MathUtils.lerp(darkness, l, 0.03f * Timers.delta());
 		
 		light.setColor(darkness, darkness, darkness, 1f);
 	}
@@ -230,7 +233,7 @@ public class Renderer extends RendererModule{
 		Tile tile = world.getTile(Koru.control.cursorX(), Koru.control.cursorY());
 		ItemStack stack = player.get(InventoryTrait.class).hotbarStack();
 		
-		if(stack != null && tile != null && Koru.control.playerReachesBlock()){
+		if(stack != null && tile != null && Koru.control.playerReachesBlock() && !tile.wall().interactable()){
 			Material select = null;
 			
 			if(stack.breaks(tile.wall().breakType()) && tile.wall().isBreakable()){
@@ -279,10 +282,10 @@ public class Renderer extends RendererModule{
 			SpriteFacet facet = null;
 			
 			for(Facet check : list.facets){
-				if(check instanceof SpriteFacet && !(check.provider == Sorter.tile && check.getLayer() > -10) &&
-						!MathUtils.isEqual(check.getLayer(), Sorter.shadow)){
+				if(check instanceof SpriteFacet && !(check.provider == Sorter.tile && check.getLayer() > 0) &&
+						!MathUtils.isEqual(check.getLayer(), Sorter.shadow) && 
+						(facet == null || check.compareTo(facet) > 0)){
 					facet = (SpriteFacet)check;
-					break;
 				}
 			}
 			
@@ -399,10 +402,11 @@ public class Renderer extends RendererModule{
 						}
 						
 						if(!tile.isWallEmpty() && tile.wall() instanceof Wall &&
-								world.isAccesible(worldx, worldy)){
+								world.isAccesible(worldx, worldy) && tile.light < 127){
 							
 							Rectangle rect = tile.wall().getHitbox(worldx, worldy, new Rectangle());
 							rect.y += World.tilesize/4;
+							rect.y += 1f;
 							rays.addRect(rect);
 						}
 					}

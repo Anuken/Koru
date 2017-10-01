@@ -137,6 +137,8 @@ public class InputHandler{
 					&& inv.recipe != -1 && inv.hasAll(recipe.requirements())
 					&& World.isPlaceable(recipe.result(), tile)){
 				
+				Effects.effect("blockplace", World.world(blockx), World.world(blocky));
+				
 				if(recipe.result().isLayer(MaterialLayer.floor)){
 					tile.addFloor(recipe.result());
 				}else{

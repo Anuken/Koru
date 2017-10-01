@@ -7,10 +7,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.graphics.KoruFacetLayers;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.Tile;
+import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
+import io.anuke.ucore.facet.BaseFacet;
 import io.anuke.ucore.facet.FacetList;
 import io.anuke.ucore.facet.Sorter;
 import io.anuke.ucore.graphics.Hue;
@@ -38,6 +42,57 @@ public class MaterialTypes{
 			
 			get(name + variantString(tile))
 			.tile(tile).center().layer(-id() * 2 - tile.top*3).add(list);
+		}
+	}
+	
+	public static class AnimatedFloor extends Floor{
+
+		protected AnimatedFloor(String name) {
+			super(name);
+		}
+		
+		@Override
+		public void draw(Tile tile, FacetList list){
+			if(tile.wall() instanceof Wall){
+				return;
+			}
+			
+			if(Koru.world.blends(tile.x, tile.y, this)){
+				get(name + "edge")
+				.tile(tile)
+				.center().layer(-id() * 2 + 1 - tile.top*3).add(list);
+			}
+			
+			new BaseFacet(-id() * 2 - tile.top*3, Sorter.tile, f->{
+				drawTile(tile);
+			}).add(list);
+		}
+		
+		public void drawTile(Tile tile){
+			Draw.rect(name + ((int)(Timers.time()/10f) % variants)+1, tile.worldx(), tile.worldy());
+		}
+	}
+	
+	public static class Water extends Floor{
+		
+		protected Water(String name) {
+			super(name);
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			if(tile.wall() instanceof Wall){
+				return;
+			}
+			
+			if(Koru.world.blends(tile.x, tile.y, this)){
+				get(name + "edge")
+				.tile(tile)
+				.center().layer(KoruFacetLayers.waterLayer + 1 + (id() % 2)*2).add(list);
+			}
+			
+			get(name + variantString(tile))
+			.tile(tile).center().layer(KoruFacetLayers.waterLayer + (id() % 2)*2).add(list);
 		}
 	}
 	

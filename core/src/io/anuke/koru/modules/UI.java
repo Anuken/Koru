@@ -6,7 +6,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.KoruCursors;
+import io.anuke.koru.items.ItemType;
 import io.anuke.koru.modules.Control.GameState;
+import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.ui.*;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.core.Inputs;
@@ -28,7 +30,7 @@ public class UI extends SceneModule{
 	private SettingsDialog settings;
 	
 	private InventoryMenu inventory;
-	private RecipeMenu recipes;
+	private PlaceMenu recipes;
 	
 	private VisibilityProvider titlevis = ()->Koru.control.isState(GameState.title);
 	private VisibilityProvider playvis = ()->Koru.control.isPlaying();
@@ -117,7 +119,9 @@ public class UI extends SceneModule{
 		
 		//recipes
 		new table(){{
-			add(recipes = new RecipeMenu()).padBottom(300);
+			visible(()->Koru.control.player.get(InventoryTrait.class).hotbarStack().isType(ItemType.placer));
+			aleft();
+			add(recipes = new PlaceMenu());
 		}}.end().visible(playvis);
 		
 		//debug

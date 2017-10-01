@@ -4,6 +4,7 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.IServer;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.systems.EntityMapper;
+import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.Trait;
@@ -21,17 +22,19 @@ public class ItemTrait extends Trait{
 		IServer.instance().getBasis().getProcessor(EntityMapper.class).getNearbyEntities(spark.pos().x, spark.pos().y, 30, 
 		aentity-> aentity.has(InventoryTrait.class) && !aentity.get(InventoryTrait.class).full(), 
 		(other)->{
-			float dst =  other.pos().dst(spark.pos());
+			float height = 3f;
+			float dst =  other.pos().dst(spark.pos().x, spark.pos().y - height);
 					
 			if(dst > 2f){
 				spark.get(VelocityTrait.class).vector.add(Tmp.v1.set(other.pos().x - spark.pos().x, 
-						other.pos().y - spark.pos().y).nor().scl(0.2f * Timers.delta()));
+						other.pos().y - (spark.pos().y - height)).nor().scl(0.2f * Timers.delta()));
 			}
 					
-			if(dst < 1){
+			if(dst < 2f){
 				other.get(InventoryTrait.class).addItem(stack);
 				other.get(InventoryTrait.class).sendUpdate(other);
 				IServer.instance().removeSpark(spark);
+				Effects.effect("itempickup", spark.pos().x, spark.pos().y - 0.5f);
 			}
 		});
 		

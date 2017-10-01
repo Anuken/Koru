@@ -72,7 +72,7 @@ public class Player extends Prototype{
 			new SyncTrait(SyncType.player),
 			new InputTrait(),
 			new HealthTrait(),
-			new InventoryTrait(24),
+			new InventoryTrait(20),
 			new DirectionTrait(),
 			new EquipTrait(),
 			new TileCollideTrait(0, 2, 4, 3)

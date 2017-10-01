@@ -43,13 +43,13 @@ public class Materials{
 		
 	}},
 	
-	water = new Floor("water"){{
+	water = new Water("water"){{
 		variants = 0;
 		solid = true;
 		hitbox.setSize(10, 10);
 	}},
 	
-	deepwater = new Floor("deepwater"){{
+	deepwater = new Water("deepwater"){{
 		variants = 0;
 		solid = true;
 		hitbox.setSize(10, 10);

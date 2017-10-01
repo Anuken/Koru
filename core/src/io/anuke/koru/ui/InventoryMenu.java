@@ -112,12 +112,13 @@ public class InventoryMenu extends Table{
 		}
 
 		public void draw(Batch batch, float alpha){
-			batch.setColor(1, 1, 1, alpha);
-			batch.draw(Draw.region((index == inventory.hotbar) ? "slotselect" : "slot"), getX(), getY(), getWidth(), getHeight());
+			Draw.alpha(alpha);
+			patch((index == inventory.hotbar) ? "slotselect" : "slot");
 			//draw(batch, getX(), getY(), getWidth(), getHeight());
 			if(stacks[index] != null){
 				drawItem(batch, alpha, getX(), getY(), stacks[index]);
 			}
+			Draw.reset();
 		}
 	}
 }

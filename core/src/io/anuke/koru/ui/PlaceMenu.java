@@ -14,39 +14,30 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.ucore.core.Draw;
-import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.scene.utils.ClickListener;
 
-public class RecipeMenu extends Table{
+public class PlaceMenu extends Table{
 	final int slotsize = 64;
 	float pscale = slotsize/16;
 	Requirement req = new Requirement();
 	Slot selected;
 	
-	public RecipeMenu(){
+	public PlaceMenu(){
 		for(BlockRecipe recipe : BlockRecipe.getAll()){
-			Slot slot = new Slot(recipe, recipe.id(), 0);
+			Slot slot = new Slot(recipe, recipe.id());
 			add(slot).size(slotsize);
 		}
-		row();
 		
-		add(req).colspan(BlockRecipe.getAll().size()).height(64);
+		add(req).size(64);
 	}
 	
-	public void act(float delta){
-		setVisible(Inputs.keyDown("build") && Koru.control.canMove());
-	}
-	
+	@Override
 	public void draw(Batch batch, float alpha){
 		batch.setColor(Hue.lightness(95/255f));
-		batch.draw(Draw.region("blank"), getX()-pscale, getY()-pscale + getHeight()/2, getWidth()+pscale*2, getHeight()/2+pscale*2);
-		batch.draw(Draw.region("blank"), getX() + getWidth()/2-slotsize/2 - pscale, getY() - pscale, slotsize + pscale*2, slotsize + pscale*2);
-		
-		batch.setColor(Color.WHITE);
-		batch.draw(Draw.region("slot2"), getX() + getWidth()/2-slotsize/2, getY(), slotsize, slotsize);
+		batch.draw(Draw.region("blank"), getX()-pscale, getY()-pscale, getWidth()+pscale*2, getHeight()+pscale*2);
 		
 		super.draw(batch, alpha);
 	}
@@ -55,6 +46,8 @@ public class RecipeMenu extends Table{
 		ItemStack[] stacks;
 		
 		public void draw(Batch batch, float alpha){
+			patch("slot");
+			
 			if(stacks == null) return;
 			
 			InventoryTrait inv = Koru.control.player.get(InventoryTrait.class);
@@ -82,35 +75,30 @@ public class RecipeMenu extends Table{
 	}
 	
 	class Slot extends Element{
-		public final int x, y;
+		public final int index;
 		public final ClickListener click;
 		public final BlockRecipe recipe;
 		
-		public Slot(BlockRecipe recipe, int x, int y) {
-			this.x = x;
-			this.y = y;
+		public Slot(BlockRecipe recipe, int index) {
+			this.index = index;
 			this.recipe = recipe;
 			
 			click = clicked(()->{
 				selected = Slot.this;
 				req.set(recipe.requirements());
 					
-				Koru.control.player.get(InventoryTrait.class).recipe = x;
+				Koru.control.player.get(InventoryTrait.class).recipe = index;
 					
 				RecipeSelectPacket packet = new RecipeSelectPacket();
-				packet.recipe = x;
+				packet.recipe = index;
 				Koru.network.client.sendTCP(packet);
 			});
 
 		}
 
-		public String toString(){
-			return "Slot " + x + ", " + y;
-		}
-
 		public void draw(Batch batch, float alpha){
-			batch.setColor(getColor());
-			batch.draw(Draw.region(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2")), getX(), getY(), getWidth(), getHeight());
+			Draw.color(getColor());
+			patch(selected == this ? "slotset" : (click.isOver() ? "slotselect2" : "slot2"));
 			
 			Material result = recipe.result();
 			TextureRegion region = Draw.region(result.name());
@@ -122,6 +110,8 @@ public class RecipeMenu extends Table{
 			}else{
 				batch.draw(region, getX() + getWidth()/2-region.getRegionWidth()*pscale/2, 4*pscale+ getY() + getHeight()/2-region.getRegionHeight()*pscale/2, w,h);
 			}
+			
+			Draw.reset();
 		}
 	}
 }

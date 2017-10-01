@@ -10,6 +10,7 @@ import io.anuke.koru.network.IServer;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.ucore.util.Bits;
 
 public class Tile implements Poolable{
 	public static final int LAYER_SIZE = 10;
@@ -131,8 +132,12 @@ public class Tile implements Poolable{
 	
 	/**Random number, generated based on coordinates.*/
 	public int rand(int max){
-		int i = (x+y*x);
-		MathUtils.random.setSeed(i);
+		return rand(0, max);
+	}
+	
+	/**Random number, generated based on coordinates.*/
+	public int rand(int offset, int max){
+		MathUtils.random.setSeed(getSeed() + offset);
 	    return MathUtils.random(1, max);
 	}
 
@@ -140,7 +145,12 @@ public class Tile implements Poolable{
 		topFloor().changeEvent(this);
 		wall().changeEvent(this);
 	}
+	
+	public long getSeed(){
+		return Bits.packLong(x, y);
+	}
 
+	@Override
 	public String toString(){
 		return "Tile: [" + x + ", " + y + ", block=" + wall() + " tile=" + topFloor() + " {"+  light +"}]";
 	}
