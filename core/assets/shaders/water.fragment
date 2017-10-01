@@ -32,8 +32,16 @@ void main() {
 	
 	float mscl = 30.0;
 	float mth = 5.0;
+	
 	//if there's something actually there
 	if(color.r > 0.01){
+	    vec4 old = color;
+	    color = texture2D(u_texture, c + vec2(sin(time/3.0 + coords.y/0.75) * v.x, 0)) * vec4(0.9, 0.9, 1, 1.0);
+	    color.a = 1.0;
+	    
+	    if(color.r < 0.01){
+	        color = old;
+	    }
 	    
 	    if(mod(int(coords.x + coords.y*1.1 + sin(time / 8.0 + coords.x/5.0 - coords.y/100.0)*2.0) + 
 	        sin(time / 20.0 + coords.y/3.0) * 1.0 +

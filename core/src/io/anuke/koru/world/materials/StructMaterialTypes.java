@@ -2,7 +2,7 @@ package io.anuke.koru.world.materials;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.koru.graphics.KoruRenderable;
+import io.anuke.koru.graphics.KoruFacet;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.Timers;
@@ -21,7 +21,7 @@ public class StructMaterialTypes{
 		public void draw(Tile tile, FacetList group){
 			
 			//light overlay
-			new KoruRenderable("torchflame1"){
+			new KoruFacet("torchflame1"){
 				public void draw(){
 					sprite.setRegion(Draw.region("torchflame" + frame(tile)));
 					super.draw();
@@ -29,7 +29,7 @@ public class StructMaterialTypes{
 			}.light().tile(tile).centerX().add(group);
 			
 			//radius light
-			new KoruRenderable("light"){
+			new KoruFacet("light"){
 				public void draw(){
 					sprite.setOriginCenter();
 					sprite.setScale(1f + (float)Math.sin(Timers.time()/7f+ tile.rand(100)/30f)/25f + (float)Math.random()/20f);
@@ -39,7 +39,7 @@ public class StructMaterialTypes{
 			}.light().set(tile.worldx(), tile.worldy()+6).center().color(0.5f, 0.4f, 0.2f).add(group);
 			
 			//actual torch
-			new KoruRenderable(name){
+			new KoruFacet(name){
 				public void draw(){
 					Draw.sprite(sprite);
 					Draw.color(1,1,1,sprite.getColor().a);

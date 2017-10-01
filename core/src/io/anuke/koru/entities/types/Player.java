@@ -30,7 +30,7 @@ public class Player extends Prototype{
 			new FacetTrait((trait, spark)->{
 				
 				trait.draw(l->{
-					l.layer = spark.pos().y;
+					l.layer = spark.pos().y + 1f;
 					
 					float x = spark.pos().x;
 					float y = spark.pos().y;

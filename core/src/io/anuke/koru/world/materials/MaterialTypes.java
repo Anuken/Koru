@@ -1,13 +1,15 @@
 package io.anuke.koru.world.materials;
 
-import static io.anuke.koru.graphics.RenderPool.get;
+import static io.anuke.koru.graphics.FacetPool.get;
 import static io.anuke.koru.modules.World.tilesize;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.KoruFacetLayers;
+import io.anuke.koru.graphics.ReflectionlessFacet;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.Tile;
@@ -17,7 +19,9 @@ import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.facet.BaseFacet;
 import io.anuke.ucore.facet.FacetList;
 import io.anuke.ucore.facet.Sorter;
+import io.anuke.ucore.function.Predicate;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.util.Geometry;
 
 public class MaterialTypes{
 	public static final Color grasscolor = new Color(0x62962fff);
@@ -130,9 +134,13 @@ public class MaterialTypes{
 	}
 	
 	public static class Wall extends Material{
+		public String edge;
+		public int height = 8;
+		public Predicate<Material> blendWith = block -> block == this;
 
 		protected Wall(String name) {
 			super(name, MaterialLayer.wall);
+			edge = name;
 			solid = true;
 		}
 
@@ -145,11 +153,44 @@ public class MaterialTypes{
 			.sort(Sorter.tile).add(list);
 			
 			get(name)
+			.material(this)
 			.set(tile.worldx(), tile.worldy() - World.tilesize/2)
 			.centerX()
 			.sort(Sorter.object).add(list);
+			
+			drawEdge(tile, list);
 		}
 		
+		public void drawEdge(Tile tile, FacetList list){
+			if(Draw.hasRegion(edge + "edge")){
+				new ReflectionlessFacet( tile.worldy() - World.tilesize / 2f - 0.001f, p -> {
+					float posx = tile.x * World.tilesize, posy = tile.y * World.tilesize + height;
+
+					int dir = 0;
+
+					for(GridPoint2 point : Geometry.getD4Points()){
+						Tile other = Koru.world.getTile(tile.x + point.x, tile.y + point.y);
+						if(other == null || !blendWith.test(other.wall())){
+							Draw.rect(edge + "edge", posx, posy, dir * 90);
+						}
+
+						dir++;
+					}
+
+					dir = 0;
+
+					for(GridPoint2 point : Geometry.getD8EdgePoints()){
+						Tile other = Koru.world.getTile(tile.x + point.x, tile.y + point.y);
+						if(other == null || !blendWith.test(other.wall())){
+							Draw.rect(edge + "edgecorner", posx, posy, dir * 90);
+						}
+
+						dir++;
+					}
+
+				}).sort(Sorter.object).add(list);
+			}
+		}
 	}
 	
 	public static class Overlay extends Material{

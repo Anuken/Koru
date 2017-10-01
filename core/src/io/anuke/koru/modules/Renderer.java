@@ -254,13 +254,20 @@ public class Renderer extends RendererModule{
 			
 			if(list.facets.size == 0) return;
 			
-			KoruRenderable b = (KoruRenderable)(list.facets.peek());
+			KoruFacet facet = null;
 			
-			Draw.getShader(Inline.class).region = b.sprite;
+			for(int i = list.facets.size - 1; i >= 0; i --){
+				if(list.facets.get(i) instanceof KoruFacet){
+					facet = (KoruFacet)list.facets.get(i);
+					break;
+				}
+			}
+			
+			Draw.getShader(Inline.class).region = facet.sprite;
 			Draw.getShader(Inline.class).color = outlineColor;
 			
 			Draw.shader(Inline.class);
-			b.draw();
+			facet.draw();
 			Draw.shader();
 		}
 		
