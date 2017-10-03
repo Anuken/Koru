@@ -333,7 +333,6 @@ public class Renderer extends RendererModule{
 
 			Material result = BlockRecipe.getRecipe(inv.recipe).result();
 			
-			
 			if(result.isLayer(MaterialLayer.floor)){
 				Draw.rect("blank", x*World.tilesize, y*World.tilesize, 12, 12);
 			}else{

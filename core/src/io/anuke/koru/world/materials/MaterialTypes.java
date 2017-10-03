@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.graphics.KoruFacet;
 import io.anuke.koru.graphics.KoruFacetLayers;
 import io.anuke.koru.graphics.ReflectionlessFacet;
 import io.anuke.koru.modules.World;
@@ -22,6 +23,7 @@ import io.anuke.ucore.facet.Sorter;
 import io.anuke.ucore.function.Predicate;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.util.Geometry;
+import io.anuke.ucore.util.Mathf;
 
 public class MaterialTypes{
 	public static final Color grasscolor = new Color(0x62962fff);
@@ -238,10 +240,18 @@ public class MaterialTypes{
 		public void draw(Tile tile, FacetList list){
 			float offset = variantOffset(tile);
 			
-			get(name + variantString(tile))
+			KoruFacet facet = get(name + variantString(tile))
 			.set(tile.worldx(), tile.worldy() + offset).layer(tile.worldy()).centerX()
-			.sort(Sorter.object)
-			.addShadow(list, -offset).add(list);
+			.sort(Sorter.object).addShadow(list, -offset);
+			
+			//skewing, "swaying"
+			facet.update(()->{
+				float time = (Timers.time() + (tile.x + tile.y)*4f) / 40f;
+				int scl = (int)(time / Math.PI);
+				float intensity = Mathf.sin(scl*10, 1f, 4f);
+				
+				facet.skewX(Mathf.sin(time, 1f, intensity));
+			}).add(list);
 		}
 		
 	}

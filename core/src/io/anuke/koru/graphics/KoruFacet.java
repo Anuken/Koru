@@ -4,10 +4,12 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.facet.*;
+import io.anuke.ucore.function.Listenable;
 
 public class KoruFacet extends SpriteFacet{
 	public boolean reflect = true;
 	public Material material = null;
+	public Listenable updater;
 	
 	public KoruFacet(){
 		
@@ -15,6 +17,11 @@ public class KoruFacet extends SpriteFacet{
 	
 	public KoruFacet(String region){
 		super(region);
+	}
+	
+	public KoruFacet update(Listenable update){
+		this.updater = update;
+		return this;
 	}
 	
 	public KoruFacet disableReflect(){
@@ -117,12 +124,21 @@ public class KoruFacet extends SpriteFacet{
 		super.center();
 		return this;
 	}
+	
+	@Override
+	public void draw(){
+		if(updater != null){
+			updater.listen();
+		}
+		super.draw();
+	}
 
 	
 	@Override
 	public void onFree(){
 		reflect = true;
 		material = null;
+		updater = null;
 		FacetPool.free(this);
 	}
 

@@ -36,6 +36,7 @@ public class KoruFacetLayers{
 			Draw.color();
 			
 			Draw.getShader(Mix.class).color.set(0x29619bff);
+			Draw.getShader(Mix.class).amount = 0.42f;
 			Draw.shader(Mix.class);
 			
 			Array<Facet> facets = Facets.instance().getFacetArray();
@@ -68,7 +69,6 @@ public class KoruFacetLayers{
 				}
 				
 				Draw.end();
-				
 				
 				//TODO facet lags behind in Y axis while moving?
 				

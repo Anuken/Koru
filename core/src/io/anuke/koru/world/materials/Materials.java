@@ -171,6 +171,7 @@ public class Materials{
 		addDrop(Items.pinecone, 1);
 		solid = false;
 		breaktime = 1;
+		variants = 0;
 	}},
 	
 	stoneblock = new Wall("stoneblock"){{

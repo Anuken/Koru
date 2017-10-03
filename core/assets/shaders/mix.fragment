@@ -20,5 +20,5 @@ void main() {
 	vec4 result = mix(color, tint, amount);
 	result.a = alpha;
 
-	gl_FragColor = result;
+	gl_FragColor = result * v_color;
 }
