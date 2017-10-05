@@ -1,25 +1,17 @@
 package io.anuke.koru.items;
 
-import java.util.ArrayList;
+import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.world.materials.Material;
 
 public class BlockRecipe{
-	private static ArrayList<BlockRecipe> recipes = new ArrayList<BlockRecipe>();
+	private static Array<BlockRecipe> recipes = new Array<>();
 	private static int lastid;
 	
 	private final int id;
 	
 	Material result;
 	ItemStack[] requirements;
-	
-	public static BlockRecipe getRecipe(int id){
-		return recipes.get(id);
-	}
-	
-	public static ArrayList<BlockRecipe> getAll(){
-		return recipes;
-	}
 	
 	public BlockRecipe(Material result){
 		this(result, result.getDrops());
@@ -44,11 +36,19 @@ public class BlockRecipe{
 		return id;
 	}
 	
-	protected static void recipe(Material result){
+	public static BlockRecipe getRecipe(int id){
+		return recipes.get(id);
+	}
+	
+	public static Array<BlockRecipe> getAll(){
+		return recipes;
+	}
+	
+	public static void addRecipe(Material result){
 		new BlockRecipe(result);
 	}
 	
-	protected static void recipe(Material result, ItemStack...req){
+	public static void addRecipe(Material result, ItemStack...req){
 		new BlockRecipe(result, req);
 	}
 }

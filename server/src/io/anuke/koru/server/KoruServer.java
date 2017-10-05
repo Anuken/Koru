@@ -17,7 +17,7 @@ import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
 import io.anuke.koru.entities.types.Effect;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.items.Items;
+import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.modules.Network;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.IServer;
@@ -45,7 +45,7 @@ public class KoruServer extends IServer{
 	CommandHandler commands;
 
 	void setup(){
-		Resources.loadMaterials();
+		Resources.loadData();
 
 		Effects.setEffectProvider((name, color, x, y) -> {
 			Spark spark = Effect.create(name, color, x, y);

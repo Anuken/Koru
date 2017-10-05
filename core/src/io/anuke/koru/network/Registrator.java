@@ -17,6 +17,7 @@ import com.esotericsoftware.kryo.io.Output;
 import io.anuke.koru.entities.types.*;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.*;
+import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
 import io.anuke.koru.network.syncing.SyncData.Synced;

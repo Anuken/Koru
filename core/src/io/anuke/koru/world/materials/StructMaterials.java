@@ -2,7 +2,7 @@ package io.anuke.koru.world.materials;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.koru.items.Items;
+import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.world.materials.MaterialTypes.Floor;
 import io.anuke.koru.world.materials.MaterialTypes.Prop;
 import io.anuke.koru.world.materials.MaterialTypes.Wall;

@@ -35,7 +35,7 @@ public class Control extends Module{
 	
 	public Control(){
 		player = new Spark(Prototypes.player);
-		player.get(ConnectionTrait.class).name = "this player";
+		player.get(ConnectionTrait.class).name = "you";
 		player.get(ConnectionTrait.class).local = true;
 	}
 
@@ -204,8 +204,9 @@ public class Control extends Module{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
+		InventoryTrait inv = player.get(InventoryTrait.class);
+		
 		if (button == Buttons.LEFT){
-			InventoryTrait inv = player.get(InventoryTrait.class);
 			
 			sendInput(InputType.leftclick_down, blockx, blocky);
 			
@@ -213,6 +214,7 @@ public class Control extends Module{
 				sendInput(InputType.interact, blockx, blocky);
 		
 		}else if (button == Buttons.RIGHT){
+			inv.recipe = -1;
 			sendInput(InputType.rightclick_down);
 		}
 		

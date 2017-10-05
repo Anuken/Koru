@@ -33,7 +33,7 @@ public class Koru extends ModuleCore{
 	public void init(){
 		try{
 			
-			Resources.loadMaterials();
+			Resources.loadData();
 			
 			basis = new Basis();
 			

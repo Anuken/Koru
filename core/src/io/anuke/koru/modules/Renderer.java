@@ -27,7 +27,6 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Profiler;
-import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
@@ -120,10 +119,6 @@ public class Renderer extends RendererModule{
 	@Override
 	public void init(){
 		player = Koru.control.player;
-
-		Resources.loadParticle("spark");
-		Resources.loadParticle("break");
-
 		new BaseFacet(this::drawBlockOverlay).add();
 		new BaseFacet(-Sorter.light-1, Sorter.object, this::drawTileOverlay).add();
 		new BaseFacet(-Sorter.light-1, Sorter.object, this::drawSelectOverlay).add();

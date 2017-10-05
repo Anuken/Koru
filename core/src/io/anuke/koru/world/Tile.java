@@ -23,7 +23,7 @@ public class Tile implements Poolable{
 	public short[] floors;
 	/**wall block ID*/
 	public short wallid;
-	/**Note that this is data for the block only.*/
+	/**Tile data. Currently not saved or transferred.*/
 	public transient TileData data;
 	/**Position data. Transient, so it doesn't get sent over the network or serialized.
 	 * MAKE SURE TO INITIALIZE AFTER DESERALIZATION! */

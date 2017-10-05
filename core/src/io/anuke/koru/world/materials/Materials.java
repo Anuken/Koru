@@ -3,7 +3,7 @@ package io.anuke.koru.world.materials;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
-import io.anuke.koru.items.Items;
+import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.MaterialTypes.*;
 import io.anuke.ucore.facet.FacetList;
@@ -180,5 +180,7 @@ public class Materials{
 		breaktime = 50;
 	}};
 	
-	public static void load(){}
+	public static void load(){
+		StructMaterials.load();
+	}
 }
