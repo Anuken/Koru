@@ -91,8 +91,10 @@ public class KoruUpdater{
 		file = new WorldFile(Paths.get("world"), new TerrainGenerator());
 		
 		world = new World(file);
+		Koru.world = world;
 		
 		basis = new Basis();
+		Koru.basis = basis;
 		basis.addProcessor((mapper = new EntityMapper()));
 		basis.addProcessor(new SyncSystem());
 		

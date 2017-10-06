@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.modules.*;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
@@ -105,7 +105,7 @@ public class Koru extends ModuleCore{
 		StackTraceElement e = Thread.currentThread().getStackTrace()[2];
 		String name = e.getFileName().replace(".java", "");
 
-		if(IServer.active() || Gdx.app == null){
+		if(Net.server() || Gdx.app == null){
 			if(Gdx.app == null){
 				System.out.println(ColorCodes.BACK_DEFAULT + ColorCodes.BOLD + ColorCodes.LIGHT_BLUE + "[" + name + "]: "
 						+ ColorCodes.LIGHT_GREEN + o + ColorCodes.RED);

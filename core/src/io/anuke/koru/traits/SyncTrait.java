@@ -1,6 +1,6 @@
 package io.anuke.koru.traits;
 
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.SyncType;
 import io.anuke.koru.network.syncing.Interpolator;
 import io.anuke.ucore.ecs.Spark;
@@ -28,7 +28,7 @@ public class SyncTrait extends Trait{
 	//TODO
 	@Override
 	public void update(Spark spark){
-		if(IServer.active() || (spark.has(ConnectionTrait.class) && spark.get(ConnectionTrait.class).local)) return;
+		if(Net.server() || (spark.has(ConnectionTrait.class) && spark.get(ConnectionTrait.class).local)) return;
 		SyncTrait sync = spark.get(SyncTrait.class);
 
 		if(sync.interpolator != null) sync.interpolator.update(spark);

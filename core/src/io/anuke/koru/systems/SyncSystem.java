@@ -3,7 +3,8 @@ package io.anuke.koru.systems;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.modules.Network;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
+import io.anuke.koru.network.Net.Mode;
 import io.anuke.koru.network.packets.WorldUpdatePacket;
 import io.anuke.koru.traits.ConnectionTrait;
 import io.anuke.koru.traits.SyncTrait;
@@ -32,8 +33,9 @@ public class SyncSystem extends TraitProcessor{
 			packet.updates.put(entity.getID(), entity.get(SyncTrait.class).type.write(entity));
 		});
 		
-		if(packet.updates.size != 0) 
-			IServer.instance().send(spark.get(ConnectionTrait.class).connectionID, packet, false);
+		if(packet.updates.size != 0) {
+			Net.sendTo(spark.get(ConnectionTrait.class).connectionID, packet, Mode.UDP);
+		}
 	}
 	
 }

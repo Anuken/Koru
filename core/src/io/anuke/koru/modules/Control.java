@@ -11,6 +11,7 @@ import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.BlockInputPacket;
 import io.anuke.koru.network.packets.InputPacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
@@ -166,7 +167,7 @@ public class Control extends Module{
 			
 			SlotChangePacket packet = new SlotChangePacket();
 			packet.slot = inv.hotbar;
-			Koru.network.client.sendTCP(packet);
+			Net.send(packet);
 			
 		}else if(keycode == KeyBinds.get("interact")){
 			sendInput(InputType.interact, blockx, blocky);
@@ -179,7 +180,7 @@ public class Control extends Module{
 		InputPacket packet = new InputPacket();
 		packet.data = params;
 		packet.type = type;
-		Koru.network.client.sendTCP(packet);
+		Net.send(packet);
 	}
 	
 	void sendBlock(){
@@ -187,7 +188,7 @@ public class Control extends Module{
 		p.x = blockx;
 		p.y = blocky;
 		p.material = Materials.grassblock.id();
-		Koru.network.client.sendTCP(p);
+		Net.send(p);
 	}
 	
 	boolean playerReachesBlock(){
@@ -240,7 +241,7 @@ public class Control extends Module{
 		
 		SlotChangePacket packet = new SlotChangePacket();
 		packet.slot = inv.hotbar;
-		Koru.network.client.sendTCP(packet);
+		Net.send(packet);
 		
 		return false;
 	}

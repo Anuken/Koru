@@ -12,7 +12,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
+import io.anuke.koru.network.Net.Mode;
 import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
@@ -51,12 +52,11 @@ public class World extends Module{
 	public World(WorldLoader loader){
 		this();
 		file = loader;
-		Koru.world = this;
 	}
 
 	public World(){
 		
-		if( !IServer.active()){
+		if( !Net.server()){
 			chunkloaded = new boolean[loadrange * 2][loadrange * 2];
 			chunks = new Chunk[loadrange * 2][loadrange * 2];
 			tempchunks = new Chunk[loadrange * 2][loadrange * 2];
@@ -81,14 +81,14 @@ public class World extends Module{
 	public void update(){
 		long start = TimeUtils.nanoTime();
 		
-		if(IServer.active() && Timers.get("checkunload", 80)) checkUnloadChunks();
+		if(Net.server() && Timers.get("checkunload", 80)) checkUnloadChunks();
 	
 		time += Timers.delta()/timescale;
 		if(time >= 1f) time = 0f;
 		
 		updated = false;
 		
-		if(IServer.active()) return;
+		if(Net.server()) return;
 
 		int newx = toChunkCoords(Core.camera.position.x);
 		int newy = toChunkCoords(Core.camera.position.y);
@@ -129,7 +129,7 @@ public class World extends Module{
 	
 	void checkUnloadChunks(){
 		Collection<Chunk> chunks = file.getLoadedChunks();
-		Array<Spark> players = IServer.instance().getBasis().getSparks();
+		Array<Spark> players = Koru.basis.getSparks();
 		
 		for(Chunk chunk : chunks){
 			boolean passed = false;
@@ -178,7 +178,7 @@ public class World extends Module{
 					ChunkRequestPacket packet = new ChunkRequestPacket();
 					packet.x = lastchunkx + x - loadrange;
 					packet.y = lastchunky + y - loadrange;
-					Koru.network.client.sendTCP(packet);
+					Net.send(packet);
 				}
 			}
 		}
@@ -239,7 +239,8 @@ public class World extends Module{
 	}
 
 	public boolean inClientBounds(int x, int y){
-		if(IServer.active()) return true;
+		if(Net.server()) return true;
+		
 		int tx = tile(Core.camera.position.x);
 		int ty = tile(Core.camera.position.y);
 		if(Math.abs(tx - x) >= loadrange * chunksize - 1 || Math.abs(ty - y) >= loadrange * chunksize - 1) return false;
@@ -264,20 +265,20 @@ public class World extends Module{
 	public void updateTile(Tile tile){
 		updated = true;
 		tile.changeEvent();
-		IServer.instance().sendToAllIn(new TileUpdatePacket(tile.x, tile.y, tile), world(tile.x), world(tile.y),
-				tilesize*chunksize*(1+loadrange));
+		Net.sendRange(new TileUpdatePacket(tile.x, tile.y, tile), world(tile.x), world(tile.y),
+				tilesize*chunksize*(1+loadrange), Mode.TCP);
 	}
 
 	public void updateLater(int x, int y){
 		updated = true;
 		getTile(x, y).changeEvent();
 		Timers.run(2f, ()->{
-			IServer.instance().sendToAll(new TileUpdatePacket(x, y, getTile(x, y)));
+			Net.send(new TileUpdatePacket(x, y, getTile(x, y)));
 		});
 	}
 
 	public Tile getTile(int x, int y){
-		if( !IServer.active()){
+		if( !Net.server()){
 			Chunk chunk = getRelativeChunk(x, y);
 			return chunk == null ? null : chunk.getWorldTile(x, y);
 		}
@@ -304,7 +305,7 @@ public class World extends Module{
 	}
 	
 	public void setTile(int x, int y, Tile tile){
-		if( !IServer.active()){
+		if( !Net.server()){
 			getRelativeChunk(x, y).setWorldTile(x, y, tile);
 			return;
 		}

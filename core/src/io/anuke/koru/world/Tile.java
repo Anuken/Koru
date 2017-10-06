@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import io.anuke.koru.modules.World;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.koru.world.materials.Materials;
@@ -63,7 +63,7 @@ public class Tile implements Poolable{
 	}
 	
 	public Material topFloor(){
-		return !IServer.active() ? Material.getMaterial(floors[0]) : Material.getMaterial(floors[top]);
+		return !Net.server() ? Material.getMaterial(floors[0]) : Material.getMaterial(floors[top]);
 	}
 	
 	public Material wall(){

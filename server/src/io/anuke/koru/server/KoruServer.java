@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.IntIntMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -19,32 +19,36 @@ import io.anuke.koru.entities.types.Effect;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.modules.Network;
-import io.anuke.koru.modules.World;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
+import io.anuke.koru.network.Net.Mode;
+import io.anuke.koru.network.Net.NetProvider;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.server.world.MapPreview;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.utils.Resources;
-import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.core.Effects;
-import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Mathf;
 
-public class KoruServer extends IServer{
-	ObjectMap<Integer, ConnectionInfo> connections = new ObjectMap<Integer, ConnectionInfo>();
-	ObjectMap<Connection, ConnectionInfo> kryomap = new ObjectMap<Connection, ConnectionInfo>();
+public class KoruServer implements NetProvider{
+	//maps connection IDs to entity IDs
+	IntIntMap connections = new IntIntMap();
 
 	Server server;
 	KoruUpdater updater;
-	GraphicsHandler graphics;
 	CommandHandler commands;
+	
+	//last connection used
+	//TODO thread safety?
+	private Connection connection;
 
-	void setup(){
+	private void setup(){
+		Net.setProvider(true, this);
+		registerHandlers();
+		
 		Resources.loadData();
 
 		Effects.setEffectProvider((name, color, x, y) -> {
@@ -77,21 +81,10 @@ public class KoruServer extends IServer{
 
 		thread.setDaemon(true);
 		thread.start();
-
-		//createGraphics();
-
 		//createMapGraphics();
 	}
 
-	void createGraphics(){
-		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.disableAudio(true);
-		config.setInitialVisible(false);
-
-		new Lwjgl3Application((graphics = new GraphicsHandler()), config);
-	}
-
-	void createMapGraphics(){
+	private void createMapGraphics(){
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.disableAudio(true);
 		config.setTitle("Map Preview");
@@ -99,21 +92,75 @@ public class KoruServer extends IServer{
 
 		new Lwjgl3Application((new MapPreview()), config);
 	}
+	
+	private void registerHandlers(){
+		
+		Net.handle(PositionPacket.class, packet->{
+			Spark player = getPlayer(connection.getID());
+			
+			player.pos().set(packet.x, packet.y);
+			player.get(DirectionTrait.class).direction = packet.direction;
+			player.get(InputTrait.class).input.mouseangle = packet.mouseangle;
+		});
+		
+		Net.handle(SparkRequestPacket.class, packet->{
+			Spark spark = updater.basis.getSpark(packet.id);
+			if(spark != null){
+				sendTo(connection.getID(), spark, Mode.TCP);
+			}
+		});
+		
+		Net.handle(ChatPacket.class, packet->{
+			packet.sender = getPlayer(connection.getID()).get(ConnectionTrait.class).name;
+			send(packet, Mode.TCP);
+		});
+		
+		Net.handle(ChunkRequestPacket.class, packet->{
+			sendTo(connection.getID(), updater.world.createChunkPacket(packet), Mode.UDP);
+		});
+		
+		Net.handle(InputPacket.class, packet->{
+			getPlayer(connection.getID()).get(InputTrait.class).input.inputEvent(packet.type, packet.data);
+		});
+		
+		Net.handle(SlotChangePacket.class, packet->{
+			Spark player = getPlayer(connection.getID());
+			
+			InventoryTrait inv = player.get(InventoryTrait.class);
+			packet.slot = Mathf.clamp(packet.slot, 0, 3);
+			inv.hotbar = packet.slot;
+			packet.id = player.getID();
+			packet.stack = inv.inventory[inv.hotbar];
+			
+			sendExcept(connection.getID(), packet, Mode.TCP);
+		});
+		
+		Net.handle(RecipeSelectPacket.class, packet->{
+			InventoryTrait inv = getPlayer(connection.getID()).get(InventoryTrait.class);
+			inv.recipe = packet.recipe;
+		});
+		
+		Net.handle(InventoryClickPacket.class, packet->{
+			Spark player = getPlayer(connection.getID());
+			
+			InventoryTrait inv = player.get(InventoryTrait.class);
+			inv.clickSlot(packet.index);
+			inv.sendUpdate(updater.basis.getSpark(player.getID()));
+		});
+	}
 
 	public void connectPacketRecieved(ConnectPacket packet, Connection connection){
+		
 		try{
 			Koru.log("Connect packet recieved...");
 			Spark player = new Spark(Prototypes.player);
-			ConnectionInfo info = new ConnectionInfo(player.getID(), connection);
 
-			registerConnection(info);
-
-			player.get(ConnectionTrait.class).connectionID = info.id;
+			player.get(ConnectionTrait.class).connectionID = connection.getID();
 			player.get(ConnectionTrait.class).name = packet.name;
 
 			DataPacket data = new DataPacket();
 			data.playerid = player.getID();
-			data.time = getWorld().time;
+			data.time = Koru.world.time;
 
 			ArrayList<Spark> sparks = new ArrayList<Spark>();
 
@@ -123,14 +170,11 @@ public class KoruServer extends IServer{
 
 			data.sparks = sparks;
 
-			send(info.id, data, false);
+			sendTo(connection.getID(), data, Mode.TCP);
 
-			sendToAllExceptTCP(info.id, player);
+			sendExcept(connection.getID(), player, Mode.TCP);
 
 			player.add();
-
-			//NOTE: IF THE FOLLOWING MESSAGES DO NOT SEND, YOU HAVE A CLASSPATH ERROR!
-			//UPDATE the UCORE VERSION
 
 			InventoryTrait inv = player.get(InventoryTrait.class);
 
@@ -139,12 +183,8 @@ public class KoruServer extends IServer{
 			inv.addItem(new ItemStack(Items.stick, 10));
 			inv.addItem(new ItemStack(Items.stone, 10));
 			inv.sendUpdate(player);
-
-			//doesn't seem to work
-			//player.get(InventoryComponent.class).sendHotbarUpdate(player);
-
-			//for(ConnectionInfo i : connections.values())
-			//	player.get(InventoryComponent.class).sendHotbarUpdate(updater.basis.getSpark(i.playerid), info.id);
+			
+			connections.put(connection.getID(), player.getID());
 
 			sendChatMessage("[GREEN]" + packet.name + " [CHARTREUSE]has connected.");
 			Koru.log("spark ID is " + player.getID() + ", connection ID is " + player.get(ConnectionTrait.class).connectionID);
@@ -155,78 +195,20 @@ public class KoruServer extends IServer{
 			System.exit(1);
 		}
 	}
-
-	public void recieved(ConnectionInfo info, Object object){
+	
+	public void disconnected(int id){
 		try{
-			if(object instanceof PositionPacket){
-				PositionPacket packet = (PositionPacket) object;
-				if(!connections.containsKey(info.id) || getPlayer(info) == null)
-					return;
-
-				getPlayer(info).pos().set(packet.x, packet.y);
-				getPlayer(info).get(DirectionTrait.class).direction = packet.direction;
-				getPlayer(info).get(InputTrait.class).input.mouseangle = packet.mouseangle;
-			}else if(object instanceof SparkRequestPacket){
-				SparkRequestPacket packet = (SparkRequestPacket) object;
-				Spark spark = updater.basis.getSpark(packet.id);
-				if(spark != null){
-					send(info, spark, false);
-				}
-			}else if(object instanceof ChatPacket){
-				ChatPacket packet = (ChatPacket) object;
-				packet.sender = updater.basis.getSpark(info.playerid).get(ConnectionTrait.class).name;
-				sendToAll(packet);
-			}else if(object instanceof ChunkRequestPacket){
-				ChunkRequestPacket packet = (ChunkRequestPacket) object;
-				send(info.id, updater.world.createChunkPacket(packet), false);
-			}else if(object instanceof InputPacket){
-				InputPacket packet = (InputPacket) object;
-				getPlayer(info).get(InputTrait.class).input.inputEvent(packet.type, packet.data);
-			}else if(object instanceof SlotChangePacket){
-				SlotChangePacket packet = (SlotChangePacket) object;
-				InventoryTrait inv = getPlayer(info).get(InventoryTrait.class);
-				packet.slot = Mathf.clamp(packet.slot, 0, 3);
-				inv.hotbar = packet.slot;
-				packet.id = info.playerid;
-				packet.stack = inv.inventory[inv.hotbar];
-				sendToAllExceptTCP(info.id, packet);
-			}else if(object instanceof RecipeSelectPacket){
-				RecipeSelectPacket packet = (RecipeSelectPacket) object;
-				InventoryTrait inv = getPlayer(info).get(InventoryTrait.class);
-				inv.recipe = packet.recipe;
-			}else if(object instanceof BlockInputPacket){
-				BlockInputPacket packet = (BlockInputPacket) object;
-				Material mat = Material.getMaterial(packet.material);
-				Tile tile = updater.world.getTile(packet.x, packet.y);
-
-				tile.addMaterial(mat);
-
-				updater.world.updateTile(tile);
-
-			}else if(object instanceof InventoryClickPacket){
-				InventoryClickPacket packet = (InventoryClickPacket) object;
-				InventoryTrait inv = getPlayer(info).get(InventoryTrait.class);
-				inv.clickSlot(packet.index);
-
-				inv.sendUpdate(updater.basis.getSpark(info.playerid));
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			Koru.log("Packet error!");
-			System.exit(1);
-		}
-	}
-
-	public void disconnected(ConnectionInfo info){
-		try{
-			if(info == null){
+			if(!connections.containsKey(id)){
 				Koru.log("An unknown player has disconnected.");
 				return;
 			}
-			sendChatMessage("[GREEN]" + getPlayer(info).get(ConnectionTrait.class).name + " [CORAL]has disconnected.");
-			Koru.log(getPlayer(info).get(ConnectionTrait.class).name + " has disconnected.");
-			removeSpark(getPlayer(info));
-			removeConnection(info);
+			
+			Spark player = getPlayer(id);
+			
+			sendChatMessage("[GREEN]" + player.get(ConnectionTrait.class).name + " [CORAL]has disconnected.");
+			Koru.log(player.get(ConnectionTrait.class).name + " has disconnected.");
+			removeSpark(player);
+			connections.remove(id, -1);
 		}catch(Exception e){
 			e.printStackTrace();
 			Koru.log("Critical error: disconnect fail!");
@@ -242,20 +224,21 @@ public class KoruServer extends IServer{
 
 		@Override
 		public void disconnected(Connection con){
-			KoruServer.this.disconnected(kryomap.get(con) == null ? null : kryomap.get(con));
+			KoruServer.this.disconnected(con.getID());
 		}
 
 		@Override
 		public void received(Connection con, Object object){
-
+			
 			if(object instanceof ConnectPacket){
 				Koru.log("recieved a connect packet from " + con.getID());
 				ConnectPacket packet = (ConnectPacket) object;
-				if(!kryomap.containsKey(con)){
+				if(!connections.containsKey(con.getID())){
 					connectPacketRecieved(packet, con);
 				}
-			}else if(kryomap.containsKey(con)){
-				recieved(kryomap.get(con), object);
+			}else if(connections.containsKey(con.getID())){
+				KoruServer.this.connection = con;
+				Net.onRecieve(object);
 			}
 
 		}
@@ -264,17 +247,7 @@ public class KoruServer extends IServer{
 	public void sendChatMessage(String message){
 		ChatPacket packet = new ChatPacket();
 		packet.message = message;
-		sendToAll(packet);
-	}
-
-	public void registerConnection(ConnectionInfo info){
-		connections.put(info.id, info);
-		kryomap.put(info.connection, info);
-	}
-
-	public void removeConnection(ConnectionInfo info){
-		connections.remove(info.id);
-		kryomap.remove(info.connection);
+		send(packet, Mode.TCP);
 	}
 
 	@Override
@@ -288,75 +261,51 @@ public class KoruServer extends IServer{
 
 	@Override
 	public void sendSpark(Spark spark){
-		sendToAllIn(spark, spark.pos().x, spark.pos().y, SyncSystem.syncrange);
+		sendRange(spark, spark.pos().x, spark.pos().y, SyncSystem.syncrange, Mode.TCP);
 	}
 
 	@Override
-	public void sendToAllIn(Object object, float x, float y, float range){
+	public void sendRange(Object object, float x, float y, float range, Mode mode){
 		updater.mapper.getNearbyConnections(x, y, range, (spark) -> {
-			send(spark.get(ConnectionTrait.class).connectionID, object, false);
+			sendTo(spark.get(ConnectionTrait.class).connectionID, object, mode);
 		});
 	}
 
 	@Override
-	public void sendToAll(Object object){
-		for(ConnectionInfo info : connections.values()){
-			send(info, object, false);
+	public void send(Object object, Mode mode){
+		if(mode == Mode.TCP){
+			server.sendToAllTCP(object);
+		}else{
+			server.sendToAllUDP(object);
 		}
 	}
 
 	@Override
-	public void sendToAllExcept(int id, Object object){
-		sendToAllExceptTCP(id, object);
-	}
-
-	@Override
-	public void send(int id, Object object, boolean udp){
-		send(connections.get(id), object, udp);
-	}
-
-	public void addSpark(Spark spark){
-		sendSpark(spark.add());
-	}
-
-	public Spark getPlayer(ConnectionInfo info){
-		return updater.basis.getSpark(info.playerid);
-	}
-
-	public void send(ConnectionInfo info, Object object, boolean udp){
-		if(udp)
-			info.connection.sendUDP(object);
-		else
-			info.connection.sendTCP(object);
-	}
-
-	public void sendToAllExceptTCP(int id, Object object){
-		for(ConnectionInfo info : connections.values()){
-			if(info.id != id)
-				send(info, object, false);
-		}
-	}
-
-	public void sendToAllExceptUDP(int id, Object object){
-		for(ConnectionInfo info : connections.values()){
-			if(info.id != id)
-				send(info, object, true);
+	public void sendExcept(int id, Object object, Mode mode){
+		if(mode == Mode.TCP){
+			server.sendToAllExceptTCP(id, object);
+		}else{
+			server.sendToAllExceptUDP(id, object);
 		}
 	}
 
 	@Override
-	public Basis getBasis(){
-		return updater.basis;
+	public void sendTo(int id, Object object, Mode mode){
+		if(mode == Mode.TCP){
+			server.sendToTCP(id, object);
+		}else{
+			server.sendToUDP(id, object);
+		}
 	}
 
-	@Override
-	public World getWorld(){
-		return updater.world;
+	public Spark getPlayer(int connectionID){
+		return updater.basis.getSpark(connections.get(connectionID, -1));
 	}
 
 	public static void main(String[] args){
 		System.out.println(ColorCodes.FLUSH);
 		System.out.flush();
+		
 		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
 			Koru.log("Clearing world.");
 			try{
@@ -373,9 +322,5 @@ public class KoruServer extends IServer{
 
 		}
 		new KoruServer().setup();
-	}
-
-	public static KoruServer instance(){
-		return (KoruServer) IServer.instance();
 	}
 }

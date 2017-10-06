@@ -2,7 +2,7 @@ package io.anuke.koru.traits;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Require;
@@ -18,7 +18,7 @@ public class EffectTrait extends Trait{
 	
 	@Override
 	public void added(Spark spark){
-		if(IServer.active()){
+		if(Net.server()){
 			throw new IllegalArgumentException("Effect entities should not be added serverside!");
 		}
 		

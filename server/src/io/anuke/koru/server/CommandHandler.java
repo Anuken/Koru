@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.math.MathUtils;
 
 import io.anuke.koru.entities.Prototypes;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.systems.EntityMapper;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Processor;
@@ -51,7 +52,7 @@ public class CommandHandler{
 			for(int i = 0; i < 30; i++){
 				Spark entity = new Spark(Prototypes.testEntity);
 				entity.pos().set(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
-				server.addSpark(entity);
+				Net.sendSpark(entity.add());
 			}
 			
 			print("spawning 30 entities. (now "+PURPLE+server.updater.basis.getSparks().size+LIGHT_CYAN+" entities at "+PURPLE+ 1f/(Timers.delta()/60f)+LIGHT_CYAN +" FPS.)");

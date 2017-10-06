@@ -1,7 +1,8 @@
 package io.anuke.koru.traits;
 
+import io.anuke.koru.Koru;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.syncing.SyncData.Synced;
 import io.anuke.koru.systems.EntityMapper;
 import io.anuke.ucore.core.Effects;
@@ -17,9 +18,9 @@ public class ItemTrait extends Trait{
 	
 	@Override
 	public void update(Spark spark){
-		if(!IServer.active()) return;
+		if(!Net.server()) return;
 		
-		IServer.instance().getBasis().getProcessor(EntityMapper.class).getNearbyEntities(spark.pos().x, spark.pos().y, 30, 
+		Koru.basis.getProcessor(EntityMapper.class).getNearbyEntities(spark.pos().x, spark.pos().y, 30, 
 		aentity-> aentity.has(InventoryTrait.class) && !aentity.get(InventoryTrait.class).full(), 
 		(other)->{
 			float height = 3f;
@@ -33,7 +34,7 @@ public class ItemTrait extends Trait{
 			if(dst < 2f){
 				other.get(InventoryTrait.class).addItem(stack);
 				other.get(InventoryTrait.class).sendUpdate(other);
-				IServer.instance().removeSpark(spark);
+				Net.removeSpark(spark);
 				Effects.effect("itempickup", spark.pos().x, spark.pos().y - 0.5f);
 			}
 		});

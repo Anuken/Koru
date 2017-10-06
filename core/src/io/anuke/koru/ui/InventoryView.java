@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.InventoryClickPacket;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
@@ -43,7 +44,7 @@ public class InventoryView extends Table{
 			slot.clicked(() -> {
 				InventoryClickPacket packet = new InventoryClickPacket();
 				packet.index = slot.index;
-				Koru.network.client.sendTCP(packet);
+				Net.send(packet);
 			});
 			add(slot).size(slotsize);
 

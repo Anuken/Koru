@@ -2,16 +2,19 @@ package io.anuke.koru.modules;
 
 import static io.anuke.koru.Koru.*;
 
-import java.util.function.Consumer;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.IntSet.IntSetIterator;
-import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.KoruEvents.Unload;
 import io.anuke.koru.modules.Control.GameState;
+import io.anuke.koru.network.Net;
+import io.anuke.koru.network.Net.Mode;
+import io.anuke.koru.network.Net.NetProvider;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.traits.*;
@@ -22,7 +25,7 @@ import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
 
-public class Network extends Module{
+public class Network extends Module implements NetProvider{
 	public static final int port = 7575;
 	public static final int ping = 0;
 	public static final int pingInterval = 60;
@@ -31,7 +34,7 @@ public class Network extends Module{
 
 	public String ip = "localhost";
 	public boolean connecting;
-	public Client client;
+	private Client client;
 
 	private Spark player;
 
@@ -41,11 +44,12 @@ public class Network extends Module{
 	private Array<Spark> sparkQueue = new Array<>();
 	private IntSet sparksToRemove = new IntSet();
 	private IntSet requestedEntities = new IntSet();
-	private ObjectMap<Class<?>, Consumer<Object>> packetHandlers = new ObjectMap<>();
 
 	@Override
 	public void init(){
 		registerPackets();
+		
+		Net.setProvider(false, this);
 
 		int buffer = (int) Math.pow(2, 6) * 8192;
 		client = new Client(buffer, buffer);
@@ -58,7 +62,7 @@ public class Network extends Module{
 
 	private void registerPackets(){
 
-		handle(DataPacket.class, data -> {
+		Net.handle(DataPacket.class, data -> {
 
 			Gdx.app.postRunnable(() -> {
 				Koru.log("Recieving a data packet... ");
@@ -79,7 +83,7 @@ public class Network extends Module{
 			});
 		});
 
-		handle(WorldUpdatePacket.class, p -> {
+		Net.handle(WorldUpdatePacket.class, p -> {
 			for(Integer key : p.updates.keys()){
 				Spark spark = Koru.basis.getSpark(key);
 				if(spark == null){
@@ -90,12 +94,12 @@ public class Network extends Module{
 			}
 		});
 
-		handle(ChunkPacket.class, p -> {
+		Net.handle(ChunkPacket.class, p -> {
 			world.loadChunks(p);
 			chunksAdded = true;
 		});
 
-		handle(TileUpdatePacket.class, p -> {
+		Net.handle(TileUpdatePacket.class, p -> {
 			if(world.inClientBounds(p.x, p.y)){
 				world.setTile(p.x, p.y, p.tile);
 			}
@@ -103,41 +107,37 @@ public class Network extends Module{
 			chunksAdded = true;
 		});
 
-		handle(MenuOpenPacket.class, p -> {
+		Net.handle(MenuOpenPacket.class, p -> {
 			Gdx.app.postRunnable(() -> {
 				ui.openMenu(p.type);
 			});
 		});
 
-		handle(SlotChangePacket.class, p -> {
+		Net.handle(SlotChangePacket.class, p -> {
 			if(Koru.basis.getSpark(p.id) == null)
 				return;
 
 			Koru.basis.getSpark(p.id).get(InventoryTrait.class).inventory[0] = p.stack;
 		});
 
-		handle(InventoryUpdatePacket.class, p -> {
+		Net.handle(InventoryUpdatePacket.class, p -> {
 			player.get(InventoryTrait.class).set(p.stacks, p.selected);
 		});
 
-		handle(ChatPacket.class, p -> {
+		Net.handle(ChatPacket.class, p -> {
 			Gdx.app.postRunnable(() -> {
 				ui.handleChatMessage(p.message, p.sender);
 			});
 		});
 
-		handle(Spark.class, spark -> {
+		Net.handle(Spark.class, spark -> {
 			sparkQueue.add(spark);
 		});
 
-		handle(SparkRemovePacket.class, p -> {
+		Net.handle(SparkRemovePacket.class, p -> {
 			sparksToRemove.add(p.id);
 		});
 
-	}
-
-	private <T> void handle(Class<T> c, Consumer<T> cons){
-		packetHandlers.put(c, (Consumer<Object>) cons);
 	}
 
 	public void connect(){
@@ -259,6 +259,40 @@ public class Network extends Module{
 
 		client.sendUDP(pos);
 	}
+	
+	@Override
+	public void send(Object object, Mode mode){
+		if(mode == Mode.TCP){
+			client.sendTCP(object);
+		}else{
+			client.sendTCP(object);
+		}
+	}
+
+	@Override
+	public void sendRange(Object object, float x, float y, float range, Mode mode){
+		throw new RuntimeException("Not supported on client!");
+	}
+
+	@Override
+	public void sendTo(int clientid, Object object, Mode mode){
+		throw new RuntimeException("Not supported on client!");
+	}
+
+	@Override
+	public void sendExcept(int clientid, Object object, Mode mode){
+		throw new RuntimeException("Not supported on client!");
+	}
+
+	@Override
+	public void sendSpark(Spark spark){
+		throw new RuntimeException("Not supported on client!");
+	}
+
+	@Override
+	public void removeSpark(Spark spark){
+		spark.remove();
+	}
 
 	class Listen extends Listener{
 		@Override
@@ -286,11 +320,7 @@ public class Network extends Module{
 		@Override
 		public void received(Connection c, Object object){
 			try{
-				if(packetHandlers.containsKey(object.getClass())){
-					packetHandlers.get(object.getClass()).accept(object);
-				}else if(!(object instanceof FrameworkMessage)){
-					Koru.log("Unhandled packet type: " + object.getClass().getSimpleName());
-				}
+				Net.onRecieve(object);
 			}catch(Exception e){
 				e.printStackTrace();
 				Koru.log("Packet recieve error!");

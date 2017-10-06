@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 
 import io.anuke.koru.items.Item;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.InventoryUpdatePacket;
 import io.anuke.koru.network.packets.SlotChangePacket;
 import io.anuke.ucore.ecs.Spark;
@@ -72,21 +72,21 @@ public class InventoryTrait extends Trait{
 		InventoryUpdatePacket update = new InventoryUpdatePacket();
 		update.selected = selected;
 		update.stacks = inventory;
-		IServer.instance().send(entity.get(ConnectionTrait.class).connectionID, update, false);
+		Net.sendTo(entity.get(ConnectionTrait.class).connectionID, update);
 	}
 
 	/** Server-side only. */
 	public void sendHotbarUpdate(Spark entity){
 		SlotChangePacket update = new SlotChangePacket();
 		update.stack = hotbarStack();
-		IServer.instance().sendToAllExcept(entity.get(ConnectionTrait.class).connectionID, update);
+		Net.sendExcept(entity.get(ConnectionTrait.class).connectionID, update);
 	}
 
 	/** Server-side only. */
 	public void sendHotbarUpdate(Spark entity, int to){
 		SlotChangePacket update = new SlotChangePacket();
 		update.stack = hotbarStack();
-		IServer.instance().send(to, update, false);
+		Net.sendTo(to, update);
 	}
 
 	public void set(ItemStack[] stacks, ItemStack selected){

@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 import io.anuke.koru.entities.Prototypes;
 import io.anuke.koru.items.ItemStack;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.SyncType;
 import io.anuke.koru.traits.ItemTrait;
 import io.anuke.koru.traits.SyncTrait;
@@ -23,7 +23,7 @@ public class ItemDrop extends Prototype{
 		return new TraitList(
 			new PosTrait(), 
 			new FacetTrait((trait, spark)->{
-				if(IServer.active()) return;
+				if(Net.server()) return;
 				
 				String itemname = spark.get(ItemTrait.class).stack.item.name();
 				String region = Draw.hasRegion(itemname + "chunk") ? itemname + "chunk" : itemname + "item";
@@ -55,7 +55,7 @@ public class ItemDrop extends Prototype{
 				item.pos().set(x + MathUtils.random(-range,range), y + MathUtils.random(-range,range));
 				amount -= stepsize;
 				
-				IServer.instance().sendSpark(item.add());
+				Net.sendSpark(item.add());
 			}
 		}
 		

@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.koru.Koru;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.ChatPacket;
 import io.anuke.ucore.scene.Scene;
 import io.anuke.ucore.scene.ui.Label;
@@ -116,7 +116,7 @@ public class ChatView extends Table{
 		
 		ChatPacket packet = new ChatPacket();
 		packet.message = message;
-		Koru.network.client.sendTCP(packet);
+		Net.send(packet);
 	}
 	
 	public void toggle(){

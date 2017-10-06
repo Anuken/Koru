@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.traits.MaterialTrait;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialTypes.Tree;
@@ -82,7 +82,7 @@ public class BlockAnimation extends Prototype{
 		Spark entity = new Spark(Prototypes.blockAnimation);
 		entity.pos().set(x, y);
 		entity.get(MaterialTrait.class).matid = material.id();
-		IServer.instance().sendSpark(entity);
+		Net.sendSpark(entity);
 	}
 
 }

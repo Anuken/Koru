@@ -2,7 +2,7 @@ package io.anuke.koru.traits;
 
 
 import io.anuke.koru.input.InputHandler;
-import io.anuke.koru.network.IServer;
+import io.anuke.koru.network.Net;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.Trait;
@@ -17,7 +17,7 @@ public class InputTrait extends Trait{
 	
 	@Override
 	public void update(Spark spark){
-		if(IServer.active()){
+		if(Net.server()){
 			input.update(Timers.delta());
 		}
 	}

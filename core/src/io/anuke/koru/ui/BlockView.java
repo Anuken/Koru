@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import io.anuke.koru.Koru;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Resources;
@@ -85,7 +86,7 @@ public class BlockView extends Table{
 					
 				RecipeSelectPacket packet = new RecipeSelectPacket();
 				packet.recipe = index;
-				Koru.network.client.sendTCP(packet);
+				Net.send(packet);
 			});
 
 		}

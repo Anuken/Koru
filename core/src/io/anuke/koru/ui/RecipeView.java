@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.items.BlockRecipe;
+import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.materials.Material;
@@ -45,7 +46,7 @@ public class RecipeView extends Table{
 					
 				RecipeSelectPacket packet = new RecipeSelectPacket();
 				packet.recipe = index;
-				Koru.network.client.sendTCP(packet);
+				Net.send(packet);
 			});
 
 		}

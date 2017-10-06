@@ -9,7 +9,6 @@ import io.anuke.koru.entities.types.BlockAnimation;
 import io.anuke.koru.entities.types.ItemDrop;
 import io.anuke.koru.items.*;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.network.IServer;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
@@ -42,7 +41,7 @@ public class InputHandler{
 		
 		// block breaking
 		if(key(InputType.leftclick_down)){
-			Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
+			Tile tile = Koru.world.getTile(blockx, blocky);
 			Material block = tile.wall();
 			Material floor = tile.topFloor();
 			
@@ -86,7 +85,7 @@ public class InputHandler{
 
 					// schedule this later.
 
-					IServer.instance().getWorld().updateLater(blockx, blocky);
+					Koru.world.updateLater(blockx, blocky);
 
 				}
 
@@ -206,7 +205,7 @@ public class InputHandler{
 		ItemStack stack = inv.inventory[slot];
 		if(stack == null)
 			return;
-		Tile tile = IServer.instance().getWorld().getTile(blockx, blocky);
+		Tile tile = Koru.world.getTile(blockx, blocky);
 
 		ClickEvent event = Pools.get(ClickEvent.class).obtain().set(down, blockx, blocky, tile, inv);
 		stack.item.onClickEvent(event);
