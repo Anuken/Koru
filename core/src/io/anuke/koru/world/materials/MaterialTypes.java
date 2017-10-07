@@ -13,6 +13,7 @@ import io.anuke.koru.graphics.KoruFacetLayers;
 import io.anuke.koru.graphics.ReflectionlessFacet;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.traits.InventoryTrait;
+import io.anuke.koru.world.BreakType;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.Timers;
@@ -234,6 +235,7 @@ public class MaterialTypes{
 			hitbox.width = 7;
 			hitbox.height = 3;
 			solid = true;
+			breaktype = BreakType.wood;
 		}
 
 		@Override

@@ -20,17 +20,19 @@ public class Items{
 	
 	mushroom = new Item("mushroom"),
 	
-	tool = new Item("tool", ItemType.tool){
+	axe = new Item("woodaxe", ItemType.tool){
 		{
-			
-		}
-		
-		public float getBreakSpeed(BreakType type){
-			return 1;
+			formalName = "Wooden Axe";
+			breakSpeeds.put(BreakType.wood, 1);
 		}
 	},
 	
 	hammer = new Item("hammer", ItemType.tool, ItemType.placer){
 		
+	},
+	mushroomStaff = new Item("mushroomstaff", ItemType.tool){
+		{
+			formalName = "Mushroom Staff";
+		}
 	};
 }

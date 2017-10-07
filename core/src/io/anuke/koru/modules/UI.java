@@ -139,6 +139,7 @@ public class UI extends SceneModule{
 			aleft();
 			
 			blockrecipes = new BlockView();
+			recipes = new RecipeView();
 			
 			new table("button-window-bg"){{
 				get().pad(4);
@@ -155,8 +156,10 @@ public class UI extends SceneModule{
 				Stack stack = new Stack();
 				
 				stack.add(blockrecipes);
-				
 				blockrecipes.setVisible(()->group.getCheckedIndex() == 0);
+				
+				stack.add(recipes);
+				recipes.setVisible(()->group.getCheckedIndex() == 1);
 				
 				row();
 				

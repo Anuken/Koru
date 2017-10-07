@@ -4,12 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.items.BlockRecipe;
+import io.anuke.koru.items.Recipe;
 import io.anuke.koru.network.Net;
 import io.anuke.koru.network.packets.RecipeSelectPacket;
 import io.anuke.koru.traits.InventoryTrait;
-import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.ui.layout.Table;
@@ -21,7 +19,7 @@ public class RecipeView extends Table{
 	Slot selected;
 	
 	public RecipeView(){
-		for(BlockRecipe recipe : BlockRecipe.getAll()){
+		for(Recipe recipe : Recipe.getAll()){
 			Slot slot = new Slot(recipe, recipe.id());
 			add(slot).size(slotsize);
 		}
@@ -33,9 +31,9 @@ public class RecipeView extends Table{
 	class Slot extends Element{
 		public final int index;
 		public final ClickListener click;
-		public final BlockRecipe recipe;
+		public final Recipe recipe;
 		
-		public Slot(BlockRecipe recipe, int index) {
+		public Slot(Recipe recipe, int index) {
 			this.index = index;
 			this.recipe = recipe;
 			
@@ -52,9 +50,26 @@ public class RecipeView extends Table{
 		}
 
 		public void draw(Batch batch, float alpha){
-			Draw.color(getColor());
+			
+			
 			patch(Koru.control.player.get(InventoryTrait.class).recipe == index ? "slotset" : (click.isOver() ? "slotselect2" : "slot2"));
 			
+			TextureRegion region = Draw.region(recipe.result().name() + "item");
+			
+			float scale = 4f;
+			
+			Draw.color(0f, 0f, 0f, 0.1f * alpha);
+			
+			Draw.rect(recipe.result().name() + "item", x + width/2f, y + height/2f - scale, 
+					region.getRegionWidth()*scale, region.getRegionHeight()*scale);
+			
+			Draw.color(getColor());
+			
+			Draw.rect(recipe.result().name() + "item", x + width/2f, y + height/2f, 
+					region.getRegionWidth()*scale, region.getRegionHeight()*scale);
+			
+			
+			/*
 			Material result = recipe.result();
 			TextureRegion region = Draw.region(result.name());
 			
@@ -67,6 +82,7 @@ public class RecipeView extends Table{
 			}
 			
 			Draw.reset();
+			*/
 		}
 	}
 }

@@ -26,15 +26,20 @@ public class BlockView extends Table{
 	Slot selected;
 	
 	public BlockView(){
+		
+		add().colspan((BlockRecipe.getAll().size)/2);
+		add(req).size(64);
+		add().colspan((BlockRecipe.getAll().size)/2-1);
+		
+		row().padTop(32);
+		
 		for(BlockRecipe recipe : BlockRecipe.getAll()){
 			Slot slot = new Slot(recipe, recipe.id());
 			add(slot).size(slotsize);
 		}
 		
-		add(req).size(64);
-		
 		background("button-window-bg");
-		pad(4);
+		pad(2);
 	}
 	
 	class Requirement extends Element{

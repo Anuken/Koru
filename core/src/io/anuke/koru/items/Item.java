@@ -3,9 +3,11 @@ package io.anuke.koru.items;
 import java.util.EnumSet;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectIntMap;
 
 import io.anuke.koru.input.InputHandler.ClickEvent;
 import io.anuke.koru.world.BreakType;
+import io.anuke.ucore.util.Strings;
 
 public class Item{
 	private static int lastid;
@@ -14,7 +16,10 @@ public class Item{
 	private final String name;
 	private final EnumSet<ItemType> types;
 	private final int id;
-	private int stackSize = 100;
+	
+	protected ObjectIntMap<BreakType> breakSpeeds = new ObjectIntMap<>();
+	protected String formalName;
+	protected int stackSize = 100;
 	
 	public static Item getItem(int id){
 		return items.get(id);
@@ -25,6 +30,7 @@ public class Item{
 		this.types = EnumSet.of(ItemType.any, types);
 		id = lastid ++;
 		items.add(this);
+		formalName = Strings.capitalize(name);
 	}
 	
 	public int getMaxStackSize(){
@@ -43,16 +49,16 @@ public class Item{
 		return name;
 	}
 	
+	public int getBreakSpeed(BreakType type){
+		return breakSpeeds.get(type, 0);
+	}
+	
 	public String formalName(){
-		return name().substring(0, 1).toUpperCase() + name().substring(1);
+		return formalName;
 	}
 	
 	public int id(){
 		return id;
-	}
-	
-	public float getBreakSpeed(BreakType type){
-		return 0;
 	}
 	
 	public void onClickEvent(ClickEvent event){}

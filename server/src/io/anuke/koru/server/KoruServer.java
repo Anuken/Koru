@@ -178,7 +178,7 @@ public class KoruServer implements NetProvider{
 
 			InventoryTrait inv = player.get(InventoryTrait.class);
 
-			inv.addItem(new ItemStack(Items.tool));
+			inv.addItem(new ItemStack(Items.axe));
 			inv.addItem(new ItemStack(Items.hammer));
 			inv.addItem(new ItemStack(Items.stick, 10));
 			inv.addItem(new ItemStack(Items.stone, 10));
