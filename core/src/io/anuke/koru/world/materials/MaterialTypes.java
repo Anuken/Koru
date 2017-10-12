@@ -315,11 +315,11 @@ public class MaterialTypes{
 				.add(list);
 			}
 
-			if(!isGrass(tile.x, tile.y + 1)){
+			if(!isGrass(tile.x, tile.y - 1)){
 				get("grassblock2" +blendn).shadow()
-				.set(tile.worldx() + 1, tile.worldy() + 1 + yadd - tilesize/2)
-				.centerX()
-				.add(list);
+				.set(tile.worldx() + 1, tile.worldy() - 1 + yadd - tilesize/2)
+				.centerX();
+				//.add(list);
 			}
 		}
 	}
@@ -339,7 +339,12 @@ public class MaterialTypes{
 			Vector3 tint = tile.topFloor().foilageTint();
 			
 			int iter = 4;
-
+			
+			boolean below = isGrass(tile.x, tile.y - 1);
+			boolean left = isGrass(tile.x - 1, tile.y);
+			boolean right = isGrass(tile.x + 1, tile.y);
+			float offset = !below ? (left && !right ? -1f : right && !left ? 1f : 0f) : 0f;
+			
 			for(int i = 0; i < iter; i++){
 				if(i == 0 && !isGrass(tile.x, tile.y - 1)) continue;
 				float gadd = (i % 2 == 0 ? 1f : add);
@@ -347,16 +352,16 @@ public class MaterialTypes{
 				get("grassf1")
 				.sort(Sorter.object)
 				.color(grasscolor.r * gadd*tint.x, grasscolor.g * gadd*tint.y, grasscolor.b * gadd*tint.z)
-				.set(tile.worldx(), tile.worldy() + i * (tilesize / iter) + xadd - tilesize/2)
-				.centerX()
+				.set(tile.worldx() + offset, tile.worldy() + i * (tilesize / iter) + xadd - tilesize/2)
+				.scale(!below && Math.abs(offset) > 0 ? -2f : 0f, 0f).centerX()
 				.add(list);
 			}
 
-			if(!isGrass(tile.x, tile.y + 1)){
+			if(!isGrass(tile.x, tile.y - 1)){
 				get("grassf1").shadow()
-				.set(tile.worldx() + 1, tile.worldy() + 4 + xadd - tilesize/2)
-				.centerX()
-				.add(list);
+				.set(tile.worldx() + 1 + offset, tile.worldy() + 2 + xadd - tilesize/2)
+				.centerX();
+				//.add(list);
 			}
 		}
 	}

@@ -19,6 +19,8 @@ public class RecipeView extends Table{
 	Slot selected;
 	
 	public RecipeView(){
+		top().left();
+		
 		for(Recipe recipe : Recipe.getAll()){
 			Slot slot = new Slot(recipe, recipe.id());
 			add(slot).size(slotsize);

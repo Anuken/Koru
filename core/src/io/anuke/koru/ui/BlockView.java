@@ -27,16 +27,21 @@ public class BlockView extends Table{
 	
 	public BlockView(){
 		
-		add().colspan((BlockRecipe.getAll().size)/2);
+		
+		add(()->(selected == null ? "" : selected.recipe.result().formalName()));
+		row();
 		add(req).size(64);
-		add().colspan((BlockRecipe.getAll().size)/2-1);
 		
 		row().padTop(32);
 		
+		Table blocks = new Table();
+		
 		for(BlockRecipe recipe : BlockRecipe.getAll()){
 			Slot slot = new Slot(recipe, recipe.id());
-			add(slot).size(slotsize);
+			blocks.add(slot).size(slotsize);
 		}
+		
+		add(blocks);
 		
 		background("button-window-bg");
 		pad(2);

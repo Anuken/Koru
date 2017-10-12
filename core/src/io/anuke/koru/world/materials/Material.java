@@ -15,6 +15,7 @@ import io.anuke.koru.world.BreakType;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.facet.FacetList;
+import io.anuke.ucore.util.Strings;
 				
 public abstract class Material{
 	private static ArrayList<Material> materials = new ArrayList<Material>();
@@ -23,6 +24,7 @@ public abstract class Material{
 	protected final int id;
 	protected final String name;
 	protected final MaterialLayer layer;
+	protected String formalName;
 	
 	protected Vector3 foilageTint = new Vector3(1f, 1f, 1f);
 	protected Color color = Color.CLEAR;
@@ -52,8 +54,13 @@ public abstract class Material{
 		id = lastid++;
 		this.name = name;
 		this.layer = layer;
+		formalName = Strings.capitalize(name);
 		
 		materials.add(this);
+	}
+	
+	public String formalName(){
+		return formalName;
 	}
 	
 	public abstract void draw(Tile tile, FacetList list);

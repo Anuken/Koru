@@ -34,6 +34,7 @@ import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Mathf;
 
 public class KoruServer implements NetProvider{
+	boolean displayMap = true;
 	//maps connection IDs to entity IDs
 	IntIntMap connections = new IntIntMap();
 
@@ -41,8 +42,7 @@ public class KoruServer implements NetProvider{
 	KoruUpdater updater;
 	CommandHandler commands;
 	
-	//last connection used
-	//TODO thread safety?
+	//TODO thread safety? -- last connection used
 	private Connection connection;
 
 	private void setup(){
@@ -81,7 +81,9 @@ public class KoruServer implements NetProvider{
 
 		thread.setDaemon(true);
 		thread.start();
-		//createMapGraphics();
+		
+		if(displayMap)
+			createMapGraphics();
 	}
 
 	private void createMapGraphics(){

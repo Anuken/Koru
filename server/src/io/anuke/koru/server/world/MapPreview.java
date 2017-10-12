@@ -11,43 +11,61 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.IntIntMap;
 
+import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
+import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.MaterialTypes.Grass;
 import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoronoiNoise;
 import io.anuke.ucore.util.GridMap;
+import io.anuke.ucore.util.Tmp;
 
 public class MapPreview extends ApplicationAdapter{
-	TerrainGenerator gen;
+	String atlasDir = System.getProperty("user.home") + "/Projects/Koru/core/assets/sprites/sprites.atlas";
+	Generator gen;
 	GridMap<ChunkPix> blocks = new GridMap<ChunkPix>();
 	IntIntMap colors = new IntIntMap();
 	SpriteBatch batch;
 	int viewrange = 4;
-	float scl = 4f;
+	float scl = 2f;
 	float vx, vy;
 	float speed = 32;
 	int pixsize = 64;
-	int percision = 2;
+	int percision = 1;
+	boolean showDark = false;
 	static double maxe;
 	static double maxt;
 
 	public void create(){
 		batch = new SpriteBatch();
-		gen = new TerrainGenerator();
+		gen = new OctaveTerrainGenerator();
+		
+		Gdx.graphics.setContinuousRendering(false);
 
-		Atlas atlas = new Atlas(Gdx.files.absolute("/home/anuke/Projects/Koru/core/assets/sprites/koru.atlas"));
+		Atlas atlas = new Atlas(Gdx.files.absolute(atlasDir));
 
 		Pixmap pixmap = atlas.getPixmapOf(atlas.findRegion("grass"));
 
 		for(Material material : Material.getAll()){
 			if(!material.isLayer(MaterialLayer.floor) && !(material instanceof Wall))
 				continue;
-			AtlasRegion region = atlas.findRegion(material.name());
-			colors.put(material.id(), pixmap.getPixel(region.getRegionX(), region.getRegionY()));
+			
+			if(material instanceof Grass){
+				Color color = Tmp.c1.set(MaterialTypes.grasscolor.r * material.foilageTint().x,
+						MaterialTypes.grasscolor.g * material.foilageTint().y,
+						MaterialTypes.grasscolor.b * material.foilageTint().z, 1f);
+				
+				colors.put(material.id(), Color.rgba8888(color));
+			}else{
+			
+				AtlasRegion region = atlas.findRegion(material.name());
+				colors.put(material.id(), pixmap.getPixel(region.getRegionX(), region.getRegionY()));
+			}
 		}
 
 		for(int x = -viewrange; x <= viewrange; x++){
@@ -106,7 +124,7 @@ public class MapPreview extends ApplicationAdapter{
 	
 	int getPix(int x, int y){
 		Tile tile = gen.generate(x, y);
-		float light = tile.light();
+		float light = showDark ? tile.light() : 1f;
 		
 		if(tile.wall() instanceof Wall){
 			temp.set(colors.get(tile.wallid, 0));

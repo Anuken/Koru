@@ -93,7 +93,7 @@ public class Renderer extends RendererModule{
 
 		loadMaterialColors();
 		
-		Draw.addSurface(surface = new ProcessorSurface());
+		Graphics.addSurface(surface = new ProcessorSurface());
 
 		Koru.log("Loaded resources. Time taken: " + Timers.elapsed() + " ms.");
 		
@@ -179,7 +179,7 @@ public class Renderer extends RendererModule{
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
-		Draw.surface("processor");
+		Graphics.surface("processor");
 		if(pixelate) beginPixel();
 		
 		clearScreen();
@@ -189,7 +189,7 @@ public class Renderer extends RendererModule{
 		
 		if(pixelate) endPixel();
 		
-		Draw.surface(true);
+		Graphics.surface(true);
 		
 		rays.setCombinedMatrix(camera);
 		rays.updateAndRender();
@@ -258,12 +258,12 @@ public class Renderer extends RendererModule{
 				}
 			}
 			
-			Draw.getShader(Inline.class).region = facet.sprite;
-			Draw.getShader(Inline.class).color = outlineColor;
+			Graphics.getShader(Inline.class).region = facet.sprite;
+			Graphics.getShader(Inline.class).color = outlineColor;
 			
-			Draw.shader(Inline.class);
+			Graphics.shader(Inline.class);
 			facet.draw();
-			Draw.shader();
+			Graphics.shader();
 		}
 		
 	}
@@ -293,14 +293,14 @@ public class Renderer extends RendererModule{
 			
 			if(facet == null) return;
 			
-			Draw.getShader(Outline.class).color = outlineColor;
-			Draw.getShader(Outline.class).region = facet.sprite;
+			Graphics.getShader(Outline.class).color = outlineColor;
+			Graphics.getShader(Outline.class).region = facet.sprite;
 			
-			Draw.shader(Outline.class);
+			Graphics.shader(Outline.class);
 			
 			facet.draw();
 			
-			Draw.shader();
+			Graphics.shader();
 		}
 	}
 

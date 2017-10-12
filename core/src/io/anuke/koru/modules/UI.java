@@ -18,6 +18,7 @@ import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Stack;
+import io.anuke.ucore.scene.ui.layout.Value;
 import io.anuke.ucore.scene.utils.Cursors;
 
 public class UI extends SceneModule{
@@ -145,15 +146,15 @@ public class UI extends SceneModule{
 				get().pad(4);
 				ButtonGroup<TextButton> group = new ButtonGroup<>();
 				
+				Stack stack = new Stack();
+				
 				group.add(new button("Blocks", "toggle", ()->{
-					
+					stack.invalidateHierarchy();
 				}).fillX().uniformX().get());
 				
 				group.add(new button("Recipes", "toggle", ()->{
-					
+					stack.invalidateHierarchy();
 				}).fillX().uniformX().get());
-				
-				Stack stack = new Stack();
 				
 				stack.add(blockrecipes);
 				blockrecipes.setVisible(()->group.getCheckedIndex() == 0);
@@ -163,7 +164,9 @@ public class UI extends SceneModule{
 				
 				row();
 				
-				add(stack).colspan(group.getButtons().size).fill();
+				add(stack).colspan(group.getButtons().size)
+				.height(Value.create(()->group.getCheckedIndex() == 0 ? 
+						blockrecipes.getPrefHeight() : recipes.getPrefHeight()));
 				
 			}}.end();
 			

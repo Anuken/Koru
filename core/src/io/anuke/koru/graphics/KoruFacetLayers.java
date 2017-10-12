@@ -8,6 +8,7 @@ import io.anuke.koru.graphics.Shaders.Water;
 import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.facet.*;
 
 public class KoruFacetLayers{
@@ -18,7 +19,7 @@ public class KoruFacetLayers{
 	water = new FacetLayer("water", waterLayer, 0){
 		
 		{
-			Draw.addSurface("reflection", Core.cameraScale, 3);
+			Graphics.addSurface("reflection", Core.cameraScale, 3);
 		}
 		
 		@Override
@@ -35,9 +36,9 @@ public class KoruFacetLayers{
 		public void end(){
 			Draw.color();
 			
-			Draw.getShader(Mix.class).color.set(0x29619bff);
-			Draw.getShader(Mix.class).amount = 0.42f;
-			Draw.shader(Mix.class);
+			Graphics.getShader(Mix.class).color.set(0x29619bff);
+			Graphics.getShader(Mix.class).amount = 0.42f;
+			Graphics.shader(Mix.class);
 			
 			Array<Facet> facets = Facets.instance().getFacetArray();
 			for(int i = 0; i < facets.size; i ++){
@@ -68,14 +69,15 @@ public class KoruFacetLayers{
 					}
 				}
 				
-				Draw.end();
+				Graphics.end();
 				
 				//TODO facet lags behind in Y axis while moving?
 				
-				Draw.batch().getTransformMatrix().setToTranslation(0, facet.getLayer(), 0);
-				Draw.batch().getTransformMatrix().scale(1f, -1f, 0);
-				Draw.batch().getTransformMatrix().translate(0, -facet.getLayer(), 0);
-				Draw.begin();
+				Core.batch.getTransformMatrix().setToTranslation(0, facet.getLayer(), 0);
+				Core.batch.getTransformMatrix().scale(1f, -1f, 0);
+				Core.batch.getTransformMatrix().translate(0, -facet.getLayer(), 0);
+				
+				Graphics.begin();
 				facet.draw();
 				
 				if(iswall){
@@ -87,15 +89,15 @@ public class KoruFacetLayers{
 				}
 			}
 			
-			Draw.end();
-			Draw.shader();
+			Graphics.end();
+			Graphics.shader();
 			
-			Draw.batch().getTransformMatrix().setToTranslation(0, 0, 0);
-			Draw.begin();
+			Core.batch.getTransformMatrix().setToTranslation(0, 0, 0);
+			Graphics.begin();
 			
-			Draw.shader(Water.class);
-			Draw.flushSurface();
-			Draw.shader();
+			Graphics.shader(Water.class);
+			Graphics.flushSurface();
+			Graphics.shader();
 		}
 	};
 }

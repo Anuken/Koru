@@ -8,6 +8,7 @@ import io.anuke.koru.network.SyncType;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.traits.DirectionTrait.Direction;
 import io.anuke.koru.utils.Resources;
+import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Prototype;
@@ -50,7 +51,7 @@ public class Player extends Prototype{
 						
 						Resources.font2().getData().setScale(1f);
 						Resources.font2().setUseIntegerPositions(false);
-						Resources.font2().draw(Draw.batch(), spark.get(ConnectionTrait.class).name, spark.pos().x + 0.5f, spark.pos().y + 18, 0, Align.center, false);
+						Resources.font2().draw(Core.batch, spark.get(ConnectionTrait.class).name, spark.pos().x + 0.5f, spark.pos().y + 18, 0, Align.center, false);
 					
 						Resources.font2().setColor(Color.WHITE);
 						
