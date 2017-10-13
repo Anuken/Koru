@@ -43,7 +43,7 @@ public class BlockAnimation extends Prototype{
 					
 					SpriteFacet bot = trait.list.facets.peek().sprite();
 					
-					int theight = bot.sprite.getRegionHeight()/9;
+					int theight = bot.sprite.getRegionHeight()/8;
 					
 					TextureRegion region = bot.sprite;
 					

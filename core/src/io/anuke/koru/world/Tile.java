@@ -2,7 +2,6 @@ package io.anuke.koru.world;
 
 import java.util.Arrays;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import io.anuke.koru.modules.World;
@@ -11,6 +10,7 @@ import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.util.Bits;
+import io.anuke.ucore.util.Mathf;
 
 public class Tile implements Poolable{
 	public static final int LAYER_SIZE = 10;
@@ -137,8 +137,12 @@ public class Tile implements Poolable{
 	
 	/**Random number, generated based on coordinates.*/
 	public int rand(int offset, int max){
-		MathUtils.random.setSeed(getSeed() + offset);
-	    return MathUtils.random(1, max);
+	    return Mathf.randomSeed(getSeed() + offset, 1, max);
+	}
+	
+	/**Random float 0-1, generated based on coordinates.*/
+	public float randFloat(int offset){
+	    return Mathf.randomSeed(getSeed() + offset);
 	}
 
 	public void changeEvent(){

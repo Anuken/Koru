@@ -142,6 +142,11 @@ public class KoruServer implements NetProvider{
 			inv.recipe = packet.recipe;
 		});
 		
+		Net.handle(BlockInputPacket.class, packet->{
+			Koru.world.getTile(packet.x, packet.y).wallid = (short)packet.material;
+			Koru.world.updateTile(Koru.world.getTile(packet.x, packet.y));
+		});
+		
 		Net.handle(InventoryClickPacket.class, packet->{
 			Spark player = getPlayer(connection.getID());
 			

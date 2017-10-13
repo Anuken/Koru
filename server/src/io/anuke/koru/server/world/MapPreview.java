@@ -13,9 +13,7 @@ import com.badlogic.gdx.utils.IntIntMap;
 
 import io.anuke.koru.world.Generator;
 import io.anuke.koru.world.Tile;
-import io.anuke.koru.world.materials.Material;
-import io.anuke.koru.world.materials.MaterialLayer;
-import io.anuke.koru.world.materials.MaterialTypes;
+import io.anuke.koru.world.materials.*;
 import io.anuke.koru.world.materials.MaterialTypes.Grass;
 import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Graphics;
@@ -45,7 +43,7 @@ public class MapPreview extends ApplicationAdapter{
 		batch = new SpriteBatch();
 		gen = new OctaveTerrainGenerator();
 		
-		Gdx.graphics.setContinuousRendering(false);
+		//Gdx.graphics.setContinuousRendering(false);
 
 		Atlas atlas = new Atlas(Gdx.files.absolute(atlasDir));
 
@@ -73,6 +71,10 @@ public class MapPreview extends ApplicationAdapter{
 				gen(x, y);
 			}
 		}
+		
+		colors.put(Materials.floweryellow.id(), Color.rgba8888(Color.YELLOW));
+		colors.put(Materials.flowerblue.id(), Color.rgba8888(Color.ROYAL));
+		colors.put(Materials.flowerpurple.id(), Color.rgba8888(Color.PURPLE));
 	}
 
 	public void render(){
@@ -133,6 +135,9 @@ public class MapPreview extends ApplicationAdapter{
 		}
 		
 		if(!tile.isWallEmpty()){
+			if(colors.containsKey(tile.wallid)){
+				return colors.get(tile.wallid, 0);
+			}
 			temp.set(colors.get(tile.topFloor().id(), 0)+1000);
 			temp.mul(light, light, light, 1f);
 			return Color.rgba8888(temp);

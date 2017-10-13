@@ -277,6 +277,44 @@ public class MaterialTypes{
 		
 	}
 	
+	public static class Flower extends Material{
+		//flowers per bunch
+		int amount = 3;
+
+		protected Flower(String name) {
+			super(name, MaterialLayer.wall);
+			solid = false;
+			variants = 5;
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			float offset = variantOffset(tile);
+			
+			float r = 8f;
+			float oy = tile.randFloat(1) * r*2 - r;
+			
+			boolean flip = tile.randFloat(-1) < 0.5;
+			
+			int variant = tile.rand(variants);
+			
+			for(int i = 0; i < amount; i ++){
+				float yoffset = offset + oy - (float)tilesize/amount * i + tilesize/2;
+				
+				get(name + ((variant-1 + i) % variants + 1))
+				.layer(tile.worldy() + yoffset)
+				.set(
+					tile.worldx() + ((i + variant) % amount - amount/2f)*8f * Mathf.sign(flip),
+					tile.worldy() + yoffset
+				).centerX().sort(Sorter.object)
+				.addShadow(list, -offset).add(list);
+			}
+			
+			
+		}
+		
+	}
+	
 	public static class TallGrassWall extends Material{
 		static final float add = 0.94f;
 
@@ -318,8 +356,8 @@ public class MaterialTypes{
 			if(!isGrass(tile.x, tile.y - 1)){
 				get("grassblock2" +blendn).shadow()
 				.set(tile.worldx() + 1, tile.worldy() - 1 + yadd - tilesize/2)
-				.centerX();
-				//.add(list);
+				.centerX()
+				.add(list);
 			}
 		}
 	}
@@ -360,8 +398,8 @@ public class MaterialTypes{
 			if(!isGrass(tile.x, tile.y - 1)){
 				get("grassf1").shadow()
 				.set(tile.worldx() + 1 + offset, tile.worldy() + 2 + xadd - tilesize/2)
-				.centerX();
-				//.add(list);
+				.centerX()
+				.add(list);
 			}
 		}
 	}

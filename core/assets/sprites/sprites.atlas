@@ -6,84 +6,84 @@ filter: Nearest,Nearest
 repeat: none
 entities/crab-b-0
   rotate: false
-  xy: 804, 143
+  xy: 615, 29
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 entities/crab-b-1
   rotate: false
-  xy: 804, 129
+  xy: 615, 15
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 entities/crab-b-2
   rotate: false
-  xy: 802, 115
+  xy: 615, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 entities/egg
   rotate: false
-  xy: 956, 259
+  xy: 856, 254
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 entities/testmonster
   rotate: false
-  xy: 956, 259
+  xy: 856, 254
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 entities/genericmonster
   rotate: false
-  xy: 872, 210
+  xy: 872, 274
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 entities/wazard
   rotate: false
-  xy: 984, 194
+  xy: 992, 278
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/hammeritem
   rotate: false
-  xy: 942, 198
+  xy: 749, 46
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/mushroomitem
   rotate: false
-  xy: 648, 73
+  xy: 826, 138
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/mushroomstaffitem
   rotate: false
-  xy: 662, 73
+  xy: 838, 166
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/pineconeitem
   rotate: false
-  xy: 617, 53
+  xy: 838, 152
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/stickitem
   rotate: false
-  xy: 629, 7
+  xy: 996, 306
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -97,28 +97,28 @@ items/stonechunk
   index: -1
 items/stoneitem
   rotate: false
-  xy: 970, 208
+  xy: 852, 155
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/toolitem
   rotate: false
-  xy: 984, 222
+  xy: 854, 127
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/woodaxe
   rotate: false
-  xy: 956, 179
+  xy: 1006, 278
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/woodaxeitem
   rotate: false
-  xy: 970, 180
+  xy: 804, 118
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -132,35 +132,35 @@ items/woodchunk
   index: -1
 items/wooditem
   rotate: false
-  xy: 998, 207
+  xy: 805, 62
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/woodpickaxeitem
   rotate: false
-  xy: 998, 193
+  xy: 805, 48
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 items/woodsworditem
   rotate: false
-  xy: 998, 179
+  xy: 805, 34
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/box
   rotate: false
-  xy: 1008, 249
+  xy: 900, 299
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/boxopen
   rotate: false
-  xy: 830, 200
+  xy: 810, 150
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
@@ -202,28 +202,28 @@ objects/bush1
   index: -1
 objects/bush2
   rotate: false
-  xy: 824, 271
+  xy: 972, 370
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 objects/bush3
   rotate: false
-  xy: 464, 93
+  xy: 991, 449
   size: 22, 20
   orig: 22, 20
   offset: 0, 0
   index: -1
 objects/cattails1
   rotate: false
-  xy: 830, 185
+  xy: 654, 81
   size: 12, 13
   orig: 12, 13
   offset: 0, 0
   index: -1
 objects/cattails2
   rotate: false
-  xy: 599, 40
+  xy: 668, 81
   size: 12, 13
   orig: 12, 13
   offset: 0, 0
@@ -258,196 +258,224 @@ objects/deadtree4
   index: -1
 objects/drybush1
   rotate: false
-  xy: 860, 270
+  xy: 972, 348
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 objects/drybush2
   rotate: false
-  xy: 882, 270
+  xy: 972, 326
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 objects/drybush3
   rotate: false
-  xy: 992, 405
+  xy: 991, 427
   size: 22, 20
   orig: 22, 20
   offset: 0, 0
   index: -1
 objects/fern1
   rotate: false
-  xy: 828, 167
+  xy: 802, 247
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern2
   rotate: false
-  xy: 902, 251
+  xy: 800, 229
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/fern3
   rotate: false
-  xy: 920, 251
+  xy: 824, 277
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
+objects/flowerblue1
+  rotate: false
+  xy: 692, 287
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerblue2
+  rotate: false
+  xy: 367, 256
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerblue3
+  rotate: false
+  xy: 1015, 481
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerblue4
+  rotate: false
+  xy: 1015, 467
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerblue5
+  rotate: false
+  xy: 1015, 453
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerpurple1
+  rotate: false
+  xy: 1015, 439
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerpurple2
+  rotate: false
+  xy: 1015, 425
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerpurple3
+  rotate: false
+  xy: 574, 109
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerpurple4
+  rotate: false
+  xy: 602, 95
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/flowerpurple5
+  rotate: false
+  xy: 503, 157
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/floweryellow1
+  rotate: false
+  xy: 1014, 411
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/floweryellow2
+  rotate: false
+  xy: 1014, 397
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/floweryellow3
+  rotate: false
+  xy: 486, 101
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/floweryellow4
+  rotate: false
+  xy: 486, 87
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+objects/floweryellow5
+  rotate: false
+  xy: 834, 180
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
 objects/grassblock2
   rotate: false
-  xy: 570, 74
+  xy: 584, 74
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblock2edge
   rotate: false
-  xy: 836, 228
+  xy: 598, 74
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblock2left
   rotate: false
-  xy: 850, 230
+  xy: 612, 78
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassblock2right
   rotate: false
-  xy: 900, 212
+  xy: 599, 53
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassf1
   rotate: false
-  xy: 914, 212
+  xy: 613, 57
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassf2
   rotate: false
-  xy: 928, 212
+  xy: 627, 57
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassf3
   rotate: false
-  xy: 942, 212
+  xy: 641, 57
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
 objects/grassf4
   rotate: false
-  xy: 844, 195
+  xy: 655, 60
   size: 12, 19
   orig: 12, 19
   offset: 0, 0
   index: -1
-objects/hatcher
-  rotate: false
-  xy: 886, 188
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-4
-  rotate: false
-  xy: 886, 188
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-0
-  rotate: false
-  xy: 900, 184
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-1
-  rotate: false
-  xy: 914, 184
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-2
-  rotate: false
-  xy: 928, 184
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/hatcher-3
-  rotate: false
-  xy: 942, 184
-  size: 12, 12
-  orig: 12, 12
-  offset: 0, 0
-  index: -1
-objects/icetree2
-  rotate: false
-  xy: 972, 342
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-objects/icytree1
-  rotate: false
-  xy: 972, 292
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-objects/icytree2
-  rotate: false
-  xy: 860, 292
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-objects/icytree3
-  rotate: false
-  xy: 991, 479
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-objects/icytree4
-  rotate: false
-  xy: 991, 445
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 objects/koru1
   rotate: false
-  xy: 584, 73
+  xy: 950, 301
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/koru2
   rotate: false
-  xy: 602, 73
+  xy: 820, 241
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 objects/koru3
   rotate: false
-  xy: 599, 55
+  xy: 818, 223
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -461,35 +489,35 @@ objects/lightshadow
   index: -1
 objects/mossyrock1
   rotate: false
-  xy: 634, 73
+  xy: 824, 152
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/mossyrock2
   rotate: false
-  xy: 844, 185
+  xy: 826, 128
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy1
   rotate: false
-  xy: 624, 91
+  xy: 840, 128
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy2
   rotate: false
-  xy: 620, 67
+  xy: 790, 125
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
   index: -1
 objects/mushy3
   rotate: false
-  xy: 634, 63
+  xy: 842, 253
   size: 12, 8
   orig: 12, 8
   offset: 0, 0
@@ -503,28 +531,28 @@ objects/mushy4
   index: -1
 objects/mushy5
   rotate: false
-  xy: 648, 63
-  size: 12, 8
-  orig: 12, 8
+  xy: 599, 42
+  size: 12, 9
+  orig: 12, 9
   offset: 0, 0
   index: -1
 objects/mushy6
   rotate: false
-  xy: 858, 187
+  xy: 816, 194
   size: 12, 9
   orig: 12, 9
   offset: 0, 0
   index: -1
 objects/mushy7
   rotate: false
-  xy: 613, 42
+  xy: 830, 194
   size: 12, 9
   orig: 12, 9
   offset: 0, 0
   index: -1
 objects/mushy8
   rotate: false
-  xy: 662, 62
+  xy: 788, 100
   size: 12, 9
   orig: 12, 9
   offset: 0, 0
@@ -573,14 +601,14 @@ objects/oaktree6
   index: -1
 objects/pinecones
   rotate: false
-  xy: 615, 28
+  xy: 840, 138
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/pinesapling
   rotate: false
-  xy: 956, 249
+  xy: 882, 274
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -629,84 +657,84 @@ objects/rock2
   index: -1
 objects/rock3
   rotate: false
-  xy: 846, 167
+  xy: 626, 78
   size: 12, 16
   orig: 12, 16
   offset: 0, 0
   index: -1
 objects/rock4
   rotate: false
-  xy: 858, 198
+  xy: 640, 78
   size: 12, 16
   orig: 12, 16
   offset: 0, 0
   index: -1
 objects/rocks
   rotate: false
-  xy: 645, 49
+  xy: 791, 72
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/sticks
   rotate: false
-  xy: 643, 7
+  xy: 996, 292
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 objects/torch
   rotate: false
-  xy: 692, 287
+  xy: 739, 61
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame1
   rotate: false
-  xy: 367, 256
+  xy: 739, 47
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame2
   rotate: false
-  xy: 488, 101
+  xy: 866, 169
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame3
   rotate: false
-  xy: 488, 87
+  xy: 866, 155
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/torchflame4
   rotate: false
-  xy: 574, 109
+  xy: 868, 141
   size: 8, 12
   orig: 8, 12
   offset: 0, 0
   index: -1
 objects/wheatgrass1
   rotate: false
-  xy: 593, 3
+  xy: 842, 285
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
   index: -1
 objects/wheatgrass2
   rotate: false
-  xy: 792, 157
+  xy: 615, 99
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
   index: -1
 objects/wheatgrass3
   rotate: false
-  xy: 808, 157
+  xy: 593, 3
   size: 14, 8
   orig: 14, 8
   offset: 0, 0
@@ -741,7 +769,7 @@ objects/willowtree4
   index: -1
 objects/workbench
   rotate: false
-  xy: 676, 73
+  xy: 858, 274
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -776,21 +804,21 @@ other/clear
   index: -1
 other/error
   rotate: false
-  xy: 830, 97
+  xy: 894, 285
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 other/hitbox
   rotate: false
-  xy: 802, 243
+  xy: 822, 295
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 other/hitbox2
   rotate: false
-  xy: 824, 249
+  xy: 464, 93
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -804,91 +832,91 @@ other/light
   index: -1
 player/crab
   rotate: false
-  xy: 788, 115
+  xy: 655, 46
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-b
   rotate: false
-  xy: 788, 101
+  xy: 669, 53
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-f
   rotate: false
-  xy: 802, 101
+  xy: 629, 29
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-f-0
   rotate: false
-  xy: 824, 153
+  xy: 629, 15
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-f-1
   rotate: false
-  xy: 838, 153
+  xy: 629, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-f-2
   rotate: false
-  xy: 818, 139
+  xy: 643, 29
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-s
   rotate: false
-  xy: 832, 139
+  xy: 643, 15
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-s-0
   rotate: false
-  xy: 818, 125
+  xy: 643, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-s-1
   rotate: false
-  xy: 832, 125
+  xy: 657, 32
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/crab-s-2
   rotate: false
-  xy: 816, 111
+  xy: 657, 18
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 player/player
   rotate: false
-  xy: 996, 240
+  xy: 866, 264
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 projectiles/bolt
   rotate: false
-  xy: 503, 161
+  xy: 856, 264
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 projectiles/slash
   rotate: false
-  xy: 800, 221
+  xy: 992, 405
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -1070,7 +1098,7 @@ shadows/shadow18
   index: -1
 shadows/shadow2
   rotate: false
-  xy: 320, 136
+  xy: 310, 136
   size: 6, 4
   orig: 6, 4
   offset: 0, 0
@@ -1084,7 +1112,7 @@ shadows/shadow20
   index: -1
 shadows/shadow22
   rotate: false
-  xy: 860, 256
+  xy: 858, 306
   size: 22, 12
   orig: 22, 12
   offset: 0, 0
@@ -1119,7 +1147,7 @@ shadows/shadow30
   index: -1
 shadows/shadow32
   rotate: false
-  xy: 991, 427
+  xy: 991, 495
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
@@ -1140,21 +1168,21 @@ shadows/shadow36
   index: -1
 shadows/shadow38
   rotate: false
-  xy: 968, 250
+  xy: 749, 80
   size: 38, 18
   orig: 38, 18
   offset: 0, 0
   index: -1
 shadows/shadow4
   rotate: false
-  xy: 464, 87
+  xy: 570, 67
   size: 6, 4
   orig: 6, 4
   offset: 0, 0
   index: -1
 shadows/shadow40
   rotate: false
-  xy: 631, 101
+  xy: 749, 60
   size: 40, 18
   orig: 40, 18
   offset: 0, 0
@@ -1175,7 +1203,7 @@ shadows/shadow44
   index: -1
 shadows/shadow46
   rotate: false
-  xy: 968, 270
+  xy: 860, 320
   size: 46, 20
   orig: 46, 20
   offset: 0, 0
@@ -1210,21 +1238,21 @@ shadows/shadow54
   index: -1
 shadows/shadow56
   rotate: false
-  xy: 910, 269
+  xy: 691, 75
   size: 56, 23
   orig: 56, 23
   offset: 0, 0
   index: -1
 shadows/shadow58
   rotate: false
-  xy: 910, 294
+  xy: 631, 96
   size: 58, 23
   orig: 58, 23
   offset: 0, 0
   index: -1
 shadows/shadow6
   rotate: false
-  xy: 824, 243
+  xy: 474, 87
   size: 6, 4
   orig: 6, 4
   offset: 0, 0
@@ -1301,7 +1329,7 @@ shadows/shadow78
   index: -1
 shadows/shadow8
   rotate: false
-  xy: 310, 136
+  xy: 464, 87
   size: 8, 4
   orig: 8, 4
   offset: 0, 0
@@ -1378,7 +1406,7 @@ shadows/shadow98
   index: -1
 tiles/blackfloor1
   rotate: false
-  xy: 816, 185
+  xy: 574, 95
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -1392,14 +1420,14 @@ tiles/blackfloor1edge
   index: -1
 tiles/blackrock
   rotate: false
-  xy: 574, 95
+  xy: 588, 95
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/blackrockedge
   rotate: false
-  xy: 673, 103
+  xy: 994, 374
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -1413,63 +1441,63 @@ tiles/block
   index: -1
 tiles/bluegrass
   rotate: false
-  xy: 850, 216
+  xy: 669, 67
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/bluegrassedge
   rotate: false
-  xy: 798, 203
+  xy: 994, 356
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/burntgrass
   rotate: false
-  xy: 860, 173
+  xy: 613, 43
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/burntgrass2
   rotate: false
-  xy: 790, 143
+  xy: 627, 43
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/burntgrass2edge
   rotate: false
-  xy: 884, 252
+  xy: 994, 338
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/burntgrassedge
   rotate: false
-  xy: 798, 185
+  xy: 882, 302
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/cobblestone
   rotate: false
-  xy: 790, 129
+  xy: 641, 43
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/cobblestoneedge
   rotate: false
-  xy: 792, 167
+  xy: 994, 320
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/darkgrass
   rotate: false
-  xy: 830, 111
+  xy: 657, 4
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -1483,21 +1511,21 @@ tiles/darkgrassedge
   index: -1
 tiles/deepwater
   rotate: false
-  xy: 816, 97
+  xy: 820, 180
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/deepwateredge
   rotate: false
-  xy: 810, 167
+  xy: 858, 288
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/dirtblock
   rotate: false
-  xy: 846, 295
+  xy: 844, 295
   size: 12, 20
   orig: 12, 20
   offset: 0, 0
@@ -1511,175 +1539,175 @@ tiles/dropshadow
   index: -1
 tiles/grass
   rotate: false
-  xy: 852, 153
+  xy: 972, 312
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass1
   rotate: false
-  xy: 846, 139
+  xy: 968, 298
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass2
   rotate: false
-  xy: 846, 125
+  xy: 683, 61
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass3
   rotate: false
-  xy: 844, 111
+  xy: 697, 61
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass4
   rotate: false
-  xy: 844, 97
+  xy: 711, 61
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass5
   rotate: false
-  xy: 872, 196
+  xy: 725, 61
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass6
   rotate: false
-  xy: 886, 202
+  xy: 683, 47
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass7
   rotate: false
-  xy: 900, 198
+  xy: 697, 47
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grass8
   rotate: false
-  xy: 914, 198
+  xy: 711, 47
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/grassblock
   rotate: false
-  xy: 846, 273
+  xy: 842, 263
   size: 12, 20
   orig: 12, 20
   offset: 0, 0
   index: -1
 tiles/grassedge
   rotate: false
-  xy: 938, 251
+  xy: 824, 259
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/gravel
   rotate: false
-  xy: 928, 198
+  xy: 725, 47
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/graveledge
   rotate: false
-  xy: 588, 91
+  xy: 914, 301
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/ice
   rotate: false
-  xy: 860, 139
+  xy: 763, 46
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice1
   rotate: false
-  xy: 860, 125
+  xy: 777, 46
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice7
   rotate: false
-  xy: 860, 125
+  xy: 777, 46
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice2
   rotate: false
-  xy: 858, 111
+  xy: 908, 285
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice3
   rotate: false
-  xy: 858, 97
+  xy: 922, 287
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice4
   rotate: false
-  xy: 620, 77
+  xy: 936, 287
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice5
   rotate: false
-  xy: 638, 87
+  xy: 950, 287
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/ice6
   rotate: false
-  xy: 652, 87
+  xy: 964, 284
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/iceedge
   rotate: false
-  xy: 606, 91
+  xy: 932, 301
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/magmarock
   rotate: false
-  xy: 666, 87
+  xy: 824, 166
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/magmarockedge
   rotate: false
-  xy: 864, 238
+  xy: 800, 211
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/riveredge
   rotate: false
-  xy: 615, 14
+  xy: 788, 111
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -1693,231 +1721,231 @@ tiles/riveredgeedge
   index: -1
 tiles/riverrock
   rotate: false
-  xy: 631, 49
+  xy: 789, 86
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand
   rotate: false
-  xy: 659, 48
+  xy: 791, 58
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand3
   rotate: false
-  xy: 659, 48
+  xy: 791, 58
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand1
   rotate: false
-  xy: 629, 35
+  xy: 791, 44
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand2
   rotate: false
-  xy: 629, 21
+  xy: 838, 239
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand4
   rotate: false
-  xy: 643, 35
+  xy: 836, 225
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand5
   rotate: false
-  xy: 643, 21
+  xy: 836, 211
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand6
   rotate: false
-  xy: 657, 34
+  xy: 982, 298
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sand7
   rotate: false
-  xy: 657, 20
+  xy: 978, 284
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/sandedge
   rotate: false
-  xy: 882, 234
+  xy: 798, 193
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stone
   rotate: false
-  xy: 657, 6
+  xy: 852, 239
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone1
   rotate: false
-  xy: 954, 235
+  xy: 850, 225
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone7
   rotate: false
-  xy: 954, 235
+  xy: 850, 225
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone2
   rotate: false
-  xy: 968, 236
+  xy: 850, 211
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone3
   rotate: false
-  xy: 982, 236
+  xy: 844, 197
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone4
   rotate: false
-  xy: 956, 221
+  xy: 844, 183
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone5
   rotate: false
-  xy: 956, 207
+  xy: 858, 197
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stone6
   rotate: false
-  xy: 956, 193
+  xy: 858, 183
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stoneblock
   rotate: false
-  xy: 846, 251
+  xy: 792, 171
   size: 12, 20
   orig: 12, 20
   offset: 0, 0
   index: -1
 tiles/stoneedge
   rotate: false
-  xy: 822, 293
+  xy: 991, 471
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 tiles/stonefloor
   rotate: false
-  xy: 970, 222
+  xy: 852, 169
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/stoneflooredge
   rotate: false
-  xy: 900, 233
+  xy: 818, 205
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/stonepillar
   rotate: false
-  xy: 816, 199
+  xy: 806, 171
   size: 12, 20
   orig: 12, 20
   offset: 0, 0
   index: -1
 tiles/swampgrass
   rotate: false
-  xy: 970, 194
+  xy: 854, 141
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/swampgrassedge
   rotate: false
-  xy: 918, 233
+  xy: 792, 153
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/walldropshadow
   rotate: false
-  xy: 936, 233
+  xy: 790, 135
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/water
   rotate: false
-  xy: 984, 208
+  xy: 868, 127
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/wateredge
   rotate: false
-  xy: 864, 220
+  xy: 808, 132
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles/woodblock
   rotate: false
-  xy: 822, 221
+  xy: 570, 73
   size: 12, 20
   orig: 12, 20
   offset: 0, 0
   index: -1
 tiles/woodblockedge
   rotate: false
-  xy: 984, 180
+  xy: 802, 104
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/woodblockedgecorner
   rotate: false
-  xy: 1006, 235
+  xy: 803, 90
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/woodfloor
   rotate: false
-  xy: 998, 221
+  xy: 805, 76
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 tiles/woodflooredge
   rotate: false
-  xy: 882, 216
+  xy: 876, 284
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

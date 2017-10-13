@@ -159,6 +159,10 @@ public class Control extends Module{
 	
 	public boolean keyDown (int keycode) {
 		
+		if(keycode == Keys.P){
+			sendBlock();
+		}
+		
 		//TODO keybindings for this as well
 		if(keycode >= Keys.NUM_1 && keycode < Keys.NUM_5){
 			InventoryTrait inv = player.get(InventoryTrait.class);
@@ -187,7 +191,7 @@ public class Control extends Module{
 		BlockInputPacket p = new BlockInputPacket();
 		p.x = blockx;
 		p.y = blocky;
-		p.material = Materials.grassblock.id();
+		p.material = Materials.floweryellow.id();
 		Net.send(p);
 	}
 	

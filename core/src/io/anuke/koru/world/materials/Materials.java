@@ -142,22 +142,29 @@ public class Materials{
 	deadtree = new Tree("deadtree"){{
 		variants = 4;
 		offsets(-4, -3, -4, -1);
+		addDrop(Items.wood, 10);
+		breaktime = 120;
 	}},
 	
 	oaktree = new Tree("oaktree"){{
 		variants = 6;
 		offsets(-10, -10, -10, -4, -4, -4);
-		addDrop(Items.wood, 16);
+		addDrop(Items.wood, 20);
+		breaktime = 120;
 	}},
 	
 	willowtree = new Tree("willowtree"){{
 		variants = 4;
 		offsets(-4, -3, -4, -3);
+		addDrop(Items.wood, 20);
+		breaktime = 120;
 	}},
 	
 	burnedtree = new Tree("burnedtree"){{
 		variants = 4;
 		offsets(-4, -3, -4, -1);
+		addDrop(Items.wood, 10);
+		breaktime = 120;
 	}},
 	
 	pinetree = new Tree("pinetree"){{
@@ -174,6 +181,22 @@ public class Materials{
 		variants = 0;
 	}},
 	
+	pinecones = new Overlay("pinecones"){{
+		addDrop(Items.pinecone, 1);
+		solid = false;
+		variants = 0;
+		interactable = true;
+	}},
+	
+	floweryellow = new Flower("floweryellow"){{
+		
+	}},
+	flowerblue = new Flower("flowerblue"){{
+		
+	}},
+	flowerpurple = new Flower("flowerpurple"){{
+				
+	}},
 	stoneblock = new Wall("stoneblock"){{
 		addDrop(Items.stone, 5); 
 		color = new Color(0x717171ff);
