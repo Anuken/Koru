@@ -75,6 +75,7 @@ public class MapPreview extends ApplicationAdapter{
 		colors.put(Materials.floweryellow.id(), Color.rgba8888(Color.YELLOW));
 		colors.put(Materials.flowerblue.id(), Color.rgba8888(Color.ROYAL));
 		colors.put(Materials.flowerpurple.id(), Color.rgba8888(Color.PURPLE));
+		colors.put(Materials.flowerred.id(), Color.rgba8888(Color.RED));
 	}
 
 	public void render(){

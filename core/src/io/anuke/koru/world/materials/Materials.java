@@ -197,6 +197,9 @@ public class Materials{
 	flowerpurple = new Flower("flowerpurple"){{
 				
 	}},
+	flowerred = new Flower("flowerred"){{
+				
+	}},
 	stoneblock = new Wall("stoneblock"){{
 		addDrop(Items.stone, 5); 
 		color = new Color(0x717171ff);
