@@ -50,7 +50,6 @@ public class Renderer extends RendererModule{
 	public static final Color outlineColor = new Color(0.5f, 0.7f, 1f, 1f);
 	
 	private Spark player;
-	private ProcessorSurface surface;
 	private FacetList[][] renderables = new FacetList[World.chunksize * World.loadrange * 2][World.chunksize * World.loadrange * 2];
 	private Sprite shadowSprite;
 	private int lastcamx, lastcamy;
@@ -89,8 +88,6 @@ public class Renderer extends RendererModule{
 		KoruCursors.updateCursor();
 
 		loadMaterialColors();
-		
-		Graphics.addSurface(surface = new ProcessorSurface());
 
 		Koru.log("Loaded resources. Time taken: " + Timers.elapsed() + " ms.");
 		
@@ -132,8 +129,6 @@ public class Renderer extends RendererModule{
 		if(Koru.control.canMove()){
 			KoruCursors.setCursor("cursor");
 		}
-
-		surface.setLightColor(world.getAmbientColor());
 		
 		float addx = 1f-(Graphics.size().x/Core.cameraScale) % 1f;
 		float addy = 1f-(Graphics.size().y/Core.cameraScale) % 1f;
@@ -176,7 +171,6 @@ public class Renderer extends RendererModule{
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
-		Graphics.surface("processor");
 		if(pixelate) beginPixel();
 		
 		clearScreen();
@@ -186,7 +180,7 @@ public class Renderer extends RendererModule{
 		
 		if(pixelate) endPixel();
 		
-		Graphics.surface(true);
+		Graphics.end();
 		
 		rays.setCombinedMatrix(camera);
 		rays.updateAndRender();

@@ -29,13 +29,8 @@ public class KoruUpdater{
 	public final WorldFile file;
 	public final EntityMapper mapper;
 	
-	private final KoruServer server;
-	
 	private boolean isRunning = true;
-	private long frameid;
 	private float delta = 1f;
-	private long lastFpsTime;
-	private final int blockupdatetime = 60 * 6;
 	private CountDownLatch latch = new CountDownLatch(1);
 	private int threads = 0;
 	private int totalchunks = 0;
@@ -62,7 +57,6 @@ public class KoruUpdater{
 		while(isRunning){
 			long start = System.currentTimeMillis();
 			loop();
-			frameid++;
 			long end = System.currentTimeMillis();
 
 			try{
@@ -77,7 +71,6 @@ public class KoruUpdater{
 	}
 
 	public KoruUpdater(KoruServer server) {
-		this.server = server;
 		
 		try{
 			if(!Files.isDirectory(Paths.get("world")))
