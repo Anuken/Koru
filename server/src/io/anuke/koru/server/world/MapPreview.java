@@ -41,7 +41,7 @@ public class MapPreview extends ApplicationAdapter{
 
 	public void create(){
 		batch = new SpriteBatch();
-		gen = new OctaveTerrainGenerator();
+		gen = new EntryTerrainGenerator();
 		
 		//Gdx.graphics.setContinuousRendering(false);
 

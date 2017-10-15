@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
-import io.anuke.koru.server.world.OctaveTerrainGenerator;
+import io.anuke.koru.server.world.EntryTerrainGenerator;
 import io.anuke.koru.server.world.WorldFile;
 import io.anuke.koru.systems.EntityMapper;
 import io.anuke.koru.systems.SyncSystem;
@@ -88,7 +88,7 @@ public class KoruUpdater{
 		
 		Timers.setDeltaProvider(()->delta);
 		
-		file = new WorldFile(Paths.get("world"), new OctaveTerrainGenerator());
+		file = new WorldFile(Paths.get("world"), new EntryTerrainGenerator());
 		
 		world = new World(file);
 		Koru.world = world;

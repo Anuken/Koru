@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -34,7 +36,6 @@ import io.anuke.ucore.util.ColorCodes;
 import io.anuke.ucore.util.Mathf;
 
 public class KoruServer implements NetProvider{
-	boolean displayMap = true;
 	//maps connection IDs to entity IDs
 	IntIntMap connections = new IntIntMap();
 
@@ -81,9 +82,6 @@ public class KoruServer implements NetProvider{
 
 		thread.setDaemon(true);
 		thread.start();
-		
-		if(displayMap)
-			createMapGraphics();
 	}
 
 	private void createMapGraphics(){
@@ -313,7 +311,9 @@ public class KoruServer implements NetProvider{
 		System.out.println(ColorCodes.FLUSH);
 		System.out.flush();
 		
-		if(args.length > 0 && args[0].toLowerCase().equals("-clearworld")){
+		List<String> arglist = Arrays.asList(args);
+		
+		if(arglist.contains("-clearworld")){
 			Koru.log("Clearing world.");
 			try{
 				Files.list(Paths.get("world")).forEach((Path path) -> {
@@ -328,6 +328,12 @@ public class KoruServer implements NetProvider{
 			}
 
 		}
-		new KoruServer().setup();
+		
+		KoruServer server = new KoruServer();
+		server.setup();
+		
+		if(arglist.contains("-showmap")){
+			server.createMapGraphics();
+		}
 	}
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import io.anuke.ucore.graphics.PixmapUtils;
+import io.anuke.ucore.graphics.Pixmaps;
 
 public class KoruCursors{
 	private static ObjectMap<String, Cursor> cursors = new ObjectMap<>();
@@ -22,8 +22,8 @@ public class KoruCursors{
 			texture.getTextureData().prepare();
 			
 			Pixmap pixmap = texture.getTextureData().consumePixmap();
-			Pixmap out = PixmapUtils.outline(pixmap, new Color(0,0,0,0.1f));
-			Pixmap out2 = PixmapUtils.scale(out, 4);
+			Pixmap out = Pixmaps.outline(pixmap, new Color(0,0,0,0.1f));
+			Pixmap out2 = Pixmaps.scale(out, 4);
 			
 			out.dispose();
 			pixmap.dispose();

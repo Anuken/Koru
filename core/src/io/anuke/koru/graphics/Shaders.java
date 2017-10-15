@@ -9,13 +9,10 @@ import io.anuke.ucore.graphics.Shader;
 import io.anuke.ucore.util.Tmp;
 
 public class Shaders{
-	
-	public static void create(){
-		new Outline();
-		new Inline();
-		new Water();
-		new Mix();
-	}
+	public static final Outline outline = new Outline();
+	public static final Inline inline = new Inline();
+	public static final Water water = new Water();
+	public static final Mix mix = new Mix();
 	
 	public static class Water extends Shader{
 		

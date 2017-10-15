@@ -19,8 +19,6 @@ import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.*;
-import io.anuke.koru.graphics.Shaders.Inline;
-import io.anuke.koru.graphics.Shaders.Outline;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
@@ -74,7 +72,6 @@ public class Renderer extends RendererModule{
 		
 		ShaderLoader.BasePath = "default-shaders/";
 		ShaderLoader.Pedantic = false;
-		Shaders.create();
 		
 		EffectLoader.load();
 		
@@ -258,10 +255,10 @@ public class Renderer extends RendererModule{
 				}
 			}
 			
-			Graphics.getShader(Inline.class).region = facet.sprite;
-			Graphics.getShader(Inline.class).color = outlineColor;
+			Shaders.inline.region = facet.sprite;
+			Shaders.inline.color = outlineColor;
 			
-			Graphics.shader(Inline.class);
+			Graphics.shader(Shaders.inline);
 			facet.draw();
 			Graphics.shader();
 		}
@@ -293,10 +290,10 @@ public class Renderer extends RendererModule{
 			
 			if(facet == null) return;
 			
-			Graphics.getShader(Outline.class).color = outlineColor;
-			Graphics.getShader(Outline.class).region = facet.sprite;
+			Shaders.outline.color = outlineColor;
+			Shaders.outline.region = facet.sprite;
 			
-			Graphics.shader(Outline.class);
+			Graphics.shader(Shaders.outline);
 			
 			facet.draw();
 			

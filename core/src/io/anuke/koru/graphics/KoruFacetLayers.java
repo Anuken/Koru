@@ -3,8 +3,6 @@ package io.anuke.koru.graphics;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.koru.graphics.Shaders.Mix;
-import io.anuke.koru.graphics.Shaders.Water;
 import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Draw;
@@ -36,9 +34,9 @@ public class KoruFacetLayers{
 		public void end(){
 			Draw.color();
 			
-			Graphics.getShader(Mix.class).color.set(0x29619bff);
-			Graphics.getShader(Mix.class).amount = 0.42f;
-			Graphics.shader(Mix.class);
+			Shaders.mix.color.set(0x29619bff);
+			Shaders.mix.amount = 0.42f;
+			Graphics.shader(Shaders.mix);
 			
 			Array<Facet> facets = Facets.instance().getFacetArray();
 			for(int i = 0; i < facets.size; i ++){
@@ -95,7 +93,7 @@ public class KoruFacetLayers{
 			Core.batch.getTransformMatrix().setToTranslation(0, 0, 0);
 			Graphics.begin();
 			
-			Graphics.shader(Water.class);
+			Graphics.shader(Shaders.water);
 			Graphics.flushSurface();
 			Graphics.shader();
 		}

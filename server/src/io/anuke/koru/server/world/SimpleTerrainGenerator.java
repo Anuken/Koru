@@ -9,7 +9,7 @@ import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
 import io.anuke.ucore.noise.VoronoiNoise;
 
-public class TerrainGenerator implements Generator{
+public class SimpleTerrainGenerator implements Generator{
 	final float scale = 0.9f;
 	VoronoiNoise tnoise = new VoronoiNoise(0, (short) 0);
 	VoronoiNoise enoise = new VoronoiNoise(10, (short) 0);
