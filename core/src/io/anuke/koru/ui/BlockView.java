@@ -15,6 +15,7 @@ import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
 import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.function.StringSupplier;
 import io.anuke.ucore.scene.Element;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.scene.utils.ClickListener;
@@ -28,7 +29,7 @@ public class BlockView extends Table{
 	public BlockView(){
 		
 		
-		add(()->(selected == null ? "" : selected.recipe.result().formalName()));
+		add((StringSupplier)()->(selected == null ? "" : selected.recipe.result().formalName()));
 		row();
 		add(req).size(64);
 		
