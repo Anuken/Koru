@@ -29,5 +29,7 @@ void main() {
 
 	if(any){
 		gl_FragColor = u_color;
+	}else{
+		gl_FragColor = vec4(0.0);
 	}
 }

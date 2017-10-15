@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.*;
@@ -68,9 +67,6 @@ public class Renderer extends RendererModule{
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
-		
-		ShaderLoader.BasePath = "default-shaders/";
-		ShaderLoader.Pedantic = false;
 		
 		EffectLoader.load();
 		

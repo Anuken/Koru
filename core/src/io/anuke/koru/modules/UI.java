@@ -59,7 +59,7 @@ public class UI extends SceneModule{
 		chat = new ChatView();
 		
 		//TODO settings
-		settings.checkPref("smoothcam", "Smooth Camera", false);
+		settings.checkPref("smoothcam", "Smooth Camera", true);
 		
 		setup();
 		
