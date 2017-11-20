@@ -28,7 +28,6 @@ public class BlockView extends Table{
 	
 	public BlockView(){
 		
-		
 		add((StringSupplier)()->(selected == null ? "" : selected.recipe.result().formalName()));
 		row();
 		add(req).size(64);

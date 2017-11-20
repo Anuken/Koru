@@ -1,6 +1,7 @@
 package io.anuke.koru.traits;
 
 import io.anuke.koru.Koru;
+import io.anuke.koru.graphics.Fx;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.network.Net;
 import io.anuke.koru.network.syncing.SyncData.Synced;
@@ -35,7 +36,7 @@ public class ItemTrait extends Trait{
 				other.get(InventoryTrait.class).addItem(stack);
 				other.get(InventoryTrait.class).sendUpdate(other);
 				Net.removeSpark(spark);
-				Effects.effect("itempickup", spark.pos().x, spark.pos().y - 0.5f);
+				Effects.effect(Fx.itempickup, spark.pos().x, spark.pos().y - 0.5f);
 			}
 		});
 		

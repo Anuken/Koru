@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Pools;
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.types.BlockAnimation;
 import io.anuke.koru.entities.types.ItemDrop;
+import io.anuke.koru.graphics.Fx;
 import io.anuke.koru.items.*;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.traits.InventoryTrait;
@@ -63,11 +64,11 @@ public class InputHandler{
 				blockhold += delta * stack.item.getBreakSpeed(select.breakType());
 
 				if((int) (blockhold) % 20 == 1)
-					Effects.effect("blockparticle", select.getColor(), World.world(blockx), 
+					Effects.effect(Fx.blockparticle, select.getColor(), World.world(blockx), 
 							select instanceof Wall ? World.world(blocky) - 6.5f : World.world(blocky) - 1f);
 
 				if(blockhold >= select.breaktime()){
-					Effects.effect("blockbreak", select.getColor(), World.world(blockx), World.world(blocky) - 1);
+					Effects.effect(Fx.blockbreak, select.getColor(), World.world(blockx), World.world(blocky) - 1);
 
 					if(select instanceof Tree){
 						BlockAnimation.create(select, World.world(blockx), World.world(blocky) - 1);
@@ -136,7 +137,7 @@ public class InputHandler{
 					&& inv.recipe != -1 && inv.hasAll(recipe.requirements())
 					&& World.isPlaceable(recipe.result(), tile)){
 				
-				Effects.effect("blockplace", World.world(blockx), World.world(blocky));
+				Effects.effect(Fx.blockplace, World.world(blockx), World.world(blocky));
 				
 				if(recipe.result().isLayer(MaterialLayer.floor)){
 					tile.addFloor(recipe.result());

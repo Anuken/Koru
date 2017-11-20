@@ -52,8 +52,8 @@ public class KoruServer implements NetProvider{
 		
 		Resources.loadData();
 
-		Effects.setEffectProvider((name, color, x, y) -> {
-			Spark spark = Effect.create(name, color, x, y);
+		Effects.setEffectProvider((id, color, x, y, rotation) -> {
+			Spark spark = Effect.create(id, color, x, y);
 			sendSpark(spark);
 		});
 

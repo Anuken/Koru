@@ -45,7 +45,7 @@ public class Koru extends ModuleCore{
 				tile.solidMaterial().getHitbox(x, y, out);
 			}));
 			
-			Effects.setEffectProvider((name, color, x, y)->{
+			Effects.setEffectProvider((id, color, x, y, rotation)->{
 				throw new IllegalArgumentException("Effects cannot be created clientside!");
 			});
 	

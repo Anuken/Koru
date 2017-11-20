@@ -97,12 +97,12 @@ public class EntryTerrainGenerator implements Generator{
 		float nscl = 0.005f;
 		
 		float river = (float)(ridge.getValue(x, y + 100, 1f / 2000f) 
-				+ rnoise.octaveNoise2d(3, 0.5f, 1f/50f, x + negationOffset, y + negationOffset) * nscl
+				+ rnoise.octaveNoise2D(3, 0.5f, 1f/50f, x + negationOffset, y + negationOffset) * nscl
 				 + 1f + nscl) / (2f + nscl*2f);
 		
-		float temp = Mathf.clamp((float) (tnoise.octaveNoise2d(12, 0.63, 1 / scale, x + negationOffset, y + negationOffset) 
+		float temp = Mathf.clamp((float) (tnoise.octaveNoise2D(12, 0.63, 1 / scale, x + negationOffset, y + negationOffset) 
 				+ 1f) / 2f - river / 2f);
-		float elev = Mathf.clamp((float) (enoise.octaveNoise2d(12, 0.63, 1 / (scale * 1.2f), x + negationOffset, y 
+		float elev = Mathf.clamp((float) (enoise.octaveNoise2D(12, 0.63, 1 / (scale * 1.2f), x + negationOffset, y 
 				+ negationOffset) + 1f) / 2f - river / 5f);
 
 		Material wall = Materials.air;

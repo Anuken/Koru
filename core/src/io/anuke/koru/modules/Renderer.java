@@ -68,8 +68,6 @@ public class Renderer extends RendererModule{
 		font.setUseIntegerPositions(false);
 		font.getData().markupEnabled = true;
 		
-		EffectLoader.load();
-		
 		RayHandler.isDiffuse = true;
 		rays = new RayHandler();
 		rays.setBlurNum(3);

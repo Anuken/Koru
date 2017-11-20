@@ -13,7 +13,8 @@ import io.anuke.ucore.ecs.extend.traits.LifetimeTrait;
 @Synced
 @Require({LifetimeTrait.class})
 public class EffectTrait extends Trait{
-	public String name;
+	public int id;
+	public float rotation;
 	public Color color = Color.WHITE;
 	
 	@Override
@@ -22,6 +23,6 @@ public class EffectTrait extends Trait{
 			throw new IllegalArgumentException("Effect entities should not be added serverside!");
 		}
 		
-		spark.get(LifetimeTrait.class).lifetime = Effects.getEffect(name).lifetime;
+		spark.get(LifetimeTrait.class).lifetime = Effects.getEffect(id).lifetime;
 	}
 }
