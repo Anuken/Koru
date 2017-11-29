@@ -8,9 +8,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.koru.Koru;
-import io.anuke.koru.graphics.KoruFacet;
-import io.anuke.koru.graphics.KoruFacetLayers;
-import io.anuke.koru.graphics.ReflectionlessFacet;
+import io.anuke.koru.graphics.*;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.world.BreakType;
@@ -23,6 +21,7 @@ import io.anuke.ucore.facet.FacetList;
 import io.anuke.ucore.facet.Sorter;
 import io.anuke.ucore.function.Predicate;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.lsystem.LSystem;
 import io.anuke.ucore.util.Geometry;
 import io.anuke.ucore.util.Mathf;
 
@@ -402,6 +401,43 @@ public class MaterialTypes{
 				.add(list);
 			}
 		}
+	}
+	
+	public static class LSystemTree extends Material{
+		protected LSystem[] systems;
+		protected int shadowSize = 10;
+
+		protected LSystemTree(String name, LSystem[] systems) {
+			super(name, MaterialLayer.wall);
+			this.systems = systems;
+			cullSize = 80;
+			color = Hue.rgb(80, 53, 30).mul(1.5f);
+			hitbox.width = 6;
+			hitbox.height = 2;
+			solid = true;
+			variants = LSystems.variants;
+			//breaktype = BreakType.wood;
+		}
+
+		@Override
+		public void draw(Tile tile, FacetList list){
+			int variant = tile.rand(variants) - 1;
+			
+			list.add(new BaseFacet(tile.worldy(), Sorter.object, d->{
+				LSystem system = systems[variant];
+				system.timeOffset = tile.randFloat(2) * 9999f;
+				system.x = tile.worldx();
+				system.y = tile.worldy();
+				system.draw();
+			}));
+			
+			get("shadow" + shadowSize)
+			.shadow()
+			.tile(tile)
+			.center()
+			.sort(Sorter.tile).add(list);
+		}
+		
 	}
 	
 	static int blendStage(int x, int y){

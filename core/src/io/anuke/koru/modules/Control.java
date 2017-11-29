@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
+import io.anuke.koru.graphics.LSystems;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
@@ -168,6 +169,10 @@ public class Control extends Module{
 			Net.send(p);
 		}
 		
+		if(keycode == Keys.R){
+			LSystems.generate();
+		}
+		
 		//TODO keybindings for this as well
 		if(keycode >= Keys.NUM_1 && keycode < Keys.NUM_5){
 			InventoryTrait inv = player.get(InventoryTrait.class);
@@ -196,7 +201,7 @@ public class Control extends Module{
 		BlockInputPacket p = new BlockInputPacket();
 		p.x = blockx;
 		p.y = blocky;
-		p.material = Materials.floweryellow.id();
+		p.material = Materials.brambles.id();
 		Net.send(p);
 	}
 	

@@ -753,6 +753,13 @@ objects/torchflame4
   orig: 8, 12
   offset: 0, 0
   index: -1
+objects/treebase
+  rotate: false
+  xy: 499, 358
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
 objects/wheatgrass1
   rotate: false
   xy: 842, 285
