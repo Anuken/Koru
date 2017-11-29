@@ -30,6 +30,7 @@ import io.anuke.koru.server.world.MapPreview;
 import io.anuke.koru.systems.SyncSystem;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.utils.Resources;
+import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.util.ColorCodes;
@@ -143,6 +144,11 @@ public class KoruServer implements NetProvider{
 		Net.handle(BlockInputPacket.class, packet->{
 			Koru.world.getTile(packet.x, packet.y).wallid = (short)packet.material;
 			Koru.world.updateTile(Koru.world.getTile(packet.x, packet.y));
+		});
+		
+		Net.handle(BlockQueryPacket.class, packet->{
+			Tile tile = Koru.world.getTile(packet.x, packet.y);
+			Koru.log("Tile: " + tile);
 		});
 		
 		Net.handle(InventoryClickPacket.class, packet->{

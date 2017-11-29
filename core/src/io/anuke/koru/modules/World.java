@@ -199,7 +199,8 @@ public class World extends Module{
 	}
 
 	public boolean blockSolid(int x, int y){
-		return getTile(x, y).solid();
+		Tile tile = getTile(x, y);
+		return tile != null && tile.solid();
 	}
 
 	public boolean isAccesible(int x, int y){

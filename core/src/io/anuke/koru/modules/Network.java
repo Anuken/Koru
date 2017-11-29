@@ -19,11 +19,14 @@ import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.traits.*;
 import io.anuke.koru.utils.Profiler;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Angles;
+import io.anuke.ucore.util.Bits;
 
 public class Network extends Module implements NetProvider{
 	public static final int port = 7575;
@@ -128,6 +131,21 @@ public class Network extends Module implements NetProvider{
 			Gdx.app.postRunnable(() -> {
 				ui.handleChatMessage(p.message, p.sender);
 			});
+		});
+		
+		Net.handle(BatchTileUpdatePacket.class, packet->{
+			for(int i = 0; i < packet.coords.length; i ++){
+				int x = (int)(packet.coords[i] >> 32);
+				int y = (int)(packet.coords[i]);
+				short floor = (short) Bits.getLeftShort(packet.ids[i]);
+				short wall = (short) Bits.getRightShort(packet.ids[i]);
+				
+				Tile tile = Koru.world.getTile(x, y);
+				tile.setWall(Material.getMaterial(wall));
+				tile.addFloor(Material.getMaterial(floor));
+				
+				Koru.renderer.invalidateTiles();;
+			}
 		});
 
 		Net.handle(Spark.class, spark -> {

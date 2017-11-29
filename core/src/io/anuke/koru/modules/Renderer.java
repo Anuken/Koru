@@ -24,6 +24,7 @@ import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.utils.Profiler;
+import io.anuke.koru.world.BreakType;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
@@ -60,6 +61,7 @@ public class Renderer extends RendererModule{
 	
 	public Renderer() {
 		Timers.mark();
+		Fx.blockbreak.getClass();
 		
 		Core.cameraScale = scale;
 		
@@ -224,9 +226,9 @@ public class Renderer extends RendererModule{
 			
 			if(select == null) return;
 			
-			if(stack.item.name().contains("pickaxe")){
+			if(select.breakType() == BreakType.stone){
 				KoruCursors.setCursor("pickaxe");
-			}else if(stack.item.name().contains("axe")){
+			}else if(select.breakType() == BreakType.wood){
 				KoruCursors.setCursor("axe");
 			}
 			
@@ -246,7 +248,9 @@ public class Renderer extends RendererModule{
 			Shaders.inline.region = facet.sprite;
 			Shaders.inline.color = outlineColor;
 			
+			Graphics.end();
 			Graphics.shader(Shaders.inline);
+			Graphics.begin();
 			facet.draw();
 			Graphics.shader();
 		}
@@ -281,7 +285,9 @@ public class Renderer extends RendererModule{
 			Shaders.outline.color = outlineColor;
 			Shaders.outline.region = facet.sprite;
 			
+			Graphics.end();
 			Graphics.shader(Shaders.outline);
+			Graphics.begin();
 			
 			facet.draw();
 			
@@ -339,8 +345,13 @@ public class Renderer extends RendererModule{
 	}
 	
 	FacetList getRenderable(int worldx, int worldy){
-		int camx = world.toChunkCoords(camera.position.x), camy =world.toChunkCoords(camera.position.y);
+		int camx = world.toChunkCoords(camera.position.x), camy = world.toChunkCoords(camera.position.y);
 		return renderables[(worldx + renderables.length/2 - camx*World.chunksize)][(worldy + renderables[0].length/2 - camy*World.chunksize)];
+	}
+	
+	public void invalidateTiles(){
+		lastcamx = -9999999;
+		lastcamy = -9999999;
 	}
 
 	public void updateTiles(){

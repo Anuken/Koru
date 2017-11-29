@@ -16,7 +16,9 @@ import com.esotericsoftware.kryo.io.Output;
 
 import io.anuke.koru.entities.types.*;
 import io.anuke.koru.input.InputType;
-import io.anuke.koru.items.*;
+import io.anuke.koru.items.Item;
+import io.anuke.koru.items.ItemData;
+import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.network.syncing.SyncData;
@@ -63,6 +65,8 @@ public class Registrator{
 			SlotChangePacket.class,
 			RecipeSelectPacket.class,
 			SparkRequestPacket.class,
+			BlockQueryPacket.class,
+			BatchTileUpdatePacket.class,
 			
 			TextTrait.class,
 			InventoryTrait.class,
@@ -93,6 +97,7 @@ public class Registrator{
 			Tile[][][].class,
 			ItemStack[].class,
 			ItemStack[][].class,
+			long[].class,
 			Items.class,
 			ItemData.class,
 			

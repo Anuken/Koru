@@ -23,10 +23,9 @@ public class Effect extends Prototype{
 			new FacetTrait((trait, spark)->{
 				trait.draw(d->{
 					d.layer = spark.pos().y;
-					
 					EffectTrait effect = spark.get(EffectTrait.class);
 					Effects.renderEffect(spark.getID(), Effects.getEffect(effect.id), 
-							effect.color, spark.life().life, spark.pos().x, spark.pos().y, effect.rotation);
+							effect.color, spark.life().life, effect.rotation, spark.pos().x, spark.pos().y);
 				});
 			})
 		);

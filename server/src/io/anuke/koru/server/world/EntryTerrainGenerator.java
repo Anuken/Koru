@@ -53,7 +53,7 @@ public class EntryTerrainGenerator implements Generator{
 		new Entry(Materials.rock, 0.007f, 0.6f, 0.2f, 0.8f, 0.4f),
 		new Entry(Materials.rock, 0.004f, 0.1f, 0.1f, 0.8f, 0.4f),
 
-		new Entry(Materials.willowtree, 0.01f, riverThreshold - 0.002f, 0.002f),
+		new Entry(Materials.willowtree, 0.01f, riverThreshold - 0.002f, 0.002f), //TODO temp constraints
 		new Entry(Materials.rock, 0.015f, riverThreshold + 0.005f, 0.005f)
 	);
 
@@ -75,9 +75,9 @@ public class EntryTerrainGenerator implements Generator{
 	};
 
 	public EntryTerrainGenerator() {
-		tnoise.setSeed(0);
-		enoise.setSeed(1);
-		rnoise.setSeed(2);
+		tnoise.setSeed(Mathf.random(99999));
+		enoise.setSeed(Mathf.random(99999));
+		rnoise.setSeed(Mathf.random(99999));
 	}
 
 	@Override

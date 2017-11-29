@@ -12,9 +12,7 @@ import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.network.Net;
-import io.anuke.koru.network.packets.BlockInputPacket;
-import io.anuke.koru.network.packets.InputPacket;
-import io.anuke.koru.network.packets.SlotChangePacket;
+import io.anuke.koru.network.packets.*;
 import io.anuke.koru.traits.ConnectionTrait;
 import io.anuke.koru.traits.DirectionTrait;
 import io.anuke.koru.traits.DirectionTrait.Direction;
@@ -161,6 +159,13 @@ public class Control extends Module{
 		
 		if(keycode == Keys.P){
 			sendBlock();
+		}
+		
+		if(keycode == Keys.T){
+			BlockQueryPacket p = new BlockQueryPacket();
+			p.x = blockx;
+			p.y = blocky;
+			Net.send(p);
 		}
 		
 		//TODO keybindings for this as well

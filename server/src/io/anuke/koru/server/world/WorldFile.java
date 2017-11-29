@@ -19,9 +19,7 @@ import com.esotericsoftware.kryo.io.Input;
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
 import io.anuke.koru.network.Registrator;
-import io.anuke.koru.world.Chunk;
-import io.anuke.koru.world.Generator;
-import io.anuke.koru.world.WorldLoader;
+import io.anuke.koru.world.*;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.util.ColorCodes;
 
@@ -33,12 +31,13 @@ public class WorldFile extends WorldLoader{
 	private Kryo kryo; // for reading only
 	private ConcurrentHashMap<Long, Chunk> loadedchunks = new ConcurrentHashMap<Long, Chunk>(); // server-side chunks
 	private Generator generator;
+	private StructureGenerator structGenerator;
 	private ChunkWriter[] writers = new ChunkWriter[Runtime.getRuntime().availableProcessors()];
 	private Object lock = new Object();
 	private boolean debug;
 	private boolean compress = false;
 
-	public WorldFile(Path file, Generator generator) {
+	public WorldFile(Path file, Generator generator, StructureGenerator structGenerator) {
 		
 		if(!Files.isDirectory(file))
 			throw new RuntimeException("World file has to be a directory!");
@@ -52,6 +51,7 @@ public class WorldFile extends WorldLoader{
 		kryo.register(Material.class, new Registrator.MaterialsSerializer());
 		this.file = file;
 		this.generator = generator;
+		this.structGenerator = structGenerator;
 
 		try{
 			Stream<Path> stream = Files.list(file);
@@ -144,6 +144,7 @@ public class WorldFile extends WorldLoader{
 		chunk.set(chunkx, chunky);
 		generator.generateChunk(chunk);
 		loadedchunks.put(hashCoords(chunkx, chunky), chunk);
+		structGenerator.generateChunk(chunk);
 		return chunk;
 	}
 

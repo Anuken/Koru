@@ -10,6 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.modules.World;
+import io.anuke.koru.server.world.DungeonGenerator;
 import io.anuke.koru.server.world.EntryTerrainGenerator;
 import io.anuke.koru.server.world.WorldFile;
 import io.anuke.koru.systems.EntityMapper;
@@ -81,7 +82,7 @@ public class KoruUpdater{
 		
 		Timers.setDeltaProvider(()->delta);
 		
-		file = new WorldFile(Paths.get("world"), new EntryTerrainGenerator());
+		file = new WorldFile(Paths.get("world"), new EntryTerrainGenerator(), new DungeonGenerator());
 		
 		world = new World(file);
 		Koru.world = world;

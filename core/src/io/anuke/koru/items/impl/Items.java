@@ -24,6 +24,13 @@ public class Items{
 		{
 			formalName = "Wooden Axe";
 			breakSpeeds.put(BreakType.wood, 1);
+			breakSpeeds.put(BreakType.stone, 1);
+		}
+	},
+	pickaxe = new Item("woodpick", ItemType.tool){
+		{
+			formalName = "Wooden Pickaxe";
+			breakSpeeds.put(BreakType.stone, 1);
 		}
 	},
 	
