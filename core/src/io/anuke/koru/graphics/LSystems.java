@@ -25,6 +25,8 @@ public class LSystems{
 		bush.swayscale = 18f;
 		bush.swayphase = 1f;
 		bush.swayspace = 1f;
+		bush.changeSpace = false;
+		bush.defaultSpace = 17f;
 		bush.start = bush.end = Hue.mix(Color.BROWN, Color.WHITE, 0.1f);
 		bush.thickness = 2f;
 		bush.defaultRules.put('F', "F");
