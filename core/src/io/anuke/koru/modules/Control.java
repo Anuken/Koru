@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.entities.Prototypes;
-import io.anuke.koru.graphics.LSystems;
+import io.anuke.koru.graphics.lsystems.LSystems;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.input.InputType;
 import io.anuke.koru.items.ItemStack;
@@ -207,7 +207,7 @@ public class Control extends Module{
 	}
 	
 	void sendBlock(){
-		Material[] types = {Materials.ltest, Materials.birch, Materials.olive, Materials.shrub};
+		Material[] types = {Materials.ltest, Materials.birch, Materials.deadbush, Materials.droopy};
 		
 		BlockInputPacket p = new BlockInputPacket();
 		p.x = blockx;

@@ -50,7 +50,16 @@ public class StructMaterials{
 	
 	box = new Prop("box"){{
 		addDrop(Items.wood, 10);
-		
+	}},
+	barrel = new Prop("barrel"){{
+		addDrop(Items.wood, 10);
+		variants = 0;
+		offset = -3;
+	}},
+	table = new Prop("table"){{
+		addDrop(Items.wood, 10);
+		variants = 0;
+		offset = -1;
 	}};
 	
 	public static void load(){}

@@ -35,7 +35,7 @@ public class MapPreview extends ApplicationAdapter{
 	float speed = 32;
 	int pixsize = 64;
 	int percision = 4;
-	boolean showDark = false;
+	boolean showDark = true;
 	static double maxe;
 	static double maxt;
 

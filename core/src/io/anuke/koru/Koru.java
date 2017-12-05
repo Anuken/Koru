@@ -5,7 +5,7 @@ import java.util.Calendar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import io.anuke.koru.graphics.LSystems;
+import io.anuke.koru.graphics.lsystems.LSystems;
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.Net;
 import io.anuke.koru.utils.Profiler;

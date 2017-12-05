@@ -22,11 +22,20 @@ public class DungeonGenerator extends StructureGenerator{
 	int maxRooms = 16;
 	int minRooms = 4;
 	Material floor = StructMaterials.stonefloor, wall = StructMaterials.stonepillar;
+	double woodChance = 0.5;
 	
 	@Override
 	protected void generate(Chunk chunk){
-
-		if(Mathf.chance(0.02)){
+		
+		if(Mathf.chance(0.01)){
+			if(Mathf.chance(woodChance)){
+				floor = StructMaterials.woodfloor;
+				wall = StructMaterials.woodblock;
+			}else{
+				floor = StructMaterials.stonefloor;
+				wall = StructMaterials.stonepillar;
+			}
+			
 			GridMap<Room> map = new GridMap<>();
 			map.put(0, 0, new Room(0, 0));
 			
@@ -55,6 +64,7 @@ public class DungeonGenerator extends StructureGenerator{
 					}else if(near != null && Mathf.chance(connectChance)){
 						point.connected[di] = true;
 						near.connected[(di + 2) % 4] = true;
+						drawPassage(chunk, point.x, point.y, di);
 					}
 					
 					di ++;
@@ -98,6 +108,8 @@ public class DungeonGenerator extends StructureGenerator{
 			for(int y = 0; y < roomSize; y++){
 
 				Material floor = this.floor, wall = Materials.air;
+				int worldx = x + midx - roomSize/2 + gridx * roomSpacing, 
+						worldy = y + midy - roomSize/2 + gridy * roomSpacing;
 
 				if((x == 0 || y == 0 || x == roomSize - 1 || y == roomSize - 1) && !(
 						(connected[1] && y == roomSize - 1 && Math.abs(x - roomSize/2) < hsize) ||
@@ -106,11 +118,13 @@ public class DungeonGenerator extends StructureGenerator{
 						(connected[0] && x == roomSize -1 && Math.abs(y - roomSize/2) < hsize)
 						)){
 					wall = this.wall;
+				}else if(Mathf.chance(0.1)){
+					wall = StructMaterials.barrel;
+				}else if(Mathf.chance(0.1)){
+					wall = StructMaterials.table;
 				}
 				
-				setTile(x + midx - roomSize/2 + gridx * roomSpacing, 
-						y + midy - roomSize/2 + gridy * roomSpacing, 
-						floor, wall);
+				setTile(worldx, worldy, floor, wall);
 			}
 		}
 	}

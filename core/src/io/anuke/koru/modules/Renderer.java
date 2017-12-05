@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.*;
+import io.anuke.koru.graphics.lsystems.LSystems;
 import io.anuke.koru.input.InputHandler;
 import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
@@ -196,8 +197,8 @@ public class Renderer extends RendererModule{
 		rays.setBounds(camera.position.x-w/2, camera.position.y-h/2, w, h);
 		
 		//debug controls?
-		if(Inputs.buttonUp(Buttons.LEFT) && Inputs.keyDown(Keys.CONTROL_LEFT) && Koru.control.debug){
-			Light add = new PointLight(rays, 50, Color.ORANGE, 100, Graphics.mouseWorld().x, Graphics.mouseWorld().y);
+		if(Inputs.buttonUp(Buttons.LEFT) && Inputs.keyDown(Keys.CONTROL_LEFT)){
+			Light add = new PointLight(rays, 50, Color.WHITE, 100, Graphics.mouseWorld().x, Graphics.mouseWorld().y);
 			add.setNoise(3, 2, 1.5f);
 		}
 		

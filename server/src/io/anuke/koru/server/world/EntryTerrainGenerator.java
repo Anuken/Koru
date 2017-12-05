@@ -1,5 +1,7 @@
 package io.anuke.koru.server.world;
 
+import static io.anuke.ucore.util.Mathf.clamp;
+
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.koru.world.Generator;
@@ -13,8 +15,10 @@ import io.anuke.ucore.util.Mathf;
 public class EntryTerrainGenerator implements Generator{
 	Simplex tnoise = new Simplex();
 	Simplex enoise = new Simplex();
+	Simplex cnoise = new Simplex();
 	Simplex rnoise = new Simplex();
 	RidgedPerlin ridge = new RidgedPerlin(2, 1, 1f);
+	RidgedPerlin mountains = new RidgedPerlin(2, 10, 0.8f);
 
 	float negationOffset = 9999999;
 	float riverThreshold = 0.616f;
@@ -24,6 +28,8 @@ public class EntryTerrainGenerator implements Generator{
 		new Entry(Materials.pinesapling, 0.01f, 0.1f, 0.1f, 0.7f, 0.1f), 
 		new Entry(Materials.pinecones, 0.01f, 0.1f, 0.1f, 0.7f, 0.1f), 
 		new Entry(Materials.oaktree, 0.02f, 0.3f, 0.15f, 0.2f, 0.25f),
+		new Entry(Materials.sapling, 0.01f, 0.1f, 0.15f, 0.2f, 0.25f),
+		new Entry(Materials.birch, 0.025f, 0.1f, 0.1f, 0.5f, 0.28f),
 		new Entry(Materials.floweryellow, 0.9f, 0.5f, 0.017f, 0.4f, 0.01f, 0.8f),
 		new Entry(Materials.flowerblue, 0.9f, 0.2f, 0.015f, 0.6f, 0.01f, 0.8f),
 		new Entry(Materials.flowerred, 0.9f, 0.4f, 0.015f, 0.4f, 0.01f, 0.8f),
@@ -45,7 +51,9 @@ public class EntryTerrainGenerator implements Generator{
 		
 		new Entry(Materials.grassblock, 1f, 0.65f, 0.03f, 0.5f, 0.02f, 1f), 
 		new Entry(Materials.shortgrassblock, 0.92f, 0.65f, 0.03f, 0.5f, 0.03f, 1f),
-
+		
+		new Entry(Materials.olive, 0.003f, 0.55f, 0.13f, 0.0f, 0.3f),
+		new Entry(Materials.acacia, 0.006f, 0.66f, 0.13f, 0.4f, 0.4f), 
 		new Entry(Materials.deadtree, 0.004f, 0.64f, 0.1f, 0.5f, 0.4f), 
 		new Entry(Materials.burnedtree, 0.003f, 0.9f, 0.1f, 0.5f, 0.4f), 
 		new Entry(Materials.drybush, 0.015f, 0.66f, 0.12f, 0.5f, 0.4f), 
@@ -53,7 +61,20 @@ public class EntryTerrainGenerator implements Generator{
 		new Entry(Materials.rock, 0.007f, 0.6f, 0.2f, 0.8f, 0.4f),
 		new Entry(Materials.rock, 0.004f, 0.1f, 0.1f, 0.8f, 0.4f),
 
-		new Entry(Materials.willowtree, 0.01f, riverThreshold - 0.002f, 0.002f), //TODO temp constraints
+		new Entry(Materials.willowtree, 0.01f, riverThreshold - 0.002f, 0.002f){{
+			temp = 0.2f;
+			tempRange = 0.3f;
+		}},
+		new Entry(Materials.droopy, 0.015f, riverThreshold - 0.004f, 0.004f){{
+			temp = 0.0f;
+			tempRange = 0.3f;
+		}},
+		new Entry(Materials.cherry, 0.005f, riverThreshold - 0.008f, 0.003f){{
+			temp = 0.0f;
+			tempRange = 0.3f;
+			elev = 0.5f;
+			elevRange = 0.1f;
+		}},
 		new Entry(Materials.rock, 0.015f, riverThreshold + 0.005f, 0.005f)
 	);
 
@@ -78,6 +99,7 @@ public class EntryTerrainGenerator implements Generator{
 		tnoise.setSeed(Mathf.random(99999));
 		enoise.setSeed(Mathf.random(99999));
 		rnoise.setSeed(Mathf.random(99999));
+		cnoise.setSeed(Mathf.random(99999));
 	}
 
 	@Override
@@ -92,17 +114,27 @@ public class EntryTerrainGenerator implements Generator{
 	}
 
 	void setTile(Tile tile, int x, int y){
-		float scale = 1000f;
+		float scale = 500f;
 		
 		float nscl = 0.007f;
+		
+		float mountainScale = 0.2f;
 		
 		float river = (float)((ridge.getValue(x, y + 100, 1f / 2000f) + 1f)
 				+ rnoise.octaveNoise2D(3, 0.5f, 1f/50f, x + negationOffset, y + negationOffset) * nscl) / 2f;
 		
+		float mnoise = (float)((mountains.getValue(x, y + 100, 1f / (scale * 1.5f)) + 1f)
+				+ rnoise.octaveNoise2D(4, 0.5f, 1f/80f, x + negationOffset, y + negationOffset) * 0.00001f);
+		
+		float cavenoise = Mathf.clamp((float) (cnoise.octaveNoise2D(8, 0.55, 1 / (scale + 400f), 
+				x + negationOffset, y + negationOffset)), 0f, 0.99f);
+		
 		float temp = Mathf.clamp((float) (tnoise.octaveNoise2D(12, 0.63, 1 / scale, x + negationOffset, y + negationOffset))
 				- river / 2f, 0f, 0.99f);
-		float elev = Mathf.clamp((float) (enoise.octaveNoise2D(12, 0.63, 1 / (scale * 1.2f), x + negationOffset, y 
-				+ negationOffset)) - river / 5f, 0f, 0.99f);
+		
+		float elev = Mathf.clamp((float)  ((1f - mountainScale) *(enoise.octaveNoise2D(12, 0.63, 1 / (scale * 1.2f), x + negationOffset, y 
+				+ negationOffset) - river / 5f)) + mnoise* mountainScale, 0f, 0.99f);
+		
 
 		Material wall = Materials.air;
 		Material floor = Materials.air;
@@ -114,6 +146,15 @@ public class EntryTerrainGenerator implements Generator{
 				wall = entries.get(i).material;
 				break;
 			}
+		}
+		
+		float cavet = 0.64f;
+		if(cavenoise > cavet){
+			wall = Materials.stoneblock;
+			floor = Materials.stone;
+			tile.setLight(clamp(1f - (cavenoise - cavet) * 40f));
+		}else if(cavenoise > cavet - 0.04){
+			floor = Materials.stone;
 		}
 		
 

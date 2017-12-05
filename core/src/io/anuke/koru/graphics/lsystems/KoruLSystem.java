@@ -1,7 +1,8 @@
-package io.anuke.koru.graphics;
+package io.anuke.koru.graphics.lsystems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -14,9 +15,11 @@ import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.lsystem.LSystem;
 import io.anuke.ucore.lsystem.LSystemData;
+import io.anuke.ucore.util.Mathf;
 
 public class KoruLSystem extends LSystem implements Disposable{
 	public static final int frames = 20;
+	public static boolean writeOut = false;
 	private Array<Vector3> circles = new Array<>();
 
 	private boolean drawn = false;
@@ -24,9 +27,15 @@ public class KoruLSystem extends LSystem implements Disposable{
 	private TextureRegion[] regions;
 	private float time = 0f;
 	private float offsetx = 0;
+	private int seed = Mathf.random(9999);
+	private boolean sortAscending = false;
+	private boolean sortCircles = false;
 	
+	public float colorStep = 0.3f;
 	public float trunkHeight = 0f;
 	public Color leafColor;
+	public Color leafColorEnd;
+	public Color lineColor;
 
 	public KoruLSystem(LSystemData data) {
 		super(data);
@@ -112,7 +121,7 @@ public class KoruLSystem extends LSystem implements Disposable{
 
 					for(Line line : lines){
 						float s = 1f - (float) line.stack / maxstack;
-
+						
 						Draw.thickness(data.thickness + s * 1f);
 						Draw.color(data.start, data.end, (float) line.stack / maxstack);
 						Draw.line(line.x1 + xoff, line.y1 + yoff, line.x2 + xoff, line.y2 + yoff);
@@ -120,7 +129,11 @@ public class KoruLSystem extends LSystem implements Disposable{
 
 					for(Vector3 vec : circles){
 						float rad = 3f + vec.z * 3;
-						Draw.color(leafColor);
+						if(leafColorEnd != null){
+							Draw.color(leafColor, leafColorEnd, Mathf.round(vec.z, colorStep));
+						}else{
+							Draw.color(leafColor);
+						}
 						Draw.rect("circle", vec.x + xoff, vec.y + yoff, rad, rad);
 					}
 
@@ -129,6 +142,9 @@ public class KoruLSystem extends LSystem implements Disposable{
 					
 					TextureRegion region = ScreenUtils.getFrameBufferTexture(screenX, screenY, screenWidth, screenHeight);
 					regions[i] = region;
+					if(i == 0 && writeOut){
+						PixmapIO.writePNG(Gdx.files.local("trees/tree" + Mathf.random(99999)), ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+					}
 					
 				}else{
 					for(Line line : lines){
@@ -176,6 +192,7 @@ public class KoruLSystem extends LSystem implements Disposable{
 		}
 
 		lines.sort();
+		if(sortCircles) circles.sort((v1, v2) -> sortAscending ? Float.compare(v1.z, v2.z) : Float.compare(v2.z, v1.z));
 	}
 
 	@Override

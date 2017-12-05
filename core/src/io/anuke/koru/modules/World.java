@@ -24,6 +24,7 @@ import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
+import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
@@ -200,7 +201,7 @@ public class World extends Module{
 
 	public boolean blockSolid(int x, int y){
 		Tile tile = getTile(x, y);
-		return tile != null && tile.solid();
+		return tile == null || (tile.solid() && tile.wall() instanceof Wall);
 	}
 
 	public boolean isAccesible(int x, int y){

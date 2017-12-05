@@ -3,7 +3,6 @@ package io.anuke.koru.world.materials;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
-import io.anuke.koru.graphics.LSystems;
 import io.anuke.koru.items.impl.Items;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.MaterialTypes.*;
@@ -201,17 +200,32 @@ public class Materials{
 	flowerred = new Flower("flowerred"){{
 				
 	}},
-	ltest = new LSystemTree("ltest", LSystems.test){{
+	ltest = new LSystemTree("ltest"){{
 				
 	}},
-	birch = new LSystemTree("birch", LSystems.birches){{
+	birch = new LSystemTree("birch"){{
 				
 	}},
-	olive = new LSystemTree("olive", LSystems.olives){{
+	olive = new LSystemTree("olive"){{
 				
 	}},
-	shrub = new LSystemTree("shrub", LSystems.bushes){{
+	shrub = new LSystemTree("shrub"){{
 						
+	}},
+	cherry = new LSystemTree("cherry"){{
+				
+	}},
+	sapling = new LSystemTree("sapling"){{
+				
+	}},
+	deadbush = new LSystemTree("deadbush"){{
+				
+	}},
+	acacia = new LSystemTree("acacia"){{
+		
+	}},
+	droopy = new LSystemTree("droopy"){{
+				
 	}},
 	stoneblock = new Wall("stoneblock"){{
 		addDrop(Items.stone, 5); 
