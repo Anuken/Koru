@@ -94,21 +94,20 @@ public class EntryTerrainGenerator implements Generator{
 	void setTile(Tile tile, int x, int y){
 		float scale = 1000f;
 		
-		float nscl = 0.005f;
+		float nscl = 0.007f;
 		
-		float river = (float)(ridge.getValue(x, y + 100, 1f / 2000f) 
-				+ rnoise.octaveNoise2D(3, 0.5f, 1f/50f, x + negationOffset, y + negationOffset) * nscl
-				 + 1f + nscl) / (2f + nscl*2f);
+		float river = (float)((ridge.getValue(x, y + 100, 1f / 2000f) + 1f)
+				+ rnoise.octaveNoise2D(3, 0.5f, 1f/50f, x + negationOffset, y + negationOffset) * nscl) / 2f;
 		
-		float temp = Mathf.clamp((float) (tnoise.octaveNoise2D(12, 0.63, 1 / scale, x + negationOffset, y + negationOffset) 
-				+ 1f) / 2f - river / 2f);
+		float temp = Mathf.clamp((float) (tnoise.octaveNoise2D(12, 0.63, 1 / scale, x + negationOffset, y + negationOffset))
+				- river / 2f, 0f, 0.99f);
 		float elev = Mathf.clamp((float) (enoise.octaveNoise2D(12, 0.63, 1 / (scale * 1.2f), x + negationOffset, y 
-				+ negationOffset) + 1f) / 2f - river / 5f);
+				+ negationOffset)) - river / 5f, 0f, 0.99f);
 
 		Material wall = Materials.air;
 		Material floor = Materials.air;
 
-		floor = floors[(int) (temp * floors.length)][(int) (elev * floors[0].length * 1.05f)];
+		floor = floors[(int) (temp * floors.length)][(int) (elev * floors[0].length)];
 
 		for(int i = 0; i < entries.size; i++){
 			if(entries.get(i).eval(elev, temp, river)){

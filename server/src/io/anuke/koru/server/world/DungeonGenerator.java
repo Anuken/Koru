@@ -18,7 +18,9 @@ public class DungeonGenerator extends StructureGenerator{
 	int roomSize = 9;
 	int passageSize = 5;
 	double roomChance = 0.4;
+	double connectChance = 0.3;
 	int maxRooms = 16;
+	int minRooms = 4;
 	Material floor = StructMaterials.stonefloor, wall = StructMaterials.stonepillar;
 	
 	@Override
@@ -39,8 +41,9 @@ public class DungeonGenerator extends StructureGenerator{
 				int di = 0;
 				
 				for(GridPoint2 direction : Geometry.getD4Points()){
-					if(map.get(point.x + direction.x, point.y + direction.y) == null &&
-							Mathf.chance(roomChance)){
+					Room near = map.get(point.x + direction.x, point.y + direction.y);
+					if(near == null &&
+							(Mathf.chance(roomChance) || (points.size == 0 && rooms < minRooms))){
 						
 						Room other = new Room(point.x + direction.x, point.y + direction.y);
 						map.put(other.x, other.y, other);
@@ -49,6 +52,9 @@ public class DungeonGenerator extends StructureGenerator{
 						point.connected[di] = true;
 						other.connected[(di + 2) % 4] = true;
 						drawPassage(chunk, point.x, point.y, di);
+					}else if(near != null && Mathf.chance(connectChance)){
+						point.connected[di] = true;
+						near.connected[(di + 2) % 4] = true;
 					}
 					
 					di ++;

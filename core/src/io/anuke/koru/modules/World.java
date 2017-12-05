@@ -253,7 +253,8 @@ public class World extends Module{
 		if(getRelativeChunk(x, y) == null) return false;
 		return true;
 	}
-
+	
+	/**Clientside only.*/
 	public Chunk getRelativeChunk(int x, int y){
 		if(x < -1) x ++;
 		if(y < -1) y ++;
@@ -312,6 +313,12 @@ public class World extends Module{
 		}
 		int cx = x / chunksize, cy = y / chunksize;
 		file.getChunk(cx, cy).setWorldTile(x, y, tile);
+	}
+	
+	/**Returns a chunk based on tile coords.*/
+	public Chunk getChunkFor(int x, int y){
+		int cx = x / chunksize, cy = y / chunksize;
+		return file.getChunk(cx, cy);
 	}
 
 	public int toChunkCoords(int a){
