@@ -12,7 +12,7 @@ import io.anuke.ucore.lsystem.LSystemData;
 import io.anuke.ucore.util.Mathf;
 
 public class LSystems{
-	public static final int variants = 16;
+	public static final int variants = 8;
 	private static final Evolver evolver = new Evolver();
 	private static final Color leafColor = Color.valueOf("366d2d");
 	private static final Color trunkColor = Color.valueOf("96572a");
@@ -53,7 +53,7 @@ public class LSystems{
 		test = evolve(bush, test);
 		
 		birches = evolveType(birches, birch, Color.valueOf("b8b1ae"), Color.valueOf("558f4b"));
-		olives = evolveType(olives, olive, Color.valueOf("7e5231"), Color.valueOf("4f8c2d"));
+		olives = evolveType(olives, olive, Color.valueOf("7e5231"), Color.valueOf("558739"));
 		bushes = evolveType(bushes, shrub, trunkColor, leafColor);
 	}
 	
@@ -87,6 +87,7 @@ public class LSystems{
 			KoruLSystem system = new KoruLSystem(data);
 			system.leafColor = leaves;
 			systems[i] = system;
+			system.trunkHeight = Mathf.range(2f);
 			LSystems.systems.add(system);
 			
 			if(out != null){
