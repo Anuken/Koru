@@ -201,8 +201,17 @@ public class Materials{
 	flowerred = new Flower("flowerred"){{
 				
 	}},
-	brambles = new LSystemTree("brambles", LSystems.brambles){{
+	ltest = new LSystemTree("ltest", LSystems.test){{
 				
+	}},
+	birch = new LSystemTree("birch", LSystems.birches){{
+				
+	}},
+	olive = new LSystemTree("olive", LSystems.olives){{
+				
+	}},
+	shrub = new LSystemTree("shrub", LSystems.bushes){{
+						
 	}},
 	stoneblock = new Wall("stoneblock"){{
 		addDrop(Items.stone, 5); 

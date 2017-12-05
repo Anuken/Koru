@@ -18,7 +18,10 @@ import io.anuke.koru.traits.ConnectionTrait;
 import io.anuke.koru.traits.DirectionTrait;
 import io.anuke.koru.traits.DirectionTrait.Direction;
 import io.anuke.koru.traits.InventoryTrait;
+import io.anuke.koru.world.Tile;
+import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.Materials;
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.extend.traits.TileCollideTrait;
@@ -167,6 +170,12 @@ public class Control extends Module{
 			p.x = blockx;
 			p.y = blocky;
 			Net.send(p);
+			Tile tile = Koru.world.getTile(blockx, blocky);
+			if(tile != null){
+				int variant = tile.rand(LSystems.variants);
+				Koru.log("Tile variant: " + (variant-1));
+				UCore.log("Code: " + LSystems.test[variant-1].getData().rules);
+			}
 		}
 		
 		if(keycode == Keys.R){
@@ -198,10 +207,12 @@ public class Control extends Module{
 	}
 	
 	void sendBlock(){
+		Material[] types = {Materials.ltest, Materials.birch, Materials.olive, Materials.shrub};
+		
 		BlockInputPacket p = new BlockInputPacket();
 		p.x = blockx;
 		p.y = blocky;
-		p.material = Materials.brambles.id();
+		p.material = types[player.get(InventoryTrait.class).hotbar].id();
 		Net.send(p);
 	}
 	

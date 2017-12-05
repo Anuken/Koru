@@ -88,6 +88,7 @@ public class Renderer extends RendererModule{
 		Koru.log("Loaded resources. Time taken: " + Timers.elapsed() + " ms.");
 		
 		pixelate();
+		Graphics.addSurface("trees", 1);
 	}
 
 	void loadMaterialColors(){
@@ -170,6 +171,8 @@ public class Renderer extends RendererModule{
 		if(pixelate) beginPixel();
 		
 		clearScreen();
+		
+		LSystems.cacheAll();
 		
 		drawMap();
 		Facets.instance().renderAll();
