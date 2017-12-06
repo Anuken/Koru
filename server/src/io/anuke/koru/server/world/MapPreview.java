@@ -24,18 +24,19 @@ import io.anuke.ucore.util.GridMap;
 import io.anuke.ucore.util.Tmp;
 
 public class MapPreview extends ApplicationAdapter{
-	String atlasDir = System.getProperty("user.home") + "/Projects/Koru/core/assets/sprites/sprites.atlas";
+	boolean isHome = System.getProperty("user.name").equals("anuke");
+	String atlasDir = System.getProperty("user.home") + (isHome ? "/Projects/Koru/core/assets/sprites/sprites.atlas" : "/Documents/GitHub/Koru/core/assets/sprites/sprites.atlas");
 	Generator gen;
 	GridMap<ChunkPix> blocks = new GridMap<ChunkPix>();
 	IntIntMap colors = new IntIntMap();
 	SpriteBatch batch;
-	int viewrange = 8;
-	float scl = 1f;
+	int viewrange = 4;
+	float scl = 3f;
 	float vx, vy;
 	float speed = 32;
-	int pixsize = 64;
-	int percision = 4;
-	boolean showDark = true;
+	int pixsize = 32;
+	int percision = 1;
+	boolean showDark = false;
 	static double maxe;
 	static double maxt;
 

@@ -108,11 +108,13 @@ public class DungeonGenerator extends StructureGenerator{
 		int midx = chunk.worldX() + World.chunksize/2;
 		int midy = chunk.worldY() + World.chunksize/2;
 		
-		for(int i = 0; i < passageSize; i ++){
-			int worldx = i - passageSize/2 + midx + gridx * roomSpacing, 
+		for(int y = -1; y <= 1; y ++) {
+			for(int i = 0; i < passageSize; i ++){
+				int worldx = i - passageSize/2 + midx + gridx * roomSpacing, 
 					worldy =  midy - roomSize/2 + gridy * roomSpacing;
 			
-			setTile(worldx, worldy, floor, Materials.air);
+				setTile(worldx, worldy + y, floor, Materials.air);
+			}
 		}
 		
 		setTile(midx + gridx * roomSpacing - passageSize/2, -1 +midy - roomSize/2 + gridy * roomSpacing,

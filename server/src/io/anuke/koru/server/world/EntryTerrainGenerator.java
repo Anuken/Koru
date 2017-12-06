@@ -18,7 +18,8 @@ public class EntryTerrainGenerator implements Generator{
 	Simplex cnoise = new Simplex();
 	Simplex rnoise = new Simplex();
 	RidgedPerlin ridge = new RidgedPerlin(2, 1, 1f);
-	RidgedPerlin mountains = new RidgedPerlin(2, 10, 0.8f);
+	RidgedPerlin mountains = new RidgedPerlin(3, 6, 0.8f);
+	RidgedPerlin caver = new RidgedPerlin(4, 3, 0.8f);
 
 	float negationOffset = 9999999;
 	float riverThreshold = 0.616f;
@@ -135,6 +136,7 @@ public class EntryTerrainGenerator implements Generator{
 		float elev = Mathf.clamp((float)  ((1f - mountainScale) *(enoise.octaveNoise2D(12, 0.63, 1 / (scale * 1.2f), x + negationOffset, y 
 				+ negationOffset) - river / 5f)) + mnoise* mountainScale, 0f, 0.99f);
 		
+		float caveh = caver.getValue(x, y, 1f / (scale  / 9f))*1.1f + (float)cnoise.octaveNoise2D(4, 0.5, 30, x, y) / 18f;
 
 		Material wall = Materials.air;
 		Material floor = Materials.air;
@@ -153,8 +155,12 @@ public class EntryTerrainGenerator implements Generator{
 			wall = Materials.stoneblock;
 			floor = Materials.stone;
 			tile.setLight(clamp(1f - (cavenoise - cavet) * 40f));
+			if(caveh > 0.8) {
+				wall = Materials.air;
+			}
 		}else if(cavenoise > cavet - 0.02){
 			floor = Materials.stone;
+			wall = Mathf.chance(0.03) ? Materials.rock : Materials.air; 
 		}
 		
 
