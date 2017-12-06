@@ -34,13 +34,13 @@ public class StructMaterials{
 	stonepillar = new Wall("stonepillar"){{
 		addDrop(Items.stone, 2); 
 		color = new Color(0x717171ff);
-		breaktime = 100;
+		breaktime = 60;
 	}},
 	
 	woodblock = new Wall("woodblock"){{
 		addDrop(Items.wood, 2); 
 		color = new Color(0x744a28ff);
-		breaktime = 60;
+		breaktime = 40;
 	}},
 	
 	torch = new Torch("torch"){{
@@ -53,11 +53,13 @@ public class StructMaterials{
 	}},
 	barrel = new Prop("barrel"){{
 		addDrop(Items.wood, 10);
+		breaktime = 20;
 		variants = 0;
 		offset = -3;
 	}},
 	table = new Prop("table"){{
 		addDrop(Items.wood, 10);
+		breaktime = 20;
 		variants = 0;
 		offset = -1;
 	}};

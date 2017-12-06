@@ -87,7 +87,7 @@ public class InputHandler{
 					// schedule this later.
 
 					Koru.world.updateLater(blockx, blocky);
-
+					blockhold = 0;
 				}
 
 			}else{

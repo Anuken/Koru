@@ -3,7 +3,9 @@ package io.anuke.koru.modules;
 import static io.anuke.koru.Koru.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.IntSet.IntSetIterator;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -18,7 +20,6 @@ import io.anuke.koru.network.Net.NetProvider;
 import io.anuke.koru.network.Registrator;
 import io.anuke.koru.network.packets.*;
 import io.anuke.koru.traits.*;
-import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.ucore.core.Core;
@@ -203,8 +204,6 @@ public class Network extends Module implements NetProvider{
 
 	@Override
 	public void update(){
-		long start = TimeUtils.nanoTime();
-
 		while(sparkQueue.size != 0){
 
 			Spark spark = sparkQueue.pop();
@@ -259,9 +258,6 @@ public class Network extends Module implements NetProvider{
 		if(connected && Timers.get("nupdate", packetFrequency)){
 			sendUpdate();
 		}
-
-		if(Profiler.update())
-			Profiler.networkTime = TimeUtils.timeSinceNanos(start);
 	}
 
 	private void sendUpdate(){

@@ -12,9 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.*;
@@ -24,13 +22,11 @@ import io.anuke.koru.items.BlockRecipe;
 import io.anuke.koru.items.ItemStack;
 import io.anuke.koru.items.ItemType;
 import io.anuke.koru.traits.InventoryTrait;
-import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.BreakType;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
-import io.anuke.koru.world.materials.MaterialTypes.Wall;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.ecs.Spark;
@@ -90,6 +86,7 @@ public class Renderer extends RendererModule{
 		
 		pixelate();
 		Graphics.addSurface("trees", 1);
+		Graphics.addSurface("dark", Core.cameraScale);
 	}
 
 	void loadMaterialColors(){
@@ -121,8 +118,7 @@ public class Renderer extends RendererModule{
 
 	@Override
 	public void update(){
-		long start = TimeUtils.nanoTime();
-		updateLight();
+		//updateLight();
 		
 		if(Koru.control.canMove()){
 			KoruCursors.setCursor("cursor");
@@ -159,9 +155,6 @@ public class Renderer extends RendererModule{
 		
 		if(Koru.control.canMove())
 			KoruCursors.updateCursor();
-
-		if(Profiler.update())
-			Profiler.renderTime = TimeUtils.timeSinceNanos(start);
 	}
 	
 	@Override
@@ -178,12 +171,14 @@ public class Renderer extends RendererModule{
 		drawMap();
 		Facets.instance().renderAll();
 		
+		drawShadows();
+		
 		if(pixelate) endPixel();
 		
 		Graphics.end();
 		
-		rays.setCombinedMatrix(camera);
-		rays.updateAndRender();
+		//rays.setCombinedMatrix(camera);
+		//rays.updateAndRender();
 		
 		if(Koru.control.canMove()){
 			record();
@@ -357,9 +352,50 @@ public class Renderer extends RendererModule{
 		lastcamx = -9999999;
 		lastcamy = -9999999;
 	}
+	
+	public void drawShadows(){
+		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
+		Graphics.surface("dark");
+		
+		for(int chunkx = 0; chunkx < World.loadrange * 2; chunkx++){
+			for(int chunky = 0; chunky < World.loadrange * 2; chunky++){
+				Chunk chunk = world.chunks[chunkx][chunky];
+				if(chunk == null)
+					continue;
+				for(int x = 0; x < World.chunksize; x++){
+					for(int y = 0; y < World.chunksize; y++){
+						int worldx = chunk.worldX() + x;
+						int worldy = chunk.worldY() + y;
+
+						Tile tile = chunk.tiles[x][y];
+						
+						if(Math.abs(worldx - camx) > viewrangex || Math.abs(worldy - camy) > viewrangey)
+							continue;
+
+						if(Math.abs(lastcamx - camx) > viewrangex || Math.abs(lastcamy - camy) > viewrangey)
+							continue;
+						
+						if(tile.light() < 0.999f){
+							Draw.color(0, 0, 0, 1f-tile.light());
+							Draw.rect("blur", tile.worldx(), tile.worldy(), 12, 12);
+						}
+					}
+				}
+			}
+		}
+		Draw.color();
+		
+		Graphics.end();
+		Graphics.shader(Shaders.round);
+		Graphics.begin();
+		Graphics.flushSurface();
+		Graphics.end();
+		Graphics.shader();
+		Graphics.begin();
+	}
 
 	public void updateTiles(){
-		rays.clearRects();
+		//rays.clearRects();
 		
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
@@ -402,6 +438,7 @@ public class Renderer extends RendererModule{
 							tile.wall().draw(tile, renderables[rendx][rendy]);
 						}
 						
+						/*
 						if(!tile.isWallEmpty() && tile.wall() instanceof Wall &&
 								world.isAccesible(worldx, worldy) && tile.light < 127){
 							
@@ -409,18 +446,18 @@ public class Renderer extends RendererModule{
 							rect.y += World.tilesize/4;
 							rect.y += 1f;
 							rays.addRect(rect);
-						}
+						}*/
 					}
 				}
 			}
 		}
 		
-		rays.updateRects();
+		//rays.updateRects();
 	}
 	
 	@Override
 	public void resize(){
-		rays.resizeFBO((int)(screen.x/4), (int)(screen.y/4));
-		rays.pixelate();
+		//rays.resizeFBO((int)(screen.x/4), (int)(screen.y/4));
+		//rays.pixelate();
 	}
 }

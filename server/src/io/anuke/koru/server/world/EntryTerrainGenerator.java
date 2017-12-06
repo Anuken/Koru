@@ -153,7 +153,7 @@ public class EntryTerrainGenerator implements Generator{
 			wall = Materials.stoneblock;
 			floor = Materials.stone;
 			tile.setLight(clamp(1f - (cavenoise - cavet) * 40f));
-		}else if(cavenoise > cavet - 0.04){
+		}else if(cavenoise > cavet - 0.02){
 			floor = Materials.stone;
 		}
 		

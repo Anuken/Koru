@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.network.Net;
@@ -18,7 +17,6 @@ import io.anuke.koru.network.packets.ChunkPacket;
 import io.anuke.koru.network.packets.ChunkRequestPacket;
 import io.anuke.koru.network.packets.TileUpdatePacket;
 import io.anuke.koru.traits.ChunkLoadTrait;
-import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.WorldLoader;
@@ -80,8 +78,6 @@ public class World extends Module{
 
 	@Override
 	public void update(){
-		long start = TimeUtils.nanoTime();
-		
 		if(Net.server() && Timers.get("checkunload", 80)) checkUnloadChunks();
 	
 		time += Timers.delta()/timescale;
@@ -123,9 +119,6 @@ public class World extends Module{
 		lastchunky = newy;
 
 		sendChunkRequest();
-		
-		if(Profiler.update())
-			Profiler.worldTime = TimeUtils.timeSinceNanos(start);
 	}
 	
 	void checkUnloadChunks(){

@@ -13,6 +13,7 @@ public class Shaders{
 	public static final Inline inline = new Inline();
 	public static final Water water = new Water();
 	public static final Mix mix = new Mix();
+	public static final Round round = new Round();
 	
 	public static class Water extends Shader{
 		
@@ -25,6 +26,18 @@ public class Shaders{
 			shader.setUniformf("camerapos", Core.camera.position.x, Core.camera.position.y);
 			shader.setUniformf("screensize", Gdx.graphics.getWidth() / Core.cameraScale, Gdx.graphics.getHeight() / Core.cameraScale);
 			shader.setUniformf("time", Timers.time());
+		}
+	}
+	
+	public static class Round extends Shader{
+		
+		public Round(){
+			super("round", "default");
+		}
+
+		@Override
+		public void apply(){
+			
 		}
 	}
 	

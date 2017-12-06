@@ -2,7 +2,6 @@ package io.anuke.koru.modules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.KoruCursors;
@@ -10,7 +9,6 @@ import io.anuke.koru.items.ItemType;
 import io.anuke.koru.modules.Control.GameState;
 import io.anuke.koru.traits.InventoryTrait;
 import io.anuke.koru.ui.*;
-import io.anuke.koru.utils.Profiler;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.function.VisibilityProvider;
@@ -236,16 +234,5 @@ public class UI extends SceneModule{
 			currentMenu.onClose();
 			currentMenu = null;
 		}
-	}
-
-	@Override
-	public void update() {
-		long start = TimeUtils.nanoTime();
-		
-		scene.act();
-		scene.draw();
-		
-		if(Profiler.update())
-			Profiler.uiTime = TimeUtils.timeSinceNanos(start);
 	}
 }

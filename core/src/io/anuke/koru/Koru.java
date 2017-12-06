@@ -3,12 +3,10 @@ package io.anuke.koru;
 import java.util.Calendar;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.koru.graphics.lsystems.LSystems;
 import io.anuke.koru.modules.*;
 import io.anuke.koru.network.Net;
-import io.anuke.koru.utils.Profiler;
 import io.anuke.koru.utils.Resources;
 import io.anuke.koru.world.Tile;
 import io.anuke.ucore.core.Effects;
@@ -71,25 +69,11 @@ public class Koru extends ModuleCore{
 		Timers.update();
 		
 		try{
-			
-			long start = TimeUtils.nanoTime();
-			
-			if(Profiler.update())
-			Profiler.engineTime = TimeUtils.timeSinceNanos(start);
-			
-			long mstart = TimeUtils.nanoTime();
-			
 			super.render();
 			basis.update();
-			if(Profiler.update()){
-				Profiler.moduleTime = TimeUtils.timeSinceNanos(mstart);
-				Profiler.totalTime = TimeUtils.timeSinceNanos(start);
-			}
-			
 		}catch(Exception e){
 			handleException(e);
 		}
-		
 	}
 	
 	static void handleException(Exception e){
