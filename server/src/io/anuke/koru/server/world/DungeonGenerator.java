@@ -71,8 +71,13 @@ public class DungeonGenerator extends StructureGenerator{
 				}
 			}
 			
+			int entrances = 0;
+			
 			for(Room point : map.values()){
 				drawRoom(chunk, point.x, point.y, point.connected);
+				if(!point.connected[3] && (Mathf.chance(0.4) || entrances ++ == 0)){
+					drawEntrance(chunk, point.x, point.y);
+				}
 			}
 		}
 	}
@@ -98,28 +103,58 @@ public class DungeonGenerator extends StructureGenerator{
 		}
 	}
 	
+	void drawEntrance(Chunk chunk, int gridx, int gridy){
+		int passageSize = this.passageSize - 2;
+		int midx = chunk.worldX() + World.chunksize/2;
+		int midy = chunk.worldY() + World.chunksize/2;
+		
+		for(int i = 0; i < passageSize; i ++){
+			int worldx = i - passageSize/2 + midx + gridx * roomSpacing, 
+					worldy =  midy - roomSize/2 + gridy * roomSpacing;
+			
+			setTile(worldx, worldy, floor, Materials.air);
+		}
+		
+		setTile(midx + gridx * roomSpacing - passageSize/2, -1 +midy - roomSize/2 + gridy * roomSpacing,
+				floor, StructMaterials.torch);
+		setTile(midx + gridx * roomSpacing + passageSize/2, -1 + midy - roomSize/2 + gridy * roomSpacing,
+				floor, StructMaterials.torch);
+	}
+	
 	void drawRoom(Chunk chunk, int gridx, int gridy, boolean[] connected){
 		int midx = chunk.worldX() + World.chunksize/2;
 		int midy = chunk.worldY() + World.chunksize/2;
 		
 		int hsize = passageSize/2;
 		
-		for(int x = 0; x < roomSize; x++){
-			for(int y = 0; y < roomSize; y++){
+		int randx = Mathf.range(1);
+		int randy = Mathf.range(1);
+		int randw = Mathf.range(1);
+		int randh = Mathf.range(1);
+		
+		for(int x = randx; x < roomSize + randw; x++){
+			for(int y = randy; y < roomSize + randh; y++){
 
 				Material floor = this.floor, wall = Materials.air;
 				int worldx = x + midx - roomSize/2 + gridx * roomSpacing, 
 						worldy = y + midy - roomSize/2 + gridy * roomSpacing;
 
-				if((x == 0 || y == 0 || x == roomSize - 1 || y == roomSize - 1) && !(
-						(connected[1] && y == roomSize - 1 && Math.abs(x - roomSize/2) < hsize) ||
-						(connected[3] && y == 0 && Math.abs(x - roomSize/2) < hsize) ||
-						(connected[2] && x == 0 && Math.abs(y - roomSize/2)  <hsize) ||
-						(connected[0] && x == roomSize -1 && Math.abs(y - roomSize/2) < hsize)
+				if((x == randx || y == randy || x == roomSize - 1 + randw || y == roomSize - 1 + randh) && !(
+						(connected[1] && y == roomSize - 1 + randh && Math.abs(x - roomSize/2) < hsize) ||
+						(connected[3] && y == randy && Math.abs(x - roomSize/2) < hsize) ||
+						(connected[2] && x == randx && Math.abs(y - roomSize/2)  <hsize) ||
+						(connected[0] && x == roomSize -1 + randw && Math.abs(y - roomSize/2) < hsize)
 						)){
 					wall = this.wall;
-				}else if(Mathf.chance(0.1)){
-					wall = StructMaterials.barrel;
+				}else if((x == randx + 1 || y == randy + 1 || x == roomSize - 2 + randw || y == roomSize - 2 + randh) && !(
+						(connected[1] && y == roomSize - 1 + randw && Math.abs(x - roomSize/2) < hsize) ||
+						(connected[3] && y == randx && Math.abs(x - roomSize/2) < hsize) ||
+						(connected[2] && x == randy && Math.abs(y - roomSize/2)  <hsize) ||
+						(connected[0] && x == roomSize -1 + randh && Math.abs(y - roomSize/2) < hsize)
+						)) {
+					if(Mathf.chance(0.3)) {
+						wall = StructMaterials.barrel;
+					}
 				}else if(Mathf.chance(0.1)){
 					wall = StructMaterials.table;
 				}

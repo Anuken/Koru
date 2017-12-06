@@ -86,7 +86,7 @@ public class Renderer extends RendererModule{
 		
 		pixelate();
 		Graphics.addSurface("trees", 1);
-		Graphics.addSurface("dark", Core.cameraScale);
+		Graphics.addSurface("dark", Core.cameraScale, 5);
 	}
 
 	void loadMaterialColors(){
