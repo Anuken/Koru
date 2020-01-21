@@ -24,7 +24,7 @@ No issues with the game will be fixed.
 
 ### Building
 
-1. Install **JDK 8** - **not any other version!* If you fail to use the right version, the build may fail.
+1. Install **JDK 8** - **not any other version!** If you fail to use the right version, the build may fail.
 2. Open a terminal/command prompt, and run `./gradlew server:run` (linux/mac) / `gradlew.bat server:run` (windows)
 3. Open another terminal/cmd tab and run `./gradlew desktop:run` (linux/mac) / `gradlew.bat desktop:run` (windows)
 4. Press "connect" in the game window.
