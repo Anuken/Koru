@@ -11,8 +11,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 
 import io.anuke.koru.Koru;
 import io.anuke.koru.graphics.*;
@@ -27,6 +26,7 @@ import io.anuke.koru.world.Chunk;
 import io.anuke.koru.world.Tile;
 import io.anuke.koru.world.materials.Material;
 import io.anuke.koru.world.materials.MaterialLayer;
+import io.anuke.koru.world.materials.MaterialTypes.*;
 import io.anuke.koru.world.materials.Materials;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.ecs.Spark;
@@ -40,7 +40,7 @@ import io.anuke.ucore.util.Mathf;
 
 public class Renderer extends RendererModule{
 	//TODO why are these final?
-	public static final int viewrangex = 28;
+	public static final int viewrangex = 32;
 	public static final int viewrangey = 26;
 	
 	public static final int scale = 4;
@@ -52,7 +52,7 @@ public class Renderer extends RendererModule{
 	private int lastcamx, lastcamy;
 	
 	//TODO round alpha, but not colors
-	private RayHandler rays;
+	public RayHandler rays;
 	private PointLight light;
 	private float darkness = 1f;
 	
@@ -71,7 +71,7 @@ public class Renderer extends RendererModule{
 		rays = new RayHandler();
 		rays.setBlurNum(3);
 		light = new PointLight(rays, 300, Color.WHITE, 1135, 0, 0);
-		light.setSoftnessLength(20f);
+		light.setSoftnessLength(40f);
 
 		Facets.instance().setLayerManager(new FacetLayerHandler(){{
 			allDrawLayers.add(KoruFacetLayers.water);
@@ -118,7 +118,7 @@ public class Renderer extends RendererModule{
 
 	@Override
 	public void update(){
-		//updateLight();
+		updateLight();
 		
 		if(Koru.control.canMove()){
 			KoruCursors.setCursor("cursor");
@@ -171,14 +171,14 @@ public class Renderer extends RendererModule{
 		drawMap();
 		Facets.instance().renderAll();
 		
-		drawShadows();
+		//drawShadows();
 		
 		if(pixelate) endPixel();
 		
 		Graphics.end();
 		
-		//rays.setCombinedMatrix(camera);
-		//rays.updateAndRender();
+		rays.setCombinedMatrix(camera);
+		rays.updateAndRender();
 		
 		if(Koru.control.canMove()){
 			record();
@@ -206,6 +206,7 @@ public class Renderer extends RendererModule{
 		darkness = MathUtils.lerp(darkness, l, 0.03f * Timers.delta());
 		
 		light.setColor(darkness, darkness, darkness, 1f);
+		light.setDistance(Vector2.dst(0, 0, w/2f, h/2f));
 	}
 	
 	void drawSelectOverlay(BaseFacet r){
@@ -395,7 +396,7 @@ public class Renderer extends RendererModule{
 	}
 
 	public void updateTiles(){
-		//rays.clearRects();
+		rays.clearRects();
 		
 		int camx = Math.round(camera.position.x / World.tilesize), camy = Math.round(camera.position.y / World.tilesize);
 
@@ -438,7 +439,7 @@ public class Renderer extends RendererModule{
 							tile.wall().draw(tile, renderables[rendx][rendy]);
 						}
 						
-						/*
+
 						if(!tile.isWallEmpty() && tile.wall() instanceof Wall &&
 								world.isAccesible(worldx, worldy) && tile.light < 127){
 							
@@ -446,18 +447,18 @@ public class Renderer extends RendererModule{
 							rect.y += World.tilesize/4;
 							rect.y += 1f;
 							rays.addRect(rect);
-						}*/
+						}
 					}
 				}
 			}
 		}
 		
-		//rays.updateRects();
+		rays.updateRects();
 	}
 	
 	@Override
 	public void resize(){
-		//rays.resizeFBO((int)(screen.x/4), (int)(screen.y/4));
-		//rays.pixelate();
+		rays.resizeFBO((int)(screen.x/4), (int)(screen.y/4));
+		rays.pixelate();
 	}
 }
